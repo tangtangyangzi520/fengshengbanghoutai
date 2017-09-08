@@ -29,7 +29,7 @@
                         <tr>
                             <th style="width:36%;">属性名称</th>
                             <th style="width:7%;">属性值</th>
-							<th style="width:7%;">所属类目</th>
+							<th style="width:15%;">所属类目</th>
                             <th style="width:10%;">创建时间</th>
                             <th style="width:20%;">操作</th>
                         </tr>
@@ -40,8 +40,8 @@
                             <td>
                               <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
                               </td>
-                             <td>{{itemobj.pcraCatId}}</td>
-                              
+                             <!-- <td>{{itemobj.pcraCatId}}</td> -->
+                             <td>{{selectTreetext}}</td> 
                             <td>{{itemobj.pcaCreatedTime|filterTime}}</td>
                               <td>
                                <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'editvalue')">编辑</button>
@@ -114,6 +114,7 @@ export default {
             showControl: false,
             showDialog:false,
             selectTreeId:0,
+            selectTreetext:'',
             parentIds : 0,
             clickItems: [],   //点击操作的数据项
             pcaEditId:'',
@@ -123,6 +124,7 @@ export default {
             controlType:'',
             searchOptions: {
                 parentIds: 0,
+                pcaSaleProp:1,
                 page: {
                     currentPage: 1,
                     pageSize: 10,
@@ -237,6 +239,7 @@ export default {
                 options = this.lastSearchOptions;
             } else {
                 this.searchOptions.parentIds = this.parentIds;
+                this.searchOptions.pcaSaleProp =1;
                 options = Object.assign({}, this.searchOptions);
                // console.log(options);
             }
@@ -320,6 +323,7 @@ export default {
         // 选中一个项时触发
         selectItem(item) {
             this.selectTreeId = item.id;
+            this.selectTreetext=item.text;
             //console.log("id="+item.id+",value="+item.text);
             this.parentIds = client.getParentIdList(this.treeList, item);
             this.getList(false, true);

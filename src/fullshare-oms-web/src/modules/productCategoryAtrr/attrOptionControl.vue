@@ -1,33 +1,35 @@
 <template>
-    <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
+    <div style="position: absolute;top:0;left:0;width:100%;height:100%;"  v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :idp="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
             <div slot="content">
                 <div class="row">
                     <div>
-                         <button type="button" class="btn btn-xs blue" @click="addOption()">添加</button>
+                         <button type="button" class="btn btn-xs blue" @click="addOption()" style="position:fixed;right:15%;top:10%;">添加</button>
                     </div>
-                   <form class="form-horizontal" name="addForm" role="form">
-                         <table class="table table-striped table-bordered table-hover" id="attrOption-table">
-                        <thead>
-                            <tr>
-                            <th style="width:;">属性值</th>
-                            <th style="width:;">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="attrOptionTbody">
-                            <tr v-for="itemobj in dataList">                                   
-                                <!--<td><input type="hidden" v-model="itemobj.pcaoId"/></td>  @blur="save" @dblclick="edit($event)" -->                               
-                                <td>
-                                 <!-- <span v-if="!editing" @dblclick="edit">{{itemobj.pcaoName}}</span> -->
-                                <input type="text" ref="input"  :value="itemobj.pcaoName" v-model="itemobj.pcaoName"/></td>
-                                <td>
-                                    <button type="button" class="btn btn-xs blue" @click="deleteOption(itemobj)">删除</button>
-                                </td>
-                            </tr>                            
-                        </tbody>
-                    </table>
-                    </form>
-                </div>
+                <!-- <div style="position: absolute;top:30px;left:0;width:100%;height:100%;overflow :auto">  -->
+                    <form class="form-horizontal" name="addForm" role="form">
+                            <table class="table table-striped table-bordered table-hover" id="attrOption-table">
+                                <thead>
+                                    <tr>
+                                    <th style="width:;">属性值</th>
+                                    <th style="width:;">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attrOptionTbody">
+                                    <tr v-for="itemobj in dataList">                                   
+                                        <!--<td><input type="hidden" v-model="itemobj.pcaoId"/></td>  @blur="save" @dblclick="edit($event)" -->                               
+                                        <td>
+                                        <!-- <span v-if="!editing" @dblclick="edit">{{itemobj.pcaoName}}</span> -->
+                                        <input type="text" ref="input"  :value="itemobj.pcaoName" v-model="itemobj.pcaoName"/></td>
+                                        <td>
+                                            <button type="button" class="btn btn-xs blue" @click.stop="deleteOption(itemobj)">删除</button>
+                                        </td>
+                                    </tr>                            
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                <!-- </div> -->
             </div>
             <span slot="btnList">
                 <button type="button" class="btn blue" @click="submitInfo()"  @blur="save">确定</button>
@@ -37,11 +39,12 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
+
           <!--确定删除-->
         <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
             <div slot="content">确定删除吗？</div>
         </m-alert>
-         <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
+        
         <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
             <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
         </div>
@@ -57,11 +60,11 @@
 </template>
 <script>
 import client from '../../common/utils/client';
-import control from './control';
+//import control from './control';
 import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
 export default {
-    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList,control },
+    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList },
     props: {
        
         pcaId:0,
@@ -90,10 +93,9 @@ export default {
             showPage: false,
             showControl: false,
             controlType:'',
-            clickItems: [],   //点击操作的数据项
             dataList:[],
-           
-             data: {
+            clickItems: [],   //点击操作的数据项
+            itemobj: {
                 "pcaoName": ""
             },
             showAlert: false,
@@ -114,19 +116,23 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
-      
+           
         //添加一行
         addOption(){
-        //    console.log("pcaId is "+this.pcaid);
-            this.dataList.push( { "val":"" });
+            //.log("pcaId is "+this.pcaid);
+            this.dataList.push( { "pcaoName":"" });
+            
             this.pcaoIdNum++;
+            // if(pcaoIdNum<=2 || pcaoIdNum>=50){
+            //       this.showMsg("属性值最少2个最多50个");
+            // }
         },
         //删除一行
-        deleteOption(itemobj){  
+        deleteOption(itemobj){
             this.selRow = itemobj;
             this.showControl = true;
         },
-         ajaxControlDel(){
+        ajaxControlDel(){
             if(this.selRow.pcaoId==null){
                 let index = this.dataList.findIndex( item => item.pcaoId == this.selRow.pcaoId );
                 this.dataList.splice(index,1); 
@@ -186,9 +192,16 @@ export default {
             this.showAlert = false;
             this.showControl = false;
         },
+        clearInfo() {
+            this.itemobj = {
+                "pcaoName": ""
+            }
+            
+        },
         // 提交信息
         submitInfo() {
-            let data = this.data
+           // let data = this.data
+            /**属性值是否存在较验 */
             var isSubmit = true;
             this.dataList.forEach(item => {
                 let pid = item.pcaoId;
@@ -200,31 +213,37 @@ export default {
                     }
                 });
             });
+            /**属性值长度较验 */
+            var arr =[];
+            this.dataList.forEach(item=> {
+              console.log(item.pcaoName.length-1) 
+            if((item.pcaoName.length-1)==-1){
+                   this.showMsg('请输入属性值') 
+                   isSubmit = false;
+            } 
+            if ( (item.pcaoName.length)>10){
+                    this.showMsg('属性值不能超过10个字');
+                    isSubmit = false;
+            }
+               //arr.push(item.pcaoName) 
+            })
+             //console.log((arr[arr.length-1]));
+            // if ((arr[arr.length-1])== '' || ((arr[arr.length-1]).length) >= 10) {
+            //      this.showMsg('请输入属性值(属性值不能超过10个字)');
+            //      isSubmit = false;
+            // }
             if(!isSubmit) {
-               // console.log("返回");
+              //  console.log("返回");
                 return;
             }
-            
-         //   console.log("继续提交了");
+            //console.log("继续提交了");
             //提交属性选项
             let url= PCAO_CREATE;         
-           // console.log("值~~~"+this.dataList);
-           let arr =[];
-            //  let set = new Set(arr);
-            // for (let item of set.keys()) {
-            //     // console.log(item);
-            //     // console.log();
-            //         if(item==arr[arr.length-1]){
-            //             this.showMsg('这个属性值已经存在，请输入新的属性值!');
-            //             return;
-            //         }   
-            // }
-            this.dataList.forEach(item=> arr.push(item.pcaoName) )
-            
+           // console.log("值~~~"+this.dataList);         
             client.postData(url,{  "pcaoList": this.dataList,
                                    "pcaoAtrrId": this.pcaid,
             }).then(response => {
-              //  console.log(arr[arr.length-1]);
+              
                     this.isLoading = false;
                     if (response.code != 200) {
                         this.showMsg(response.msg);
@@ -240,10 +259,10 @@ export default {
                     this.showMsg('网络连接错误');
                 }
             );
-           
-        },
-     
+       
+        },  
     }, 
+    
     created() {
      
     },
@@ -253,7 +272,7 @@ export default {
             this.showDialog = this.show;
         },
         pcaid(){
-            this.getList();
+            this.getList();        
         },
         
     },
