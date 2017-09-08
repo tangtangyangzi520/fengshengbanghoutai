@@ -68,7 +68,7 @@
                                 <span v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">需要发货时间</span>
                             </div> 
                             <div class="col-md-3" style="text-align:center;">
-                                <span v-if="this.subData.ordStatus==3">需要交易完成时间</span>
+                                <span v-if="this.subData.ordStatus==3">{{subData.completeTime}}</span>
                             </div> 
                         </div>
                     </div>
@@ -115,17 +115,19 @@
                         </div>
 
                         <div class="col-md-6">
-                           <h4>订单状态: {{ordStatus(subData.ordStatus)}}</h4>
+                           <h4>订单状态: {{subData.ordStatusDisplay}}</h4>
                            <div v-if="subData.ordStatus==0">如买家未在规定时间内付款,订单将按照设置逾期自动关闭;</div>
                            <div v-if="subData.ordStatus==1">买家已付款至你的财付通账户,请尽快发货,否则买家有权申请退款;</div>
                            <div v-if="subData.ordStatus==2">买家如在<span style="color:red;">7天内</span>没有申请退款,交易将自动完成;</div>
                            <div v-if="subData.ordStatus==3"><p></p></div>
                            <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</div>
                            <div>
-                               <a>备注</a>
+
+                               <a @click.stop="setDemo(setData.orsId)">备注</a>
                                <p>
-                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue">修改价格</button>
-                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue">取消订单</button></p>
+                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="editPayAmount(subData)" class="btn btn-xs blue">修改价格</button>
+                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="cancelOrder(subData)" class="btn btn-xs blue">取消订单</button></p>
+
                             </div>
                         </div>  
                     </div> 
@@ -192,7 +194,7 @@
                                         {{detailActAmount(itemDetail)}}
                                     </td>
                                     <td align="center" style="width:10%;vertical-align:middle;">
-                                        {{ordStatus(itemDetail.ordStatus)}}
+                                        {{subData.ordStatusDisplay}}
                                     </td>
                                 </tr>
                              </tbody>
@@ -204,6 +206,12 @@
                 <button type="button" class="btn default" data-dismiss="modal">确定</button>
             </span>
         </m-alert>
+        <!-- 创建订单备注弹窗 -->
+        <!-- <demo-control v-if="!destroyControlDialog" :id="orsId" :show="showDemoDialog" :onhide="hideAddDialog" ></demo-control> -->
+        <!-- 创建修改订单状态弹窗 -->
+        <!-- <change-status-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showStatusDialog" :onhide="hideAddDialog" ></change-status-control> -->
+        <!-- 创建取消订单弹窗 -->
+        <!-- <cancel-order-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showReasonDialog" :onhide="hideAddDialog" :send-req="reason"></cancel-order-control> -->
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
@@ -221,8 +229,13 @@ import client from '../../common/utils/client';
 import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
 import loading from '../common/loading';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
+// import changeStatusControl from './changeStatusControl';
+// import cancelOrderControl from './cancelOrderControl';
+// import changePaymentControl from './changePaymentControl';
 export default {
-    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading },
+    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading,
+    // changeStatusControl,cancelOrderControl,changePaymentControl  
+    },
     props: {
         show: {
             type: Boolean,
@@ -243,10 +256,6 @@ export default {
         subData: {
             type: Object,
             value: {}
-        },
-        ordStatusCon:{
-            type:Function,
-            value:() => { }
         },
         progressObject:{
             width:'',
@@ -288,6 +297,18 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        //取消订单
+        cancelOrder(itemSub){
+            this.$parent.cancelOrder(itemSub);
+        },
+        //修改价格
+        editPayAmount(itemSub){
+            this.$parent.editPayAmount(itemSub);
+        },
+        //备注
+        setDemo(orsId){
+            this.$parent.setDemo(orsId);
+        },
         //进度条
         progressWidth(){
             let progress=this.subData.ordStatus;
@@ -327,19 +348,6 @@ export default {
                 default:;
             }
         },
-         //显示订单状态    
-        ordStatus(status){
-            switch(status){
-                case 0:return '待付款';
-                case 1:return '待发货';
-                case 2:return '已发货';
-                case 3:return '已完成';
-                case 4:return '已关闭';
-                case 5:return '已取消';
-                case 6:return '售后线下处理';
-                default:;
-            }
-        },
          //支付渠道显示
         ordPayChannel(payChannel){
             switch(payChannel){
@@ -374,8 +382,13 @@ export default {
         cancelSelectComponent() {
             this.showComponent = false;
         },
+        hideAddDialog(){
+             this.showDialog = false;
+        },
         hideDialog() {
-            this.showDialog = false;
+            this.showDemoDialog=false;
+            this.showStatusDialog=false;
+            this.showReasonDialog=false;
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
