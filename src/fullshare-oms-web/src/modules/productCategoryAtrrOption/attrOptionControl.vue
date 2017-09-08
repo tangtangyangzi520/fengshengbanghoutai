@@ -4,7 +4,7 @@
             <div slot="content">
                 <div class="row">
                     <div>
-                         <button type="button" class="btn btn-xs blue" @click="addOption()">添加</button>
+                         <button type="button" class="btn btn-xs blue" @click="addOption()" style="position:fixed;right:15%;top:10%;">添加</button>
                     </div>
                    <form class="form-horizontal" name="addForm" role="form">
                          <table class="table table-striped table-bordered table-hover" id="attrOption-table">

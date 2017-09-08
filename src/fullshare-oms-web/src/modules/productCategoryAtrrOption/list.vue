@@ -123,6 +123,7 @@ export default {
             controlType:'',
             searchOptions: {
                 parentIds: 0,
+                pcaSaleProp:1,
                 page: {
                     currentPage: 1,
                     pageSize: 10,
@@ -237,6 +238,7 @@ export default {
                 options = this.lastSearchOptions;
             } else {
                 this.searchOptions.parentIds = this.parentIds;
+                this.searchOptions.pcaSaleProp =1;
                 options = Object.assign({}, this.searchOptions);
                // console.log(options);
             }

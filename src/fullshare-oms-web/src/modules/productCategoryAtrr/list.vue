@@ -130,6 +130,7 @@ export default {
             controlType:'',
             searchOptions: {
                 parentIds: 0,
+                pcaSaleProp:0,
                 page: {
                     currentPage: 1,
                     pageSize: 10,
