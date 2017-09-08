@@ -1,0 +1,502 @@
+<template>
+    <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1200px'">
+            <div slot="content">
+                <div class="row nopadding">
+                    <!-- 订单进度条 -->
+                    <div class="col-md-12" v-if="this.subData.ordStatus==0||this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">
+                        <div class="col-md-12" >
+                            <div class="col-md-3" style="text-align:center;">
+                                <span style="color:blue;">买家下单</span>
+                            </div>  
+                            <div class="col-md-3" style="text-align:center;">
+                                <span style="color:blue;" v-if="this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">买家付款</span>
+                               <span v-else> 买家付款</span>
+                            </div> 
+                            <div class="col-md-3" style="text-align:center;">
+                                <span style="color:blue;" v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">商家发货</span>
+                               <span v-else> 商家发货</span>
+                            </div> 
+                            <div class="col-md-3" style="text-align:center;">
+                                <span style="color:blue;" v-if="this.subData.ordStatus==3">交易完成</span>
+                               <span v-else> 交易完成</span>
+                            </div> 
+                        </div>
+                        <!-- 进度条start -->
+                        <div class="col-md-12" v-if="this.subData.ordStatus==0" >
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                    aria-valuemin="0" aria-valuemax="100" style="width:25%;">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" v-if="this.subData.ordStatus==1" >
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                    aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" v-if="this.subData.ordStatus==2" >
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                    aria-valuemin="0" aria-valuemax="100" style="width:75%;">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" v-if="this.subData.ordStatus==3" >
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                    aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                        </div>
+                         <!-- 进度条end -->
+                         <!-- 具体时间 -->
+                        <div class="col-md-12" >
+                            <div class="col-md-3" style="text-align:center;">
+                                {{subData.ordCreatedTime}}
+                            </div>  
+                            <div class="col-md-3" style="text-align:center;">
+                                <span v-if="this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3"> {{subData.ordPayTime}}</span>
+                            </div> 
+                            <div class="col-md-3" style="text-align:center;">
+                                <span v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">需要发货时间</span>
+                            </div> 
+                            <div class="col-md-3" style="text-align:center;">
+                                <span v-if="this.subData.ordStatus==3">需要交易完成时间</span>
+                            </div> 
+                        </div>
+                    </div>
+                    <!-- 订单信息 -->
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                <h4>订单信息</h4>
+                                </div>
+                                <div class="col-md-6 right">
+                                    担保交易
+                                </div>
+                            </div>
+                            <table  class="table table-bordered table-hover">
+                                <tr><td width="30%">订单编号: </td>
+                                    <td width="70%">{{setData.orstNo}}</td>
+                                </tr>
+                                 <tr><td width="30%">订单类型: </td>
+                                    <td width="70%">{{orderTypeDisplay(setData.ordOrderType)}}</td>
+                                </tr>
+                                 <tr><td width="30%">付款方式: </td>
+                                    <td width="70%">{{ordPayChannel(itemSet.orsPayChannel)}}</td>
+                                </tr>
+                                 <tr><td width="30%">买家昵称: </td>
+                                    <td width="70%">{{subData.ordMemberId}}</td>
+                                </tr>
+                                 <tr><td width="30%">姓名: </td>
+                                    <td width="70%">{{subData.ordReceiveName}}</td>
+                                </tr>
+                                 <tr><td width="30%">身份证号: </td>
+                                    <td width="70%">缺少会员身份证</td>
+                                </tr>
+                                 <tr><td width="30%">配送方式: </td>
+                                    <td width="70%">{{ordLogiType(setData.ordLogiType)}}</td>
+                                </tr>
+                                 <tr><td width="30%">收货信息: </td>
+                                    <td width="70%">{{ordAddress(setData.orderSubList[0])}}</td>
+                                </tr>
+                                 <tr><td width="30%">买家留言: </td>
+                                    <td width="70%">{{setData.buyerMessage}}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-md-6">
+                           <h4>订单状态: {{ordStatus(subData.ordStatus)}}</h4>
+                           <div v-if="subData.ordStatus==0">如买家未在规定时间内付款,订单将按照设置逾期自动关闭;</div>
+                           <div v-if="subData.ordStatus==1">买家已付款至你的财付通账户,请尽快发货,否则买家有权申请退款;</div>
+                           <div v-if="subData.ordStatus==2">买家如在<span style="color:red;">7天内</span>没有申请退款,交易将自动完成;</div>
+                           <div v-if="subData.ordStatus==3"><p></p></div>
+                           <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</div>
+                           <div>
+                               <a>备注</a>
+                               <p>
+                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue">修改价格</button>
+                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue">取消订单</button></p>
+                            </div>
+                        </div>  
+                    </div> 
+
+
+                    <div class="col-md-12">
+                         <table  class="table table-bordered table-hover">
+                            <tr>
+                                <th style="width:30%;">订单号 | 交易单号 | 支付方式</th>
+                                <th style="width:20%;">付款人及留言</th>
+                                <th style="width:20%;" >付款时间</th>
+                                <th style="width:10%;" >实收（元）</th>
+                                <th style="width:10%;" >状态</th>
+                            </tr>
+                            <tr>
+                                <td width="20%">
+                                    <p>{{subData.ordOrderNo}}</p>
+                                    <p>----需要交易单号----</p>
+                                    <p>{{ordPayChannel(setData.orsPayChannel)}}</p>
+                                </td>
+                                <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordMemberId}}:{{setData.buyerMessage}}</td>
+                                <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordPayTime}}</td>
+                                <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordActAmount}}</td>
+                                <td width="20%" align="center" style="vertical-align:middle;">{{payStatus(setData.orsPayStatus)}}</td>
+                            </tr>
+                         </table>
+
+                    </div>
+                     <div class="col-md-12">
+                         <table class="table table-bordered table-hover">
+                             <thead>
+                                <tr>
+                                    <th style="width:26%;">商品信息</th>
+                                    <th style="width:7%;">单价(元)</th>
+                                    <th style="width:7%;">数量</th>
+                                    <th style="width:10%;">优惠(元)</th>
+                                    <th style="width:10%;">小计(元)</th>
+                                    <th style="width:10%;">状态</th>
+                                </tr>
+                             </thead>
+                             <tbody>
+                                 <tr v-for="(index,itemDetail) in subData.orderDetailList">
+                                    <td class="tdTitle" style="width:26%;">
+                                        <p>商品编码:{{itemDetail.detailSku.skuCode}}</p>
+                                        <p>
+                                            <a target="_blank" :href="itemDetail.detailSpu.spuPic" title="查看大图">
+                                                <img :src="itemDetail.detailSpu.spuPic" class="img-rounded" style="height:50px">
+                                            </a>
+                                        </p>
+                                        <h4>{{itemDetail.detailSpu.spuName}}</h4>
+                                        <p>发货地: 需要提供发货地</p>
+                                        <p>规格: {{itemDetail.detailSku.skuName}}</p>
+                                    </td>
+                                    <td align="center"  style="width:7%;vertical-align:middle;">
+                                        {{itemDetail.ordOriginal}}
+                                    </td>
+                                    <td align="center" style="width:7%;vertical-align:middle;" >
+                                        {{itemDetail.ordSkuNum}}
+                                    </td>
+                                    <td align="center" style="width:10%;vertical-align:middle;">
+                                        <!-- 优惠 -->
+                                        {{itemDetail.ordShareAmount}}
+                                    <td align="center" style="width:10%;vertical-align:middle;">
+                                        {{detailActAmount(itemDetail)}}
+                                    </td>
+                                    <td align="center" style="width:10%;vertical-align:middle;">
+                                        {{ordStatus(itemDetail.ordStatus)}}
+                                    </td>
+                                </tr>
+                             </tbody>
+                         </table>
+                    </div>
+                </div>
+            </div>
+            <span slot="btnList">
+                <button type="button" class="btn default" data-dismiss="modal">确定</button>
+            </span>
+        </m-alert>
+        <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
+            <div slot="content">{{showAlertMsg}}</div>
+        </m-alert>
+        <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
+            <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
+        </div>
+        <div style="position:fixed;z-index:11111;" v-show="showComponent">
+            <select-component-all v-show="showComponent" :options="componentShowOption" :onselect="selectComponentFunc" :oncancel="cancelSelectComponent"></select-component-all>
+        </div>
+        <loading :show="isLoading"></loading>
+    </div>
+</template>
+<script>
+import client from '../../common/utils/client';
+import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
+import loading from '../common/loading';
+import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
+export default {
+    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading },
+    props: {
+        show: {
+            type: Boolean,
+            value: false
+        },
+        onhide: {
+            type: Function,
+            value: () => { }
+        },
+        id: {
+            type: String,
+            value: 0
+        },
+        setData: {
+            type: Object,
+            value: {}
+        },
+        subData: {
+            type: Object,
+            value: {}
+        },
+        ordStatusCon:{
+            type:Function,
+            value:() => { }
+        },
+        progressObject:{
+            width:'',
+        }
+    },
+    data() {
+        return {
+            isLoading: false,
+            showDialog: false,
+            showPage: false,
+            showPainListSelect: true,
+            painIdsSelect: [],
+            painList: [],
+            componentShowOption: {},
+            data: {
+                "authorName": "",
+                "authorTitle": "",
+                "authorType": 2,
+                "bgUrl": "",
+                "description": "",
+                "halfFigure": "",
+                "iconId": null,
+                "iconUrl": "",
+                "painIds": [],
+                "painOptions": []
+            },
+            showAlert: false,
+            showAlertTitle: '温馨提示',
+            showAlertMsg: '',
+            removeAddDialog: false,
+            title: '订单详情',
+        }
+    },
+    vuex: {
+        getters: {
+            picShowOption: ({ resourceControl }) => resourceControl.picShowOption,
+            selectPicList: ({ resourceControl }) => resourceControl.selectPicList,
+        },
+        actions: { showSelectPic, getSelectPicList }
+    },
+    methods: {
+        //进度条
+        progressWidth(){
+            let progress=this.subData.ordStatus;
+            console.log(progress)
+            switch(progress){
+                case 0:this.progressObject.width="25%";return;
+                case 1:this.progressObject.width="50%";return;
+                case 2:this.progressObject.width="75%";return;
+                case 3:this.progressObject.width="100%";return;
+                default:;
+            }
+        },
+        //商品小计
+        detailActAmount(itemDetail){
+            return itemDetail.ordPromotion*itemDetail.ordSkuNum
+        },
+        //显示支付状态
+        payStatus(payStatus){
+            switch(payStatus){
+                case 0:return '未支付'; 
+                case 1:return '支付成功';
+                case 2:return '取消支付';
+                case 3:return '无效订单';
+                default:;
+            }
+        },
+        //显示收货信息
+        ordAddress(orderSub){
+            return orderSub.ordReceiveProvince+" "+orderSub.ordReceiveCitity+" "+orderSub.ordReceiveArea+" "+orderSub.ordReceiveDetail+
+                    ","+orderSub.ordReceiveName+","+orderSub.ordReceiveMobile
+        },
+        //显示配送方式
+        ordLogiType(ordLogiType){
+            switch(ordLogiType){
+                case 1:return '快递发货';
+                case 2:return '上门自提';
+                default:;
+            }
+        },
+         //显示订单状态    
+        ordStatus(status){
+            switch(status){
+                case 0:return '待付款';
+                case 1:return '待发货';
+                case 2:return '已发货';
+                case 3:return '已完成';
+                case 4:return '已关闭';
+                case 5:return '已取消';
+                case 6:return '售后线下处理';
+                default:;
+            }
+        },
+         //支付渠道显示
+        ordPayChannel(payChannel){
+            switch(payChannel){
+                case 10:
+                case 11:
+                case 12:return '微信支付';
+                case 20:
+                case 21:
+                case 22:return '支付宝支付';
+                default:;
+            }
+        },
+        // 显示订单类型
+        orderTypeDisplay(orderType){
+            switch(orderType){
+                case 0:return '普通订单';
+                case 1:return '跨境顶大';
+                default:;
+            }
+        },
+        // 选择组件回调
+        selectComponentFunc(list) {
+            if (list[0].componentType == 27 || list[0].componentType == 15 || list[0].componentType == 13) {
+                this.contentSelect = list[0].subtitle;
+            } else {
+                this.contentSelect = list[0].title;
+            }
+            this.data.subComponentId = list[0].componentId;
+            this.showComponent = false;
+        },
+        // 隐藏选择组件弹窗
+        cancelSelectComponent() {
+            this.showComponent = false;
+        },
+        hideDialog() {
+            this.showDialog = false;
+            setTimeout(() => {
+                this.showPage = false;
+                this.onhide();
+            }, 300)
+        },
+        showMsg(msg, title) {
+            if (title) {
+                this.showAlertTitle = title;
+            } else {
+                this.showAlertTitle = '温馨提示';
+            }
+            this.showAlertMsg = msg;
+            this.showAlert = true;
+        },
+        hideMsg() {
+            this.showAlert = false;
+        },
+        clearInfo() {
+            this.data = {
+                "authorName": "",
+                "authorTitle": "",
+                "authorType": 2,
+                "bgUrl": "",
+                "description": "",
+                "halfFigure": "",
+                "iconId": null,
+                "iconUrl": "",
+                "painIds": [],
+                "painOptions": []
+            }
+            this.painIdsSelect = [];
+        },
+    },
+    computed(){
+        
+    },
+    created() {
+    },
+    watch: {
+        show() {
+            this.showPage = this.show;
+            this.showDialog = this.show;
+        },
+        id() {
+            this.data = {
+                "authorName": "",
+                "authorTitle": "",
+                "authorType": 2,
+                "bgUrl": "",
+                "description": "",
+                "halfFigure": "",
+                "iconId": null,
+                "iconUrl": "",
+                "painIds": [],
+                "painOptions": []
+            }
+            this.painList = [];
+            this.painIdsSelect = [];
+            if (this.id == '') {
+                this.title = '添加专家';
+                setTimeout(() => {
+                    this.typesList = client.global.componentTypes;
+                }, 30)
+                return;
+            }
+            this.title = '编辑专家';
+            this.isLoading = true;
+            this.painList = [];
+            client.postData(AUTHOR_GET + '?componentId=' + this.id, {}).then(response => {
+                this.isLoading = false;
+                if (response.code == 200) {
+                    let data = response.data;
+                    if (data.painIds) {
+                        data.painIds.forEach(item => {
+                            this.painIdsSelect.push({ id: item, name: '' })
+                        })
+                        this.data.painIds = data.painIds;
+                    }
+                    if (data.painOptions) {
+                        /*data.painOptions.forEach(item => {
+                            this.painIdsSelect.push({ id: item, name: '' })
+                        })*/
+                        this.data.painOptions = data.painOptions;
+                    }
+                    /*"authorName": "",
+                                    "authorTitle":"",
+                                    "authorType":2,
+                                    "bgUrl":"",
+                                    "description":"",
+                                    "halfFigure":"",
+                                    "iconId":"",
+                                    "iconUrl":"",
+                                    "painIds":[],
+                                    "painOptions":[]*/
+
+                    this.data.authorId = data.authorId;
+                    this.data.authorName = data.authorName;
+                    this.data.authorTitle = data.authorTitle;
+                    this.data.description = data.description;
+                    this.data.iconUrl = data.iconUrl;
+                    this.data.halfFigure = data.halfFigure;
+                    this.data.bgUrl = data.bgUrl;
+                    data.tags.forEach(item => {
+                        item.id = item.tagId;
+                        item.text = item.tagName;
+                    })
+                } else {
+                    this.showMsg(response.msg);
+                }
+            }, data => {
+                this.isLoading = false;
+                this.showMsg(data.message);
+            })
+        }
+    },
+    ready() {
+        this.typesList = client.global.componentTypes;
+        this.showPainListSelect = true;
+    },
+    beforeDestroy() {
+        this.showPainListSelect = false;
+    }
+};
+</script>

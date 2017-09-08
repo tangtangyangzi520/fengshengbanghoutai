@@ -1,0 +1,241 @@
+<template>
+    <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'900px'">
+            <div slot="content">
+                <div class="row nopadding col-md-12">
+                    <div>
+                        <h2>订单原价（不含运费）：{{editPaymentData.ordAmount}}元</h2>
+                    </div>
+                   <table class="table table-striped table-bordered table-hover">
+                       <thead>
+                           <tr>
+                               <th>商品</th>
+                               <th>单价（元）</th>
+                               <th>数量</th>
+                               <th>小计（元）</th>
+                               <th>优惠金额</th>
+                               <th>涨价或减价</th>
+                               <th>运费（元）</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <tr v-for="(index,itemDetail) in editPaymentData.orderDetailList">
+                                <td class="tdTitle" style="width:26%;">
+                                    <p>
+                                        <a target="_blank" :href="itemDetail.detailSpu.spuPic" title="查看大图">
+                                            <img :src="itemDetail.detailSpu.spuPic" class="img-rounded" style="height:50px">
+                                        </a>
+                                    </p>
+                                    <h4>{{itemDetail.detailSpu.spuName}}</h4>
+                                    <p>{{itemDetail.detailSku.skuName}}</p>
+                                    <!-- <p>SKU编码：{{itemDetail.detailSku.skuCode}}</p> -->
+                                </td>
+                                <td align="center" style="width:7%;">
+                                    {{itemDetail.ordOriginal}}
+                                </td>
+                                 <td align="center" style="width:7%;">
+                                    {{itemDetail.ordSkuNum}}
+                                </td>
+                                <td align="center" style="width:7%;">
+                                    {{itemDetail.ordOriginal*itemDetail.ordSkuNum}}
+                                </td>
+                                 <td align="center" style="width:12%;">
+                                    -{{itemDetail.ordShareAmount}}
+                                </td>
+                                 <td align="center" style="width:12%;">
+                                     <input type="text" class="form-control" v-model="itemDetail.ordChangePrice">
+                                </td>
+                                 <td align="center"  style="width:12%;" :rowspan="editPaymentData.orderDetailList.length" v-if="index===0">
+                                    <input type="text" class="form-control" v-model="editPaymentData.ordTransportAmount">
+                                </td>
+                           </tr>
+                       </tbody>
+                    </table> 
+                   <div class="row nopadding col-md-12">
+                       <div >
+                            &nbsp;&nbsp;&nbsp;&nbsp;收货地址： {{ordAddress()}}
+                       </div>
+                       <div >
+                           &nbsp;&nbsp;&nbsp;&nbsp;买家实付： {{calculateActAmount()}}{{actAmount()}}
+                        <div >
+                           &nbsp;&nbsp;&nbsp;&nbsp;买家实付 = 原价 + 总优惠金额 + 运费 + 总涨价或减价(涨价或减价：如果为减价，则需输入负值；如果为涨价,则需输入正值。)
+                       </div>
+                   </div>
+                </div>
+            </div>
+                <span slot="btnList">
+                    <button type="button" @click.stop="editActAmount" class="btn default blue">确定</button>
+                    <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                </span>
+        </m-alert>
+        <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
+            <div slot="content">{{showAlertMsg}}</div>
+        </m-alert>
+        <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
+            <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
+        </div>
+        <div style="position:fixed;z-index:11111;" v-show="showComponent">
+            <select-component-all v-show="showComponent" :options="componentShowOption" :onselect="selectComponentFunc" :oncancel="cancelSelectComponent"></select-component-all>
+        </div>
+        <loading :show="isLoading"></loading>
+    </div>
+</template>
+<script>
+import client from '../../common/utils/client';
+import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
+import loading from '../common/loading';
+import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
+export default {
+    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading },
+    props: {
+        show: {
+            type: Boolean,
+            value: false
+        },
+        onhide: {
+            type: Function,
+            value: () => { }
+        },
+        id: {
+            type: String,
+            value: 0
+        },
+        subData:{
+            type:Object,
+            value:null,
+        }
+    },
+    data() {
+        return {
+            editPaymentData:null,
+            isLoading: false,
+            showDialog: false,
+            showPage: false,
+            orderSubStatusList:[{ id: 6, name: '售后线下处理' }],
+            componentShowOption: {},
+            editStatusData:{
+                "ordOrderId":0,
+                "ordStatus":0,
+            },
+            showAlert: false,
+            showAlertTitle: '温馨提示',
+            showAlertMsg: '',
+            removeAddDialog: false,
+            title: '修改订单价格',
+            changeDataList:[],
+        }
+    },
+    vuex: {
+        getters: {
+            picShowOption: ({ resourceControl }) => resourceControl.picShowOption,
+            selectPicList: ({ resourceControl }) => resourceControl.selectPicList,
+        },
+        actions: { showSelectPic, getSelectPicList }
+    },
+    methods: {
+        //提交修改
+        editActAmount(){
+             client.postData(ORDER_EDIT_ACT_AMOUNT,this.editPaymentData).then(data => {
+                this.isLoading = false;
+                if (data.code == 200) {
+                    this.hideDialog();
+                    this.$parent.getList();
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.isLoading = false;
+            });
+        },
+        //计算实付款
+        actAmount () {
+            let changePriceSum=0,price=0;
+            this.editPaymentData.orderDetailList.forEach(item =>{
+                price=item.ordChangePrice==''?0:item.ordChangePrice;
+                changePriceSum =Number(changePriceSum)+Number(price);
+                this.editPaymentData.ordActAmount=Number(this.editPaymentData.ordActAmount)+Number(price);
+            });
+            return Number(this.editPaymentData.ordAmount)-Number(this.editPaymentData.ordCampaignShareAmount)+Number(this.editPaymentData.ordTransportAmount)+Number(changePriceSum);
+        },
+        //获取改价字符串
+        getChangePriceString(){
+            let string='',list=[],price=0;
+            this.editPaymentData.orderDetailList.forEach(item =>{
+                price=item.ordChangePrice==''?0:item.ordChangePrice;
+                list.push(price);
+                string=list.join("+");
+            });
+            return string;
+        },
+        //计算买家实付算式
+        calculateActAmount(num){
+            let amount='',changePriceString=this.getChangePriceString();
+            amount=this.editPaymentData.ordAmount+"-"+this.editPaymentData.ordCampaignShareAmount+"+"+(this.editPaymentData.ordTransportAmount==''?0:this.editPaymentData.ordTransportAmount)+
+                    "+("+changePriceString+")=";
+            return amount;
+        },
+         //显示收货信息
+        ordAddress(){
+            let orderSub=this.subData;
+            return orderSub.ordReceiveProvince+" "+orderSub.ordReceiveCitity+" "+orderSub.ordReceiveArea+" "+orderSub.ordReceiveDetail
+        },
+        //选择下拉框
+        selectComponentFunc(item){
+            this.editStatusData.ordStatus=item.id;
+        },
+        // 选择组件回调
+        selectComponentFunc(list) {
+            if (list[0].componentType == 27 || list[0].componentType == 15 || list[0].componentType == 13) {
+                this.contentSelect = list[0].subtitle;
+            } else {
+                this.contentSelect = list[0].title;
+            }
+            this.data.subComponentId = list[0].componentId;
+            this.showComponent = false;
+        },
+        // 隐藏选择组件弹窗
+        cancelSelectComponent() {
+            this.showComponent = false;
+        },
+        hideDialog() {
+            this.showDialog = false;
+            setTimeout(() => {
+                this.showPage = false;
+                this.onhide();
+            }, 300)
+        },
+        showMsg(msg, title) {
+            if (title) {
+                this.showAlertTitle = title;
+            } else {
+                this.showAlertTitle = '温馨提示';
+            }
+            this.showAlertMsg = msg;
+            this.showAlert = true;
+        },
+        hideMsg() {
+            this.showAlert = false;
+        },
+       
+    },
+    computed(){
+        
+    },
+    created() {
+        
+    },
+    watch: {
+        show() {
+            this.showPage = this.show;
+            this.showDialog = this.show;
+            this.editPaymentData= Object.assign({},this.subData);
+        },
+    },
+    ready() {
+        this.typesList = client.global.componentTypes;
+    },
+    beforeDestroy() {
+
+    }
+};
+</script>

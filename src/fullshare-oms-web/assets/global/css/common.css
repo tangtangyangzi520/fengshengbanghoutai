@@ -1,0 +1,73 @@
+.table th { 
+text-align: center;
+vertical-align: middle!important;
+} 
+/*自定义模态框大小
+ .modal-custom {
+    width: 80%; }  
+*/
+ 
+/*#author-content-table tr th:nth-child(3),#author-content-table tr td:nth-child(3){width:150px;}*/
+#author-content-table tr th:nth-child(4){width:80px;}
+#author-content-table tr td:nth-child(4){text-align:center;}
+#author-content-table tr th:nth-child(1){width:120px;}
+#author-content-table tr td:nth-child(1){text-align:center;}
+/*#author-content-table tr td .img-circle{display:block;width:80px;height:80px;margin-bottom:10px;}*/
+#author-content-table tr td .expert{width:100%;display:box; display: -webkit-box; display: -moz-box; height: 80px; -webkit-box-pack:center; -moz-box-pack:center; -webkit-box-align:center; -moz-box-align:center; }
+#author-content-table tr td .expert b{display:block;margin:0 0 10px;padding:0;border-radius:50% !important;width:80px;height:80px;}
+
+
+#author-content-table tr td .img-rounded{background-size:cover;}
+#author-content-table tr th:last-child{width:220px;}
+
+
+#author-search-table tr th:nth-child(1){width:80px;}
+#author-search-table tr td:nth-child(1){text-align:center;}
+#author-search-table tr td .img-circle{display:block;width:100%;margin-bottom:10px;}
+
+
+
+#version-content-table tr th:last-child{width:150px;}
+#version-content-table tr th:nth-child(1){width:100px;}
+#version-content-table tr th:nth-child(2){width:200px;}
+#version-content-table tr th:nth-child(3){width:120px;}
+#version-content-table tr th:nth-child(4){width:120px;text-align:center;}
+#welcome-content-table tr th:last-child{width:150px;}
+#welcome-content-table tr td:nth-child(2){width:120px;text-align:center;}
+
+#template-content-table tr th:nth-child(1){width:120px;}
+#template-content-table tr td .img-rounded{display:block;width:120px;}
+#template-content-table tr th:last-child{width:200px;}
+#template-content-table tr td:nth-child(4){width:100px;text-align:center;}
+
+#pain-content-table tr th:last-child{width:220px;}
+#pain-content-table tr td:nth-child(2){width:120px;text-align:center;}
+#solution-content-table tr th:last-child{width:220px;}
+#solution-content-table tr td:nth-child(3){width:120px;text-align:center;}
+#solution-content-table tr td:nth-child(4){width:120px;text-align:center;}
+
+
+
+#sku-content-table tr td .img-rounded{display:block;width:100%;margin-bottom:10px;}
+#sku-content-table tr th:nth-child(1){width:160px;}
+#sku-content-table tr td:nth-child(1){text-align:center;}
+#sku-content-table tr td:nth-child(2){width:80px;text-align:center;}
+#sku-content-table tr td:nth-child(3){width:80px;text-align:center;}
+#sku-content-table tr td:nth-child(4){width:150px;text-align:left;}
+#sku-content-table tr td:nth-child(6){width:150px;text-align:left;}
+#sku-content-table tr td:nth-child(7){width:70px;text-align:center;}
+/*#sku-content-table tr th:last-child{width:130px;text-align:center;}*/
+table.table-striped tr td{vertical-align:middle;text-align:center;}
+table.table-striped tr td:first-child img{width:auto !important;display:block;}
+table.table-striped tr td:first-child span{width:100%;display:block;padding-bottom:10px;color:#666;}
+table.table-striped tr td:first-child p{margin:10px 0 10px;width:100%;display:box;display: -webkit-box; display: -moz-box;width:100%; -webkit-box-pack:center; -moz-box-pack:center; -webkit-box-align:center; -moz-box-align:center; }
+
+
+
+#material-content-table tr td .img-rounded{display:block;height:60px;width:100%;margin-bottom:10px;}
+#material-content-table tr th:nth-child(1){width:60px;}
+#material-content-table tr td:nth-child(1){text-align:center;}
+#material-content-table tr td:nth-child(2){width:120px;text-align:center;}
+#material-content-table tr td:nth-child(3){width:120px;text-align:center;}
+#material-content-table tr td:nth-child(4){width:120px;text-align:center;}
+

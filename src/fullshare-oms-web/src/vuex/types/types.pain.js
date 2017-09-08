@@ -1,0 +1,3 @@
+// 获取痛点树
+export const GET_PAIN_TREE_SUCCESS = 'GET_PAIN_TREE_SUCCESS'
+export const GET_PAIN_TREE_FAIL = 'GET_PAIN_TREE_FAIL'
