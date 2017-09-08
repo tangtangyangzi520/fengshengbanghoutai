@@ -1,18 +1,18 @@
-<template>
+<template> 
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;"  v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :idp="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
             <div slot="content">
                 <div class="row">
                     <div>
-                         <button type="button" class="btn btn-xs blue" @click="addOption()" style="position:fixed;right:15%;top:10%;">添加</button>
+                         <button type="button" class="btn btn-xs blue" @click="addOption()" style="position:fixed;right:15%;top:10%;">娣诲姞</button>
                     </div>
                 <!-- <div style="position: absolute;top:30px;left:0;width:100%;height:100%;overflow :auto">  -->
                     <form class="form-horizontal" name="addForm" role="form">
                             <table class="table table-striped table-bordered table-hover" id="attrOption-table">
                                 <thead>
                                     <tr>
-                                    <th style="width:;">属性值</th>
-                                    <th style="width:;">操作</th>
+                                    <th style="width:;">灞炴�у��</th>
+                                    <th style="width:;">鎿嶄綔</th>
                                     </tr>
                                 </thead>
                                 <tbody id="attrOptionTbody">
@@ -22,7 +22,7 @@
                                         <!-- <span v-if="!editing" @dblclick="edit">{{itemobj.pcaoName}}</span> -->
                                         <input type="text" ref="input"  :value="itemobj.pcaoName" v-model="itemobj.pcaoName"/></td>
                                         <td>
-                                            <button type="button" class="btn btn-xs blue" @click.stop="deleteOption(itemobj)">删除</button>
+                                            <button type="button" class="btn btn-xs blue" @click.stop="deleteOption(itemobj)">鍒犻櫎</button>
                                         </td>
                                     </tr>                            
                                 </tbody>
@@ -32,17 +32,17 @@
                 <!-- </div> -->
             </div>
             <span slot="btnList">
-                <button type="button" class="btn blue" @click="submitInfo()"  @blur="save">确定</button>
-                <button type="button" class="btn default" data-dismiss="modal" >关闭</button>
+                <button type="button" class="btn blue" @click="submitInfo()"  @blur="save">纭畾</button>
+                <button type="button" class="btn default" data-dismiss="modal" >鍏抽棴</button>
             </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
 
-          <!--确定删除-->
-        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
-            <div slot="content">确定删除吗？</div>
+          <!--纭畾鍒犻櫎-->
+        <m-alert :title="'鍒犻櫎鍐呭'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
+            <div slot="content">纭畾鍒犻櫎鍚楋紵</div>
         </m-alert>
         
         <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
@@ -94,16 +94,16 @@ export default {
             showControl: false,
             controlType:'',
             dataList:[],
-            clickItems: [],   //点击操作的数据项
+            clickItems: [],   //鐐瑰嚮鎿嶄綔鐨勬暟鎹」
             itemobj: {
                 "pcaoName": ""
             },
             showAlert: false,
-            showAlertTitle: '温馨提示',
+            showAlertTitle: '娓╅Θ鎻愮ず',
             showAlertMsg: '',
             removeAddDialog: false,
-            title: '编辑属性值',
-            selectPicType: 1,//logo类型
+            title: '缂栬緫灞炴�у��',
+            selectPicType: 1,//logo绫诲瀷
             pcaoIdNum : 0,
             selRow : {},
         }
@@ -117,17 +117,17 @@ export default {
     },
     methods: {
            
-        //添加一行
+        //娣诲姞涓�琛�
         addOption(){
             //.log("pcaId is "+this.pcaid);
             this.dataList.push( { "val":"" });
             
             this.pcaoIdNum++;
             // if(pcaoIdNum<=2 || pcaoIdNum>=50){
-            //       this.showMsg("属性值最少2个最多50个");
+            //       this.showMsg("灞炴�у�兼渶灏�2涓渶澶�50涓�");
             // }
         },
-        //删除一行
+        //鍒犻櫎涓�琛�
         deleteOption(itemobj){
             this.selRow = itemobj;
             this.showControl = true;
@@ -147,7 +147,7 @@ export default {
             } 
            
         },
-        //按属性ID查询属性值列表
+        //鎸夊睘鎬D鏌ヨ灞炴�у�煎垪琛�
         getList(){
             let url=PCAO_GET_ID;
            client.postData(url+'?pcaoAtrrId='+this.pcaid).then(response =>{
@@ -163,11 +163,11 @@ export default {
                
             });
         },
-         // 隐藏选择资源弹窗
+         // 闅愯棌閫夋嫨璧勬簮寮圭獥
         cancelSelect() {
             this.showSelectPic({ show: false });
         },
-         // 隐藏选择组件弹窗
+         // 闅愯棌閫夋嫨缁勪欢寮圭獥
         cancelSelectComponent() {
             this.showComponent = false;
         },
@@ -182,7 +182,7 @@ export default {
             if (title) {
                 this.showAlertTitle = title;
             } else {
-                this.showAlertTitle = '温馨提示';
+                this.showAlertTitle = '娓╅Θ鎻愮ず';
             }
             this.showAlertMsg = msg;
             this.showAlert = true;
@@ -198,37 +198,37 @@ export default {
             }
             
         },
-        // 提交信息
+        // 鎻愪氦淇℃伅
         submitInfo() {
            // let data = this.data
-            /**属性值是否存在较验 */
+            /**灞炴�у�兼槸鍚﹀瓨鍦ㄨ緝楠� */
             var isSubmit = true;
             this.dataList.forEach(item => {
                 let pid = item.pcaoId;
                 let pname = item.pcaoName;
                 this.dataList.forEach(item2 => {
                     if(pid != item2.pcaoId && pname == item2.pcaoName){
-                        this.showMsg('这个属性值已经存在，请输入新的属性值!');
+                        this.showMsg('杩欎釜灞炴�у�煎凡缁忓瓨鍦紝璇疯緭鍏ユ柊鐨勫睘鎬у��!');
                         isSubmit = false;
                     }
                 });
             });
-            /**属性值长度较验 */
+            /**灞炴�у�奸暱搴﹁緝楠� */
             var arr =[];
             this.dataList.forEach(item=> arr.push(item.pcaoName) )
              //console.log((arr[arr.length-1]));
             if ((arr[arr.length-1])== '' || ((arr[arr.length-1]).length) >= 10) {
-                 this.showMsg('请输入属性值(属性值不能超过10个字)');
+                 this.showMsg('璇疯緭鍏ュ睘鎬у��(灞炴�у�间笉鑳借秴杩�10涓瓧)');
                  isSubmit = false;
             }
             if(!isSubmit) {
-              //  console.log("返回");
+              //  console.log("杩斿洖");
                 return;
             }
-            //console.log("继续提交了");
-            //提交属性选项
+            //console.log("缁х画鎻愪氦浜�");
+            //鎻愪氦灞炴�ч�夐」
             let url= PCAO_CREATE;         
-           // console.log("值~~~"+this.dataList);         
+           // console.log("鍊紐~~"+this.dataList);         
             client.postData(url,{  "pcaoList": this.dataList,
                                    "pcaoAtrrId": this.pcaid,
             }).then(response => {
@@ -245,7 +245,7 @@ export default {
                     }
                 }, response => {
                     this.isLoading = false;
-                    this.showMsg('网络连接错误');
+                    this.showMsg('缃戠粶杩炴帴閿欒');
                 }
             );
        
