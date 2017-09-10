@@ -2,33 +2,34 @@
     <form class="row search-form" style="margin: 5px 0 0 0">
             
             <input type="hidden" class="form-control"  v-model="searchOptions.saleStatus">
-            
-            <div class="col-md-4">
+              <div class="col-md-8 nopadding">
+            <div class="col-md-4 ">
                 <div class="form-group">
-                    <label class="col-md-3">&nbsp;&nbsp;商品名称：</label>
-                    <div class="col-md-9">
+                    <label class="col-md-4 ">&nbsp;&nbsp;商品名称</label>
+                    <div class="col-md-8">
                         <input type="text" class="form-control" v-model="searchOptions.spuName">
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 ">
                 <div class="form-group">
-                    <label class="col-md-3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品编码：</label>
-                    <div class="col-md-9">
+                    <label class="col-md-4 ">商品编码</label>
+                    <div class="col-md-8">
                         <input type="text" class="form-control" v-model="searchOptions.spuCode">
                     </div>
                 </div>
             </div>
             
-            <div class="col-md-4">
+            <div class="col-md-4 ">
                 <div class="form-group">
-                    <label class="col-md-3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SKU编码：</label>
-                    <div class="col-md-9">
+                    <label class="col-md-4 "> SKU编码</label>
+                    <div class="col-md-8">
                         <input type="text" class="form-control" v-model="searchOptions.skuCode">
                     </div>
                 </div>
-            </div>
+            </div> 
+           </div>
             <!-- <div class="col-md-4">
                 <div class="form-group">
                     <label class="col-md-3">发布状态：</label>
@@ -37,12 +38,13 @@
                     </div>
                 </div>
             </div> -->
+
             <br><br><br>
             <div class="col-md-12 nopadding">
                 <div class="form-group">
-                    <label class="col-md-1 " style="width:8%;">&nbsp;&nbsp;经营类目：</label>
+                    <label class="col-md-1 " style="width:8%;">&nbsp;&nbsp;经营类目</label>
                     <div class="col-md-7 nopadding" style="padding-left:2px;">
-                        <div class="col-md-4">
+                        <div class="col-md-4" >
                             <select class="form-control" v-model="firstActive">
                                 <option value="0">请选择一级类目</option>
                                 <option v-for="item in authorList" :value="item.id">{{item.text}}</option>
@@ -70,7 +72,7 @@
 
              <div class="col-md-12 nopadding">
                 <div class="form-group">
-                    <label class="col-md-1 " style="width:8%;">&nbsp;&nbsp;展示类目：</label>
+                    <label class="col-md-1 " style="width:8%;">&nbsp;&nbsp;展示类目</label>
                     <div class="col-md-7 nopadding" style="padding-left:2px;">
                         <div class="col-md-4">
                             <select class="form-control" v-model="showfirstActive">

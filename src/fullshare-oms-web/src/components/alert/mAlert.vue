@@ -6,7 +6,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title">{{title}}</h4>
                 </div>
-                <div class="modal-body" style="max-height:400px;overflow-x:hidden;overflow-y:auto;">
+                <div class="modal-body" style="max-height:430px;overflow-x:hidden;overflow-y:auto;">
                     <slot name="content"></slot>
                 </div>
                 <div class="modal-footer">

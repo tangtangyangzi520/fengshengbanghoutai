@@ -26,7 +26,7 @@
     
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>商品广告词：
+                                商品广告词：
                             </label>
                             <div class="controls col-md-6">
                                 <input type="text" class="form-control input-sm" v-model="request.spuAd" placeholder="">
@@ -48,7 +48,7 @@
 
                          <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>商品关键词：
+                                商品关键词：
                             </label>
                             <div class="controls col-md-6">
                                 <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开">
@@ -97,7 +97,7 @@
                         
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>上榜理由：
+                                上榜理由：
                             </label>
                             <div class="col-md-4">
                                 <select class="form-control" v-model="shangb" size=11 multiple="multiple">
@@ -110,7 +110,7 @@
     
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>专家观点：
+                                专家观点：
                             </label>
                             <div class="controls col-md-8">
                                 <textarea class="form-control input-sm" v-model="request.spuExpertOption" placeholder="30-100个字以内">
@@ -177,7 +177,7 @@
                                <input type="text" class="form-control input-sm" v-model="sj" placeholder="" @keyup="checkfloat($event)">
                         </div>
                             <label for="title" class="col-sm-2 control-label">
-                                <span class="required">* </span>原价：
+                                原价：
                             </label>
                             <div class="controls col-md-2">
                                <input type="text" class="form-control input-sm" v-model="yj" placeholder="" @keyup="checkfloat($event)">
@@ -199,7 +199,7 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>SKU编码：
+                                SKU编码：
                             </label>
                             <div class="controls col-md-2">
                                <input type="text" class="form-control input-sm" v-model="skubm" placeholder="">  
@@ -331,7 +331,7 @@
 
                          <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>参与消保类型：
+                                参与消保类型：
                             </label>
                             <div class="controls col-md-4" >
                                <span  class="insu" v-for="data in insurancelist">
@@ -342,7 +342,7 @@
 
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>包装清单：<br><font color="#A8A8A8">200字以内</font>
+                                包装清单：<br><font color="#A8A8A8">200字以内</font>
                             </label>
                             <div class="controls col-md-7">
                                 <textarea class="form-control input-sm" v-model="request.spuPackingList" placeholder="200字以内">
@@ -352,7 +352,7 @@
 
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>开始时间：
+                                开始时间：
                             </label>
                             <div class="controls col-md-4 ">
                                 <span class="radios">

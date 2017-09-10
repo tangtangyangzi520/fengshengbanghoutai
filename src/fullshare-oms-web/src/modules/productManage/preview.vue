@@ -160,7 +160,7 @@ export default {
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
-            title: '商品预览',
+            title: '预览',
             tagsList: [],             //选择的标签
             showTagTreeSelect: false, //显示标签选择弹窗
             selectPicType: 1,//区分头像,半身图还是背景(默认1专家头像)
@@ -350,7 +350,7 @@ export default {
              this.imgs = []
              this.imgList= []
              this.showimg = false
-             client.postData( PSR_GETDETAILS_BY_ID + "?spuID="+this.pspuid, {}).then(data => {  //192.168.4.249
+             client.postData( PSR_GETDETAILS_BY_ID + "?spuId="+this.pspuid, {}).then(data => {  //192.168.4.249
                    
                    for(let i = 0;i < data.length ;i++){
                        this.imgList.push({
@@ -373,10 +373,11 @@ export default {
                     this.minSalePrice = data.data.minSalePrice
                     this.totalStockNum = data.data.totalStockNum
                     this.spuFreight = data.data.spuFreight
+                    this.title = "预览:" + data.data.spuName 
                 }
             }, data => {
                 this.showMsg("spu获取失败");
-                alert("spu获取失败")
+                //alert("spu获取失败")
              })
         },
         imgList( val ) {

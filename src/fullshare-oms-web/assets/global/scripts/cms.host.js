@@ -20,6 +20,6 @@ if (/http:\/\/t/.test(location.href)) {
         File_Upload = "http://prevideo.fshtop.com/common/";
         ///////////////////////////////////
         ERP_TEST  =  "http://192.168.4.250:8086/eb-manager";
-        APP_TEST  =  "http://192.168.4.249:8086/eb-manager";
+        APP_TEST  =  "http://192.168.4.250:8086/eb-manager";
         ////////////////////////////////////
 }
