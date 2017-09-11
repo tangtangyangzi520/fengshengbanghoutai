@@ -283,54 +283,54 @@ var HEADLINE_LIST = CMS_API_BASE + "/headline/getList";
 //商品模块url
 //////////////////////////////////////////////////////////////////////
 //pku
-var  SKU_EDIT_LIST      = ERP_TEST + "/sku/editProductSku";         //编辑sku列表
-var  SKU_EDIT_UP_DOWN   = ERP_TEST + "/sku/shelvesSku";             //sku上架或下架
-var  SKU_GET_BY_ID      = ERP_TEST + "/sku/getProductSkuBySpuId";   //根据spuID获取sku列表
+var  SKU_EDIT_LIST      =  OMS_TEST + "/sku/editProductSku";         //编辑sku列表
+var  SKU_EDIT_UP_DOWN   =  OMS_TEST + "/sku/shelvesSku";             //sku上架或下架
+var  SKU_GET_BY_ID      =  OMS_TEST + "/sku/getProductSkuBySpuId";   //根据spuID获取sku列表
 //spu,图片资源
-var  SPU_EXPORT         = ERP_TEST + "/spu/exportSpu";              //根据spuid导出sku列表
-var  SPU_CREATE         = ERP_TEST + "/spu/createProductSpu";       //新增spu
-var  SPU_GET_LIST       = ERP_TEST + "/spu/listSpu";                //获取spu列表
-var  SPU_EDIT           = ERP_TEST + "/spu/editProductSpu";         //编辑spu
-var  SPU_GET_BY_ID      = ERP_TEST + "/spu/getProductSpuById";      //根据ID获取单个spu
-var  PSR_CREATE         = ERP_TEST + "/psr/createPsr";              //新增详情页
-var  PSR_GETBANNER_BY_ID    = ERP_TEST + "/psr/getPsrBannerById";   //banner图片资源
-var  PSR_GETDETAILS_BY_ID   = ERP_TEST + "/psr/getPsrDetailsById";  //详情图片资源
+var  SPU_EXPORT         =  OMS_TEST + "/spu/exportSpu";              //根据spuid导出sku列表
+var  SPU_CREATE         =  OMS_TEST + "/spu/createProductSpu";       //新增spu
+var  SPU_GET_LIST       =  OMS_TEST + "/spu/listSpu";                //获取spu列表
+var  SPU_EDIT           =  OMS_TEST + "/spu/editProductSpu";         //编辑spu
+var  SPU_GET_BY_ID      =  OMS_TEST + "/spu/getProductSpuById";      //根据ID获取单个spu
+var  PSR_CREATE         =  OMS_TEST + "/psr/createPsr";              //新增详情页
+var  PSR_GETBANNER_BY_ID    =  OMS_TEST + "/psr/getPsrBannerById";   //banner图片资源
+var  PSR_GETDETAILS_BY_ID   =  OMS_TEST + "/psr/getPsrDetailsById";  //详情图片资源
 //品牌
-var  PBD_GET_LIST   = ERP_TEST + "/pbd/list";                       //获取品牌列表
-var  PBD_CREATE     = ERP_TEST + "/pbd/createProductBrand";         //新增品牌
-var  PBD_EDIT       = ERP_TEST + "/pbd/editProductBrand";           //编辑品牌
-var  PBD_DELETE     = ERP_TEST + "/pbd/deleteProductBrand";         //删除品牌
-var  PBD_GET_ONE    = ERP_TEST + "/pbd/getProductBrandById";        //根据品牌ID获取品牌
+var  PBD_GET_LIST   =  OMS_TEST + "/pbd/list";                       //获取品牌列表
+var  PBD_CREATE     =  OMS_TEST + "/pbd/createProductBrand";         //新增品牌
+var  PBD_EDIT       =  OMS_TEST + "/pbd/editProductBrand";           //编辑品牌
+var  PBD_DELETE     =  OMS_TEST + "/pbd/deleteProductBrand";         //删除品牌
+var  PBD_GET_ONE    =  OMS_TEST + "/pbd/getProductBrandById";        //根据品牌ID获取品牌
 //数据字典
-var  SYSTEM_REASON       = ERP_TEST + "/reason/getProductChartReasons";  //获取上榜理由
-var  TAG_LIST_GET        = CMS_API_BASE + "/tag/getTagTree";            //根据typeId 获取类目列表
-var  SYSTEM_DICTIONARY   = ERP_TEST + "/system/listDictionary";        //根据"parentCode"获取数据字典
-var  PCA_GET_BY_CATID    = ERP_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据类目ID获取属性值
+var  SYSTEM_REASON       =  OMS_TEST + "/reason/getProductChartReasons";  //获取上榜理由
+var  TAG_LIST_GET        =  CMS_API_BASE + "/tag/getTagTree";            //根据typeId 获取类目列表
+var  SYSTEM_DICTIONARY   =  OMS_TEST + "/system/listDictionary";        //根据"parentCode"获取数据字典
+var  PCA_GET_BY_CATID    =  OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据类目ID获取属性值
 //////////////////////////////////////////////////////////////////////
 
 //订单模块url
 ////////////////////////////////////////////////////////////////////
-var ORDER_GET_LIST     =   ERP_TEST + "/order/list";                    //订单条件查询列表
-var ORDER_GET_LIST     = ERP_TEST + "/order/list";                      //订单条件查询列表
-var ORDER_EDIT_DEMO    = ERP_TEST + "/order/editOrderSetDemo";          //编辑商家备注
-var ORDER_EDIT_STATUS  = ERP_TEST + "/order/changeOrdStatus";           //修改订单状态
-var ORDER_CANCEL_REASON   = ERP_TEST + "/order/getOrderCancelReasons";  //获取订单取消原因
-var ORDER_EDIT_REASON  = ERP_TEST + "/order/cancelOrderSub";            //取消订单
-var ORDER_EDIT_ACT_AMOUNT = ERP_TEST + "/order/editActAmount";          //修改订单价格
-var ORDER_EXPORT       = ERP_TEST + "/order/exportOrder";               //修改订单价格
+var ORDER_GET_LIST     =    OMS_TEST + "/order/list";                    //订单条件查询列表
+var ORDER_GET_LIST     =  OMS_TEST + "/order/list";                      //订单条件查询列表
+var ORDER_EDIT_DEMO    =  OMS_TEST + "/order/editOrderSetDemo";          //编辑商家备注
+var ORDER_EDIT_STATUS  =  OMS_TEST + "/order/changeOrdStatus";           //修改订单状态
+var ORDER_CANCEL_REASON   =  OMS_TEST + "/order/getOrderCancelReasons";  //获取订单取消原因
+var ORDER_EDIT_REASON  =  OMS_TEST + "/order/cancelOrderSub";            //取消订单
+var ORDER_EDIT_ACT_AMOUNT =  OMS_TEST + "/order/editActAmount";          //修改订单价格
+var ORDER_EXPORT       =  OMS_TEST + "/order/exportOrder";               //修改订单价格
 
 //app商品测试
 var APP_SPU_GET_ONE =  APP_TEST + "/spu/getAppProductSpuById"  //根据spuID获取信息
 
 //类目属性模块
-var PCA_CREATE      =ERP_TEST +"/pca/createProductCategoryAtrr";        //分类属性添加
-var PCA_GET_ID      =ERP_TEST +"/pca/getProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性
-var PCA_EDIT        =ERP_TEST +"/pca/editProductCategoryAtrr";          //分类属性修改
-var PCA_GET_PCRACATIDS      =ERP_TEST +"/pca/getPcraCatIds"             //根据分类ID获取SPU分类属性
-var PCA_GET_BY_PCRACATIDS   =ERP_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据分类ID获取SPU分类属性分页查询
-var PCA_DELETE      =ERP_TEST + "/pca/deleteProductCategoryAtrr";       //删除SPU分类属性
-var PCA_INPUTTYPES  =ERP_TEST +"/pca/getpcaInputTypes";                 //根据"parentCode"获取数据字典
+var PCA_CREATE      = OMS_TEST +"/pca/createProductCategoryAtrr";        //分类属性添加
+var PCA_GET_ID      = OMS_TEST +"/pca/getProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性
+var PCA_EDIT        = OMS_TEST +"/pca/editProductCategoryAtrr";          //分类属性修改
+var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds"             //根据分类ID获取SPU分类属性
+var PCA_GET_BY_PCRACATIDS   = OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据分类ID获取SPU分类属性分页查询
+var PCA_DELETE      = OMS_TEST + "/pca/deleteProductCategoryAtrr";       //删除SPU分类属性
+var PCA_INPUTTYPES  = OMS_TEST +"/pca/getpcaInputTypes";                 //根据"parentCode"获取数据字典
 
-var PCAO_DELETE     =ERP_TEST +  "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
-var PCAO_CREATE     =ERP_TEST +  "/pcao/createPacoandpcaoName";           //添加属性选项
-var PCAO_GET_ID     =ERP_TEST+   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId" //根据分类属性ID获取属性选项值
+var PCAO_DELETE     = OMS_TEST +  "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
+var PCAO_CREATE     = OMS_TEST +  "/pcao/createPacoandpcaoName";           //添加属性选项
+var PCAO_GET_ID     = OMS_TEST+   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId" //根据分类属性ID获取属性选项值
