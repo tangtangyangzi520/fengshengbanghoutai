@@ -79,7 +79,7 @@
                             </td>
                             <td align="center" style="width:10%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <!-- 订单状态 -->
-                                {{ordStatus(itemSub.ordStatus)}}
+                                {{itemSub.ordStatusDisplay}}
                                 <p><button type="button" v-show="(itemSub.ordStatus==0)" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue">取消订单</button></p>
                                 <p><button type="button" v-show="(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)" @click.stop="editStatus(itemSub)" class="btn btn-xs blue">修改状态</button></p>
                                 </td>
@@ -104,7 +104,7 @@
         </div>
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
         <!-- 创建订单详情弹窗 -->
-        <order-control v-if="!destroyControlDialog" :id="orderEditId" :set-data="orderSetData" :sub-data="orderSubData" :show="showAddDialog" :onhide="hideAddDialog" :ordStatusCon="ordStatus" ></order-control>
+        <order-control v-if="!destroyControlDialog" :id="orderEditId" :set-data="orderSetData" :sub-data="orderSubData" :show="showAddDialog" :onhide="hideAddDialog" ></order-control>
         <!-- 创建订单备注弹窗 -->
         <demo-control v-if="!destroyControlDialog" :id="orsId" :show="showDemoDialog" :onhide="hideAddDialog" ></demo-control>
         <!-- 创建修改订单状态弹窗 -->
@@ -226,19 +226,6 @@ export default {
         setDemo(orsId){
             this.orsId=orsId;
             this.showDemoDialog=true;
-        },
-        //显示订单状态    
-        ordStatus(status){
-            switch(status){
-                case 0:return '待付款';
-                case 1:return '待发货';
-                case 2:return '已发货';
-                case 3:return '已完成';
-                case 4:return '已关闭';
-                case 5:return '已取消';
-                case 6:return '售后线下处理';
-                default:;
-            }
         },
         //支付渠道显示
         ordPayChannel(payChannel){
