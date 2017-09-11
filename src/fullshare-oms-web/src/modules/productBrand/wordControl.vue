@@ -35,7 +35,7 @@
                                 <span class="required">* </span>品牌描述
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="data.pbdIntroduce" placeholder="请输入品牌描述">
+                                <textarea v-model="data.pbdIntroduce" placeholder="请输入品牌描述" rows="2" cols="50" maxlength="256"></textarea>
                             </div>
                         </div>
                         <div class="form-group" style="padding-bottom:10px;">
@@ -130,6 +130,7 @@ export default {
                 "pbdDisplay": 1,
                 "pbdWebsite": "",
                 "pbdLogoUrl": "",
+                "pbdLogoId": "",
                 "pbdIntroduce": "",
                 "pbdCountry": "",
                 "pbdSort": ""
@@ -158,6 +159,7 @@ export default {
         selectPicFunc(list) {
             console.log(list);
             this.data.pbdLogoUrl = list[0].url;
+             this.data.pbdLogoId = list[0].id;
             this.showSelectPic({ show: false });
         },
          // 隐藏选择资源弹窗
@@ -212,6 +214,7 @@ export default {
                 "pbdDisplay": 1,
                 "pbdWebsite": "",
                 "pbdLogoUrl": "",
+                "pbdLogoId": "",
                 "pbdIntroduce": "",
                 "pbdCountry": "",
                 "pbdSort": ""
@@ -244,6 +247,16 @@ export default {
                 this.showMsg('请输入品牌排序(1~10字)');
                 return;
             }
+
+            var reg = /^-?\d{0,10}$/
+              
+            let f = !reg.test(data.pbdSort)
+            if (  f ) {
+                   this.showMsg("请输入整数")
+                   //$(el).val(s.substring(0,s.length-1))
+                    $(el).val("")
+            }
+
             if (data.pbdLogoUrl == "") {
                 this.showMsg('请上传logo');
                 return;
@@ -286,6 +299,7 @@ export default {
                 "pbdDisplay": 1,
                 "pbdWebsite": "",
                 "pbdLogoUrl": "",
+                "pbdLogoId": "",
                 "pbdIntroduce": "",
                 "pbdCountry": "",
                 "pbdSort": ""
@@ -307,6 +321,7 @@ export default {
                     this.data.pbdEnglishName = data.pbdEnglishName;
                     this.data.pbdWebsite = data.pbdWebsite;
                     this.data.pbdLogoUrl = data.pbdLogoUrl;
+                    this.data.pbdLogoId = data.pbdLogoId;
                     this.data.pbdIntroduce = data.pbdIntroduce;
                     this.data.pbdCountry = data.pbdCountry;
                     this.data.pbdSort = data.pbdSort;

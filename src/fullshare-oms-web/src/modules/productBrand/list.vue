@@ -2,7 +2,7 @@
       <div>
         <div class="page-bar min-bar">
             <page-title-bar>
-                <span slot="title">{{name}}管理{{countDesc}}</span>
+                <span slot="title">{{name}}列表{{countDesc}}</span>
             </page-title-bar>
             <search :onchange="changeSearchOptions" :oncreate="getList"></search>
             <div class="col-md-12 right">
@@ -18,11 +18,7 @@
                 <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                     <thead>
                         <tr>
-                            <th style="width:4%">
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
-                            </th>
-                            <th style="width:26%;">品牌Logo</th>
+                            <th style="width:30%;">品牌Logo</th>
                             <th style="width:7%;">品牌名称</th>
                             <th style="width:7%;">英文名称</th>
                             <th style="width:10%;">品牌网址</th>
@@ -34,10 +30,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="item in dataList" @click="selectItem(item)">
-                            <td style="text-align:center;vertical-align:middle;">
-                                <input type="checkbox" :checked="item.checked"></input>
-                            </td>
-                            <td style="width:100px">
+                            <td style="width:100px;text-align:center;vertical-align:middle;" >
                                 <p>
                                     <a target="_blank" :href="item.pbdLogoUrl" title="查看大图">
                                         <img :src="item.pbdLogoUrl" style="height:50px">
@@ -50,7 +43,7 @@
                             <td>{{item.pbdIntroduce}}</td>
                             <td>{{item.pbdCountry}}</td>
                             <td>{{item.pbdSort}}</td>
-                            <td>
+                            <td style="text-align:center;vertical-align:middle;">
                                 <button type="button" v-if="limitResource.good_word_edit" class="btn btn-xs blue" @click.stop="showControlFunc(item,'edit')">编辑</button>
                                 <button type="button" v-if="limitResource.good_word_delete" @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button>
                             </td>

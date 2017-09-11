@@ -1,8 +1,8 @@
 <template>
     <form class="row search-form" style="margin: 5px 0 0 0">
-           <div class="col-md-4">
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label class="col-md-3">名称：</label>
+                    <label class="col-md-3">&nbsp;&nbsp;品牌名称：</label>
                     <div class="col-md-9">
                         <input type="text" class="form-control" v-model="searchOptions.keyword">
                     </div>

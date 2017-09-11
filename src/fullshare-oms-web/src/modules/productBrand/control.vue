@@ -3,77 +3,9 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
-    
-        <m-alert :title="'提交内容'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div slot="content">确定提交吗？</div>
-        </m-alert>
-        <!--确定发布-->
-        <m-alert :title="'发布内容'" :show-cancel-btn="true" :show="showPublishDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div slot="content">确定发布吗？</div>
-        </m-alert>
-        <!--确定上架-->
-        <m-alert :title="'下架内容'" :show-cancel-btn="true" :show="showPutawayDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div slot="content">确定上架吗？</div>
-        </m-alert>
-        <!--确定下架-->
-        <m-alert :title="'下架内容'" :show-cancel-btn="true" :show="showSoldOutDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div slot="content">确定下架吗？</div>
-        </m-alert>
-    
         <!--确定删除-->
-        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showDeleteDialog" :onsure="ajaxControl" :onhide="hideMsg">
+        <m-alert :title="'删除品牌'" :show-cancel-btn="true" :show="showDeleteDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定删除吗？</div>
-        </m-alert>
-        <m-alert :title="'拒绝提交申请'" :show-cancel-btn="true" :onsure="ajaxControl" :show="showRejectDialog" :onhide="hideMsg">
-            <div class="form-group" slot="content" style="padding-bottom:15px;">
-                <label for="account" class="col-sm-4 control-label">拒绝理由</label>
-                <div class="controls col-md-6">
-                    <input type="text" class="form-control input-sm " v-model="rejectDesc" placeholder="拒绝理由">
-                </div>
-            </div>
-        </m-alert>
-        <m-alert :title="'撤回内容'" :show-cancel-btn="true" :onsure="ajaxControl" :show="showWithdrawDialog" :onhide="hideMsg">
-            <div class="form-group" slot="content" style="padding-bottom:15px;">
-                <label for="account" class="col-sm-4 control-label">撤回说明</label>
-                <div class="controls col-md-6">
-                    <input type="text" class="form-control input-sm " v-model="withdrawDesc" placeholder="撤回说明">
-                </div>
-            </div>
-        </m-alert>
-        <!--确定优先-->
-        <m-alert :title="'设置优先级'" :show-cancel-btn="true" :show="showImportantDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div class="form-group" slot="content" style="padding-bottom:15px;" v-if="importantData">
-                <label for="account" class="col-sm-4 control-label">优先级</label>
-                <div class="controls col-md-6">
-                    <select class="form-control input-sm " name="selected" v-model="importantData.priorityNum">
-                        <option value="-1">请选择</option>
-                        <option value="0">普通</option>
-                        <option value="1">置顶</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group" slot="content" style="padding-bottom:15px;">
-                <label for="account" class="col-sm-4 control-label">排序</label>
-                <div class="controls col-md-6">
-                    <input type="text" class="form-control input-sm " v-model="importantData.sortNum">
-                </div>
-            </div>
-        </m-alert>
-        <!--拉取爬虫文章-->
-        <m-alert :title="'设置拉取数量'" :show-cancel-btn="true" :show="showGetArticleDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div class="form-group" slot="content" style="padding-bottom:15px;">
-                <label for="account" class="col-sm-4 control-label">拉取数量</label>
-                <div class="controls col-md-6">
-                    <select class="form-control input-sm " name="selected" v-model="pullNum">
-                        <option value="10">10条</option>
-                        <option value="20">20条</option>
-                        <option value="30">30条</option>
-                        <option value="40">40条</option>
-                        <option value="50">50条</option>
-                        <option value="100">100条</option>
-                    </select>
-                </div>
-            </div>
         </m-alert>
         <loading :show="isLoading"></loading>
     </div>
@@ -110,15 +42,7 @@ export default {
             showAlertMsg: '',
             isLoading: false,
             importantData: null,
-            showRejectDialog: false,
-            showSubmitDialog: false,
-            showWithdrawDialog: false,
-            showPublishDialog: false,
             showDeleteDialog: false,
-            showPutawayDialog: false,
-            showSoldOutDialog: false,
-            showImportantDialog: false,
-            showGetArticleDialog: false,
             rejectDesc: '',    //拒绝理由
             withdrawDesc: '',  //撤回说明
             important: '',//优先级选择
