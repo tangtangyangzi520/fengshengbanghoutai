@@ -31,8 +31,8 @@
                             <th style="width:7%;">属性类型</th>
 							<th style="width:7%;">是否必填</th>
 							<th style="width:7%;">是否默认展示</th>
-							<th style="width:40%;">属性值列表</th>
-							<th style="width:7%;">所属类目</th>
+							<th style="width:30%;">属性值列表</th>
+							<th style="width:20%;">所属类目</th>
                             <th style="width:20%;">创建时间</th>
 							<th style="width:7%;">排序号</th>
                             <th style="width:7%;">操作</th>
@@ -47,7 +47,7 @@
                                 <td>
                                     <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
                                 </td>
-                                <td>{{itemobj.pcraCatId}}</td>
+                                <td>{{selectTreetext}}</td>
                                 <td>{{itemobj.pcaCreatedTime|filterTime}}</td>
                                 <td>{{itemobj.pcaSortNo}}</td>
                                 <td>
@@ -121,6 +121,7 @@ export default {
             showControl: false,
             showDialog:false,
             selectTreeId:0,
+            selectTreetext:'',
             parentIds : 0,
             clickItems: [],   //点击操作的数据项
             pcaEditId:'',
@@ -245,6 +246,7 @@ export default {
                 options = this.lastSearchOptions;
             } else {
                 this.searchOptions.parentIds = this.parentIds;
+                this.searchOptions.pcaSaleProp =0;
                 options = Object.assign({}, this.searchOptions);
                // console.log(options);
             }
@@ -328,6 +330,7 @@ export default {
         // 选中一个项时触发
         selectItem(item) {
             this.selectTreeId = item.id;
+            this.selectTreetext=item.text;
             //console.log("id="+item.id+",value="+item.text);
             this.parentIds = client.getParentIdList(this.treeList, item);
             this.getList(false, true);

@@ -120,7 +120,7 @@ export default {
         //添加一行
         addOption(){
             //.log("pcaId is "+this.pcaid);
-            this.dataList.push( { "val":"" });
+            this.dataList.push( { "pcaoName":"" });
             
             this.pcaoIdNum++;
             // if(pcaoIdNum<=2 || pcaoIdNum>=50){
@@ -215,12 +215,23 @@ export default {
             });
             /**属性值长度较验 */
             var arr =[];
-            this.dataList.forEach(item=> arr.push(item.pcaoName) )
-             //console.log((arr[arr.length-1]));
-            if ((arr[arr.length-1])== '' || ((arr[arr.length-1]).length) >= 10) {
-                 this.showMsg('请输入属性值(属性值不能超过10个字)');
-                 isSubmit = false;
+            this.dataList.forEach(item=> {
+              console.log(item.pcaoName.length-1) 
+            if((item.pcaoName.length-1)==-1){
+                   this.showMsg('请输入属性值') 
+                   isSubmit = false;
+            } 
+            if ( (item.pcaoName.length)>10){
+                    this.showMsg('属性值不能超过10个字');
+                    isSubmit = false;
             }
+               //arr.push(item.pcaoName) 
+            })
+             //console.log((arr[arr.length-1]));
+            // if ((arr[arr.length-1])== '' || ((arr[arr.length-1]).length) >= 10) {
+            //      this.showMsg('请输入属性值(属性值不能超过10个字)');
+            //      isSubmit = false;
+            // }
             if(!isSubmit) {
               //  console.log("返回");
                 return;
