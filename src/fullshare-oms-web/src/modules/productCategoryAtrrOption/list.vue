@@ -83,7 +83,6 @@
 
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect, itemList } from '../../components';
-import search from './search';
 import loading from '../common/loading';
 import productatrrControl from '../productCategoryAtrr/productatrrControl';
 import attrOptionControl from '../productCategoryAtrr/attrOptionControl';
@@ -97,7 +96,7 @@ export default {
         onselect: Function,
         oncancel: Function
     },
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect, search, loading, productatrrControl, treeview, itemList ,attrOptionControl},
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect,  loading, productatrrControl, treeview, itemList ,attrOptionControl},
     data() {
         return {
             name: '',

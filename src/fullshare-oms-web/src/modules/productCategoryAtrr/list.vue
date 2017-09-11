@@ -89,7 +89,6 @@
 
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect, itemList } from '../../components';
-import search from './search';
 import loading from '../common/loading';
 import productatrrControl from './productatrrControl';
 import treeview from '../common/tagTreeItem';
@@ -103,7 +102,7 @@ export default {
         onselect: Function,
         oncancel: Function
     },
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect, search, loading, productatrrControl, treeview, itemList ,attrOptionControl},
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect,  loading, productatrrControl, treeview, itemList ,attrOptionControl},
     data() {
         return {
             name: '',
@@ -162,6 +161,7 @@ export default {
         hideAddDialog(control) {
             this.pcaEditId = '';
             this.pcaId='';
+            //this.showControl = false;
             this.showAddDialog = false;
             this.showDialog = false;
             if (control && control == 'create') {
@@ -223,14 +223,16 @@ export default {
                 this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
                 if (type == 'edit') {
                     this.pcaEditId = this.selRow.pcaId;
+                    console.log(this.showControl);
                     this.showAddDialog = true;
                 }
-                if(type == 'editvalue'){
+                else if(type == 'editvalue'){
                     this.pcaEditId = this.selRow.pcaId;
                   //  this.getOptions();
                     this.showDialog = true; 
                 }
                 else {
+                    alert("ssss");
                     this.showControl = true;
                 }
             }
@@ -386,6 +388,7 @@ export default {
             this.showAlert = true;
         },
         hideMsg() {
+            this.showAddDialog = false;
             this.showDeleteDialog = false;
             this.showAlert = false;
             this.showControl = false;

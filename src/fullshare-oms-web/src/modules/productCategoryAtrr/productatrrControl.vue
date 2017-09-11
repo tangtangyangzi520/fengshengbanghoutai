@@ -253,7 +253,7 @@ export default {
             let url = PCA_CREATE;
 
             if (this.pcaid!= '') {
-                alert(this.pcaid);
+               // alert(this.pcaid);
                 url = PCA_EDIT+ '?pcaId=' + this.pcaid;
                   data.pcaId = this.pcaid;
                  
