@@ -67,23 +67,28 @@
          <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert> 
+                  <!--确定删除-->
+        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
+            <div slot="content">确定删除吗？</div>
+        </m-alert>
+
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert> 
-        <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
-        
+
         <loading :show="isLoading"></loading>
     </div> 
 </template>
 <script>
-import control from './control';
+
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect, itemList } from '../../components';
 import search from './search';
 import loading from '../common/loading';
-import productatrrControl from './productatrrControl';
+import productatrrControl from '../productCategoryAtrr/productatrrControl';
+import attrOptionControl from '../productCategoryAtrr/attrOptionControl';
 import treeview from '../common/tagTreeItem';
-import attrOptionControl from './attrOptionControl';
+
 export default {
    
     props: {
@@ -92,7 +97,7 @@ export default {
         onselect: Function,
         oncancel: Function
     },
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect, search, control, loading, productatrrControl, treeview, itemList ,attrOptionControl},
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect, search, loading, productatrrControl, treeview, itemList ,attrOptionControl},
     data() {
         return {
             name: '',
@@ -122,6 +127,7 @@ export default {
             changeObj:false,
             lastSearchOptions: {},
             controlType:'',
+             selRow : {},
             searchOptions: {
                 parentIds: 0,
                 pcaSaleProp:1,
@@ -201,19 +207,20 @@ export default {
         },
         showControlFunc(itemobj, type) {
             this.controlType = type;
+             this.selRow = itemobj;
             if (!itemobj) {
                 if (this.selectItems.length != 0) {
                     this.clickItems = this.selectItems;
                     this.showControl = true;
                 }
             } else {
-                this.clickItems = typeof itemobj == 'array' ? itemobj : [itemobj];
+                this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
                 if (type == 'edit') {
-                    this.pcaEditId = itemobj.pcaId;
+                    this.pcaEditId = this.selRow.pcaId;
                     this.showAddDialog = true;
                 }
                 if(type == 'editvalue'){
-                    this.pcaEditId = itemobj.pcaId;
+                    this.pcaEditId = this.selRow.pcaId;
                   //  this.getOptions();
                     this.showDialog = true; 
                 }
@@ -221,6 +228,13 @@ export default {
                     this.showControl = true;
                 }
             }
+        },
+         ajaxControlDel(){
+                let url=PCA_DELETE+'?pcaId=' + this.selRow.pcaId;
+                client.postData(url).then(data =>{
+                    this.isLoading = false;     
+                    this.getList();
+                });  
         },
         hideControlFunc(type) {
             if (type == 'success') {
@@ -368,6 +382,7 @@ export default {
         hideMsg() {
             this.showDeleteDialog = false;
             this.showAlert = false;
+            this.showControl = false;
         }
     },
 
