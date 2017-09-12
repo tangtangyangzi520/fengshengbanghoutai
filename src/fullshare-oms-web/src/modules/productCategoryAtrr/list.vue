@@ -27,23 +27,40 @@
                     <table class="table table-striped table-bordered table-hover" id="category-table">
                         <thead>
                             <tr>
-                            <th style="width:36%;">属性名称</th>
-                            <th style="width:7%;">属性类型</th>
-							<th style="width:7%;">是否必填</th>
-							<th style="width:7%;">是否默认展示</th>
-							<th style="width:30%;">属性值列表</th>
-							<th style="width:20%;">所属类目</th>
-                            <th style="width:20%;">创建时间</th>
-							<th style="width:7%;">排序号</th>
-                            <th style="width:7%;">操作</th>
+                            <th >属性名称</th>
+                            <th >属性类型</th>
+							<th >是否必填</th>
+							<th >是否默认展示</th>
+							<th >属性值列表</th>
+							<th >所属类目</th>
+                            <th >创建时间</th>
+							<th >排序号</th>
+                            <th >操作</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="itemobj in dataList" >
                                 <td>{{itemobj.pcaName}}</td>
-                                <td>{{itemobj.pcaRequired}}</td>
-                                <td>{{itemobj.pcaRequired}}</td>
-                                <td>{{itemobj.pcaSaleProp}}</td>
+                                <td >
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==1">单选</span>
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==2">多选</span>
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==3">下拉列表</span>
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==4">单行文本</span>
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==5">多行文本</span>
+                                </td>
+                                <!--{{itemobj.pcaInputType}}-->
+                                <td>
+                                    <p style="padding-top:5px;">
+                                        <span class="label label-default" v-if="itemobj.pcaRequired!=1">否</span>
+                                        <span class="label label-success" v-else>是</span>
+                                    </p>
+                                </td>
+                                <td>
+                                     <p style="padding-top:5px;">
+                                        <span class="label label-default" v-if="itemobj.pcaSaleProp!=1">否</span>
+                                        <span class="label label-success" v-else>是</span>
+                                    </p>
+                                </td> 
                                 <td>
                                     <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
                                 </td>
@@ -126,6 +143,7 @@ export default {
             selectTreeId:0,
             selectTreetext:'',
             parentIds : 0,
+            parentTexts:'',
             clickItems: [],   //点击操作的数据项
             pcaEditId:'',
             pcaId:'',
@@ -153,6 +171,8 @@ export default {
         }
     },
     methods: {
+        
+
          addItem() {
             this.showAddDialog = true;
             this.pcaEditId='';
@@ -232,7 +252,6 @@ export default {
                     this.showDialog = true; 
                 }
                 else {
-                    alert("ssss");
                     this.showControl = true;
                 }
             }
@@ -348,7 +367,10 @@ export default {
             this.selectTreetext=item.text;
             //console.log("id="+item.id+",value="+item.text);
             this.parentIds = client.getParentIdList(this.treeList, item);
+            this.parentTexts = client.getParentTextList(this.treeList,item);
             this.getList(false, true);
+             console.log(this.parentIds);
+              console.log(this.parentTexts);
         },
        
         
