@@ -2,7 +2,7 @@
     <div>
         <div class="page-bar min-bar">
             <page-title-bar>
-                <span slot="title">经营类目管理</span>
+                <span slot="title">类目销售属性设置（SKU属性）</span>
             </page-title-bar>
             <div class="col-md-12 right">
                <span v-if="selectItems.length>0" class="desc">已选
