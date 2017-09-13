@@ -2,7 +2,7 @@
     <div>
         <div class="page-bar min-bar">
             <page-title-bar>
-                <span slot="title">经营类目管理</span>
+                <span slot="title">类目通用属性设置</span>
             </page-title-bar>
             <div class="col-md-12 right">
                <span v-if="selectItems.length>0" class="desc">已选
@@ -27,23 +27,40 @@
                     <table class="table table-striped table-bordered table-hover" id="category-table">
                         <thead>
                             <tr>
-                            <th style="width:36%;">属性名称</th>
-                            <th style="width:7%;">属性类型</th>
-							<th style="width:7%;">是否必填</th>
-							<th style="width:7%;">是否默认展示</th>
-							<th style="width:30%;">属性值列表</th>
-							<th style="width:20%;">所属类目</th>
-                            <th style="width:20%;">创建时间</th>
-							<th style="width:7%;">排序号</th>
-                            <th style="width:7%;">操作</th>
+                            <th >属性名称</th>
+                            <th >属性类型</th>
+							<th >是否必填</th>
+							<th >是否默认展示</th>
+							<th >属性值列表</th>
+							<th >所属类目</th>
+                            <th >创建时间</th>
+							<th >排序号</th>
+                            <th >操作</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="itemobj in dataList" >
                                 <td>{{itemobj.pcaName}}</td>
-                                <td>{{itemobj.pcaRequired}}</td>
-                                <td>{{itemobj.pcaRequired}}</td>
-                                <td>{{itemobj.pcaSaleProp}}</td>
+                                <td >
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==1">单选</span>
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==2">多选</span>
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==3">下拉列表</span>
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==4">单行文本</span>
+                                    <span class="label label-info" v-show="itemobj.pcaInputType==5">多行文本</span>
+                                </td>
+                                <!--{{itemobj.pcaInputType}}-->
+                                <td>
+                                    <p style="padding-top:5px;">
+                                        <span class="label label-default" v-if="itemobj.pcaRequired!=1">否</span>
+                                        <span class="label label-success" v-else>是</span>
+                                    </p>
+                                </td>
+                                <td>
+                                     <p style="padding-top:5px;">
+                                        <span class="label label-default" v-if="itemobj.pcaSaleProp!=1">否</span>
+                                        <span class="label label-success" v-else>是</span>
+                                    </p>
+                                </td> 
                                 <td>
                                     <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
                                 </td>
@@ -73,19 +90,22 @@
          <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert> 
+           <!--确定删除-->
+        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
+            <div slot="content">确定删除吗？</div>
+        </m-alert>
+        
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert> 
-        <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
-        
+
         <loading :show="isLoading"></loading>
     </div> 
 </template>
 <script>
-import control from './control';
+
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect, itemList } from '../../components';
-import search from './search';
 import loading from '../common/loading';
 import productatrrControl from './productatrrControl';
 import treeview from '../common/tagTreeItem';
@@ -99,7 +119,7 @@ export default {
         onselect: Function,
         oncancel: Function
     },
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect, search, control, loading, productatrrControl, treeview, itemList ,attrOptionControl},
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect,  loading, productatrrControl, treeview, itemList ,attrOptionControl},
     data() {
         return {
             name: '',
@@ -123,10 +143,12 @@ export default {
             selectTreeId:0,
             selectTreetext:'',
             parentIds : 0,
+            parentTexts:'',
             clickItems: [],   //点击操作的数据项
             pcaEditId:'',
             pcaId:'',
             changeObj:false,
+             selRow : {},
             lastSearchOptions: {},
             controlType:'',
             searchOptions: {
@@ -149,6 +171,8 @@ export default {
         }
     },
     methods: {
+        
+
          addItem() {
             this.showAddDialog = true;
             this.pcaEditId='';
@@ -157,6 +181,7 @@ export default {
         hideAddDialog(control) {
             this.pcaEditId = '';
             this.pcaId='';
+            //this.showControl = false;
             this.showAddDialog = false;
             this.showDialog = false;
             if (control && control == 'create') {
@@ -208,19 +233,21 @@ export default {
         },
         showControlFunc(itemobj, type) {
             this.controlType = type;
+             this.selRow = itemobj;
             if (!itemobj) {
                 if (this.selectItems.length != 0) {
                     this.clickItems = this.selectItems;
                     this.showControl = true;
                 }
             } else {
-                this.clickItems = typeof itemobj == 'array' ? itemobj : [itemobj];
+                this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
                 if (type == 'edit') {
-                    this.pcaEditId = itemobj.pcaId;
+                    this.pcaEditId = this.selRow.pcaId;
+                    console.log(this.showControl);
                     this.showAddDialog = true;
                 }
-                if(type == 'editvalue'){
-                    this.pcaEditId = itemobj.pcaId;
+                else if(type == 'editvalue'){
+                    this.pcaEditId = this.selRow.pcaId;
                   //  this.getOptions();
                     this.showDialog = true; 
                 }
@@ -228,6 +255,13 @@ export default {
                     this.showControl = true;
                 }
             }
+        },
+        ajaxControlDel(){
+                let url=PCA_DELETE+'?pcaId=' + this.selRow.pcaId;
+                client.postData(url).then(data =>{
+                    this.isLoading = false;     
+                    this.getList();
+                });  
         },
         hideControlFunc(type) {
             if (type == 'success') {
@@ -333,7 +367,10 @@ export default {
             this.selectTreetext=item.text;
             //console.log("id="+item.id+",value="+item.text);
             this.parentIds = client.getParentIdList(this.treeList, item);
+            this.parentTexts = client.getParentTextList(this.treeList,item);
             this.getList(false, true);
+             console.log(this.parentIds);
+              console.log(this.parentTexts);
         },
        
         
@@ -373,8 +410,10 @@ export default {
             this.showAlert = true;
         },
         hideMsg() {
+            this.showAddDialog = false;
             this.showDeleteDialog = false;
             this.showAlert = false;
+            this.showControl = false;
         }
     },
 
