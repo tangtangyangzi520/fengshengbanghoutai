@@ -23,7 +23,7 @@
                     </ul>
                     </div> 
                 </div>
-                <div class="col-md-6" id="contentList">
+                <div class="col-md-6" id="contentList" style="width:75%;">
                     <table class="table table-striped table-bordered table-hover" id="category-table">
                         <thead>
                             <tr>

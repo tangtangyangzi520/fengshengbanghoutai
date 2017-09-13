@@ -238,6 +238,7 @@ export default {
                 this.showMsg('请输入属性名称(1~10字)');
                 return;
             }
+            //if(this.data.pcaName)
              //属性类型判空
             if(this.data.pcaInputType < 0 ){
                 this.showMsg("请选择属性类型")
@@ -268,7 +269,7 @@ export default {
             client.postData(url, data).then(response => {
                 this.isLoading = false;
                 if (response.code != 200) {
-                    this.showMsg(response.msg);
+                    this.showMsg(response.message);
                 } else {
                     if (this.pcaid != '') {
                         this.onhide('update');
@@ -278,7 +279,7 @@ export default {
                 }
             }, response => {
                 this.isLoading = false;
-                this.showMsg('网络连接错误');
+                this.showMsg(response.message);
             })
         }
     },
@@ -329,7 +330,7 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
-                this.showMsg('网络连接错误');
+                this.showMsg(response.msg);
             })
         }
     },
