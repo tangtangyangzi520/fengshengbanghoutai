@@ -331,6 +331,7 @@ var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds"             //根�
 var PCA_GET_BY_PCRACATIDS   = OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据分类ID获取SPU分类属性分页查询
 var PCA_DELETE      = OMS_TEST + "/pca/deleteProductCategoryAtrr";       //删除SPU分类属性
 var PCA_INPUTTYPES  = OMS_TEST +"/pca/getpcaInputTypes";                 //根据"parentCode"获取数据字典
+var SALEPCA_CREATE=ERP_TEST +"/pca/createSaleProductCategoryAtrr"; //销售属性添加
 
 var PCAO_DELETE     = OMS_TEST +  "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
 var PCAO_CREATE     = OMS_TEST +  "/pcao/createPacoandpcaoName";           //添加属性选项
