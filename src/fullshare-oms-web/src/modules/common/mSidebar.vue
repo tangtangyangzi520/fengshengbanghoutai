@@ -43,12 +43,19 @@ export default {
 			    {"text":"商品管理" ,"children":[
                     {"text":"商品列表","url":"/dist/#!/productManage"},
                     {"text":"品牌列表","url":"/dist/#!/productBrand"},
-                    {"text":"属性列表","url":"/dist/#!/productCategoryAtrr"},
-                    {"text":"属性选项列表","url":"/dist/#!/productCategoryAtrrOption"},
+                    {"text":"通用属性列表","url":"/dist/#!/productCategoryAtrr"},
+                    {"text":"销售属性列表","url":"/dist/#!/productCategoryAtrrOption"},
                   ]
                 },
                 {"text":"订单管理" ,"children":[
                     {"text":"订单列表","url":"/dist/#!/order"},
+                    /*{"text":"品牌列表","url":"/dist/#!/productBrand"},
+                    {"text":"属性列表","url":"/"},*/
+                  ]
+                },
+                {"text":"营销管理" ,"children":[
+                    {"text":"限时折扣列表","url":"/dist/#!/discountManage"},
+                    {"text":"优惠券列表","url":"/dist/#!/couponManage"},
                     /*{"text":"品牌列表","url":"/dist/#!/productBrand"},
                     {"text":"属性列表","url":"/"},*/
                   ]

@@ -1,9 +1,9 @@
 <template>
     <form class="row search-form" style="margin: 5px 0 0 0">
             
-            <input type="hidden" class="form-control"  v-model="searchOptions.saleStatus">
+            <!-- <input type="hidden" class="form-control"  v-model="searchOptions.saleStatus">
             
-                        <input type="text" class="form-control" v-model="searchOptions.mkcName">
+                        <input type="text" class="form-control" v-model="searchOptions.spuName"> -->
                     
           
     </form>
@@ -65,9 +65,8 @@ export default {
             searchOptions: {
                 orderBy:1,
                 mkcStatus : -1,//状态
-                "mkcType": 6,
-                "mkcName": "",   
-                 creators: [],
+                "mkcType": 5,
+                creators: [],
                 //experts: [],
                 pains: [],
                 deployStatus: -1,

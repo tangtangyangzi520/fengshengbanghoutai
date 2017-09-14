@@ -20,7 +20,7 @@
                                 <span class="required">* </span>商品名称：
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="request.spuName" placeholder="">
+                                <input type="text" class="form-control input-sm" v-model="request.spuName" placeholder="50字以内" maxLength="50">
                             </div>
                         </div>
     
@@ -29,10 +29,19 @@
                                 商品广告词：
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="request.spuAd" placeholder="">
+                                <input type="text" class="form-control input-sm" v-model="request.spuAd" placeholder="50字以内" maxLength="50">
                             </div>
                         </div>
                          
+                         <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span> 有赞商品地址：
+                            </label>
+                            <div class="controls col-md-6">
+                                <input type="text" class="form-control input-sm" v-model="request.spuShareUrl" placeholder="100字以内" maxLength="100">
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>品牌：
@@ -51,7 +60,7 @@
                                 商品关键词：
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开">
+                                <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开" maxLength="50">
                             </div>
                         </div>
                         <div class="form-group">
@@ -59,7 +68,7 @@
                                 商品简介：
                             </label>
                             <div class="controls col-md-7">
-                                <textarea class="form-control input-sm" v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案">
+                                <textarea  v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="50">
                                 </textarea> 
                             </div>
                         </div>
@@ -113,7 +122,7 @@
                                 专家观点：
                             </label>
                             <div class="controls col-md-8">
-                                <textarea class="form-control input-sm" v-model="request.spuExpertOption" placeholder="30-100个字以内">
+                                <textarea class="form-control input-sm" v-model="request.spuExpertOption" placeholder="30-100个字以内" maxLength="100">
                                 </textarea> 
                             </div>
                         </div>
@@ -129,8 +138,8 @@
                      <div   v-for="(v,i) in sxlist"  style ="width: 100%; background-color:white;
                              border:1px solid #F0F0F0;" > 
                         <div class="baseSx"> 
-                         <a class="delete2" @click="closeProperty($event)" >×</a>                       
-                         <span class="pca" style="margin-left:5%;display:-moz-inline-box;display:inline-block;width:75px;">{{i.pcaName}}
+<!--                          <a class="delete2" @click="closeProperty($event)" >×</a>                       
+ -->                         <span class="pca" style="margin-left:5%;display:-moz-inline-box;display:inline-block;width:75px;">{{i.pcaName}}
                                   <input :value="i.pcaName" type="hidden" />
                                   <input :value="i.pcaId" type="hidden" />
                                   <input :value="i.pcaSortNo" type="hidden" />
@@ -158,8 +167,8 @@
                             
                         </div>
                     </div>
- <br><span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">还可以添加 2 组，销售属性总数最多4组，SKU组合不能超过600组。</font>
-                        <div class="form-group">
+ <br><span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">销售属性总数最多4组，SKU组合不能超过600组。</font>
+                        <div class="form-group" id="addsx">
                             <label for="title" class="col-sm-3 control-label">
                               <button type="button" class="btn yellow" @click="addProperty()">添加销售属性</button> 
                             </label>
@@ -215,7 +224,7 @@
                             <input type="text" class="col-md-2 input" v-for="i in 10 " placeholder="">
                         </div>
                     </div>
-                    <div class="form-group"> 
+                    <div id="dkej" class="form-group"> 
                         <label for="title" class="col-sm-3 control-label">                         
                              <button type="button" class="btn green" v-on:click="dkej()">生成SKU组合</button>
                         </label>
@@ -223,7 +232,7 @@
                     <div >
                         <table id="pltab" border="1" cellspacing="0" cellpadding="0" style="display:none">  
                           
-                                <tr style-"text-align: center">
+                                <tr style="text-align: center">
                                    <td style="width:41.8%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
                                    <td style="border:1px solid white;line-height:30px">￥<input class=" input2" type="text"  @keyup="sput($event,'.put0')"  /></td>
                                    <td style="border:1px solid white">￥<input class=" input2" type="text"  @keyup="sput($event,'.put1')" /></td>
@@ -345,7 +354,7 @@
                                 包装清单：<br><font color="#A8A8A8">200字以内</font>
                             </label>
                             <div class="controls col-md-7">
-                                <textarea class="form-control input-sm" v-model="request.spuPackingList" placeholder="200字以内">
+                                <textarea class="form-control input-sm" v-model="request.spuPackingList" placeholder="200字以内" maxLength="200">
                                 </textarea> 
                             </div>
                         </div>
@@ -361,7 +370,7 @@
                                 <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
                                 </span>
                        <div class="col-md-6 time-box">
-                        <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" v-model="time" id="createStartTime"/>
+                        <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" v-model="time" id="createStartTime0"/>
                                 <select  v-model="hour" style="width:90px; height:27px">
                                     <option value="-1">选择小时</option>
                                     <option v-for="item in 24" :value="item">{{item}}时</option>
@@ -439,6 +448,7 @@ export default {
         return {
             request:{
               //"spuType": 1,
+                "spuShareUrl":'',
                 "spuPic": '',
                 "spuAppSummary": "",
                 "spuPcSummary":"",
@@ -615,7 +625,11 @@ export default {
         },
         //重置基本属性
         reset() {
-            client.postData(  PCA_GET_BY_CATID + "?parentIds="+this.par[3]+","+this.par[4]+","+this.par[5], {}  ).then(data => {
+            let arr =[]
+            arr.push(this.par[3])
+            arr.push(this.par[4])
+            arr.push(this.par[5])
+            client.postData(  PCA_GET_BY_CATID , {"parentIds" :arr }  ).then(data => {
                 if (data.code == 200) {
 
                     this.sxlist = data.data;
@@ -759,6 +773,7 @@ export default {
             let flag = false
             let fla = false
             let msg = ""
+            let msg3 = ""
             let a = new Array();
             //基本属性的遍历
              $(".baseSx ").each(function(index,val){
@@ -780,8 +795,11 @@ export default {
                        if(flag){
                        a.push(arr)
                     }else{
-                        if(!fla){
+                        /*if(!fla){
                             fla = true
+                        }*/
+                        if( $($(val).children("span[class='pca']").children("input:hidden")[7]).val() == 1){
+                          msg3 += "属性:"+ $($(val).children("span[class='pca']").children("input:hidden")[0]).val()+"的属性值必须填 ! "
                         }
                     }
                 })
@@ -789,8 +807,15 @@ export default {
                      $("#table").hide()
                      $("#pltab").hide()
                      this.xssxList = []
-                 this.showMsg(msg)
-                 return
+                     this.showMsg(msg)
+                     return
+             }
+             if(msg3 != ""){
+                     $("#table").hide()
+                     $("#pltab").hide()
+                     this.xssxList = []
+                     this.showMsg(msg3)
+                     return
              }
              if(fla){
                  //this.showMsg("请先选择基本属性或移除")
@@ -800,7 +825,7 @@ export default {
                  //return
              }
             //销售属性的遍历 及 判空
-            let msg2 = ''
+            let msg2 = ""
 
            $("#base div[id!=\"0\"]").each(function(index,v){
                      let name = ''
@@ -828,7 +853,7 @@ export default {
                 })
                 if(flag){
                     for(let n=0 ; n<arr.length-1 ; n++){
-                        for(let m =1; m<arr.length ; m++){
+                        for(let m =1+n; m<arr.length ; m++){
                             if(arr[n] == arr[m]){
                                 msg2 = " 属性名:"+ name +"->属性值'"+arr[n]+"'已重复!"
                                 return 
@@ -916,7 +941,7 @@ export default {
              this.xssxList.splice(index, 1);
            },
          addProperty(){ 
-             if( $("#base div[id!=\"0\"]").length > 3 )  {
+             if( $("#base div[id!=\"0\"]").length + this.sxlist.length > 3 )  {
                 this.showMsg("销售属性总数最多4组!");
                   return
              }
@@ -930,6 +955,39 @@ export default {
 
             if( this.request.spuName == '' ){
                 this.showMsg("请输入商品名称")
+                return
+            }
+            if( this.request.spuName.length >= 50 ){
+                this.showMsg("商品名称不能超过50字")
+                return
+            }
+              
+            if( this.request.spuAd.length >= 50 ){
+                this.showMsg("商品广告词不能超过50字")
+                return
+            }
+            if( this.request.spuKeyword.length >= 50 ){
+                this.showMsg("商品关键词不能超过50字")
+                return
+            }
+            if( this.request.spuShareUrl.length >= 100 ){
+                this.showMsg("有赞商品地址不能超过100字")
+                return
+            }
+           /* if( this.request.spuPcSummary.length >= 50 ){
+                this.showMsg("商品简介不能超过50字")
+                return
+            }*/
+            if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
+                this.showMsg("专家观点不能少于30字")
+                return
+            }
+            if( this.request.spuExpertOption.length >= 100 ){
+                this.showMsg("专家观点不能超过100字")
+                return
+            }
+            if( this. request.spuPackingList.length >= 200 ){
+                this.showMsg("包装清单不能超过200字")
                 return
             }
               this.request.spuCatId = this.par[5];
@@ -981,10 +1039,11 @@ export default {
                                     }
                                 baseList.push(basesx)
                                 skuname += $($(zc).children("span[class='pcao']").children("input:checked")).val()+","
-
+                       //添加属性被选中,基本属性没有选中
                       }else if( $($($(".addsxxx")[d]).children("input:checked")).length == 1 && $($(zc).children("span[class='pcao']").children("input:checked")).length == 0){ 
                                //上面不匹配，确定为新增基础属性
                                //alert("添加")
+                        
                                if( $.trim($($($(".addsxxx")[d]).children("input:checked").next(":text")).val() ) == "" ){
                                        //alert(1)
                                        msg2 = $($(bname[d]).children("input:hidden")[0]).val()+":添加属性值不能为空"
@@ -1008,7 +1067,14 @@ export default {
                                     }
                                      pcaoList.push(newbase)
                                       skuname += $($($(".addsxxx")[d]).children("input:checked").next(":text")).val()+","
-                            }
+                                // 基本属性和添加属性没有选的时候.判断属性是否必须填
+                            }else if( $($(zc).children("span[class='pcao']").children("input:checked")).length == 0 &&  $($($(".addsxxx")[d]).children("input:checked")).length == 0
+                                       && $($(bname[d]).children("input:hidden")[7]).val() == 1 ){
+
+                                       msg2 = "属性名(" +$($(bname[d]).children("input:hidden")[0]).val() +")的属性值必须填 ! "
+                                       return false
+                               }
+
                       })
 
                      if( msg2 != ''){
@@ -1020,10 +1086,10 @@ export default {
                         this.showMsg('请输入丰盛榜售价')
                         return
                     }
-                       if( this.yj == '' ){
+                      /* if( this.yj == '' ){
                         this.showMsg('请输入原价')
                         return
-                    }
+                    }*/
                       
                       if(  this.kc == '' ){
                         this.showMsg('请输入展示库存')
@@ -1233,7 +1299,7 @@ export default {
                                           "pcaMemo": zhi[f+ii], // 备注
                                           "pcaName": $($(ze).children(":text")[0]).val(), // 销售属性名
                                           "pcaRequired": 0,   // 0
-                                          "pcaSaleProp": 1,  // 1
+                                          "pcaSaleProp": 2,  // 1
                                           "pcaSortNo": g,   // 排序号
                                           "pcraCatId": leimuid,  //  类目ID 
                                         }
@@ -1318,10 +1384,10 @@ export default {
                         msg += "第"+$(el[0]).val()+"行: 未填写丰盛榜售价___________"
                         //return
                     }
-                    if( $(el[3]).val() == ''){
+                    /*if( $(el[3]).val() == ''){
                         msg += "第"+$(el[0]).val()+"行: 未填写原价____________"
                         //return
-                    }
+                    }*/
                     if( $(el[4]).val() == ''){
                         msg += "第"+$(el[0]).val()+"行: 未填写展示库存___________"
                         //return
@@ -1378,36 +1444,40 @@ export default {
 
        this.request.tagList = []
       //类目标签
-      if( this.tagsList.length == 0){
-            this.showMsg("请选择类目标签")
+     /* if( this.tagsList.length == 0){
+            this.showMsg("请选择展示类目标签")
             return
-      }
+      }*/
         this.tagsList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
         })
       //人群标签
      
-      if( this.personList.length == 0){
+     /* if( this.personList.length == 0){
             this.showMsg("请选择人群标签")
             return
-      }
+      }*/
         this.personList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
         })
       //内容标签
-      if( this.neirongList.length == 0){
+      /*if( this.neirongList.length == 0){
             this.showMsg("请选择内容标签")
             return
-      }
+      }*/
         this.neirongList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
         })
       
         //上榜理由
-     if(this.shangb.length == 0 ){
-            this.showMsg("上榜理由不能为空")
+        if(this.shangb.length > 3 ){
+            this.showMsg("最多选择3个上榜理由")
             return
          }
+    /* if(this.shangb.length == 0 ){
+            this.showMsg("上榜理由不能为空")
+            return
+         }*/
          //商品图片判空
        
         if(this.request.resourceList.length == 0 ){
@@ -1423,10 +1493,10 @@ export default {
                let av = {"piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2], }
                arr.push(av)
          })
-         if(arr.length == 0 ){
+         /*if(arr.length == 0 ){
             this.showMsg("消保类型不能为空")
             return
-         }
+         }*/
          //上架时间
       if( $(".radios input:checked").val() == 2 ){
            if( this.hour == -1 || this.minutes == -1 || this.time == ""){
@@ -1591,45 +1661,70 @@ export default {
         },
         //内容标签回调
         selectNeiFunc(list) {
-            if( list.length > 3 ){
+            /*if( list.length > 3 ){
                 alert("标签不能超过3个")
                 return
-            }
+            }*/
+            let flag = false 
             this.neirongList = []
-            this.neirongList = list;
             this.data.labelIds = [];
             list.forEach(item => {
+                if( item.id.length < 7 ){
+                    flag = true
+                    return 
+                }
                 this.data.labelIds.push(item.id);
             })
-            this.showneiTreeSelect = !this.showneiTreeSelect;
+            if(flag){
+                 alert("请选择到最后一级标签。")
+               this.data.labelIds = []
+               return
+            }else{
+                this.neirongList = list;
+               this.showneiTreeSelect = !this.showneiTreeSelect;
+            }
         },
         //人群标签回调
         selectPerFunc(list) {
-            if( list.length > 3 ){
+           /* if( list.length > 3 ){
                 alert("标签不能超过3个")
                 return
-            }
+            }*/
             this.personList = [];
             this.personList = list;
             this.data.labelIds = [];
             list.forEach(item => {
+                if( item.id.length < 8){
+
+                }
                 this.data.labelIds.push(item.id);
             })
             this.showperTreeSelect = !this.showperTreeSelect;
         },
         // 选择标签回调
         selectTagFunc(list) {
-            if( list.length > 3 ){
+            /*if( list.length > 3 ){
                 alert("标签不能超过3个")
                 return
-            }
+            }*/
+            let flag = false 
             this.tagsList = []
-            this.tagsList = list;
             this.data.labelIds = [];
             list.forEach(item => {
+                 if( item.id.length < 10 ){
+                    flag = true
+                    return 
+                }
                 this.data.labelIds.push(item.id);
             })
-            this.showTagTreeSelect = !this.showTagTreeSelect;
+            if(flag){
+                alert("请选择到最后一级标签。")
+               this.data.labelIds = []
+               return
+            }else{
+               this.tagsList = list;
+                this.showTagTreeSelect = !this.showTagTreeSelect;
+            }
         },
         hideDialog() {
             this.par = []
@@ -1738,7 +1833,10 @@ export default {
                 if (data.code == 200) {
 
                     this.sxlist = data.data;
-                    
+                    if(this.sxlist.length >= 4){
+                        $("#dkej").hide()
+                        $("#addsx").hide()
+                    }   
                 } else {
                     this.showMsg(data.msg);
                 }
@@ -1809,7 +1907,7 @@ export default {
     ready() {   
         this.typesList = client.global.componentTypes;
         this.showPainListSelect = true;
-         $('#createStartTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
+         $('#createStartTime0').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
         $('.datePicker').on('change', () => {
             this.rad = 2
         })

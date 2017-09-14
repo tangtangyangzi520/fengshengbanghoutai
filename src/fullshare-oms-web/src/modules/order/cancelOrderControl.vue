@@ -1,6 +1,6 @@
 <template>
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'600px'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showReasonDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'600px'">
             <div slot="content">
                 <!-- <m-select :data="cancelReasonList" :placeholder="'请选择取消原因'" :change-func="selectReasonFunc" :class="'fixedIcon'" ></m-select> -->
                 <div>
@@ -61,7 +61,7 @@ export default {
                 "ordCancelReason":'',
             },
             isLoading: false,
-            showDialog: false,
+            showReasonDialog: false,
             showPage: false,
             showPainListSelect: true,
             painIdsSelect: [],
@@ -99,8 +99,8 @@ export default {
         editCancelReason(){
             this.editReasonData.ordOrderId=this.id;
             console.log(this.editCancelReason);
-            if(!this.editReasonData.ordCancelReason){
-                // this.showMsg("请选择订单状态");
+            if(this.editReasonData.ordCancelReason==''){
+                this.showMsg("请选择订单状态");
                 return;
             }
             client.postData(ORDER_EDIT_REASON,this.editReasonData).then(data => {
@@ -136,7 +136,7 @@ export default {
             this.showComponent = false;
         },
         hideDialog() {
-            this.showDialog = false;
+            this.showReasonDialog = false;
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
@@ -154,84 +154,7 @@ export default {
         hideMsg() {
             this.showAlert = false;
         },
-        clearInfo() {
-            this.data = {
-                "authorName": "",
-                "authorTitle": "",
-                "authorType": 2,
-                "bgUrl": "",
-                "description": "",
-                "halfFigure": "",
-                "iconId": null,
-                "iconUrl": "",
-                "painIds": [],
-                "painOptions": []
-            }
-            this.painIdsSelect = [];
-        },
-        // 提交信息
-        submitInfo() {
-            let datas = Object.assign({}, this.data);
-            if (this.data.authorName.replace(/\s/g, '') == '' || this.data.authorName.length > 30) {
-                this.showMsg('请输入专家名称(1~30字)');
-                return;
-            }
-            if (datas.iconUrl == '') {
-                this.showMsg('请选择专家头像');
-                return;
-            }
-            if (datas.halfFigure == '') {
-                this.showMsg('请选择半身图');
-                return;
-            }
-            if (datas.bgUrl == '') {
-                this.showMsg('请选择背景图');
-                return;
-            }
-            datas.labelIds = [];
-            let url = AUTHOR_ADD;
-            if (this.id != '') {
-                url = AUTHOR_EDIT;
-            } else {
-                //新增专家painOptions字段名不同
-                let newOptions = [];
-                datas.painOptions.forEach(item => {
-                    //console.log(item)
-                    for (var key in item) {
-                        if (key == 'painComponentId') {
-                            item.id = item[key];
-                            delete item.painComponentId;
-                        } else if (key == 'painName') {
-                            item.text = item[key];
-                            delete item.painName;
-                        } else if (key == 'opinion') {
-                            item.option = item[key];
-                            delete item.opinion;
-                        }
-                    }
-                    newOptions.push(item);
-                });
-                datas.painOptions = newOptions;
-            }
-            datas.painOptions = JSON.stringify(datas.painOptions);
-            this.isLoading = true;
-            client.postData(url, datas).then(response => {
-                this.isLoading = false;
-                if (response.code != 200) {
-                    this.showMsg(response.msg);
-                } else {
-                    this.showPainListSelect = false;
-                    if (this.id != '') {
-                        this.onhide('update');
-                    } else {
-                        this.onhide('create');
-                    }
-                }
-            }, response => {
-                this.isLoading = false;
-                this.showMsg(response.message);
-            })
-        }
+       
     },
     created() {
         
@@ -242,7 +165,7 @@ export default {
         },
         show() {
             this.showPage = this.show;
-            this.showDialog = this.show;
+            this.showReasonDialog = this.show;
         },
     },
     ready() {

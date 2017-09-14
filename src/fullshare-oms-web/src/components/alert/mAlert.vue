@@ -61,7 +61,11 @@ export default {
         'width': {
             type: String,
             default: '500px'
-        }
+        },
+        /*'maxheight': {
+            type: String,
+            default: '400px'
+        }*/
     },
     data() {
         return {

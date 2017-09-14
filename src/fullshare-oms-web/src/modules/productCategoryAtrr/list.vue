@@ -23,7 +23,7 @@
                     </ul>
                     </div> 
                 </div>
-                <div class="col-md-6" id="contentList">
+                <div class="col-md-6" id="contentList" style="width:75%;">
                     <table class="table table-striped table-bordered table-hover" id="category-table">
                         <thead>
                             <tr>
@@ -367,7 +367,7 @@ export default {
             this.selectTreetext=item.text;
             //console.log("id="+item.id+",value="+item.text);
             this.parentIds = client.getParentIdList(this.treeList, item);
-            this.parentTexts = client.getParentTextList(this.treeList,item);
+          //  this.parentTexts = client.getParentTextList(this.treeList,item);
             this.getList(false, true);
              console.log(this.parentIds);
               console.log(this.parentTexts);

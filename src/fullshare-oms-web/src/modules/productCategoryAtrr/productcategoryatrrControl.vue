@@ -29,7 +29,7 @@
 					
                         <div class="col-md-6" >
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required"></span>是否默认展示</label>
+                                <span class="required">* </span>是否默认展示</label>
                             <div class="controls col-md-4">
                                 <!--{{data.pcaSaleProp}} -->
                                     <input type="checkbox"  v-model="data.pcaSaleProp"  />
@@ -38,7 +38,7 @@
                         
 						<div class="col-md-6">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required"></span>备注:
+                                <span class="required">* </span>备注:
                             </label>
                             <div class="controls col-md-9">
                                 <input type="text" class="form-control input-sm" v-model="data.pcaMemo" placeholder="请输入备注">
@@ -47,11 +47,11 @@
 						
 						<div class="form-group">
                             <label class="col-sm-3 control-label">
-                                <span class="required">*</span>属性类型：</label>
+                                <span class="required"></span>*属性类型：</label>
 						<!-- pcaAtrrType -->
-                         <div class="col-md-3">
+                         <div class="controls col-md-6">
                                 <select v-model="data.pcaInputType" class="type">
-                                    <option value="-1">请选择</option>
+                                    <option value="0">请选择</option>
                                     <option v-for="item in inputtypesList" :value="item.key">{{item.keyValue}}</option>
                                 </select>
                            </div>     
@@ -108,7 +108,7 @@ export default {
     },
     data() {
         return {
-            pcaInputType:-1,
+            pcaInputType:0,
             isLoading: false,
             showDialog: false,
             showPage: false,
@@ -122,7 +122,7 @@ export default {
                 "pcaRequired":0,
                 "pcaSaleProp": 0,
                 "pcaMemo": "",
-                "pcaInputType":-1
+                "pcaInputType":""
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
@@ -234,15 +234,9 @@ export default {
         // 提交信息
         submitInfo() {
             let data =  this.data;
-            if (this.data.pcaName.replace(/\s/g, '') == '' || this.data.pcaName.length > 10) {
-                this.showMsg('请输入属性名称(1~10字)');
+            if (this.data.pcaName.replace(/\s/g, '') == '' || this.data.pcaName.length > 30) {
+                this.showMsg('请输入属性名称(1~30字)');
                 return;
-            }
-            //if(this.data.pcaName)
-             //属性类型判空
-            if(this.data.pcaInputType < 0 ){
-                this.showMsg("请选择属性类型")
-                return
             }
             if(data.pcaRequired ){
                 data.pcaRequired=1
@@ -259,7 +253,7 @@ export default {
             let url = PCA_CREATE;
 
             if (this.pcaid!= '') {
-               // alert(this.pcaid);
+                //alert(this.pcaid);
                 url = PCA_EDIT+ '?pcaId=' + this.pcaid;
                   data.pcaId = this.pcaid;
                  
@@ -269,7 +263,7 @@ export default {
             client.postData(url, data).then(response => {
                 this.isLoading = false;
                 if (response.code != 200) {
-                    this.showMsg(response.message);
+                    this.showMsg(response.msg);
                 } else {
                     if (this.pcaid != '') {
                         this.onhide('update');
@@ -279,14 +273,13 @@ export default {
                 }
             }, response => {
                 this.isLoading = false;
-                this.showMsg(response.message);
+                this.showMsg('网络连接错误');
             })
         }
     },
     created() {
         this.data.pcraCatId= this.selectedid
         this.getinputtypeList();
-        //this.getPainList();
     },
     watch: {
         show() {
@@ -330,7 +323,7 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
-                this.showMsg(response.msg);
+                this.showMsg('网络连接错误');
             })
         }
     },

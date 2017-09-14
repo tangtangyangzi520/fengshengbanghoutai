@@ -52,7 +52,7 @@
                 <hr style="color:DimGray">
                    <div style="margin-top:4%;margin-bottom:4%">
                          <a style="display:block;color:#909090;margin-left:1.5%;text-decoration:none">
-                         <font size"4" >划线价格说明</font> <span v-for="a in 35">&nbsp;</span>  &gt;</a>
+                         <font size="4">划线价格说明</font> <span v-for="a in 25">&nbsp;</span>  &gt;</a>
                    </div>
                 <hr style="color:DimGray">   
             </div>
@@ -65,7 +65,7 @@
                 <button type="button" class="btn green-meadow" @click="submitInfo">下架</button>  -->
                 <!--  <button type="button" class="btn purple" @click="submitInfo">预览</button>  -->
                  <!--  <button type="button" class="btn blue" @click="save">保存</button>  -->
-                  <button type="button" v-if="showimg" class="btn default" @click="hideDialog()" >返回编辑</button>
+                  <button type="button" v-if="showimg" class="btn default" @click="hideDialog()" >重新编辑</button>
                   <button type="button" v-else class="btn default" @click="hideDialog()" >关闭</button>
 
               </span>
@@ -248,7 +248,7 @@ export default {
             this.showDialog = false;
             setTimeout(() => {
                 this.showPage = false;
-                this.onhide();
+                this.onhide('cancel');
             }, 300)
         },
         selectPainFunc(list) {
@@ -374,6 +374,7 @@ export default {
                     this.totalStockNum = data.data.totalStockNum
                     this.spuFreight = data.data.spuFreight
                     this.title = "预览:" + data.data.spuName 
+                   
                 }
             }, data => {
                 this.showMsg("spu获取失败");

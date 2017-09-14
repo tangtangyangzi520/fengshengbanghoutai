@@ -1,11 +1,91 @@
 <template>
     <form class="row search-form" style="margin: 5px 0 0 0">
-            
-            <input type="hidden" class="form-control"  v-model="searchOptions.saleStatus">
-            
-                        <input type="text" class="form-control" v-model="searchOptions.mkcName">
-                    
-          
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3">创建时间：</label>
+                    <div class="col-md-9 time-box">
+                        <div><input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTime"></div>
+                        <div>至</div>
+                        <div><input type="text" class="form-control inline-block datePicker" placeholder="选择结束时间" id="createEndTime"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3 time-box">更新时间：</label>
+                    <div class="col-md-9 time-box">
+                        <div><input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="modifyedStartTime"></div>
+                        <div>至</div>
+                        <div><input type="text" class="form-control inline-block datePicker" placeholder="选择结束时间" id="modifyedEndTime"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3">专家名：</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" v-model="searchOptions.title">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3">发布状态：</label>
+                    <div class="col-md-9">
+                        <m-select :data="stateList" :placeholder="'请选择内容'" :change-func="selectStateFunc" :class="'fixedIcon'"></m-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3">创建人：</label>
+                    <div class="col-md-9">
+                        <m-multi-select :data="authorList" :active-items="[]" :placeholder="'请选择内容'" :change-func="selectAuthorFunc"></m-multi-select>
+                    </div>
+                </div>
+            </div>
+    
+            <!--<div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3">作者：</label>
+                    <div class="col-md-9">
+                        <m-multi-select :data="expertsList" :active-items="[]" :placeholder="'请选择内容'" :change-func="selectExpertFunc"></m-multi-select>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3">关注点：</label>
+                    <div class="col-md-9">
+                        <m-multi-select :data="painList" :active-items="painIdsActive" :placeholder="'请选择关注点'" :change-func="selectPainFunc"></m-multi-select>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-3">渠道：</label>
+                        <div class="col-md-9">
+                            <m-multi-select :data="chanelList" :active-items="channelIdActive" :placeholder="'请选择渠道'" :change-func="selectChanelFunc"></m-multi-select>
+                        </div>
+                    </div>
+                </div>-->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3">上架状态：</label>
+                    <div class="col-md-9">
+                        <m-select :data="putawayStateList" :placeholder="'请选择内容'" :change-func="selectPutawayStateFunc" :class="'fixedIcon'"></m-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-md-3">已打标签：</label>
+                    <div class="col-md-9">
+                        <m-select :data="tagStatusList" :placeholder="'请选择内容'" :change-func="selectTagStatusFunc" :class="'fixedIcon'"></m-select>
+                    </div>
+                </div>
+            </div>
     </form>
 </template>
 <script>
@@ -15,11 +95,6 @@ import { getPainTree } from '../../vuex/actions/actions.pain';
 import { mMultiSelect, mAlert, mSelect } from '../../components';
 export default {
     props: {
-        cflag:true,
-        parent: {
-            type: Number,
-            value: -100
-        },
         onchange: {
             type: Function,
             default: () => { }
@@ -40,14 +115,10 @@ export default {
     },
     components: { mMultiSelect, mSelect, mAlert },
     data() {
-        return {  
-            oneList:[],
-            twoList:[],
-            threeList:[],
-            leimuList:[],
+        return {
             stateList: [],
             painList: [],
-            authorList: [],//经营类目列表
+            authorList: [],//创建者列表
             //expertsList: [],//作者列表
             chanelList: [],
             putawayStateList: [{ id: 0, name: '下架' }, { id: 1, name: '上架' }],
@@ -55,19 +126,10 @@ export default {
             painIdsActive: [],   //关注点选中
             channelIdActive: [], //渠道类型选中
             tagStatusList: [{ id: 0, name: '未打' }, { id: 1, name: '已打' }],
-            firstActive: 0,
-            secondActive: 0,
-            thirdActive: 0,
-            showfirstActive: 0,
-            showsecondActive: 0,
-            showthirdActive: 0,
-            //可以在这里编辑搜索条件
             searchOptions: {
-                orderBy:1,
-                mkcStatus : -1,//状态
-                "mkcType": 6,
-                "mkcName": "",   
-                 creators: [],
+                title: '',
+                subtitle: '',
+                creators: [],
                 //experts: [],
                 pains: [],
                 deployStatus: -1,
@@ -139,20 +201,16 @@ export default {
             }
             this.onchange(options);
         },
-        // 获取类目列表
-        getLEIMUList() {
-            client.postData(  TAG_LIST_GET + "?typeId=100", {}).then(data => {
+        // 获取创建者列表
+        getAuhorList() {
+            client.postData(COMPONENT_GET_USERS, {}).then(data => {
                 if (data.code == 200) {
-
-                    this.leimuList = data.data.root.children;
-                   
-                    let list = data.data.root.children;
+                    let list = data.data;
                     for (let i = 0; i < list.length; i++) {
-                        list[i].name = list[i].text;
-                        list[i].id = list[i].id;
+                        list[i].name = list[i].userName;
+                        list[i].id = list[i].userId;
                     }
                     this.authorList = list;
-                    this.oneList = list;
                     this.stateList = client.global.deployStatusSelect;
                 } else {
                     this.showMsg(data.msg);
@@ -196,52 +254,19 @@ export default {
         },
         // 选择痛点回调
         selectPainFunc(list) {
-
-              if( list.length !=0 ){
-                  console.log(list[0].name)
-                  console.log(list[0].id)
-                 let select = this.leimuList 
-                 let pain = []
-                 for (let i = 0; i < select.length; i++) {
-
-                      for (let j = 0; j < select[i].children.length; j++) {
-
-                         if( list[0].id == select[i].children[j].id ){
-                             
-                             for (let z = 0; z < select[i].children[j].children.length; z++) {
-
-                          pain = select[i].children[j].children
-                          console.log(select[i].children[j].children.length)
-                          pain[z].name = select[i].children[j].children[z].text
-                          pain[z].id = select[i].children[j].children[z].id
-                            }
-                        }
-                    }
-                } 
-                     this.chanelList = pain         
-            } 
-            
+            if (list instanceof Array) {
+                this.painIdsActive = list;
+            } else {
+                this.painIdsActive = [list];
+            }
+            this.searchOptions.pains = [];
+            this.painIdsActive.forEach(item => {
+                this.searchOptions.pains.push(item.id);
+            })
+            this.setOptions();
         },
         // 选择创建者回调
         selectAuthorFunc(list) {
-            
-            if( list.length !=0 ){
-                  console.log(list[0].name)
-                  console.log(list[0].id)
-                 let select = this.leimuList 
-                 let pain = []
-                 for (let i = 0; i < select.length; i++) {
-                     if( list[0].id == select[i].id ){
-                        pain = select[i].children
-                        for (let j = 0; j < select[i].children.length; j++) {
-                           console.log(select[i].children.length)
-                        pain[j].name = select[i].children[j].text;
-                        pain[j].id = select[i].children[j].id;
-                    } 
-                 }                                      
-            }
-            this.painList = pain
-        }
             let creators = [];
             list.forEach((item) => {
                 creators.push(item.id);
@@ -278,86 +303,12 @@ export default {
         }
     },
     created() {
-        this.getLEIMUList();
+        this.getAuhorList();
         //this.getExpertList();
-        //this.getComponentChannelList();
-        //this.getPainTree();
+        this.getComponentChannelList();
+        this.getPainTree();
     },
     watch: {
-        cflag() {
-           if( (this.firstActive ==0 && this.secondActive == 0 && this.thirdActive == 0) || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
-              this.oncreate(false, true);
-           }else{
-               alert("选择经营类目不完整")
-
-           }
-        },
-        parent(val){
-           this.searchOptions.mkcStatus = val;
-           if( (this.firstActive + this.secondActive + this.thirdActive) == 0 || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
-              this.oncreate(false, true);
-           }else{
-               alert("选择类目不完整")
-
-           }
-        },
-        showthirdActive(val) {
-            this.searchOptions.showCatIdList[2] = val
-
-        },
-        showfirstActive(val){
-            //if( val == 0){
-                this.searchOptions.showCatIdList[2] = 0
-                this.searchOptions.showCatIdList[1] = 0
-                this.searchOptions.showCatIdList[0] = val
-                this.showsecondActive = 0
-                this.showthirdActive = 0
-                this.threeList =[]
-                this.twoList = []
-           // }else{
-             if( this.leimuList.find(item=>item.id==val) != null){
-                this.twoList = this.leimuList.find(item=>item.id==val).children
-            }
-        },
-        showsecondActive(val){
-                this.searchOptions.showCatIdList[2] = 0
-                this.searchOptions.showCatIdList[1] = val
-            //if( val == 0){
-                this.showthirdActive = 0
-                this.threeList =[]
-            //}else{
-            if( this.twoList.find(item=>item.id==val) != null){
-                this.threeList = this.twoList.find(item=>item.id==val).children;
-            }
-        },
-        thirdActive(val) {
-            this.searchOptions.spuCatId = val
-
-        },
-        firstActive(val){
-            //if( val == 0){
-                this.secondActive = 0
-                this.thirdActive = 0
-                this.chanelList =[]
-                this.painList = []
-           // }else{
-            if(this.leimuList.find(item=>item.id==val) != null){
-
-                this.painList = this.leimuList.find(item=>item.id==val).children
-            }
-           // }
-        },
-        secondActive(val){
-            //if( val == 0){
-                this.thirdActive = 0
-                this.chanelList =[]
-           // }else{
-            if(this.painList.find(item=>item.id==val) != null){
-
-                this.chanelList = this.painList.find(item=>item.id==val).children;
-            }
-           // }
-        },
         title(val) {
             this.searchOptions.title = val;
         },

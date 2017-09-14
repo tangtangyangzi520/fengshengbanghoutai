@@ -224,35 +224,32 @@ export default {
         submitInfo() {
             let data = this.data;
             if (data.pbdName.replace(/\s/g, '') == '' || data.pbdName.length > 30) {
-                this.showMsg('请输入品牌名称(1~30字)');
+                this.showMsg('请输入品牌名称(1~20字)');
                 return;
             }
             if (data.pbdEnglishName.replace(/\s/g, '') == '' || data.pbdEnglishName.length > 70) {
-                this.showMsg('请输入英文名称(1~70字)');
+                this.showMsg('请输入英文名称(1~30字)');
                 return;
             }
             if (data.pbdWebsite.replace(/\s/g, '') == '' || data.pbdWebsite.length > 70) {
-                this.showMsg('请输入品牌网址(1~70字)');
+                this.showMsg('请输入品牌网址(1~100字)');
                 return;
             }
             if (data.pbdIntroduce.replace(/\s/g, '') == '' || data.pbdIntroduce.length > 70) {
-                this.showMsg('请输入品牌描述(1~70字)');
+                this.showMsg('请输入品牌描述(1~100字)');
                 return;
             }
             if (data.pbdCountry.replace(/\s/g, '') == '' || data.pbdCountry.length > 30) {
-                this.showMsg('请输入国家(1~30字)');
+                this.showMsg('请输入国家(1~20字)');
                 return;
             }
-            if (data.pbdSort.replace(/\s/g, '') == '' || data.pbdSort.length > 10) {
-                this.showMsg('请输入品牌排序(1~10字)');
-                return;
-            }
+           
 
             var reg = /^-?\d{0,10}$/
               
             let f = !reg.test(data.pbdSort)
             if (  f ) {
-                   this.showMsg("请输入整数")
+                   this.showMsg("请输入1~11位整数")
                    //$(el).val(s.substring(0,s.length-1))
                     $(el).val("")
             }
@@ -280,7 +277,7 @@ export default {
                 }
             }, response => {
                 this.isLoading = false;
-                this.showMsg('网络连接错误');
+                this.showMsg(response.message);
             })
         }
     },

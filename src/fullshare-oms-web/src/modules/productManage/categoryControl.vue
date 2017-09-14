@@ -24,7 +24,7 @@
        </div>  
        <div class="box">
            <ul>
-               <li v-for="item in thirdList"><a :id="item.id" @click="thirdSelect(item,$event)">{{item.text}}</a><span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:8%"> > </span> </li> 
+               <li v-for="item in thirdList"><a :id="item.id" @click="thirdSelect(item,$event)">{{item.text}}</a><span v-for="i in 4">&nbsp;</span> <span style="float:right;margin-right:6%"> > </span> </li> 
            </ul>
        </div> <br><br>  
        <div style="text-align:center">           

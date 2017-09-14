@@ -8,7 +8,9 @@
             <div class="col-md-12 right">
                 <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
                 <button class="btn yellow-crusta" type="button" @click="exportOrder">批量导出</button>
-                <!-- <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button> -->
+<!--                 <button class="btn yellow-crusta" type="button" @click="selectSpu" >选择商品</button>
+ -->                <!-- <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button> -->
+        
 
             </div>
             <form id="exportForm" method="POST">
@@ -41,19 +43,19 @@
                     </thead>
                 </table>
             </div>
-            <div class="table-responsive col-md-12" v-for="itemSet in dataList">
+            <div class="table-responsive col-md-12" v-for="itemSet in dataList" :key="itemSet.orstNo">
                 <div>订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp;    
                 支付流水号：需要支付接口提供数据 &nbsp;&nbsp;&nbsp;&nbsp;   
                 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp;
                 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
                  
-                <a href="javascript:;" @click="setDemo(itemSet.orsId)">备注</a> -- 
-                <a href="javascript:;">加星</a>
+                <a href="javascript:;" @click="setDemo(itemSet.orsId)">备注</a>
+                 <!-- --<a href="javascript:;">加星</a> -->
                 
                 </div>
                 <table class="table table-striped table-bordered table-hover" >
-                    <tbody v-for="itemSub in itemSet.orderSubList">
-                        <tr v-for="(index,itemDetail) in itemSub.orderDetailList" @click="selectItem(item)">
+                    <tbody v-for="itemSub in itemSet.orderSubList" :key="itemSub.ordOrderNo">
+                        <tr v-for="(index,itemDetail) in itemSub.orderDetailList" @click="selectItem(item)" :key="index">
                             <td class="tdTitle" style="width:26%;">
                                 <p v-if="index===0 && itemSet.orderSubList.length>1">子订单号:{{itemSub.ordOrderNo}}&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" @click="showDetail(itemSet,itemSub)">查看详情</a></p>
                                 <p>
@@ -114,6 +116,8 @@
 
         <!-- 创建修改订单价格弹窗 -->
         <change-payment-control v-if="!destroyControlDialog" :sub-data="orderSubData" :show="showPaymentDialog" :onhide="hideAddDialog"></change-payment-control>
+        <!-- 测试选择商品弹窗 -->
+        <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideAddDialog" @spu-data="getSelected"></select-spu>
 
         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
@@ -132,6 +136,7 @@ import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect } from
 import search from './search';
 import control from '../common/control';
 import loading from '../common/loading';
+import selectSpu from '../common/selectSpu';
 import orderControl from './orderControl';
 import demoControl from './demoControl';
 import changeStatusControl from './changeStatusControl';
@@ -140,7 +145,7 @@ import changePaymentControl from './changePaymentControl';
 let vueThis = null;
 export default {
     components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, 
-                    loading, orderControl,demoControl,changeStatusControl,cancelOrderControl,changePaymentControl },
+                    loading, orderControl,demoControl,changeStatusControl,cancelOrderControl,changePaymentControl,selectSpu },
     props: {
         title:'',
         ospuid:0,
@@ -168,6 +173,7 @@ export default {
             showStatusDialog:false,
             showReasonDialog:false,
             showPaymentDialog:false,
+            showSpuDialog:false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             limitResource: null, //发布状态
@@ -180,6 +186,7 @@ export default {
             orderSubData: null,
             orsId: 0,
             ordOrderId:0,
+            testSelectedSpu:[],
         }
     },
     computed: {
@@ -200,6 +207,14 @@ export default {
         }
     },
     methods: {
+        //得到选择的商品
+        getSelected(data){
+            this.testSelectedSpu=data;
+        },
+        //选择商品
+        selectSpu(){
+            this.showSpuDialog=true;
+        },
         //导出订单
         exportOrder(){
             $("#exportForm").attr("action",ORDER_EXPORT);

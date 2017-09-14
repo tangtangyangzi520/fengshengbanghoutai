@@ -57,9 +57,9 @@
             <div class="form-group">
                 <label class="col-md-3">实付金额:</label>
                 <div class="col-md-9 time-box">
-                    <div><input type="text" class="form-control inline-block" :placeholder="'输入最低金额'" v-model="searchOptions.lowOrsOpenPay"></div>
+                    <div><input type="text" class="form-control inline-block" :placeholder="'输入最低金额'" v-model="searchOptions.lowOrsOpenPay" @blur="checkAmount(searchOptions.lowOrsOpenPay)"></div>
                     <div>至</div>
-                    <div><input type="text" class="form-control inline-block" :placeholder="'输入最高金额'" v-model="searchOptions.highOrsOpenPay"></div>
+                    <div><input type="text" class="form-control inline-block" :placeholder="'输入最高金额'" v-model="searchOptions.highOrsOpenPay" @blur="checkAmount(searchOptions.highOrsOpenPay)"></div>
                 </div>
             </div>
         </div>
@@ -135,6 +135,12 @@ export default {
         }
     },
     methods: {
+        //校验查询金额
+        checkAmount(data){
+            if(!/^[0-9]*$/.test(data) || data < 0){
+                this.$parent.showMsg("请输入不小于0的数字");
+            }
+        },
         //清空查询条件
         clearOptions() {
             this.searchOptions = {

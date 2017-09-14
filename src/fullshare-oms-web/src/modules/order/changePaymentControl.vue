@@ -19,7 +19,7 @@
                            </tr>
                        </thead>
                        <tbody>
-                           <tr v-for="(index,itemDetail) in editPaymentData.orderDetailList">
+                           <tr v-for="(index,itemDetail) in editPaymentData.orderDetailList" :key="index">
                                 <td class="tdTitle" style="width:26%;">
                                     <p>
                                         <a target="_blank" :href="itemDetail.detailSpu.spuPic" title="查看大图">
@@ -43,10 +43,10 @@
                                     -{{itemDetail.ordShareAmount}}
                                 </td>
                                  <td align="center" style="width:12%;">
-                                     <input type="text" class="form-control" v-model="itemDetail.ordChangePrice">
+                                     <input type="text" class="form-control" v-model="itemDetail.ordChangePrice" @blur="checkChangePrice(itemDetail)">
                                 </td>
                                  <td align="center"  style="width:12%;" :rowspan="editPaymentData.orderDetailList.length" v-if="index===0">
-                                    <input type="text" class="form-control" v-model="editPaymentData.ordTransportAmount">
+                                    <input type="text" class="form-control" v-model="editPaymentData.ordTransportAmount" @blur="checkTransportAmount(editPaymentData)">
                                 </td>
                            </tr>
                        </tbody>
@@ -133,9 +133,32 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        //校验涨价减价
+        checkChangePrice(item){
+            if(!/^[0-9]*$/.test(Math.abs(Number(item.ordChangePrice)))){
+                this.$parent.showMsg("请输入数字");
+                item.ordChangePrice=0;
+            }
+            if(item.ordOriginal*item.ordSkuNum+Number(item.ordChangePrice)-item.ordShareAmount<0){
+                this.$parent.showMsg("减价幅度不得大于需付价格");
+                item.ordChangePrice=0;
+            }
+            return;
+        },
+        //校验运费
+        checkTransportAmount(item){
+            if(!/^[0-9]*$/.test(item.ordTransportAmount) || item.ordTransportAmount < 0){
+                this.$parent.showMsg("请输入不小于0的数字");
+                item.ordTransportAmount=0;
+            }
+            return;
+        },
         //提交修改
         editActAmount(){
-             client.postData(ORDER_EDIT_ACT_AMOUNT,this.editPaymentData).then(data => {
+            //校验数据
+            this.checkTransportAmount(this.editPaymentData);
+            this.editPaymentData.orderDetailList.forEach(item => this.checkChangePrice(item));
+            client.postData(ORDER_EDIT_ACT_AMOUNT,this.editPaymentData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.hideDialog();

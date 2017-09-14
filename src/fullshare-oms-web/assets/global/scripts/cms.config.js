@@ -290,6 +290,7 @@ var  SKU_GET_BY_ID      =  OMS_TEST + "/sku/getProductSkuBySpuId";   //根据spu
 var  SPU_EXPORT         =  OMS_TEST + "/spu/exportSpu";              //根据spuid导出sku列表
 var  SPU_CREATE         =  OMS_TEST + "/spu/createProductSpu";       //新增spu
 var  SPU_GET_LIST       =  OMS_TEST + "/spu/listSpu";                //获取spu列表
+var  SPU_GET_LIST_SKU   =  OMS_TEST + "/spu/listSpuAndSku";          //获取spu列表(包含sku列表)
 var  SPU_EDIT           =  OMS_TEST + "/spu/editProductSpu";         //编辑spu
 var  SPU_GET_BY_ID      =  OMS_TEST + "/spu/getProductSpuById";      //根据ID获取单个spu
 var  PSR_CREATE         =  OMS_TEST + "/psr/createPsr";              //新增详情页
@@ -333,4 +334,14 @@ var PCA_INPUTTYPES  = OMS_TEST +"/pca/getpcaInputTypes";                 //根�
 
 var PCAO_DELETE     = OMS_TEST +  "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
 var PCAO_CREATE     = OMS_TEST +  "/pcao/createPacoandpcaoName";           //添加属性选项
-var PCAO_GET_ID     = OMS_TEST+   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId" //根据分类属性ID获取属性选项值
+var PCAO_GET_ID     = OMS_TEST +   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId" //根据分类属性ID获取属性选项值
+
+//营销模块
+var MKT_LIST   =  OMS_TEST+ "/mkt/list"                      //优惠券/活动条件查询
+var MKT_CREATE =  OMS_TEST+ "/mkt/createMktCampaign"         //新建优惠券/活动
+var MKT_EDIT   =  OMS_TEST+ "/mkt/editMktCampaign"             //编辑优惠券/活动
+var MKT_GET_ID   =  OMS_TEST+ "/mkt/getMktCampaignRespById"    //根据id获取优惠券/活动
+var MKT_INVALIDATE   =  OMS_TEST+ "/mkt/invalidateMktCampaign"    //优惠券/活动失效
+var MKT_DELETE  =  OMS_TEST+ "/mkt/deleteMktCampaign"        //优惠券/活动删除
+
+

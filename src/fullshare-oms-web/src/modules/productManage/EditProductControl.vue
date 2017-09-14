@@ -10,7 +10,7 @@
                                 <span class="required">* </span>商品名称：
                             </label>
                             <div class="controls col-md-4">
-                                <input type="text" class="form-control input-sm" v-model="request.spuName" placeholder="" >
+                                <input type="text" class="form-control input-sm" v-model="request.spuName" placeholder="" maxLength="50">
                             </div>
                         </div>
     
@@ -19,10 +19,19 @@
                                 商品广告词：
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="request.spuAd" placeholder="">
+                                <input type="text" class="form-control input-sm" v-model="request.spuAd" placeholder="" maxLength="50">
                             </div>
                         </div>
                          
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span> 有赞商品地址：
+                            </label>
+                            <div class="controls col-md-6">
+                                <input type="text" class="form-control input-sm" v-model="request.spuShareUrl" placeholder="100字以内" maxLength="100">
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>品牌：
@@ -41,7 +50,7 @@
                                 商品关键词：
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开">
+                                <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开" maxLength="50">
                             </div>
                         </div>
                         <div class="form-group">
@@ -49,7 +58,7 @@
                                 商品简介：
                             </label>
                             <div class="controls col-md-7">
-                                <textarea class="form-control input-sm" v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案">
+                                <textarea class="form-control input-sm" v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="50">
                                 </textarea> 
                             </div>
                         </div>
@@ -103,7 +112,7 @@
                                 专家观点：
                             </label>
                             <div class="controls col-md-8">
-                                <textarea class="form-control input-sm" v-model="request.spuExpertOption" placeholder="30-100个字以内">
+                                <textarea  v-model="request.spuExpertOption" placeholder="30-100个字以内" maxLength="100">
                                 </textarea> 
                             </div>
                         </div>
@@ -190,7 +199,7 @@
                                 包装清单：<br><font color="#A8A8A8">200字以内</font>
                             </label>
                             <div class="controls col-md-7">
-                                <textarea class="form-control input-sm" v-model="request.spuPackingList" placeholder="200字以内">
+                                <textarea  v-model="request.spuPackingList" placeholder="200字以内" maxLength="200">
                                 </textarea> 
                             </div>
                         </div>
@@ -302,10 +311,11 @@ export default {
             singleimgList:[],
             product:{},
             request:{
+                "spuShareUrl":'',
                 "spuPic": '',
                 "spuId":0,
                 "spuAppSummary": "",
-                "spuPcSummary": '',
+                "spuPcSummary": "",
                 "spuName": "",
                 "spuCatId": -1,
                 "spuKeyword":"",
@@ -530,6 +540,39 @@ export default {
                 this.showMsg("请输入商品名称")
                 return
             }
+        if( this.request.spuName.length >= 50 ){
+                this.showMsg("商品名称不能超过50字")
+                return
+            }
+              
+            if( this.request.spuAd.length >= 50 ){
+                this.showMsg("商品广告词不能超过50字")
+                return
+            }
+            if( this.request.spuKeyword.length >= 50 ){
+                this.showMsg("商品关键词不能超过50字")
+                return
+            }
+            if( this.request.spuShareUrl.length >= 100 ){
+                this.showMsg("有赞商品地址不能超过100字")
+                return
+            }
+            /*if( this.request.spuPcSummary.length >= 50 ){
+                this.showMsg("商品简介不能超过50字")
+                return
+            }*/
+            if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
+                this.showMsg("专家观点不能少于30字")
+                return
+            }
+            if( this.request.spuExpertOption.length >= 100 ){
+                this.showMsg("专家观点不能超过100字")
+                return
+            }
+            if( this. request.spuPackingList.length >= 200 ){
+                this.showMsg("包装清单不能超过200字")
+                return
+            }
 
         this.request.spuId = this.spuid
         this.request.spuAppSummary = this.request.spuPcSummary
@@ -539,37 +582,42 @@ export default {
       }
        this.request.tagList = []
       //类目标签
-      if( this.tagsList.length == 0){
-            this.showMsg("请选择类目标签")
+     /* if( this.tagsList.length == 0){
+            this.showMsg("请选择展示类目标签")
             return
-      }
+      }*/
         this.tagsList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum ,"prpSpuId":this.spuid ,"prpSort":index} )
         })
       //人群标签
-      if( this.personList.length == 0){
+      /*if( this.personList.length == 0){
             this.showMsg("请选择人群标签")
             return
-      }
+      }*/
         this.personList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum,"prpSpuId":this.spuid ,"prpSort":index} )
         })
       //内容标签
-      if( this.neirongList.length == 0){
+      /*if( this.neirongList.length == 0){
             this.showMsg("请选择内容标签")
             return
-      }
+      }*/
         this.neirongList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum, "prpSpuId":this.spuid ,"prpSort":index} )
         })
       
 
          //上榜理由
-
-        if(this.shangb.length == 0 ){
-            this.showMsg("请选择上榜理由")
+         if(this.shangb.length > 3 ){
+            this.showMsg("最多选择3个上榜理由")
             return
          }
+
+       /* if(this.shangb.length == 0 ){
+            this.showMsg("请选择上榜理由")
+            return
+         }*/
+
         this.shangb.forEach((data,index)=>{
                 let val = this.shangbanglist.find(item=>item.keyValue == data)
                 this.request.pcrList.$set(index, {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":this.spuid, }  );
@@ -586,10 +634,10 @@ export default {
                let av = { "piSpuId": sid, "piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2], }
                arr.push(av)
          })
-         if(arr.length == 0 ){
+        /* if(arr.length == 0 ){
             this.showMsg("请选择消保类型")
             return
-         }
+         }*/
          console.log(arr)
          this.request.piList = arr 
     //上架时间
@@ -775,45 +823,70 @@ export default {
         },
         //内容标签回调
         selectNeiFunc(list) {
-            if( list.length > 3 ){
+            /*if( list.length > 3 ){
                 alert("标签不能超过3个")
                 return
-            }
+            }*/
+            let flag = false 
             this.neirongList = []
-            this.neirongList = list;
             this.data.labelIds = [];
             list.forEach(item => {
+                if( item.id.length < 7 ){
+                    flag = true
+                    return 
+                }
                 this.data.labelIds.push(item.id);
             })
-            this.showneiTreeSelect = !this.showneiTreeSelect;
+            if(flag){
+                 alert("请选择到最后一级标签。")
+               this.data.labelIds = []
+               return
+            }else{
+                this.neirongList = list;
+               this.showneiTreeSelect = !this.showneiTreeSelect;
+            }
         },
         //人群标签回调
         selectPerFunc(list) {
-            if( list.length > 3 ){
+           /* if( list.length > 3 ){
                 alert("标签不能超过3个")
                 return
-            }
+            }*/
             this.personList = [];
             this.personList = list;
             this.data.labelIds = [];
             list.forEach(item => {
+                if( item.id.length < 8){
+
+                }
                 this.data.labelIds.push(item.id);
             })
             this.showperTreeSelect = !this.showperTreeSelect;
         },
         // 选择标签回调
         selectTagFunc(list) {
-            if( list.length > 3 ){
+            /*if( list.length > 3 ){
                 alert("标签不能超过3个")
                 return
-            }
+            }*/
+            let flag = false 
             this.tagsList = []
-            this.tagsList = list;
             this.data.labelIds = [];
             list.forEach(item => {
+                 if( item.id.length < 10 ){
+                    flag = true
+                    return 
+                }
                 this.data.labelIds.push(item.id);
             })
-            this.showTagTreeSelect = !this.showTagTreeSelect;
+            if(flag){
+                alert("请选择到最后一级标签。")
+               this.data.labelIds = []
+               return
+            }else{
+               this.tagsList = list;
+                this.showTagTreeSelect = !this.showTagTreeSelect;
+            }
         },
          selectFunc(list) {
             this.tagsList = []
@@ -952,6 +1025,7 @@ export default {
                           }
                     }
                 })
+                    this.request.spuShareUrl = data.data.spuShareUrl
                     this.request.spuAppSummary = data.data.spuAppSummary 
                     this.request.spuPcSummary = data.data.spuPcSummary 
                     this.request.spuName = data.data.spuName 
