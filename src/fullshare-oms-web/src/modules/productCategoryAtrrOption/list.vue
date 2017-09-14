@@ -40,13 +40,14 @@
                             <td>
                               <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
                               </td>
-                             <!-- <td>{{itemobj.pcraCatId}}</td> -->
-                             <td>{{selectTreetext}}</td> 
+                             <td>{{itemobj.pcraCatId}}</td>
+                             <!-- <td>{{selectTreetext}}</td>  -->
                             <td>{{itemobj.pcaCreatedTime|filterTime}}</td>
                               <td>
-                               <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'editvalue')">编辑</button>
-                               <!--  <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')">编辑</button> -->                            
-                                <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red">删除</button>
+                              
+                               <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')">编辑</button>                            
+                               <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red">删除</button>
+                                <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'editvalue')">编辑属性值</button>
                                
                             </td>
                         </tr>
@@ -62,7 +63,7 @@
             </div>
        
         <!-- 创建分类属性弹窗 -->       
-      <productatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :show="showAddDialog" :onhide="hideAddDialog"></productatrr-control>
+      <saleproductatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :show="showAddDialog" :onhide="hideAddDialog"></saleproductatrr-control>
       <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :show="showDialog" :onhide="hideAddDialog"></attr-option-control>
          <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
@@ -84,7 +85,7 @@
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect, itemList } from '../../components';
 import loading from '../common/loading';
-import productatrrControl from '../productCategoryAtrr/productatrrControl';
+import saleproductatrrControl from './saleproductatrrControl';
 import attrOptionControl from '../productCategoryAtrr/attrOptionControl';
 import treeview from '../common/tagTreeItem';
 
@@ -96,7 +97,7 @@ export default {
         onselect: Function,
         oncancel: Function
     },
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect,  loading, productatrrControl, treeview, itemList ,attrOptionControl},
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect,  loading, saleproductatrrControl, treeview, itemList ,attrOptionControl},
     data() {
         return {
             name: '',
@@ -130,6 +131,7 @@ export default {
             searchOptions: {
                 parentIds: 0,
                 pcaSaleProp:1,
+                pcaAtrrType:2,
                 page: {
                     currentPage: 1,
                     pageSize: 10,
@@ -218,7 +220,7 @@ export default {
                     this.pcaEditId = this.selRow.pcaId;
                     this.showAddDialog = true;
                 }
-                if(type == 'editvalue'){
+               else  if(type == 'editvalue'){
                     this.pcaEditId = this.selRow.pcaId;
                   //  this.getOptions();
                     this.showDialog = true; 
@@ -253,6 +255,7 @@ export default {
             } else {
                 this.searchOptions.parentIds = this.parentIds;
                 this.searchOptions.pcaSaleProp =1;
+                this.searchOptions.pcaAtrrType =2;
                 options = Object.assign({}, this.searchOptions);
                // console.log(options);
             }

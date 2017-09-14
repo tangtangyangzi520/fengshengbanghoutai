@@ -21,19 +21,26 @@
                             </label>
                           
                             <div class="controls col-md-4" >
-                               
+                                <!-- {{data.pcaRequired}}-->
                                 <input type="checkbox" v-model="data.pcaRequired"  ><br>
                             </div>
                         </div>
 					
-                        <div class="col-md-6" >
+                        <!--<div class="col-md-6" >
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required"></span>是否默认展示</label>
                             <div class="controls col-md-4">
-                                      <input type="checkbox"  v-model="data.pcaAtrrType"  />
+                                    <input type="checkbox"  v-model="data.pcaSaleProp"  />
+                            </div>
+                        </div>-->
+                          <div class="col-md-6" >
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required"></span>销售属性</label>
+                            <div class="controls col-md-4">
+                                <!--{{data.pcaSaleProp}} -->
+                                    <input type="checkbox"  v-model="data.pcaAtrrType"  />
                             </div>
                         </div>
-                        
 						<div class="col-md-6">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required"></span>备注:
@@ -46,6 +53,7 @@
 						<div class="form-group">
                             <label class="col-sm-3 control-label">
                                 <span class="required">*</span>属性类型：</label>
+						
                          <div class="col-md-3">
                                 <select v-model="data.pcaInputType" class="type">
                                     <option value="-1">请选择</option>
@@ -223,8 +231,8 @@ export default {
                 "pcaName": "",
                 "pcaRequired": 0,
                 "pcaSaleProp": "",
-                "pcaAtrrType":0,
                 "pcaMemo": "",
+                "pcaAtrrType":1,
                 "pcaInputType":0
             }
            
@@ -240,7 +248,7 @@ export default {
             //if(this.data.pcaName)
              //属性类型判空
             if(this.data.pcaInputType < 0 ){
-                this.showMsg("请选择属性类型")
+                this.showMsg("请选择属性类型");
                 return
             }
             if(data.pcaRequired ){
@@ -254,13 +262,12 @@ export default {
               data.pcaSaleProp=0     
             }
             if(data.pcaAtrrType ){
-                data.pcaAtrrType=1
+                data.pcaAtrrType=2
             }else{
-                 data.pcaAtrrType=0
+                 data.pcaAtrrType=1
             }
-            
           //添加选项
-            let url = PCA_CREATE;
+            let url = SALEPCA_CREATE;
 
             if (this.pcaid!= '') {
                // alert(this.pcaid);
@@ -302,10 +309,10 @@ export default {
                 "selectedid":"",
                 "pcaName": "",
                 "pcaRequired":0,      
-                "pcaSaleProp":0,
-                "pcaAtrrType":0,                     
+                "pcaSaleProp":0,                     
                 "pcaMemo": "",
-                "pcaInputType":0
+                "pcaInputType":0,
+                "pcaAtrrType":1
             }
           
             if (this.pcaid == '') {
@@ -329,7 +336,8 @@ export default {
                     this.data.pcaRequired = data.pcaRequired;
                     this.data.pcaMemo = data.pcaMemo;
                     this.data.pcaInputType=data.pcaInputType;
-                     this.data.pcaAtrrType= data.pcaAtrrType;
+                    this.data.pcaAtrrType= data.pcaAtrrType;
+                   
                 } else {
                     this.showMsg(response.msg);
                 }

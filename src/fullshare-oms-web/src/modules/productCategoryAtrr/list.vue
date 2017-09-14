@@ -154,6 +154,7 @@ export default {
             searchOptions: {
                 parentIds: 0,
                 pcaSaleProp:0,
+                pcaAtrrType:1,
                 page: {
                     currentPage: 1,
                     pageSize: 10,
@@ -281,6 +282,7 @@ export default {
             } else {
                 this.searchOptions.parentIds = this.parentIds;
                 this.searchOptions.pcaSaleProp =0;
+                this.searchOptions.pcaAtrrType =1;
                 options = Object.assign({}, this.searchOptions);
                // console.log(options);
             }
