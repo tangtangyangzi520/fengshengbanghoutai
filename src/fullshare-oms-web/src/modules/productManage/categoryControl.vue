@@ -6,7 +6,7 @@
         <div class="form-group">        
             <div class="" style="margin-left:30%">
                   类目搜索： <input type="text" class="input input-sm" v-model="data.title" placeholder="请输入关键字">
-                    <button class="btn green-meadow" @click="getLEIMUList" type="button">搜索</button>
+                    <button class="btn green-meadow" @click="seachLEIMUList" type="button">搜索</button>
             </div>
         </div>
        <input type="text" style="margin-left: 10%;" class="input"  placeholder="">
@@ -96,6 +96,60 @@ export default {
         }
     },
     methods: {
+     //搜索类目查询
+        seachLEIMUList(){
+            this.seachTwoList = []
+            this.seachThreeList= []
+             client.postData( TAG_LIST_GET + "?typeId=100", {}).then(data => {
+                  if (data.code == 200) {
+                    this.leimuList = data.data.root.children;
+                    this.category = this.data.title;
+
+                    //console.log(this.seachTwoList);
+                    //console.log("搜索名:"+this.category);
+                    var isEntel = false;
+                    var tempStr = "";
+                    var tempLev1 = "";
+                    var tempLev2 = "";
+                    this.leimuList.forEach(item=> {
+                        tempLev1 = item.text;
+                        tempStr = item.text;
+                        if(item.text.indexOf(this.category) >= 0){
+                           isEntel = true;
+                           //this.seachList.push(item);
+                           console.log("拼接结果:" + tempStr);
+                          this.seachList.push(tempStr);
+                        }
+
+                        this.seachTwoList = this.leimuList.find(item2=>item2.id==item.id).children;                             
+                        this.seachTwoList.forEach(item2=>{
+                            tempLev2 = tempLev1 + ">>" + item2.text;
+                            if(item2.text.indexOf(this.category) >= 0){
+                                tempStr = tempLev1 + ">>" + item2.text;
+                                isEntel = true;
+                                console.log("拼接结果:" + tempStr);                        
+                                this.seachList.push(tempStr);
+                            }
+
+                            this.seachThreeList=this.seachTwoList.find(item3=>item3.id==item2.id).children; 
+                            //console.log("搜索名3:"+this.category);
+                            this.seachThreeList.forEach(item3=>{
+                                if(item3.text.indexOf(this.category) >= 0){
+                                    tempStr = tempLev2 + ">>" + item3.text;
+                                    isEntel = true;
+                                    console.log("拼接结果:" + tempStr);
+                                    this.seachList.push(tempStr);
+                                }
+                              //  tempStr = "";
+                            });
+                        });
+                    });
+                } else {
+                    this.showMsg(data.msg);
+                }
+             },data =>{
+             })  
+        },
          addItem() {
             let msg =""
             if( this.sele[1] == null || this.sele[2] == null){
