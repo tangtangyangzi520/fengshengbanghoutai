@@ -447,7 +447,7 @@ export default {
     data() {
         return {
             request:{
-              //"spuType": 1,
+                "spuType": 1,
                 "spuShareUrl":'',
                 "spuPic": '',
                 "spuAppSummary": "",
