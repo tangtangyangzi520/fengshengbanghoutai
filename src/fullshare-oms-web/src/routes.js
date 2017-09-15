@@ -16,6 +16,8 @@ import LabelManage from './modules/system/labelManage/list.vue';
 import discountManage from './modules/discountManage/list.vue';
 //优惠券管理
 import couponManage from './modules/couponManage/list.vue';
+//运费模板
+import ProductCarriageTemp from './modules/ProductCarriageTemp/list.vue';
 
 export default function(router) {
     router.map({
@@ -54,6 +56,10 @@ export default function(router) {
         '/couponManage': {
             name: 'couponManage',
             component: couponManage
+        },
+        '/ProductCarriageTemp': {
+            name: 'ProductCarriageTemp',
+            component: ProductCarriageTemp
         },
         // '/channelLayout/:parentId': {
         //     name: 'channelLayout',

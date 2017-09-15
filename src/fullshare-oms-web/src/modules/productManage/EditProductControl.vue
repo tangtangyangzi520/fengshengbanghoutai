@@ -311,6 +311,7 @@ export default {
             singleimgList:[],
             product:{},
             request:{
+                "spuType": 1,
                 "spuShareUrl":'',
                 "spuPic": '',
                 "spuId":0,

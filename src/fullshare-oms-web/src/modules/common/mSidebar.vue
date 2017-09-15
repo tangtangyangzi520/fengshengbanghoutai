@@ -49,10 +49,17 @@ export default {
                 },
                 {"text":"订单管理" ,"children":[
                     {"text":"订单列表","url":"/dist/#!/order"},
+                    {"text":"运费模板","url":"/dist/#!/ProductCarriageTemp"},
                     /*{"text":"品牌列表","url":"/dist/#!/productBrand"},
                     {"text":"属性列表","url":"/"},*/
                   ]
                 },
+                /*{"text":"订单设置" ,"children":[
+                    {"text":"运费模板","url":"/dist/#!/ProductCarriageTemp"},
+                    {"text":"品牌列表","url":"/dist/#!/productBrand"},
+                    {"text":"属性列表","url":"/"},
+                  ]
+                },*/
                 {"text":"营销管理" ,"children":[
                     {"text":"限时折扣列表","url":"/dist/#!/discountManage"},
                     {"text":"优惠券列表","url":"/dist/#!/couponManage"},

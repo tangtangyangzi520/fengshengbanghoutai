@@ -321,28 +321,37 @@ var ORDER_EDIT_ACT_AMOUNT =  OMS_TEST + "/order/editActAmount";          //修�
 var ORDER_EXPORT       =  OMS_TEST + "/order/exportOrder";               //修改订单价格
 
 //app商品测试
-var APP_SPU_GET_ONE =  APP_TEST + "/spu/getAppProductSpuById"  //根据spuID获取信息
+var APP_SPU_GET_ONE =  APP_TEST + "/spu/getAppProductSpuById";  //根据spuID获取信息
 
 //类目属性模块
 var PCA_CREATE      = OMS_TEST +"/pca/createProductCategoryAtrr";        //分类属性添加
 var PCA_GET_ID      = OMS_TEST +"/pca/getProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性
 var PCA_EDIT        = OMS_TEST +"/pca/editProductCategoryAtrr";          //分类属性修改
-var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds"             //根据分类ID获取SPU分类属性
+var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds";             //根据分类ID获取SPU分类属性
 var PCA_GET_BY_PCRACATIDS   = OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据分类ID获取SPU分类属性分页查询
 var PCA_DELETE      = OMS_TEST + "/pca/deleteProductCategoryAtrr";       //删除SPU分类属性
 var PCA_INPUTTYPES  = OMS_TEST +"/pca/getpcaInputTypes";                 //根据"parentCode"获取数据字典
-var SALEPCA_CREATE=ERP_TEST +"/pca/createSaleProductCategoryAtrr"; //销售属性添加
+var SALEPCA_CREATE  =  OMS_TEST +"/pca/createSaleProductCategoryAtrr"; //销售属性添加
 
 var PCAO_DELETE     = OMS_TEST +  "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
 var PCAO_CREATE     = OMS_TEST +  "/pcao/createPacoandpcaoName";           //添加属性选项
-var PCAO_GET_ID     = OMS_TEST +   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId" //根据分类属性ID获取属性选项值
+var PCAO_GET_ID     = OMS_TEST +   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId"; //根据分类属性ID获取属性选项值
 
 //营销模块
-var MKT_LIST   =  OMS_TEST+ "/mkt/list"                      //优惠券/活动条件查询
-var MKT_CREATE =  OMS_TEST+ "/mkt/createMktCampaign"         //新建优惠券/活动
-var MKT_EDIT   =  OMS_TEST+ "/mkt/editMktCampaign"             //编辑优惠券/活动
-var MKT_GET_ID   =  OMS_TEST+ "/mkt/getMktCampaignRespById"    //根据id获取优惠券/活动
-var MKT_INVALIDATE   =  OMS_TEST+ "/mkt/invalidateMktCampaign"    //优惠券/活动失效
-var MKT_DELETE  =  OMS_TEST+ "/mkt/deleteMktCampaign"        //优惠券/活动删除
+var MKT_LIST   =  OMS_TEST+ "/mkt/list";                      //优惠券/活动条件查询
+var MKT_CREATE =  OMS_TEST+ "/mkt/createMktCampaign";        //新建优惠券/活动
+var MKT_EDIT   =  OMS_TEST+ "/mkt/editMktCampaign";            //编辑优惠券/活动
+var MKT_GET_ID   =  OMS_TEST+ "/mkt/getMktCampaignRespById";    //根据id获取优惠券/活动
+var MKT_INVALIDATE   =  OMS_TEST+ "/mkt/invalidateMktCampaign";    //优惠券/活动失效
+var MKT_DELETE  =  OMS_TEST+ "/mkt/deleteMktCampaign";        //优惠券/活动删除
+
+//运费模板模块  
+var PCT_EDIT   =  OMS_TEST+ "/pct/editProductCarriageTemp";        //新增运费模板
+var PCT_CREATE =  OMS_TEST+ "/pct/createProductCarriageTemp";        //新增运费模板
+var PCT_LIST   =  OMS_TEST+ "/pct/list";                               //运费模板列表
+
+//地区模块
+var AREA_GET_LIST = OMS_TEST + "/area/list"; //获取所有的省份
+
 
 

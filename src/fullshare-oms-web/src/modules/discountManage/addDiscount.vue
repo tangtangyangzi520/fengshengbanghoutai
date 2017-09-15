@@ -35,7 +35,7 @@
                     <div class="controls col-md-4">
                          <input type="text" class="form-control input-sm"  value="数据库暂无此字段,可不填" placeholder="限时折扣"  required="required" oninvalid="setCustomValidity('请输入活动标签!')"> 
                          活动期间展示于商品详情的价格旁边，2至5字。                                
-                         <input id="sub1" type="submit" style="display:none" id="name">
+                         <input id="sub1" type="submit" style="display:none" >
 
                     </div>
             </div>
