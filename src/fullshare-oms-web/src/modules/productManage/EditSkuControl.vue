@@ -2,10 +2,6 @@
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
             <div slot="content" style="background-color:#F0F0F0">
-               
-                    
-
-                       
                     <div >
                         <table class="tab" id="table" style="" border="1" cellspacing="0" cellpadding="0">  
                         <thead>
@@ -28,10 +24,6 @@
                                    </td>
 
                                    <td style="width:40%" >  <a class="dele"  @click="close(g.skuId)" >×</a> <span style="padding-left:8.3%"> {{ g.skuAtrr }} </span>
-                                         <p style="padding-top:5px;">
-                                       <span class="label label-default" v-if="g.skuShelvesStatus!=1">下架</span>
-                                       <span class="label label-success" v-else>上架</span>
-                                         </p>
                                    </td>
                                    <td>￥<input class=" input2" type="text" v-model="g.skuSalePrice"    @keyup="checkfloat($event)"/></td>
 
@@ -43,14 +35,12 @@
                              </tbody>
                         </table>
                     </div>
-
-    
         <!-- <loading :show="isLoading"></loading> -->
         <!-- 标签选择弹窗 -->
         </div><span slot="btnList">
                 <button type="button" class="btn blue" @click="addItem()">编辑保存</button>
-                <button type="button" class="btn yellow-crusta" @click="up()" >批量上架</button>
-                 <button type="button" class="btn default" @click="down()">批量下架</button>
+               <!--  <button type="button" class="btn yellow-crusta" @click="up()" >批量上架</button>
+                 <button type="button" class="btn default" @click="down()">批量下架</button> -->
                 <button type="button" class="btn green-meadow" @click="hideDialog()" >关闭</button>
             </span></m-alert>
     </div>
@@ -187,7 +177,7 @@ export default {
                     $(el).val("")
                }
         },
-         up() {
+        /* up() {
             let arr = []
             this.skuList.forEach( item => {
                 if(item.checked == true ){
@@ -195,7 +185,7 @@ export default {
                 }
             })
             
-            client.postData( SKU_EDIT_UP_DOWN ,  { "ids": arr, "skuShelvesStatus": 1 }).then(data => {
+            client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 1 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("上架成功")
                     client.postData( SKU_GET_BY_ID + "?spuId="+this.spuid2, {}).then(data => {
@@ -222,7 +212,7 @@ export default {
                 }
             })
               
-            client.postData( SKU_EDIT_UP_DOWN ,  { "ids": arr, "skuShelvesStatus": 0 }).then(data => {
+            client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 0 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("下架成功")
                     client.postData(  SKU_GET_BY_ID + "?spuId="+this.spuid2, {}).then(data => {
@@ -239,9 +229,7 @@ export default {
             }, data => {
                 alert("下架失败,请重试");
             })
-
-
-         },
+         },*/
          selectAll() {
             this.skuList.forEach(item => {
                 item.checked = true;
@@ -272,7 +260,7 @@ export default {
                     this.showAddDialog = true;
                      setTimeout(() => {
                         this.hideDialog()
-                    }, 1000)
+                    }, 10)
                 } else {
                     this.showMsg(data.msg);
                 }

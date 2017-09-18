@@ -19,8 +19,15 @@
                <!--  <button class="btn blue" type="button" @click="showControlFunc(null,'publishAll')">修改模板</button>
                 <button class="btn default" type="button" @click="showControlFunc(null,'submitAll')">下架</button>
                 <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">删除</button>-->
-                <button class="btn yellow-crusta" type="button" @click="productexport()">导出</button> 
-                <button class="btn green-meadow" @click="search()" type="button">搜索</button>
+                <span v-if="par == 3">
+                 <button type="button" class="btn blue" @click="up()" >批量上架</button>
+                 </span>
+                 <span v-else>
+                 <button type="button" class="btn default" @click="down()">批量下架</button>
+                 </span>
+                 <button class="btn purple" type="button" @click="deleteSpu()">删除</button>
+                 <button class="btn yellow-crusta" type="button" @click="productexport()">导出</button> 
+                 <button class="btn green-meadow" @click="search()" type="button">搜索</button>
             </div>
              <a><div  id="1" class="cha"    style="float:left"    @click="changeClass(1)">出售中</div></a>  
             <a> <div id="2" class="select"  style="float:left"   @click="changeClass(2)">已售罄</div></a>   
@@ -67,12 +74,23 @@
                             </td>
                             <td style="width:13%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
                                    font-style: normal;">{{"￥"+item.minSalePrice+"  ~ ￥"+item.maxSalePrice}}</td>
-                            <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
+                            <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}
+                                <p style="padding-top:5px;">
+                                    <span class="label label-default" v-if="item.spuShelvesStatus!=1">下架</span>
+                                    <span class="label label-success" v-else>上架</span>
+                                </p>
+                            </td>
 
                             <td style="text-align:center;vertical-align:middle;">
                                 <a  style="text-decoration:none;" title="订单列表"  @click.stop="order(item.spuId,item.spuName)"> 
+                                <span v-if="item.totalSaleNum > 0">    
                                 {{item.totalSaleNum}}
+                                </span>
+                                <span v-else>
+                                    库存不足
+                                </span>
                                 </a>
+                               
                                  <!--  商品状态 -->
                               <!--       <span class="label label-default" v-if="item.deployStatus==4">{{item.spuCatId|filterStatus}}</span>
                                 <template v-else>
@@ -214,6 +232,61 @@ export default {
         }
     },
     methods: {
+         deleteSpu() {
+            let arr = []
+            this.dataList.forEach( item => {
+                if(item.checked == true ){
+                     arr.push(item.spuId)
+                }
+            })
+            
+            client.postData( SPU_DELETE ,  arr ).then(data => {
+                if (data.code == 200) {
+                    this.showMsg("删除成功")
+                    this.getList()
+            }else {
+                    this.showMsg(data.msg);
+                }}, data => {
+                this.showMsg("删除失败,请重试");
+            })
+         },
+         up() {
+            let arr = []
+            this.dataList.forEach( item => {
+                if(item.checked == true ){
+                     arr.push(item.spuId)
+                }
+            })
+            
+            client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 1 }).then(data => {
+                if (data.code == 200) {
+                    this.showMsg("上架成功")
+                    this.getList()
+            }else {
+                    this.showMsg(data.msg);
+                }}, data => {
+                this.showMsg("上架失败,请重试");
+            })
+         },
+         down() {
+            let arr = []
+            this.dataList.forEach( item => {
+                if(item.checked == true ){
+                     arr.push(item.spuId)
+                }
+            })
+              
+            client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 0 }).then(data => {
+                if (data.code == 200) {
+                    this.showMsg("下架成功")
+                    this.getList()
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.showMsg("下架失败,请重试");
+            })
+         },
         //根据售价升降序
         orderBy( val ) {
             let options;

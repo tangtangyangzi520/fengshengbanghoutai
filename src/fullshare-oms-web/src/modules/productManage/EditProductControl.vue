@@ -157,31 +157,28 @@
                         </div>
     <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
 
-                         <div class="form-group">
+                          <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>运费设置：
                             </label>
-                            <div class="controls col-md-4">
-                                <input type="radio" name="yunfei" v-model="request.spuFreight" value="包邮" checked >包邮&nbsp;&nbsp;&nbsp;&nbsp;
-                                
-                               
-                                 <input type="radio" name="yunfei" v-model="request.spuFreight" value="运费￥10">运费￥10&nbsp;&nbsp;&nbsp;&nbsp;
-                                
-                               <!--   <select class="form-control" v-model="thirdActive">
-                                     <option value="0">请选择</option>
-                                     <option v-for="item in chanelList" :value="item.id">{{item.text}}</option>
-                                 </select> -->
-                            </div>
+                         <div class="controls col-md-5">
+                              <div class="col-md-4" style="margin-top:2%">
+                                <input type="radio" name="yunfei" v-model="yunfei" value="0" checked >统一邮费
+                              </div>
+                              <h4 class="col-md-1">￥</h4>
+                              <div class="col-sm-5" >
+                                  <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"/></div>
+                              <br><br><br>
+                              <div class="col-md-4" >
+                                 <input type="radio" name="yunfei" v-model="yunfei" value="1">运费模板</div>
+                                 <div class="col-md-6">
+                                 <select class="form-control" v-model="request.spuCarriageId">
+                                     <option value="-1">请选择</option>
+                                     <option v-for="item in carriageList" :value="item.pcId">{{item.pcName}}</option>
+                                 </select>
+                                 </div>
+                          </div>
                         </div>
-
-                        <!--  <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>每人限购：
-                            </label>
-                            <div class="controls col-md-4">
-                                <input type="text" class="form-control input-sm" v-model="data.subtitle" placeholder="请输入良言文案">
-                            </div>
-                        </div> -->
 
                          <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
@@ -208,6 +205,10 @@
                             <label for="title" class="col-sm-3 control-label">
                                 开始时间：
                             </label>
+                            <span v-if="spuShelvesStatus == 1">
+                             <div class="controls col-md-6"><h4>{{uptime|filterTime}}</h4></div>
+                             </span>
+                            <span v-else>
                             <div class="controls col-md-4 ">
                                 <span class="radios">
                                 <input type="radio" name="startTime" v-model="rad" value="1" checked>立刻                                                              
@@ -226,9 +227,10 @@
                                 </select>
                         </div>  
                     </div>
+                </span>
                 </div>                                                    
- <h4><strong>商品详情图片上传</strong></h4>             
- <div class="col-md-4" style="padding-bottom:10px;">
+                <h4><strong>商品详情图片上传</strong></h4>             
+                    <div class="col-md-4" style="padding-bottom:10px;">
                             <!-- <label class="col-sm-4 control-label">
                                 <span class="required">* </span>点击编辑图片广告</label> -->
                             <div class="controls col-md-6">
@@ -305,12 +307,15 @@ export default {
     },
     data() {
         return {
+            spuShelvesStatus:0,
+            uptime:'',
             rad:1,
             img:"http://img1.fshtop.com/1502701860183.jpg",
             imgList:[],
             singleimgList:[],
             product:{},
             request:{
+                "spuCarriageId":-1,//运费模板id
                 "spuType": 1,
                 "spuShareUrl":'',
                 "spuPic": '',
@@ -327,11 +332,13 @@ export default {
                 "spuFreight":"", //运费
                 "spuPackingList":"",//包装清单
                 "piList" : [],//消保集合
-                "skuPlanShelvesDate":"",//上架时间
+                "spuPlanShelvesDate":"",//上架时间
                 "resourceList": [],//图片集合
                 "tagList":[],//标签集合
                 "detailsList": []
             },
+            carriageList:[],//运费模板
+            yunfei:0,       //0:统一邮费  1:运费模板
             hour : -1,
             minutes : -1,
             stime :"",
@@ -381,30 +388,6 @@ export default {
             showTagTreeSelect: false, //显示标签选择弹窗
             showperTreeSelect: false,//
             showneiTreeSelect: false,
-            /*searchOptions: {
-                zt : "1",//状态
-                title: '',
-                spuCode:'',
-                spuName: '',
-                subtitle: '',
-                creators: [],
-                //experts: [],
-                pains: [],
-                deployStatus: -1,
-                createStartTime1: '',
-                createEndTime: '',
-                modifyedStartTime: '',
-                modifyedEndTime: '',
-                skuChannels: [],
-                submitStatus: -1,
-                page: {
-                    currentPage: 1,
-                    pageSize: 10,
-                    startIndex: 0,
-                    totalPage: 0,
-                    totalSize: 0
-                }
-            }*/
         }
     },
     vuex: {
@@ -413,6 +396,11 @@ export default {
             selectPicList: ({ resourceControl }) => resourceControl.selectPicList,
         },
         actions: { showSelectPic, getSelectPicList }
+    },
+    filters: {
+        filterTime(time) {
+            return client.formateTime(time);
+        }
     },
     methods: {
         //增加属性选项
@@ -554,10 +542,10 @@ export default {
                 this.showMsg("商品关键词不能超过50字")
                 return
             }
-            if( this.request.spuShareUrl.length >= 100 ){
+           /* if( this.request.spuShareUrl.length >= 100 ){
                 this.showMsg("有赞商品地址不能超过100字")
                 return
-            }
+            }*/
             /*if( this.request.spuPcSummary.length >= 50 ){
                 this.showMsg("商品简介不能超过50字")
                 return
@@ -648,19 +636,19 @@ export default {
             this.showMsg("请输入上架时间")
             return
            }
-           this.request.skuPlanShelvesDate = this.stime//+" "+this.hour+":"+this.minutes
+           this.request.spuPlanShelvesDate = this.stime//+" "+this.hour+":"+this.minutes
            if( this.hour>= 10 ){
-                          this.request.skuPlanShelvesDate += " "+this.hour
+                          this.request.spuPlanShelvesDate += " "+this.hour
                     }else{
-                        this.request.skuPlanShelvesDate += " 0"+this.hour
+                        this.request.spuPlanShelvesDate += " 0"+this.hour
                     }
                     if( this.minutes >= 10 ){
-                          this.request.skuPlanShelvesDate += ":"+this.minutes
+                          this.request.spuPlanShelvesDate += ":"+this.minutes
                     }else{
-                        this.request.skuPlanShelvesDate+= ":0"+this.minutes
+                        this.request.spuPlanShelvesDate+= ":0"+this.minutes
                     }
       } else {
-           this.request.skuPlanShelvesDate = ""
+           this.request.spuPlanShelvesDate = ""
       } 
 
         //商品图片判空
@@ -702,9 +690,19 @@ export default {
             })
             
     },
+    //获取运费模板
+         getCarriageList() {
+          client.postData(  PCT_PCLIST , {}).then(data => {
+                if (data.code == 200) {
+                   this.carriageList = data.data;
+                } else {
 
-
-
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.showMsg("获取运费模板失败,请刷新重试");
+            })
+        },
         hideAddDialog(control) {
             this.expertEditId = '';
             this.showAddDialog = false;
@@ -729,17 +727,17 @@ export default {
         //获取消保类型
         getxbList() { 
         client.postData( SYSTEM_DICTIONARY , {
-  "key": "",
-  "keyValue": "",
-  "page": {
-    "currentPage": 0,
-    "pageSize": 10,
-    "startIndex": 0,
-    "totalPage": 0,
-    "totalSize": 0
-  },
-  "parentCode": "product_insurance"
-}).then(data => {
+              "key": "",
+              "keyValue": "",
+              "page": {
+                "currentPage": 0,
+                "pageSize": 10,
+                "startIndex": 0,
+                "totalPage": 0,
+                "totalSize": 0
+              },
+              "parentCode": "product_insurance"
+            }).then(data => {
                 if (data.code == 200) {
                     this.insurancelist = data.data;
                 } else {
@@ -766,13 +764,13 @@ export default {
         //获取品牌
         getbrandList() { 
         client.postData(  PBD_GET_LIST  , {
-       "page": {
-       "currentPage": 0,
-       "pageSize": 0,
-       "startIndex": 0,
-       "totalPage": 0,
-       "totalSize": 0
-       }}).then(data => {
+               "page": {
+               "currentPage": 0,
+               "pageSize": 0,
+               "startIndex": 0,
+               "totalPage": 0,
+               "totalSize": 0
+               }}).then(data => {
                 if (data.code == 200) {
                     let list = data.data;
                     for (let i = 0; i < list.length; i++) {
@@ -985,16 +983,51 @@ export default {
          this.getxbList()
          this.getshangbangList(); 
          this.getbrandList();
+         this.getCarriageList() 
     },
     watch: {
+        stime(val) {
+            let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/
+            if(!reg.test(val)){
+                this.showMsg('日期格式不合法')
+                this.stime = '' 
+            }
+        },
+        "request.spuFreight":{　　
+          　handler(curVal,oldVal){　
+            if(curVal > 0 ){
+            this.request.spuCarriageId = -1
+            //setTimeout(() => {
+                this.yunfei = 0　
+            //}, 50)　　　　
+            }　　　　　　　
+            　　　　　　　
+          },　　　　　　　　　　
+          deep:true　　　　　　　　
+        },
+        "request.spuCarriageId":{　　
+          　handler(curVal,oldVal){　
+            if(curVal != -1){　
+                this.request.spuFreight = 0　　　　　　　　　
+                this.yunfei = 1　
+             }　　　　　　　
+          },　　　　　　　　　　
+          deep:true　　　　　　　　
+        },
         proflag(){
                    client.postData( SPU_GET_BY_ID  + "?spuId="+this.spuid, {}).then(data => {  //192.168.4.249
                 this.isLoading = false;
                   if (data.code == 200) {
-
+                    //运费模板回显
+                    
+                    if(data.data.spuCarriageId >0){
+                        this.request.spuCarriageId = data.data.spuCarriageId 
+                    }else{
+                       this.request.spuFreight = data.data.spuFreight
+                    }
                     //上架时间回显
                     this.rad = 2
-                    var sjtime  = new Date(data.data.skuList[0].skuPlanShelvesDate)
+                    var sjtime  = new Date(data.data.spuPlanShelvesDate)
                     this.stime = sjtime.getFullYear() 
                     if( sjtime.getMonth()+1 >= 10 ){
                           this.stime += "-"+(sjtime.getMonth()+1)
@@ -1006,7 +1039,8 @@ export default {
                     }else{
                         this.stime += "-0"+sjtime.getDate()
                     }
-                   
+                    this.spuShelvesStatus = data.data.spuShelvesStatus
+                    this.uptime = data.data.spuOnShelvesTime
                    //this.stime = sjtime.getFullYear() + "-0"+(sjtime.getMonth()+1)+"-"+sjtime.getDate()
                      //alert(stime)
                   
@@ -1037,7 +1071,7 @@ export default {
                     this.request.spuExpertOption = data.data.spuExpertOption
                     this.request.spuFreight = data.data.spuFreight
                     this.request.spuPackingList = data.data.spuPackingList
-                    this.request.skuPlanShelvesDate = data.data.skuPlanShelvesDate
+                    this.request.spuPlanShelvesDate = data.data.spuPlanShelvesDate
     
                   //标签回显
                    data.data.tagList.forEach(item=> {
@@ -1171,9 +1205,7 @@ export default {
         this.showPainListSelect = true;
 
         $('#createStartTime1').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('.datePicker').on('change', () => {
-            this.setOptions();
-        })
+        
     },
     beforeDestroy() {
         this.showPainListSelect = false;

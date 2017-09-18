@@ -55,7 +55,7 @@
                         <table class="tab" id="t" style="width:1000px" border="1" cellspacing="0" cellpadding="0">  
                         <thead>
                           <tr>
-                             <th style="width:20%">
+                             <th style="width:10%">
                                  <a :id="'desc'+spu.spuId"  class="orderBy" style="display:none;text-decoration:none" @click="orderBy(false,spu.spuId)">▼</a>
                                  <a :id="'asc'+spu.spuId" class="orderBy" style="text-decoration:none" @click="orderBy(true,spu.spuId)">▲</a>
                                
@@ -71,32 +71,32 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;库存:{{spu.totalSaleNum}}</h4>
                                 </a>
                              </th>
-                             <th style="width:20%"> 批量减价 <input type="text" class="input-sm"  @keyup="reduceBefore(spu.spuId,spu.minSalePrice,$event)" :id="'before'+spu.spuId" >  </th>
+                             <th style="width:20%"> 批量减价 <input type="text" class="input-sm"  @keyup="reduceBefore(spu.spuId,spu.minSalePrice,$event)" v-model="spu.reduce" :id="'before'+spu.spuId" >  </th>
                              <th style="width:15%"> 减价后<input type="text" class="input-sm" @keyup="refuceAfter(spu.spuId,spu.minSalePrice,$event)" :id="'after'+spu.spuId" > </th>
-                             <th style="width:5%"></th>
-                          </tr>
+<!--                              <th style="width:15%"></th>
+ -->                          </tr>
                           
                         </thead>
                              <tbody :id="'tab'+spu.spuId" style="display:none">
                                 <tr >   
-                                  <td style="width:20%">
-                                        
+                                  <td style="width:10%">
+                                 <!--        
                                      <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(spu)">全选</button>
-                                     <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(spu)">反选</button>
+                                     <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(spu)">反选</button> -->
                                   </td>
                                   <td style="width:40%"> SKU组合 </td>
                                   <td style="width:20%"> 原价（元） </td>
                                   <td style="width:15%"> 减价后</td>
-                                  <td style="width:5%"> 操作</td>
-                                </tr>
+<!--                                   <td style="width:15%"> 操作</td>
+ -->                                </tr>
                                 <tr v-for=" g in spu.skuList" style="height:20%"  @click="selectItem(g)">  
-                                   <td style="width:20%"> <input type="checkbox" :checked="g.checked"></input> </td>
+                                   <td style="width:10%"> <!-- <input type="checkbox" :checked="g.checked"></input> --> </td>
                                    <td style="width:40%"> {{ g.skuName }} </td>
-                                   <td style="width:20%"> {{ g.skuMarketProPrice }}</td>
-                                    <td style="width:15%"> <input type="text" class="input-sm" v-model="g.skuSalePrice"  >  </td>
-                                    <td style="width:5%"> 
-                                    <button type="button"  @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button> </td>
-                                </tr>
+                                   <td style="width:20%"> {{ g.skuSalePrice }}</td>
+                                    <td style="width:15%"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"  >  -->{{g.skureduce}} </td>
+                                  <!--     <td style="width:15%"> 
+                                  <button type="button"  @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button> </td>
+ -->                                </tr>
                              </tbody>
                         </table>
                    
@@ -297,20 +297,18 @@ export default {
          },
          addItem2(ev) {
             this.request.cmisList = []
-            this.spuList.forEach(item => {
-               item.skuList.forEach(sku => {
-                    if( sku.skuSalePrice != '' ){
+            this.spuList.forEach(spu => {
+                    //if( sku.skuSalePrice != '' ){
                        this.request.cmisList.push( {
                           "enableStatus": 1,//0-无效，1-有效
                           "misCampaignId": 0,//活动主键
-                          "misDiscountPrice": sku.skuSalePrice,//限时折扣价
+                          "misDiscountPrice": spu.reduce,//限时折扣价
                           "misMandatory": 1,//是否必要产品：0-非必要产品，1-必要产品
                           "misMcnId": 0,  //条件主键
-                          "misSkuId": sku.skuId, //产品主键
+                          "misSpuId": spu.spuId, //产品主键
                           "misType": 1 ,//商品类型：1-a商品，2-b商品 
-                        })
-                    }
-                })
+                    })
+               // }
             })
             if( this.request.mkcCampaignId > 0 ){
                 client.postData( MKT_EDIT , this.request).then(data => {
@@ -521,15 +519,18 @@ export default {
                     //
                   
                     response.data.spuList.forEach( spu => {
-                        spu.skuList.forEach( sku => {
-                             sku.checked = false
-                             sku.skuSalePrice = ""
+                        
+                             //sku.checked = false
+                             //sku.skuSalePrice = ""
                              response.data.misList.forEach(m => {
-                                  if( m.misSkuId == sku.skuId ){
-                                    sku.checked = true
-                                    sku.skuSalePrice = m.misDiscountPrice
-                                  }
-                             })
+                                  if( m.misSpuId == spu.spuId ){
+                                   // sku.checked = true
+                                    spu.reduce = m.misDiscountPrice
+                                    spu.skuList.forEach( sku => {
+                                        sku.skureduce = sku.skuSalePrice - spu.reduce
+                                    })
+                            }
+                            
                         })
                     })
                     this.spuList = response.data.spuList

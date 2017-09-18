@@ -18,6 +18,8 @@ import discountManage from './modules/discountManage/list.vue';
 import couponManage from './modules/couponManage/list.vue';
 //运费模板
 import ProductCarriageTemp from './modules/ProductCarriageTemp/list.vue';
+//省市区三级联动
+import area from  './modules/area/selectArea.vue';
 
 export default function(router) {
     router.map({
@@ -60,6 +62,10 @@ export default function(router) {
         '/ProductCarriageTemp': {
             name: 'ProductCarriageTemp',
             component: ProductCarriageTemp
+        },
+        '/area': {
+            name: 'area',
+            component: area
         },
         // '/channelLayout/:parentId': {
         //     name: 'channelLayout',

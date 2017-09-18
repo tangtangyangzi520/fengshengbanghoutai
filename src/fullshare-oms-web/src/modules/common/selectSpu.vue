@@ -326,9 +326,9 @@ export default {
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.forEach(item => {
-                        item.checked = false
+                        item.checked = true
                         item.skuList.forEach(sku => {
-                            sku.checked = false
+                            sku.checked = true
                             sku.skuSalePrice = ''
                         })
                     })

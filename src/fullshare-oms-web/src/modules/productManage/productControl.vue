@@ -312,21 +312,27 @@
                         </div>
     <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
 
-                         <div class="form-group">
+                        <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>运费设置：
                             </label>
-                            <div class="controls col-md-4">
-                                <input type="radio" name="yunfei" v-model="request.spuFreight" value="包邮" checked >包邮&nbsp;&nbsp;&nbsp;&nbsp;
-                                
-                               
-                                 <input type="radio" name="yunfei" v-model="request.spuFreight" value="运费￥10">运费￥10&nbsp;&nbsp;&nbsp;&nbsp;
-                                
-                               <!--   <select class="form-control" v-model="thirdActive">
-                                     <option value="0">请选择</option>
-                                     <option v-for="item in chanelList" :value="item.id">{{item.text}}</option>
-                                 </select> -->
-                            </div>
+                         <div class="controls col-md-5">
+                              <div class="col-md-4" style="margin-top:2%">
+                                <input type="radio" name="yunfei" v-model="yunfei" value="0" checked >统一邮费
+                              </div>
+                              <h4 class="col-md-1">￥</h4>
+                              <div class="col-sm-5" >
+                                  <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"/></div>
+                              <br><br><br>
+                              <div class="col-md-4" >
+                                 <input type="radio" name="yunfei" v-model="yunfei" value="1">运费模板</div>
+                                 <div class="col-md-6">
+                                 <select class="form-control" v-model="request.spuCarriageId">
+                                     <option value="-1">请选择</option>
+                                     <option v-for="item in carriageList" :value="item.pcId">{{item.pcName}}</option>
+                                 </select>
+                                 </div>
+                          </div>
                         </div>
 
                         <!--  <div class="form-group">
@@ -447,6 +453,7 @@ export default {
     data() {
         return {
             request:{
+                "spuCarriageId":-1,//运费模板id
                 "spuType": 1,
                 "spuShareUrl":'',
                 "spuPic": '',
@@ -462,11 +469,12 @@ export default {
                 "spuFreight":"", //运费
                 "spuPackingList":"",//包装清单
                 "piList" : [],//消保集合
-                "skuPlanShelvesDate":"",//上架时间
+                "spuPlanShelvesDate":"",//上架时间
                 "resourceList": [],//图片集合
                 "tagList":[],//标签集合
                 "skuList":[]
             },
+            yunfei:0,       //0:统一邮费  1:运费模板
             rad:1,         //上架状态 1:立刻  2:设定
             hour : -1,     //上架时间小时
             minutes : -1,  //上架时间分钟
@@ -475,6 +483,7 @@ export default {
             shangb :[],
             shangbanglist: [],
             sxlist: [],
+            carriageList:[],//运费模板
             img:"http://img1.fshtop.com/1502701860183.jpg",
             xssxList:[],
             idnum:0,
@@ -1299,9 +1308,10 @@ export default {
                                           "pcaMemo": zhi[f+ii], // 备注
                                           "pcaName": $($(ze).children(":text")[0]).val(), // 销售属性名
                                           "pcaRequired": 0,   // 0
-                                          "pcaSaleProp": 2,  // 1
+                                          "pcaSaleProp": 1,  // 1
                                           "pcaSortNo": g,   // 排序号
                                           "pcraCatId": leimuid,  //  类目ID 
+                                          "pcaAtrrType":3,//1-通用属性; 2-销售属性; 3-私有属性
                                         }
 
                                  attrList.push(map)
@@ -1503,19 +1513,19 @@ export default {
             this.showMsg("上架时间不能为空")
             return
            }
-           this.request.skuPlanShelvesDate = this.time//+" "+this.hour+":"+this.minutes
+           this.request.spuPlanShelvesDate = this.time//+" "+this.hour+":"+this.minutes
            if( this.hour>= 10 ){
-                          this.request.skuPlanShelvesDate += " "+this.hour
+                          this.request.spuPlanShelvesDate += " "+this.hour
                     }else{
-                        this.request.skuPlanShelvesDate += " 0"+this.hour
+                        this.request.spuPlanShelvesDate += " 0"+this.hour
                     }
                     if( this.minutes >= 10 ){
-                          this.request.skuPlanShelvesDate += ":"+this.minutes
+                          this.request.spuPlanShelvesDate += ":"+this.minutes
                     }else{
-                        this.request.skuPlanShelvesDate+= ":0"+this.minutes
+                        this.request.spuPlanShelvesDate+= ":0"+this.minutes
                     }
       } else {
-           this.request.skuPlanShelvesDate = ""
+           this.request.spuPlanShelvesDate = ""
       } 
       //
          this.request.piList = arr 
@@ -1563,20 +1573,32 @@ export default {
                 //this.getList();
             }
         },
+        //获取运费模板
+         getCarriageList() {
+          client.postData(  PCT_PCLIST , {}).then(data => {
+                if (data.code == 200) {
+                   this.carriageList = data.data
+                } else {
+                    this.showMsg(data.msg)
+                }
+            }, data => {
+                this.showMsg("获取运费模板失败,请刷新重试");
+            })
+        },
         //获取消保类型
         getxbList() { 
         client.postData(  SYSTEM_DICTIONARY  , {
-  "key": "",
-  "keyValue": "",
-  "page": {
-    "currentPage": 0,
-    "pageSize": 10,
-    "startIndex": 0,
-    "totalPage": 0,
-    "totalSize": 0
-  },
-  "parentCode": "product_insurance"
-}).then(data => {
+              "key": "",
+              "keyValue": "",
+              "page": {
+                "currentPage": 0,
+                "pageSize": 10,
+                "startIndex": 0,
+                "totalPage": 0,
+                "totalSize": 0
+              },
+              "parentCode": "product_insurance"
+            }).then(data => {
                 if (data.code == 200) {
                     this.insurancelist = data.data;
                 } else {
@@ -1603,13 +1625,13 @@ export default {
         //获取品牌
         getbrandList() { 
         client.postData(  PBD_GET_LIST , {
-       "page": {
-       "currentPage": 0,
-       "pageSize": 0,
-       "startIndex": 0,
-       "totalPage": 0,
-       "totalSize": 0
-       }}).then(data => {
+             "page": {
+             "currentPage": 0,
+             "pageSize": 0,
+             "startIndex": 0,
+             "totalPage": 0,
+             "totalSize": 0
+             }}).then(data => {
                 if (data.code == 200) {
                     let list = data.data;
                     for (let i = 0; i < list.length; i++) {
@@ -1808,13 +1830,41 @@ export default {
             })
         }
     },
-    
+   
     created() {
+         this.getbrandList()
          this.getxbList()
-         this.getshangbangList(); 
-         this.getbrandList();
+         this.getshangbangList()
+         this.getCarriageList() 
     },
     watch: {
+        stime(val) {
+            let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/
+            if(!reg.test(val)){
+                this.showMsg('日期格式不合法')
+                this.stime = '' 
+            }
+        },
+        "request.spuFreight":{　　
+          　handler(curVal,oldVal){　
+             if(curVal > 0 ){
+            this.request.spuCarriageId = -1
+            //setTimeout(() => {
+                this.yunfei = 0　
+            //}, 50)　　　　　　　　　　　
+            　}　　
+          },　　　　　　　　　　
+          deep:true　　　　　　　　
+        },
+        "request.spuCarriageId":{　　
+          　handler(curVal,oldVal){　
+            if(curVal != -1){　
+                this.request.spuFreight = 0.00　　　　　　　　　　　
+                this.yunfei = 1　
+             }　　　　　　　
+          },　　　　　　　　　　
+          deep:true　　　　　　　　
+        },
         shangb() {
             if(this.shangb.length > 3){
                 this.showMsg("最多选择3个理由")
@@ -1829,9 +1879,8 @@ export default {
             arr.push(this.par[3])
             arr.push(this.par[4])
             arr.push(this.par[5])
-           client.postData(  PCA_GET_BY_CATID  , {"parentIds" :arr }  ).then(data => {
+           client.postData(  PCA_GET_BY_CATID  , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
                 if (data.code == 200) {
-
                     this.sxlist = data.data;
                     if(this.sxlist.length >= 4){
                         $("#dkej").hide()
@@ -1843,8 +1892,6 @@ export default {
             }, data => {
                 this.showMsg("获取基本属性失败,请刷新重试");
             })
-
-          /* this.sxlist = {"code":200,"msg":"操作成功","serverTime":"1504084257797","data":[{"pcaId":"900967612593364994","pcraCatId":"1001","pcaName":"电器","pcaSortNo":"0","pcaInputType":0,"pcaSearchType":1,"pcaSaleProp":1,"pcaAtrrType":0,"pcaRequired":0,"pcaUseFlag":0,"pcaMemo":"string","pcaCreatedTime":1503643409000,"pcaCreator":"oym","pcaModifyTime":1503661501000,"pcaModify":"oym","pcaoList":[{"pcaoId":"901040722596225024","pcaoAtrrId":"900967612593364994","pcaoName":"strings","pcaoValue":"string","pcaoIcon":"0","pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"oym","pcaoCreatedTime":1503659824000,"pcaoModify":"oym","pcaoModifyTime":1503661258000}]},{"pcaId":"902448197199355904","pcraCatId":"1001001","pcaName":"string","pcaSortNo":"0","pcaInputType":0,"pcaSearchType":1,"pcaSaleProp":0,"pcaAtrrType":0,"pcaRequired":0,"pcaUseFlag":0,"pcaMemo":"string","pcaCreatedTime":1503995392000,"pcaCreator":"oym","pcaModifyTime":1503995392000,"pcaModify":"oym","pcaoList":[{"pcaoId":"1","pcaoAtrrId":"902448197199355904","pcaoName":"1","pcaoValue":"1","pcaoIcon":"1","pcaoSortNo":1,"pcaoUseFlag":1,"pcaoCreator":"","pcaoCreatedTime":1501571942000,"pcaoModify":"1","pcaoModifyTime":1503645546000}]},{"pcaId":"902448197199355905","pcraCatId":"1001001001","pcaName":"颜色","pcaSortNo":"0","pcaInputType":0,"pcaSearchType":1,"pcaSaleProp":0,"pcaAtrrType":0,"pcaRequired":0,"pcaUseFlag":0,"pcaMemo":"string","pcaCreatedTime":1503995509000,"pcaCreator":"oym","pcaModifyTime":1503995509000,"pcaModify":"oym","pcaoList":[{"pcaoId":"902448197199355134","pcaoAtrrId":"902448197199355905","pcaoName":"蓝","pcaoValue":"蓝","pcaoIcon":null,"pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"yjj","pcaoCreatedTime":1502087704000,"pcaoModify":"yjj","pcaoModifyTime":1504074908000},{"pcaoId":"902448197199355136","pcaoAtrrId":"902448197199355905","pcaoName":"白","pcaoValue":"白","pcaoIcon":null,"pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"yjj","pcaoCreatedTime":1502087704000,"pcaoModify":"yjj","pcaoModifyTime":1504074908000},{"pcaoId":"902448197199355138","pcaoAtrrId":"902448197199355905","pcaoName":"绿","pcaoValue":"绿","pcaoIcon":null,"pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"yjj","pcaoCreatedTime":1502087704000,"pcaoModify":"yjj","pcaoModifyTime":1504074908000},{"pcaoId":"902448197199355137","pcaoAtrrId":"902448197199355905","pcaoName":"黑","pcaoValue":"黑","pcaoIcon":null,"pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"yjj","pcaoCreatedTime":1502087704000,"pcaoModify":"yjj","pcaoModifyTime":1504074908000},{"pcaoId":"902448197199355135","pcaoAtrrId":"902448197199355905","pcaoName":"黄","pcaoValue":"黄","pcaoIcon":null,"pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"yjj","pcaoCreatedTime":1502087704000,"pcaoModify":"yjj","pcaoModifyTime":1504074908000}]},{"pcaId":"902495960805040134","pcraCatId":"1001001001","pcaName":"款式","pcaSortNo":"0","pcaInputType":0,"pcaSearchType":1,"pcaSaleProp":0,"pcaAtrrType":0,"pcaRequired":0,"pcaUseFlag":0,"pcaMemo":"string","pcaCreatedTime":1504006780000,"pcaCreator":"oym","pcaModifyTime":1504006780000,"pcaModify":"oym","pcaoList":[{"pcaoId":"902448197199355140","pcaoAtrrId":"902495960805040134","pcaoName":"短","pcaoValue":"短","pcaoIcon":null,"pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"yjj","pcaoCreatedTime":1502087704000,"pcaoModify":"yjj","pcaoModifyTime":1504074908000},{"pcaoId":"902448197199355139","pcaoAtrrId":"902495960805040134","pcaoName":"长","pcaoValue":"长","pcaoIcon":null,"pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"yjj","pcaoCreatedTime":1502087704000,"pcaoModify":"yjj","pcaoModifyTime":1504074908000},{"pcaoId":"902495960805040135","pcaoAtrrId":"902495960805040134","pcaoName":"string","pcaoValue":"string","pcaoIcon":"0","pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"oym","pcaoCreatedTime":1504006780000,"pcaoModify":"oym","pcaoModifyTime":1504006780000},{"pcaoId":"902448197199355141","pcaoAtrrId":"902495960805040134","pcaoName":"中","pcaoValue":"中","pcaoIcon":null,"pcaoSortNo":1,"pcaoUseFlag":0,"pcaoCreator":"yjj","pcaoCreatedTime":1502087704000,"pcaoModify":"yjj","pcaoModifyTime":1504074908000}]}]}.data*/
         },
         par(){
              //this.showMsg("watch"+this.par);

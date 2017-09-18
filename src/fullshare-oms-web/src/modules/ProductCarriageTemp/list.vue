@@ -31,7 +31,7 @@
             
         </div>
         <br> <h4 style="text-align:center" v-if="dataList.length==0"> 暂无数据,请先新增运费模板 </h4>
-        <div class="contentBlock" >
+        <div class="contentBlock" style="overflow-x: scroll;">
             <div class="table-responsive col-md-12" v-for="items in dataList" >
                 <table class="table table-striped table-bordered table-hover discount " >
                     <thead>
@@ -40,42 +40,42 @@
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
                             </th> -->
-                            <th style="width:35%;text-align:left;border-right:none;border-left:none; ">&nbsp;&nbsp;{{items[0].pctName}}</th>
+                            <th style="width:35%;text-align:left;border-right:none;border-left:none; ">&nbsp;&nbsp;{{items.pcName}}</th>
                             <th colspan="2" style="width:33%;text-align:left;border-right:none;border-left:none;">
-                                <h5>最后编辑时间<span v-if="items[0].pctModifyTime > 0">{{items[0].pctModifyTime|filterTime}}</span></h5></th>                       
+                                <h5>最后编辑时间<span v-if="items.pcModifyTime > 0">{{items.pcModifyTime|filterTime}}</span></h5></th>                       
                             <th colspan="2" style=" width:32%;text-align:left;border-right:none;border-left:none;">  
                             <span v-if="dataList.length > 0">
 <!--                              <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showControlFunc(items,'submit')">复制模板</button>  
  -->                             <button type="button"  class="btn btn-xs blue" @click.stop="editItem(items)">修改</button>
 <!--                              <button type="button"  class="btn btn-xs default" @click.stop="editItem(items)">删除</button>
- -->                             <a :id="'desc'+items[0].pctId"  class="orderBy" style="text-decoration:none" @click="orderBy(false,items[0].pctId)">▼</a>
-                             <a :id="'asc'+items[0].pctId" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true,items[0].pctId)">▲</a>
+ -->                             <a :id="'desc'+items.pcId"  class="orderBy" style="text-decoration:none" @click="orderBy(false,items.pcId)">▼</a>
+                             <a :id="'asc'+items.pcId" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true,items.pcId)">▲</a>
                          </span>
                          </th>
                      </tr>
                        
                     </thead>
-                    <tbody  :id="'tab'+items[0].pctId" >
+                    <tbody  :id="'tab'+items.pcId" >
                          <tr style="background-color:#white;height:40px;border-bottom:4px solid #D7D7D7;">
                            <!--  <th style="width:4%">
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
                             </th> -->
-                            <th style="width:35%;text-align:left; border-right:none;border-left:none;">可配送区域</th>
-                             <th style="width:20%; border-right:none; border-left:none;">首件（个）</th>
-                            <th style="width:13%; border-right:none;border-left:none;">运费（元）
+                            <th style="width:52%;text-align:left; border-right:none;border-left:none;">可配送区域</th>
+                             <th style="width:12%; border-right:none; border-left:none;">首件（个）</th>
+                            <th style="width:12%; border-right:none;border-left:none;">运费（元）
                                
                             </th>
                             <th style="width:12%; border-right:none;border-left:none;">续件（个）</th>
                            
-                            <th style=" border-right:none;border-left:none;">续费（元）</th>
+                            <th style="width:12%; border-right:none;border-left:none;">续费（元）</th>
                         </tr>
-                        <tr  @click="selectItem(items)" v-for="item in items" style="border-bottom:2px solid #D7D7D7;">
+                        <tr  @click="selectItem(items)" v-for="item in items.pctSet" style="border-bottom:2px solid #D7D7D7;">
 
                             <!-- 全选反选 <td style="text-align:center;vertical-align:middle;">
                                 <input type="checkbox" :checked="item.checked"></input>
                             </td> -->
-                            <td style="width:35%;text-align:left;vertical-align:middle;border-right:none;border-left:none;">
+                            <td style="width:52%;text-align:left;vertical-align:middle;border-right:none;border-left:none;">
                                 <!-- <p>
                                     <a target="_blank" :href="item.imgUrl" title="查看大图">
                                         <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
@@ -86,10 +86,10 @@
                             </a> --> {{item.pctArea}}
 
                             </td>
-                            <td style="width:13%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;font-style: normal;border-right:none;border-left:none;text-align:left;">
+                            <td style="width:12%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;font-style: normal;border-right:none;border-left:none;text-align:left;">
                                      &nbsp;&nbsp; {{item.pctFirstNum}}
                             </td>
-                            <td style="text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                            <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
                                <!--  商品状态 -->
                                 <!--  <span class="label label-default" v-if="item.deployStatus==4">{{item.spuCatId|filterStatus}}</span>
                                 <template v-else>
@@ -99,13 +99,13 @@
                               &nbsp;&nbsp; {{item.pctFirstPrice}}
                             </td>
 
-                            <td style="text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                            <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
                                &nbsp;&nbsp; {{item.pctOtherNum}}
                             </td>
                             
                           <!--   <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
-                            <td style="text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                            <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
                                   &nbsp;&nbsp; {{item.pctOtherPrice}}
                             </td>
                         </tr>
@@ -158,7 +158,7 @@ export default {
     data() {
         return {
             disflag:false,
-            pctArr:[],
+            pctArr:{},
             lflag:false,
             pflag:true,
             flag:true,
@@ -200,10 +200,7 @@ export default {
     },
     methods: {
         editItem(arr) {
-            this.pctArr = []
-            arr.forEach((item,index)=>{
-                this.pctArr.$set(index,item);
-             })
+            this.pctArr = Object.assign({},arr);
             this.disflag = !this.disflag
             this.showAddDialog = true;
         },
@@ -357,29 +354,7 @@ export default {
             client.postData( PCT_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
-                    let total = new Array()
-                    let branch = new Array()
-                    let name = ""
-                    data.data.forEach(item => {
-                        item.checked = false;
-                        if(name != ""){
-                            if(name == item.pctName){
-                                branch.push(item)
-                            }else{
-                                name = item.pctName
-                                total.push(branch)
-                                branch = new Array()
-                                branch.push(item)
-                            }
-                        }else{
-                           name = item.pctName
-                           branch.push(item)
-                        }
-                    })
-                    if(branch.length > 0 ){
-                       total.push(branch)
-                    }
-                    this.dataList = total
+                    this.dataList = data.data
                     //alert(total.length)
                     this.page = data.page;
                 } else {

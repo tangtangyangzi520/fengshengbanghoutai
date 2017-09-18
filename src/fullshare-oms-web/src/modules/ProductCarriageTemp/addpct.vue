@@ -115,6 +115,8 @@ export default {
     },
     data() {
         return {
+            shengNum:-1,
+            pc:{},
             allSelected:'',
             areaString:'',
             index:-1,
@@ -168,18 +170,26 @@ export default {
          },
          addItem2(ev) {
             let pctList = []
+            let count = 0
             this.dataList.forEach( data =>{
                  if( data.pctArea != "" ){
                      data.pctName = this.pctName
                      pctList.push( data )
+                     count += data.pctArea.split("、").length
                  }
             })
              if( pctList.length == 0){
               this.showMsg("请先选择可配送区域再保存")
               return
             }
+            if(  this.shengNum > count ){
+                 this.showMsg("运费模板必须包含所有省份")
+                 return
+            }
             if( pctList[0].pctId > 0 ){
-                client.postData( PCT_EDIT , pctList).then(data => {
+                this.pc.pcName = this.pctName
+                this.pc.pctSet = pctList
+                client.postData( PCT_EDIT , this.pc ).then(data => {
                 this.isLoading = true
                 if (data.code == 200) {
                         this.showMsg("编辑运费模板成功")
@@ -195,7 +205,7 @@ export default {
              })
 
             }else{
-                client.postData( PCT_CREATE , pctList ).then(data => {
+                client.postData( PCT_CREATE ,{"pctSet":pctList,"pcName":this.pctName,}).then(data => {
                 this.isLoading = true
                 if (data.code == 200) {
                         this.showMsg("新健运费模板成功")
@@ -216,7 +226,20 @@ export default {
        selectItem(item) {
             item.checked = !item.checked;
         },
-        //sku展开 或 收起
+        //获取省份
+        getshengList() { 
+            console.log('获取省份信息')
+            client.postData( AREA_GET_LIST , {}).then(data => {
+                if (data.code == 200) {
+                    this.shengNum = data.data.length;
+                } else {
+                    //this.showMsg(data.msg);
+                }
+            }, data => {
+                this.showMsg("获取省份信息失败,请刷新重试");
+            })
+        },
+        //展开 或 收起
          orderBy( val ,id) {
             if( val ){
                 $("#desc"+id).show()
@@ -277,9 +300,7 @@ export default {
              this.trId = val
              this.showSpuDialog = true
         },
- 
-        hideAddDialog(control) {
-            
+        hideAddDialog(control) {   
             this.expertEditId = '';
             this.showAddDialog = false;
             if (control && control == 'create') {
@@ -373,16 +394,16 @@ export default {
             })
         }
     },
-    
     created() {
-        
+       
     },
     watch: {
         dflag() {
             this.dataList = []
             this.title = '编辑运费模板';
-            this.pctName =  this.pctArrs[0].pctName
-            this.dataList = this.pctArrs
+            this.pctName =  this.pctArrs.pcName
+            this.pc = this.pctArrs
+            this.dataList = this.pctArrs.pctSet
             this.dataList.push({
                         "pctArea": "",
                         "pctFirstNum": 1,
@@ -448,8 +469,8 @@ export default {
         }
     },
     ready() {   
-        $("#submitform3").on("submit",this.addItem2);  
-      
+        $("#submitform3").on("submit",this.addItem2) 
+         this.getshengList()     
     },
     beforeDestroy() {
         this.showPainListSelect = false;

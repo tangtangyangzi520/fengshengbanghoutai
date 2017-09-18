@@ -282,9 +282,8 @@ var HEADLINE_LIST = CMS_API_BASE + "/headline/getList";
 
 //商品模块url
 //////////////////////////////////////////////////////////////////////
-//pku
+//sku
 var  SKU_EDIT_LIST      =  OMS_TEST + "/sku/editProductSku";         //编辑sku列表
-var  SKU_EDIT_UP_DOWN   =  OMS_TEST + "/sku/shelvesSku";             //sku上架或下架
 var  SKU_GET_BY_ID      =  OMS_TEST + "/sku/getProductSkuBySpuId";   //根据spuID获取sku列表
 //spu,图片资源
 var  SPU_EXPORT         =  OMS_TEST + "/spu/exportSpu";              //根据spuid导出sku列表
@@ -296,6 +295,9 @@ var  SPU_GET_BY_ID      =  OMS_TEST + "/spu/getProductSpuById";      //根据ID�
 var  PSR_CREATE         =  OMS_TEST + "/psr/createPsr";              //新增详情页
 var  PSR_GETBANNER_BY_ID    =  OMS_TEST + "/psr/getPsrBannerById";   //banner图片资源
 var  PSR_GETDETAILS_BY_ID   =  OMS_TEST + "/psr/getPsrDetailsById";  //详情图片资源
+var  SPU_EDIT_UP_DOWN   =  OMS_TEST + "/spu/shelvesSpu";             //sku上架或下架
+var  SPU_DELETE  =  OMS_TEST + "/spu/deleteSpus";             //sku上架或下架
+
 //品牌
 var  PBD_GET_LIST   =  OMS_TEST + "/pbd/list";                       //获取品牌列表
 var  PBD_CREATE     =  OMS_TEST + "/pbd/createProductBrand";         //新增品牌
@@ -346,12 +348,13 @@ var MKT_INVALIDATE   =  OMS_TEST+ "/mkt/invalidateMktCampaign";    //优惠券/�
 var MKT_DELETE  =  OMS_TEST+ "/mkt/deleteMktCampaign";        //优惠券/活动删除
 
 //运费模板模块  
-var PCT_EDIT   =  OMS_TEST+ "/pct/editProductCarriageTemp";        //新增运费模板
-var PCT_CREATE =  OMS_TEST+ "/pct/createProductCarriageTemp";        //新增运费模板
-var PCT_LIST   =  OMS_TEST+ "/pct/list";                               //运费模板列表
+var PCT_EDIT   =  OMS_TEST+ "/pc/editProductCarriage";        //新增运费模板
+var PCT_CREATE =  OMS_TEST+ "/pc/createProductCarriage";        //新增运费模板
+var PCT_LIST   =  OMS_TEST+ "/pc/list";                               //运费模板列表(包含pct)
+var PCT_PCLIST =  OMS_TEST+ "/pc/pcList";                               //运费模板列表(只有pc)
 
 //地区模块
-var AREA_GET_LIST = OMS_TEST + "/area/list"; //获取所有的省份
+var AREA_GET_LIST = OMS_TEST + "/area/provinceList"; //获取所有的省份
 
 
 

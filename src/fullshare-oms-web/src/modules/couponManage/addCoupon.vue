@@ -1,6 +1,6 @@
 <template>
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1100px'" >
             <div slot="content">
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form" id='submitform'>
@@ -57,13 +57,13 @@
                                        <div class="col-md-8 nopadding">
 
                             <div class="col-md-3" >
-                                <input type="radio" name="menkan" v-model="" value="0" checked >不限制&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="menkan" v-model="menkan" value="0" checked >不限制&nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <br> <br>
                                 <div class="col-sm-2" >
-                                <input type="radio" name="menkan" v-model="" value=""  >满&nbsp;&nbsp;&nbsp;&nbsp; 
+                                <input type="radio" name="menkan" v-model="menkan" value="1"  >满&nbsp;&nbsp;&nbsp;&nbsp; 
                                 </div>
-                                <div class="col-md-3" >  <input type="number" class="form-control input-sm" v-model="request.mkcUsedCondition" placeholder="" max="9999999" required="required" min="0"/></div>
+                                <div class="col-md-3" >  <input type="number" class="form-control input-sm" v-model="request.mkcUsedCondition" placeholder="" max="9999999" required="required" min="1"/></div>
                                
                                <label  class="col-sm-0 control-label" >
                                元可使用
@@ -132,21 +132,21 @@
                         <table class="tab" id="t" style="width:1000px" border="1" cellspacing="0" cellpadding="0">  
                         <thead>
                           <tr>
-                             <th style="width:30%">
+                             <th style="width:10%">
                                  <a :id="'desc'+spu.spuId"  class="orderBy" style="display:none;text-decoration:none" @click="orderBy(false,spu.spuId)">▼</a>
                                  <a :id="'asc'+spu.spuId" class="orderBy" style="text-decoration:none" @click="orderBy(true,spu.spuId)">▲</a>
-                                
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(spu)">全选</button>
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(spu)">反选</button>
+                                <input type="checkbox" :checked="spu.checked" @click="reverseList(spu)"></input>
+                               <!--  <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(spu)">全选</button>
+                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(spu)">反选</button> -->
                              </th>
-                             <th style="width:30%">{{spu.spuName}}</th>
+                             <th style="width:50%">{{spu.spuName}}</th>
                              <th style="width:40%">{{spu.spuCreatedTime|filterTime}}</th>
                           </tr>
                         </thead>
                              <tbody :id="spu.spuId" style="display:none">
                                 <tr v-for=" g in spu.skuList" style="height:20%"  @click="selectItem(g)">  
-                                   <td style="width:30%"> <input type="checkbox" :checked="g.checked"></input> </td>
-                                   <td style="width:30%"> {{ g.skuName }} </td>
+                                   <td style="width:10%"> <!-- <input type="checkbox" :checked="g.checked"></input> --> </td>
+                                   <td style="width:50%"> {{ g.skuName }} </td>
                                    <td style="width:40%"> {{ g.skuCreatedTime|filterTime }}</td>
                                 </tr>
                              </tbody>
@@ -209,6 +209,7 @@ export default {
     },
     data() {
         return {
+            menkan:0,
             useful :0,
             a:10,
             mktEnd:"",
@@ -280,22 +281,26 @@ export default {
               $("#sub").click()
          },
          addItem2(ev) {
+
             this.request.cmisList = []
             this.spuList.forEach(item => {
-               item.skuList.forEach(sku => {
-                    if( sku.checked ){
+               //item.skuList.forEach(sku => {
+                    if( item.checked ){
                        this.request.cmisList.push( {
                           "enableStatus": 1,//0-无效，1-有效
                           "misCampaignId": 0,//活动主键
                           "misDiscountPrice": 0,//限时折扣价
                           "misMandatory": 1,//是否必要产品：0-非必要产品，1-必要产品
                           "misMcnId": 0,  //条件主键
-                          "misSkuId": sku.skuId, //产品主键
+                          "misSpuId": item.spuId, //产品主键
                           "misType": 1 ,//商品类型：1-a商品，2-b商品 
                         })
                     }
-                })
+                //})
             })
+             /*if(this.request.cmisList == 0){
+                this.showMsg("请先选择商品再保存")
+            }*/
 
              if( this.request.mkcCampaignId > 0 ){
                 client.postData( MKT_EDIT , this.request).then(data => {
@@ -354,6 +359,7 @@ export default {
             })
         },
         reverseList(val) {
+            val.checked = !val.checked;
             val.skuList.forEach(item => {
                 item.checked = !item.checked;
             })
@@ -519,16 +525,25 @@ export default {
                     }else{
                         this.mktEnd += "-0"+endtime.getDate()
                     }
+                    //使用门槛回显
+                    if(this.request.mkcUsedCondition > 0 ){
+                      this.menkan = 1
+                    }
                     this.request.mktEnd = this.mktEnd
-                    //
+                    //可使用商品回显
+                    if( response.data.spuList.length > 0 ){
+                       this.useful = 1
+                    }
                      response.data.spuList.forEach( spu => {
-                        spu.skuList.forEach( sku => {
+                        //spu.skuList.forEach( sku => {
+                             //sku.checked = false
+                          spu.skuList.forEach( sku => {
                              sku.checked = false
+                           })
                              response.data.misList.forEach(m => {
-                                  if( m.misSkuId == sku.skuId ){
-                                    sku.checked = true
+                                  if( m.misSpuId == spu.spuId ){
+                                    spu.checked = true
                                   }
-                             })
                         })
                     })
                     this.spuList = response.data.spuList
@@ -545,7 +560,7 @@ export default {
                 let start = new Date( this.request.mktStart.replace(/-/g,"/") )
                 if( end < start ){
                     this.showMsg('生效时间不可以大于过期时间')
-                   
+                    this.mktEnd = ""
                     this.request.mktEnd = ""
                     return
                 }
