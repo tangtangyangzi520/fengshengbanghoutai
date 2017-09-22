@@ -1,1 +1,6 @@
 /target/
+/.settings/
+.classpath
+.gitignore
+/node_modules/
+/bin/
