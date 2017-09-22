@@ -4,143 +4,155 @@
             <div slot="content">
                 <div class="row nopadding">
                     <!-- 订单进度条 -->
-                    <div class="col-md-12" v-if="this.subData.ordStatus==0||this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">
-                        <div class="col-md-12" >
+                    <div class="col-md-12 myBorder" v-if="this.subData.ordStatus==0||this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">
+                        </br>
+                        <div class="col-md-12">
                             <div class="col-md-3" style="text-align:center;">
                                 <span style="color:blue;">买家下单</span>
-                            </div>  
+                            </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span style="color:blue;" v-if="this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">买家付款</span>
-                               <span v-else> 买家付款</span>
-                            </div> 
+                                <span v-else> 买家付款</span>
+                            </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span style="color:blue;" v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">商家发货</span>
-                               <span v-else> 商家发货</span>
-                            </div> 
+                                <span v-else> 商家发货</span>
+                            </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span style="color:blue;" v-if="this.subData.ordStatus==3">交易完成</span>
-                               <span v-else> 交易完成</span>
-                            </div> 
+                                <span v-else> 交易完成</span>
+                            </div>
                         </div>
+                        </br>
+                        </br>
                         <!-- 进度条start -->
-                        <div class="col-md-12" v-if="this.subData.ordStatus==0" >
+                        <div class="col-md-12" v-if="this.subData.ordStatus==0">
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width:25%;">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:25%;">
                                     <span class="sr-only"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12" v-if="this.subData.ordStatus==1" >
+                        <div class="col-md-12" v-if="this.subData.ordStatus==1">
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
                                     <span class="sr-only"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12" v-if="this.subData.ordStatus==2" >
+                        <div class="col-md-12" v-if="this.subData.ordStatus==2">
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width:75%;">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:75%;">
                                     <span class="sr-only"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12" v-if="this.subData.ordStatus==3" >
+                        <div class="col-md-12" v-if="this.subData.ordStatus==3">
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%;">
                                     <span class="sr-only"></span>
                                 </div>
                             </div>
                         </div>
-                         <!-- 进度条end -->
-                         <!-- 具体时间 -->
-                        <div class="col-md-12" >
+                        <!-- 进度条end -->
+                        <!-- 具体时间 -->
+                        <div class="col-md-12">
                             <div class="col-md-3" style="text-align:center;">
                                 {{subData.ordCreatedTime}}
-                            </div>  
+                            </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span v-if="this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3"> {{subData.ordPayTime}}</span>
-                            </div> 
+                            </div>
                             <div class="col-md-3" style="text-align:center;">
-                                <span v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">需要发货时间</span>
-                            </div> 
+                                <span v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">{{subData.ordModifyTime}}</span>
+                            </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span v-if="this.subData.ordStatus==3">{{subData.completeTime}}</span>
-                            </div> 
+                            </div>
+                            </br></br>
                         </div>
                     </div>
                     <!-- 订单信息 -->
                     <div class="col-md-12">
-                        <div class="col-md-6">
+                        <div class="col-md-6 myBorder">
                             <div class="col-md-12">
                                 <div class="col-md-6">
-                                <h4>订单信息</h4>
+                                    <h4>订单信息</h4>
                                 </div>
                                 <div class="col-md-6 right">
                                     担保交易
                                 </div>
                             </div>
-                            <table  class="table table-bordered table-hover">
-                                <tr><td width="30%">订单编号: </td>
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <td width="30%">订单编号: </td>
                                     <td width="70%">{{setData.orstNo}}</td>
                                 </tr>
-                                 <tr><td width="30%">订单类型: </td>
+                                <tr>
+                                    <td width="30%">订单类型: </td>
                                     <td width="70%">{{orderTypeDisplay(setData.ordOrderType)}}</td>
                                 </tr>
-                                 <tr><td width="30%">付款方式: </td>
+                                <tr>
+                                    <td width="30%">付款方式: </td>
                                     <td width="70%">{{ordPayChannel(itemSet.orsPayChannel)}}</td>
                                 </tr>
-                                 <tr><td width="30%">买家昵称: </td>
+                                <tr>
+                                    <td width="30%">买家昵称: </td>
                                     <td width="70%">{{subData.ordMemberId}}</td>
                                 </tr>
-                                 <tr><td width="30%">姓名: </td>
+                                <tr>
+                                    <td width="30%">姓名: </td>
                                     <td width="70%">{{subData.ordReceiveName}}</td>
                                 </tr>
-                                 <tr><td width="30%">身份证号: </td>
+                                <tr>
+                                    <td width="30%">身份证号: </td>
                                     <td width="70%">缺少会员身份证</td>
                                 </tr>
-                                 <tr><td width="30%">配送方式: </td>
+                                <tr>
+                                    <td width="30%">配送方式: </td>
                                     <td width="70%">{{ordLogiType(setData.ordLogiType)}}</td>
                                 </tr>
-                                 <tr><td width="30%">收货信息: </td>
+                                <tr>
+                                    <td width="30%">收货信息: </td>
                                     <td width="70%">{{ordAddress(setData.orderSubList[0])}}</td>
                                 </tr>
-                                 <tr><td width="30%">买家留言: </td>
+                                <tr>
+                                    <td width="30%">买家留言: </td>
                                     <td width="70%">{{setData.buyerMessage}}</td>
                                 </tr>
                             </table>
                         </div>
 
-                        <div class="col-md-6">
-                           <h4>订单状态: {{subData.ordStatusDisplay}}</h4>
-                           <div v-if="subData.ordStatus==0">如买家未在规定时间内付款,订单将按照设置逾期自动关闭;</div>
-                           <div v-if="subData.ordStatus==1">买家已付款至你的财付通账户,请尽快发货,否则买家有权申请退款;</div>
-                           <div v-if="subData.ordStatus==2">买家如在<span style="color:red;">7天内</span>没有申请退款,交易将自动完成;</div>
-                           <div v-if="subData.ordStatus==3"><p></p></div>
-                           <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</div>
-                           <div>
+                        <div class="col-md-6 myBorder">
+                            <h4>订单状态: {{subData.ordStatusDisplay}}</h4>
+                            <div v-if="subData.ordStatus==0">如买家未在规定时间内付款,订单将按照设置逾期自动关闭;</div>
+                            <div v-if="subData.ordStatus==1">买家已付款至你的财付通账户,请尽快发货,否则买家有权申请退款;</div>
+                            <div v-if="subData.ordStatus==2">买家如在
+                                <span style="color:red;">7天内</span>没有申请退款,交易将自动完成;</div>
+                            <div v-if="subData.ordStatus==3">
+                                <p></p>
+                            </div>
+                            <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</div>
+                            <div>
 
-                               <a @click.stop="setDemo(setData.orsId)">备注</a>
-                               <p>
+                                <a @click.stop="setDemo(setData.orsId)">备注</a>
+                                <p>
                                     <button type="button" v-show="(subData.ordStatus==0)" @click.stop="editPayAmount(subData)" class="btn btn-xs blue">修改价格</button>
-                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="cancelOrder(subData)" class="btn btn-xs blue">取消订单</button></p>
+                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="cancelOrder(subData)" class="btn btn-xs blue">取消订单</button>
+                                </p>
 
                             </div>
-                        </div>  
-                    </div> 
+                        </div>
+                    </div>
 
-
-                    <div class="col-md-12">
-                         <table  class="table table-bordered table-hover">
+                    <div class="col-md-12 myBorder">
+                        <table class="table table-bordered table-hover">
                             <tr>
                                 <th style="width:30%;">订单号 | 交易单号 | 支付方式</th>
                                 <th style="width:20%;">付款人及留言</th>
-                                <th style="width:20%;" >付款时间</th>
-                                <th style="width:10%;" >实收（元）</th>
-                                <th style="width:10%;" >状态</th>
+                                <th style="width:20%;">付款时间</th>
+                                <th style="width:10%;">实收（元）</th>
+                                <th style="width:10%;">状态</th>
                             </tr>
                             <tr>
                                 <td width="20%">
@@ -153,12 +165,12 @@
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordActAmount}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{payStatus(setData.orsPayStatus)}}</td>
                             </tr>
-                         </table>
+                        </table>
 
                     </div>
-                     <div class="col-md-12">
-                         <table class="table table-bordered table-hover">
-                             <thead>
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
                                     <th style="width:26%;">商品信息</th>
                                     <th style="width:7%;">单价(元)</th>
@@ -167,9 +179,9 @@
                                     <th style="width:10%;">小计(元)</th>
                                     <th style="width:10%;">状态</th>
                                 </tr>
-                             </thead>
-                             <tbody>
-                                 <tr v-for="(index,itemDetail) in subData.orderDetailList">
+                            </thead>
+                            <tbody>
+                                <tr v-for="(index,itemDetail) in subData.orderDetailList">
                                     <td class="tdTitle" style="width:26%;">
                                         <p>商品编码:{{itemDetail.detailSku.skuCode}}</p>
                                         <p>
@@ -177,28 +189,31 @@
                                                 <img :src="itemDetail.detailSpu.spuPic" class="img-rounded" style="height:50px">
                                             </a>
                                         </p>
-                                        <h4>{{itemDetail.detailSpu.spuName}}</h4>
+                                        <h4>
+                                            <a style="text-decoration:none;" title="预览商品" @click.stop="previewpro(itemDetail.detailSpu.spuId)">{{itemDetail.detailSpu.spuName}}</a>
+                                        </h4>
+                                        
                                         <p>发货地: 需要提供发货地</p>
                                         <p>规格: {{itemDetail.detailSku.skuName}}</p>
                                     </td>
-                                    <td align="center"  style="width:7%;vertical-align:middle;">
+                                    <td align="center" style="width:7%;vertical-align:middle;">
                                         {{itemDetail.ordOriginal}}
                                     </td>
-                                    <td align="center" style="width:7%;vertical-align:middle;" >
+                                    <td align="center" style="width:7%;vertical-align:middle;">
                                         {{itemDetail.ordSkuNum}}
                                     </td>
                                     <td align="center" style="width:10%;vertical-align:middle;">
                                         <!-- 优惠 -->
                                         {{itemDetail.ordShareAmount}}
-                                    <td align="center" style="width:10%;vertical-align:middle;">
-                                        {{detailActAmount(itemDetail)}}
-                                    </td>
-                                    <td align="center" style="width:10%;vertical-align:middle;">
-                                        {{subData.ordStatusDisplay}}
-                                    </td>
+                                        <td align="center" style="width:10%;vertical-align:middle;">
+                                            {{detailActAmount(itemDetail)}}
+                                        </td>
+                                        <td align="center" style="width:10%;vertical-align:middle;">
+                                            {{subData.ordStatusDisplay}}
+                                        </td>
                                 </tr>
-                             </tbody>
-                         </table>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -206,12 +221,6 @@
                 <button type="button" class="btn default" data-dismiss="modal">确定</button>
             </span>
         </m-alert>
-        <!-- 创建订单备注弹窗 -->
-        <!-- <demo-control v-if="!destroyControlDialog" :id="orsId" :show="showDemoDialog" :onhide="hideAddDialog" ></demo-control> -->
-        <!-- 创建修改订单状态弹窗 -->
-        <!-- <change-status-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showStatusDialog" :onhide="hideAddDialog" ></change-status-control> -->
-        <!-- 创建取消订单弹窗 -->
-        <!-- <cancel-order-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showReasonDialog" :onhide="hideAddDialog" :send-req="reason"></cancel-order-control> -->
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
@@ -229,12 +238,9 @@ import client from '../../common/utils/client';
 import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
 import loading from '../common/loading';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
-// import changeStatusControl from './changeStatusControl';
-// import cancelOrderControl from './cancelOrderControl';
-// import changePaymentControl from './changePaymentControl';
 export default {
-    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading,
-    // changeStatusControl,cancelOrderControl,changePaymentControl  
+    components: {
+        selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading,
     },
     props: {
         show: {
@@ -257,8 +263,8 @@ export default {
             type: Object,
             value: {}
         },
-        progressObject:{
-            width:'',
+        progressObject: {
+            width: '',
         }
     },
     data() {
@@ -298,74 +304,78 @@ export default {
     },
     methods: {
         //取消订单
-        cancelOrder(itemSub){
+        cancelOrder(itemSub) {
             this.$parent.cancelOrder(itemSub);
         },
         //修改价格
-        editPayAmount(itemSub){
+        editPayAmount(itemSub) {
             this.$parent.editPayAmount(itemSub);
         },
         //备注
-        setDemo(orsId){
+        setDemo(orsId) {
             this.$parent.setDemo(orsId);
         },
+        //查看商品预览
+        previewpro(data){
+            this.$parent.previewpro(data);
+        },
         //进度条
-        progressWidth(){
-            let progress=this.subData.ordStatus;
+        progressWidth() {
+            let progress = this.subData.ordStatus;
             console.log(progress)
-            switch(progress){
-                case 0:this.progressObject.width="25%";return;
-                case 1:this.progressObject.width="50%";return;
-                case 2:this.progressObject.width="75%";return;
-                case 3:this.progressObject.width="100%";return;
-                default:;
+            switch (progress) {
+                case 0: this.progressObject.width = "25%"; return;
+                case 1: this.progressObject.width = "50%"; return;
+                case 2: this.progressObject.width = "75%"; return;
+                case 3: this.progressObject.width = "100%"; return;
+                default: ;
             }
         },
         //商品小计
-        detailActAmount(itemDetail){
-            return itemDetail.ordPromotion*itemDetail.ordSkuNum
+        detailActAmount(itemDetail) {
+            return itemDetail.ordPromotion * itemDetail.ordSkuNum
         },
         //显示支付状态
-        payStatus(payStatus){
-            switch(payStatus){
-                case 0:return '未支付'; 
-                case 1:return '支付成功';
-                case 2:return '取消支付';
-                case 3:return '无效订单';
-                default:;
+        payStatus(payStatus) {
+            switch (payStatus) {
+                case 0: return '未支付';
+                case 1: return '支付成功';
+                case 2: return '取消支付';
+                case 3: return '无效订单';
+                default: ;
             }
         },
         //显示收货信息
-        ordAddress(orderSub){
-            return orderSub.ordReceiveProvince+" "+orderSub.ordReceiveCitity+" "+orderSub.ordReceiveArea+" "+orderSub.ordReceiveDetail+
-                    ","+orderSub.ordReceiveName+","+orderSub.ordReceiveMobile
+        ordAddress(orderSub) {
+            return orderSub.ordReceiveProvince + " " + orderSub.ordReceiveCitity + " " + orderSub.ordReceiveArea + " " + orderSub.ordReceiveDetail +
+                "," + orderSub.ordReceiveName + "," + orderSub.ordReceiveMobile
         },
         //显示配送方式
-        ordLogiType(ordLogiType){
-            switch(ordLogiType){
-                case 1:return '快递发货';
-                case 2:return '上门自提';
-                default:;
+        ordLogiType(ordLogiType) {
+            switch (ordLogiType) {
+                case 1: return '快递发货';
+                case 2: return '上门自提';
+                default: ;
             }
         },
-         //支付渠道显示
-        ordPayChannel(payChannel){
-            switch(payChannel){
+        //支付渠道显示
+        ordPayChannel(payChannel) {
+            switch (payChannel) {
                 case 10:
                 case 11:
-                case 12:return '微信支付';
+                case 12: return '微信支付';
                 case 20:
                 case 21:
-                case 22:return '支付宝支付';
-                default:;
+                case 22: return '支付宝支付';
+                default: ;
             }
         },
         // 显示订单类型
-        orderTypeDisplay(orderType){
-            switch(orderType){
-                case 0:return '普通订单';
-                case 1:return '跨境顶大';
-                default:;
+        orderTypeDisplay(orderType) {
+            switch (orderType) {
+                case 0: return '普通订单';
+                case 1: return '跨境顶大';
+                default: ;
             }
         },
         // 选择组件回调
@@ -382,13 +392,13 @@ export default {
         cancelSelectComponent() {
             this.showComponent = false;
         },
-        hideAddDialog(){
-             this.showDialog = false;
+        hideAddDialog() {
+            this.showDialog = false;
         },
         hideDialog() {
-            this.showDemoDialog=false;
-            this.showStatusDialog=false;
-            this.showReasonDialog=false;
+            this.showDemoDialog = false;
+            this.showStatusDialog = false;
+            this.showReasonDialog = false;
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
@@ -422,8 +432,8 @@ export default {
             this.painIdsSelect = [];
         },
     },
-    computed(){
-        
+    computed() {
+
     },
     created() {
     },
@@ -513,3 +523,8 @@ export default {
     }
 };
 </script>
+<style>
+.myBorder {
+    border-top: 1px solid #000
+}
+</style>

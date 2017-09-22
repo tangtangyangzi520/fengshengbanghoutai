@@ -6,20 +6,20 @@
                     <div>
                         <h2>订单原价（不含运费）：{{editPaymentData.ordAmount}}元</h2>
                     </div>
-                   <table class="table table-striped table-bordered table-hover">
-                       <thead>
-                           <tr>
-                               <th>商品</th>
-                               <th>单价（元）</th>
-                               <th>数量</th>
-                               <th>小计（元）</th>
-                               <th>优惠金额</th>
-                               <th>涨价或减价</th>
-                               <th>运费（元）</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           <tr v-for="(index,itemDetail) in editPaymentData.orderDetailList" :key="index">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>商品</th>
+                                <th>单价（元）</th>
+                                <th>数量</th>
+                                <th>小计（元）</th>
+                                <th>优惠金额</th>
+                                <th>涨价或减价</th>
+                                <th>运费（元）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(index,itemDetail) in editPaymentData.orderDetailList" :key="index">
                                 <td class="tdTitle" style="width:26%;">
                                     <p>
                                         <a target="_blank" :href="itemDetail.detailSpu.spuPic" title="查看大图">
@@ -33,36 +33,36 @@
                                 <td align="center" style="width:7%;">
                                     {{itemDetail.ordOriginal}}
                                 </td>
-                                 <td align="center" style="width:7%;">
+                                <td align="center" style="width:7%;">
                                     {{itemDetail.ordSkuNum}}
                                 </td>
                                 <td align="center" style="width:7%;">
                                     {{itemDetail.ordOriginal*itemDetail.ordSkuNum}}
                                 </td>
-                                 <td align="center" style="width:12%;">
+                                <td align="center" style="width:12%;">
                                     -{{itemDetail.ordShareAmount}}
                                 </td>
-                                 <td align="center" style="width:12%;">
-                                     <input type="text" class="form-control" v-model="itemDetail.ordChangePrice" @blur="checkChangePrice(itemDetail)">
+                                <td align="center" style="width:12%;">
+                                    <input type="text" class="form-control" v-model="itemDetail.ordChangePrice" @blur="checkChangePrice(itemDetail)">
                                 </td>
-                                 <td align="center"  style="width:12%;" :rowspan="editPaymentData.orderDetailList.length" v-if="index===0">
+                                <td align="center" style="width:12%;" :rowspan="editPaymentData.orderDetailList.length" v-if="index===0">
                                     <input type="text" class="form-control" v-model="editPaymentData.ordTransportAmount" @blur="checkTransportAmount(editPaymentData)">
                                 </td>
-                           </tr>
-                       </tbody>
-                    </table> 
-                   <div class="row nopadding col-md-12">
-                       <div >
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row nopadding col-md-12">
+                        <div>
                             &nbsp;&nbsp;&nbsp;&nbsp;收货地址： {{ordAddress()}}
-                       </div>
-                       <div >
-                           &nbsp;&nbsp;&nbsp;&nbsp;买家实付： {{calculateActAmount()}}{{actAmount()}}
-                        <div >
-                           &nbsp;&nbsp;&nbsp;&nbsp;买家实付 = 原价 + 总优惠金额 + 运费 + 总涨价或减价(涨价或减价：如果为减价，则需输入负值；如果为涨价,则需输入正值。)
-                       </div>
-                   </div>
+                        </div>
+                        <div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;买家实付： {{calculateActAmount()}}{{actAmount()}}
+                            <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;买家实付 = 原价 + 总优惠金额 + 运费 + 总涨价或减价(涨价或减价：如果为减价，则需输入负值；如果为涨价,则需输入正值。)
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
                 <span slot="btnList">
                     <button type="button" @click.stop="editActAmount" class="btn default blue">确定</button>
                     <button type="button" class="btn default" data-dismiss="modal">取消</button>
@@ -78,7 +78,7 @@
             <select-component-all v-show="showComponent" :options="componentShowOption" :onselect="selectComponentFunc" :oncancel="cancelSelectComponent"></select-component-all>
         </div>
         <loading :show="isLoading"></loading>
-    </div>
+        </div>
 </template>
 <script>
 import client from '../../common/utils/client';
@@ -100,29 +100,29 @@ export default {
             type: String,
             value: 0
         },
-        subData:{
-            type:Object,
-            value:null,
+        subData: {
+            type: Object,
+            value: null,
         }
     },
     data() {
         return {
-            editPaymentData:null,
+            editPaymentData: null,
             isLoading: false,
             showDialog: false,
             showPage: false,
-            orderSubStatusList:[{ id: 6, name: '售后线下处理' }],
+            orderSubStatusList: [{ id: 6, name: '售后线下处理' }],
             componentShowOption: {},
-            editStatusData:{
-                "ordOrderId":0,
-                "ordStatus":0,
+            editStatusData: {
+                "ordOrderId": 0,
+                "ordStatus": 0,
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
             title: '修改订单价格',
-            changeDataList:[],
+            changeDataList: [],
         }
     },
     vuex: {
@@ -134,35 +134,36 @@ export default {
     },
     methods: {
         //校验涨价减价
-        checkChangePrice(item){
-            if(!/^[0-9]*$/.test(Math.abs(Number(item.ordChangePrice)))){
+        checkChangePrice(item) {
+            if (!/^[0-9]*$/.test(Math.abs(Number(item.ordChangePrice)))) {
                 this.$parent.showMsg("请输入数字");
-                item.ordChangePrice=0;
+                item.ordChangePrice = 0;
             }
-            if(item.ordOriginal*item.ordSkuNum+Number(item.ordChangePrice)-item.ordShareAmount<0){
+            if (item.ordOriginal * item.ordSkuNum + Number(item.ordChangePrice) - item.ordShareAmount < 0) {
                 this.$parent.showMsg("减价幅度不得大于需付价格");
-                item.ordChangePrice=0;
+                item.ordChangePrice = 0;
             }
             return;
         },
         //校验运费
-        checkTransportAmount(item){
-            if(!/^[0-9]*$/.test(item.ordTransportAmount) || item.ordTransportAmount < 0){
+        checkTransportAmount(item) {
+            if (!/^[0-9]*$/.test(item.ordTransportAmount) || item.ordTransportAmount < 0) {
                 this.$parent.showMsg("请输入不小于0的数字");
-                item.ordTransportAmount=0;
+                item.ordTransportAmount = 0;
             }
             return;
         },
         //提交修改
-        editActAmount(){
+        editActAmount() {
             //校验数据
             this.checkTransportAmount(this.editPaymentData);
             this.editPaymentData.orderDetailList.forEach(item => this.checkChangePrice(item));
-            client.postData(ORDER_EDIT_ACT_AMOUNT,this.editPaymentData).then(data => {
-                this.isLoading = false;
+            client.postData(ORDER_EDIT_ACT_AMOUNT, this.editPaymentData).then(data => {
+                this.isLoading = false; a
                 if (data.code == 200) {
                     this.hideDialog();
                     this.$parent.getList();
+                    this.showMsg("修改成功");
                 } else {
                     this.showMsg(data.msg);
                 }
@@ -171,40 +172,40 @@ export default {
             });
         },
         //计算实付款
-        actAmount () {
-            let changePriceSum=0,price=0;
-            this.editPaymentData.orderDetailList.forEach(item =>{
-                price=item.ordChangePrice==''?0:item.ordChangePrice;
-                changePriceSum =Number(changePriceSum)+Number(price);
-                this.editPaymentData.ordActAmount=Number(this.editPaymentData.ordActAmount)+Number(price);
+        actAmount() {
+            let changePriceSum = 0, price = 0;
+            this.editPaymentData.orderDetailList.forEach(item => {
+                price = item.ordChangePrice == '' ? 0 : item.ordChangePrice;
+                changePriceSum = Number(changePriceSum) + Number(price);
+                this.editPaymentData.ordActAmount = Number(this.editPaymentData.ordActAmount) + Number(price);
             });
-            return Number(this.editPaymentData.ordAmount)-Number(this.editPaymentData.ordCampaignShareAmount)+Number(this.editPaymentData.ordTransportAmount)+Number(changePriceSum);
+            return Number(this.editPaymentData.ordAmount) - Number(this.editPaymentData.ordCampaignShareAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
         },
         //获取改价字符串
-        getChangePriceString(){
-            let string='',list=[],price=0;
-            this.editPaymentData.orderDetailList.forEach(item =>{
-                price=item.ordChangePrice==''?0:item.ordChangePrice;
+        getChangePriceString() {
+            let string = '', list = [], price = 0;
+            this.editPaymentData.orderDetailList.forEach(item => {
+                price = item.ordChangePrice == '' ? 0 : item.ordChangePrice;
                 list.push(price);
-                string=list.join("+");
+                string = list.join("+");
             });
             return string;
         },
         //计算买家实付算式
-        calculateActAmount(num){
-            let amount='',changePriceString=this.getChangePriceString();
-            amount=this.editPaymentData.ordAmount+"-"+this.editPaymentData.ordCampaignShareAmount+"+"+(this.editPaymentData.ordTransportAmount==''?0:this.editPaymentData.ordTransportAmount)+
-                    "+("+changePriceString+")=";
+        calculateActAmount(num) {
+            let amount = '', changePriceString = this.getChangePriceString();
+            amount = this.editPaymentData.ordAmount + "-" + this.editPaymentData.ordCampaignShareAmount + "+" + (this.editPaymentData.ordTransportAmount == '' ? 0 : this.editPaymentData.ordTransportAmount) +
+                "+(" + changePriceString + ")=";
             return amount;
         },
-         //显示收货信息
-        ordAddress(){
-            let orderSub=this.subData;
-            return orderSub.ordReceiveProvince+" "+orderSub.ordReceiveCitity+" "+orderSub.ordReceiveArea+" "+orderSub.ordReceiveDetail
+        //显示收货信息
+        ordAddress() {
+            let orderSub = this.subData;
+            return orderSub.ordReceiveProvince + " " + orderSub.ordReceiveCitity + " " + orderSub.ordReceiveArea + " " + orderSub.ordReceiveDetail
         },
         //选择下拉框
-        selectComponentFunc(item){
-            this.editStatusData.ordStatus=item.id;
+        selectComponentFunc(item) {
+            this.editStatusData.ordStatus = item.id;
         },
         // 选择组件回调
         selectComponentFunc(list) {
@@ -239,19 +240,19 @@ export default {
         hideMsg() {
             this.showAlert = false;
         },
-       
+
     },
-    computed(){
-        
+    computed() {
+
     },
     created() {
-        
+
     },
     watch: {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
-            this.editPaymentData= Object.assign({},this.subData);
+            this.editPaymentData = Object.assign({}, this.subData);
         },
     },
     ready() {
@@ -262,3 +263,4 @@ export default {
     }
 };
 </script>
+

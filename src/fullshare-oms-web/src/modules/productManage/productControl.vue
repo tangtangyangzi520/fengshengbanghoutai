@@ -14,7 +14,15 @@
                                  <span style="float:left">{{par[0]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[1]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[2]}}</span>  
                             </label>
                         </div>
-    
+                         <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span>商品类型：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                                <input type="radio" name="leixing" v-model="request.spuCountryType" value="1" checked >国内&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="leixing" v-model="request.spuCountryType" value="2" >跨境
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>商品名称：
@@ -63,7 +71,7 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开" maxLength="50">
                             </div>
                         </div>
-                        <div class="form-group">
+                       <!--  <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 商品简介：
                             </label>
@@ -71,7 +79,7 @@
                                 <textarea  v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="50">
                                 </textarea> 
                             </div>
-                        </div>
+                        </div> -->
                        
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
@@ -105,16 +113,25 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                上榜理由：
-                            </label>
-                            <div class="col-md-4">
-                                <select class="form-control" v-model="shangb" size=11 multiple="multiple">
+                          <label for="title" class="col-sm-3 control-label">
+                            上榜理由：
+                          </label>
+                          <div class="col-md-4" style="background-color:white;width:600px" >
+                               <!--  <select class="form-control" v-model="shangb" size=11 multiple="multiple">
                                      
-                                     <option v-for="item in shangbanglist" :value="item">{{item.keyValue}}</option>
-                                 </select>
-                            </div>
-                        </div>
+                                     <option v-for="item in shangbanglist" :value="item.keyValue">{{item.keyValue}}</option>
+                                   </select> -->
+
+                                   <div  style="display:inline-block;width:280px;margin-top:2.5%" v-for="(index,item) in shangbanglist">
+                                    <input type="checkbox" name="shangbang" v-model="shangb" :value="item.keyValue" @click="shangbang($event)"/>{{item.keyValue}}
+                                    <br v-if="(index+1) % 2 == 0">
+                                  </div>
+                                  <br><br>
+                                </div> 
+                                <div class="col-md-8" >
+                                  <span style="color:red"><span v-for="i in 63">&nbsp;</span>注：最多可选择3个理由</span>
+                                </div>
+                              </div>
                         
     
                         <div class="form-group">
@@ -139,7 +156,7 @@
                              border:1px solid #F0F0F0;" > 
                         <div class="baseSx"> 
 <!--                          <a class="delete2" @click="closeProperty($event)" >×</a>                       
- -->                         <span class="pca" style="margin-left:5%;display:-moz-inline-box;display:inline-block;width:75px;">{{i.pcaName}}
+ -->                         <span class="pca" style="margin-left:5%;display:-moz-inline-box;display:inline-block;width:75px;">{{i.pcaName}}：
                                   <input :value="i.pcaName" type="hidden" />
                                   <input :value="i.pcaId" type="hidden" />
                                   <input :value="i.pcaSortNo" type="hidden" />
@@ -199,22 +216,21 @@
                             <div class="controls col-md-2">
                                <input type="text" class="form-control input-sm" v-model="kc" placeholder="" @keyup="check($event)">
                             </div>
-                            <label for="title" class="col-sm-2 control-label">
-                                <span class="required">* </span>ERP库存（件）：
-                            </label>
-                            <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="erpkc" placeholder="" @keyup="check($event)">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
+                             <label for="title" class="col-sm-2 control-label">
                                 SKU编码：
                             </label>
                             <div class="controls col-md-2">
                                <input type="text" class="form-control input-sm" v-model="skubm" placeholder="">  
                             </div>
-                        </div>
-                     </div> 
+                       
+                          <!--   <label for="title" class="col-sm-2 control-label">
+                                <span class="required">* </span>ERP库存（件）：
+                            </label>
+                            <div class="controls col-md-2">
+                               <input type="text" class="form-control input-sm" v-model="erpkc" placeholder="" @keyup="check($event)">
+                            </div> -->
+                        
+                     </div> </div>
                                   
                    <div id="base">
                         <div id="0" class="box2" style="display:none">
@@ -349,8 +365,11 @@
                                 参与消保类型：
                             </label>
                             <div class="controls col-md-4" >
-                               <span  class="insu" v-for="data in insurancelist">
-                                <input type="checkbox"   :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo" style="width:16px;height:16px;margin-right:3px">&nbsp;&nbsp;{{ data.keyValue }}<br>
+                               <span  class="insu" v-for="(index,data) in insurancelist">
+                                <span v-if="index < 3">
+                                <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" checked style="width:16px;height:16px;margin-right:3px">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
+                                <span v-else  >
+                                 <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" style="width:16px;height:16px;margin-right:3px">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
                                 </span>
                             </div>
                         </div>
@@ -387,11 +406,10 @@
                                 </select>
                         </div>  
                     </div>
-                </div>                                                    
-                           
-                    </form>
-                </div>
-            </div>
+                </div>                                                      
+              </div>
+           </form>
+        </div>
             <span slot="btnList">
                 <button type="button" class="btn blue" @click="addItem()">保存并下一步</button>
                 <button type="button" class="btn default" @click="hideDialog()" >取消</button>
@@ -453,12 +471,13 @@ export default {
     data() {
         return {
             request:{
+                "spuCountryType":1,
                 "spuCarriageId":-1,//运费模板id
                 "spuType": 1,
                 "spuShareUrl":'',
                 "spuPic": '',
                 "spuAppSummary": "",
-                "spuPcSummary":"",
+                //"spuPcSummary":"",
                 "spuName": "",
                 "spuCatId": -1,
                 "spuKeyword":"",
@@ -532,7 +551,7 @@ export default {
             sj:'',
             kc:'',
             skubm:'',
-            erpkc:'',
+           // erpkc:'',
             spu:{
                 "msg":"",
                 "id":0,
@@ -572,6 +591,18 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        shangbang(event){
+          console.log(this.shangb)
+          let el = event.currentTarget;
+           if(this.shangb.length >= 3){
+                $(el).removeAttr("checked")
+                this.showMsg("最多选择3个理由")
+            }else{
+                 this.request.pcrList.pcrReason = this.shangb 
+                 //alert(this.request.pcrList.pcrReason)
+            }
+
+      },
         sput(event,clazz) {
               let el = event.currentTarget;
                 var reg = /^-?\d{0,9}\.?\d{0,2}$/
@@ -638,7 +669,7 @@ export default {
             arr.push(this.par[3])
             arr.push(this.par[4])
             arr.push(this.par[5])
-            client.postData(  PCA_GET_BY_CATID , {"parentIds" :arr }  ).then(data => {
+            client.postData(  PCA_GET_BY_CATID , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
                 if (data.code == 200) {
 
                     this.sxlist = data.data;
@@ -646,12 +677,13 @@ export default {
                      this.sj  = ''
                      this.kc  = ''
                      this.skubm  = ''
-                     this.erpkc  = ''
+                    // this.erpkc  = ''
                      this.xssxList = []
                      $("#table").hide()
                      $("#pltab").hide()
                      $("#div1").show()
                      $("#pltab input:text").val("")
+                     $("#base div[id!=\"0\"]").remove()
                 } else {
                     this.showMsg(data.msg);
                 }
@@ -935,12 +967,12 @@ export default {
                   let el = event.currentTarget;
                    $(el).parent().remove()  
            
-          /* if(  $("#base div[id!=\"0\"]").length == 0 ){
+         if(  $("#base div[id!=\"0\"]").length == 0 ){
                   this.xssxList = []; 
                   $("#table").hide()
                  $("#pltab").hide()
                   $("#div1").show()
-           }*/
+           }
 
         },
         //删除spu列
@@ -962,7 +994,7 @@ export default {
 
          addItem() {
 
-            if( this.request.spuName == '' ){
+            if( $.trim(this.request.spuName) == '' ){
                 this.showMsg("请输入商品名称")
                 return
             }
@@ -979,14 +1011,14 @@ export default {
                 this.showMsg("商品关键词不能超过50字")
                 return
             }
+            if( $.trim(this.request.spuShareUrl) == '' ){
+                this.showMsg("请输入有赞商品地址")
+                return
+            }
             if( this.request.spuShareUrl.length >= 100 ){
                 this.showMsg("有赞商品地址不能超过100字")
                 return
             }
-           /* if( this.request.spuPcSummary.length >= 50 ){
-                this.showMsg("商品简介不能超过50字")
-                return
-            }*/
             if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
                 this.showMsg("专家观点不能少于30字")
                 return
@@ -1013,14 +1045,8 @@ export default {
               let sjg = this.sj
               let kcs = this.kc
               let skubm2 = this.skubm
-              let erpkc2 = this.erpkc
-
-            
-
-         if( $("#div1").is(":visible") &&  $("#table").is( ":hidden") ){ 
-
-                 
-
+             // let erpkc2 = this.erpkc
+             if( $("#div1").is(":visible") &&  $("#table").is( ":hidden") ){ 
                    // alert("单一sku")
                     let msg2 = ""
                     let baseList = []
@@ -1104,10 +1130,10 @@ export default {
                         this.showMsg('请输入展示库存')
                         return
                     }
-                      if(  this.erpkc == '' ){
+                     /* if(  this.erpkc == '' ){
                         this.showMsg('请输入ERP库存')
                         return
-                    }
+                    }*/
                     if(  this.skubm == '' ){
                         this.showMsg('请输入SKU编码')
                         return
@@ -1171,12 +1197,12 @@ export default {
                         "skuNew": 1,   
                         "skuOverseas": 1,              // 1
                         "skuSalePrice": sjg,            // 售价   
-                        "skuStockNum": kcs,            //  库存 $(el[4]).val()
+                        "skuShowNum": kcs,            //  库存 $(el[4]).val()
                         "skuUnit": "",         //  "" 
                         "skuUrl": "",          //  ""
                         "skuWhId": "",                //   ""
                         "sku_remark": skuname ,     //  拼接属性 
-                        "skuShowNum": erpkc2,  
+                        //"skuStockNum": erpkc2,  
                     }
                     console.log(sin)
                     spulist.push(sin)
@@ -1402,10 +1428,10 @@ export default {
                         msg += "第"+$(el[0]).val()+"行: 未填写展示库存___________"
                         //return
                     }
-                    if( $(el[5]).val() == ''){
+                   /* if( $(el[5]).val() == ''){
                         msg += "第"+$(el[0]).val()+"行: 未填写ERP实际库存___________"
                         //return
-                    }        
+                    }        */
                     if( $(el[6]).val() == ''){
                         msg += "第"+$(el[0]).val()+"行: 未填写sku编码___________"
                         //return
@@ -1426,7 +1452,7 @@ export default {
                         "skuNew": 1,   
                         "skuOverseas": 1,              // 1
                         "skuSalePrice": $(el[2]).val(),            // 售价   
-                        "skuStockNum": $(el[5]).val(),            //  库存 $(el[4]).val()
+                        //"skuStockNum": $(el[5]).val(),            //  库存 $(el[4]).val()
                         "skuUnit": "",         //  "" 
                         "skuUrl": "",          //  ""
                         "skuWhId": "",                //   ""
@@ -1497,12 +1523,14 @@ export default {
       
     //保消类型
          let arr = [];
+
          $(".insu input:checked").each(function(i , v){
              //let ar = {"piInsuranceId": '',"piInsurance":'',"piSort":'', }
                let ar = $(v).val().split(",")
-               let av = {"piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2], }
+               let av = {"piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2],"piDesc":ar[3], }//
                arr.push(av)
          })
+          this.request.piList = arr 
          /*if(arr.length == 0 ){
             this.showMsg("消保类型不能为空")
             return
@@ -1528,15 +1556,29 @@ export default {
            this.request.spuPlanShelvesDate = ""
       } 
       //
-         this.request.piList = arr 
-         this.request.spuAppSummary = this.request.spuPcSummary
+        
+         //this.request.spuAppSummary = this.request.spuPcSummary
 
         this.shangb.forEach((data,index)=>{
-                this.request.pcrList.$set(index, {"pcrReason": data.keyValue,"pcrSortNo":data.sortNo,"pcrSpuId":data.dictionnaryId, }  );
+                let val = this.shangbanglist.find(item=>item.keyValue == data)
+                this.request.pcrList.$set(index, {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
                 //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
              })
 
-            client.postData( SPU_CREATE , this.request).then(data => {
+        if(this.yunfei == 0 && $.trim(this.request.spuFreight) == ''){
+             this.showMsg("请设置统一邮费的价格")
+             return
+        }
+         if(this.yunfei ==1 && this.request.spuCarriageId ==-1){
+             this.showMsg("请选择运费模板")
+             return
+        }
+         if(this.yunfei == 0){
+           this.request.spuCarriageId = -1
+        }else{
+          this.request.spuFreight = -1
+        }
+        client.postData( SPU_CREATE , this.request).then(data => {
                 if (data.code == 200) {
                     //alert("新增成功")
                     //this.showMsg("新增成功")
@@ -1865,14 +1907,6 @@ export default {
           },　　　　　　　　　　
           deep:true　　　　　　　　
         },
-        shangb() {
-            if(this.shangb.length > 3){
-                this.showMsg("最多选择3个理由")
-                return
-            }
-                this.request.pcrList.pcrReason = this.shangb 
-                //alert(this.request.pcrList.pcrReason)
-        },
         cflag() {
             //alert(this.spuCatId)
             let arr =[]
@@ -1968,7 +2002,7 @@ export default {
     .box{
         //margin-left: 2%;
         //overflow-x: scroll;
-        height: 200px;
+        height: 130px;
         width: 100%;
         //display:inline-block;
         background-color:white;

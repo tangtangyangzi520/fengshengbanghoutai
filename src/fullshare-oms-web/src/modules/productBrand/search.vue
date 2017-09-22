@@ -1,13 +1,6 @@
 <template>
-    <form class="row search-form" style="margin: 5px 0 0 0">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="col-md-3">&nbsp;&nbsp;品牌名称：</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" v-model="searchOptions.keyword">
-                    </div>
-                </div>
-            </div>
+    <form class="row search-form" style="margin: 5px 0 0 0">  
+        <input type="text" class="form-control" v-model="searchOptions.keyword">
     </form>
 </template>
 <script>
@@ -44,6 +37,11 @@ export default {
         }
     },
     methods: {
+        //添加品牌
+        addBanner() {
+            this.wordEditId = '';
+            this.showAddDialog = true;
+        },
         // 过滤请求参数，空值的字段删除
         setOptions() {
             let options = this.searchOptions;

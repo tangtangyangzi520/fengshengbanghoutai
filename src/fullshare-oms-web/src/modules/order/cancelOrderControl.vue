@@ -7,7 +7,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">订单状态：</label>
                     <div class="controls col-md-6">
-                    <select v-model="editReasonData.ordCancelReason" class="type">
+                    <select v-model="editReasonData.ordCancelReason" class="type" id="ordCancelReason">
                         <option v-for="item in cancelReasonList" :value="item.keyValue">{{item.keyValue}}</option>
                     </select>
                 </div>

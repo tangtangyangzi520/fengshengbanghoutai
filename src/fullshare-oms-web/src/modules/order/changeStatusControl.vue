@@ -6,8 +6,8 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">订单状态：</label>
                         <div class="controls col-md-6">
-                        <select v-model="editStatusData.ordStatus" class="type">
-                        <option v-for="item in orderSubStatusList" :value="item.id">{{item.name}}</option>
+                        <select v-model="editStatusData.ordStatus" class="type"> 
+                        <option v-for="item in orderSubStatusList" :value="item.id" selected = "selected">{{item.name}}</option>
                         </select>
                     </div> 
                 </div>
@@ -55,7 +55,7 @@ export default {
             isLoading: false,
             showDialog: false,
             showPage: false,
-            orderSubStatusList:[{ id: 6, name: '售后线下处理' }],
+            orderSubStatusList:[{ id: 5, name: '售后线下处理' }],
             componentShowOption: {},
             editStatusData:{
                 "ordOrderId":0,
@@ -83,10 +83,10 @@ export default {
         //修改子订单状态
         editOrderSubStatus(){
             this.editStatusData.ordOrderId=this.id;
-            if(!this.editStatusData.ordStatus){
-                // this.showMsg("请选择订单状态");
-                return;
-            }
+            // if(!this.editStatusData.ordStatus){
+            //     this.showMsg("请选择订单状态");
+            //     return;
+            // }
             client.postData(ORDER_EDIT_STATUS,this.editStatusData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {

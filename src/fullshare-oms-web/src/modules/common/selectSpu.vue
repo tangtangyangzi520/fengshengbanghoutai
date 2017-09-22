@@ -144,6 +144,7 @@ import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.reso
 export default {
     components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading,treeview,paging },
     props: {
+        spulist:[],
         show: {
             type: Boolean,
             value: false
@@ -326,10 +327,10 @@ export default {
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.forEach(item => {
-                        item.checked = true
+                        item.checked = false
                         item.skuList.forEach(sku => {
-                            sku.checked = true
-                            sku.skuSalePrice = ''
+                            sku.checked = false
+                            sku.skureduce = ''
                         })
                     })
                     this.unSelectedList = data.data;
@@ -413,6 +414,7 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
+            this.selectedList=this.spulist;
         },
 
     },

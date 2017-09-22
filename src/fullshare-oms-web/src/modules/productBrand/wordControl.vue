@@ -10,65 +10,79 @@
                                 <span class="required">* </span>品牌名称
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="data.pbdName" placeholder="请输入品牌名称">
+                                <input type="text" class="form-control input-sm" v-model="data.pbdName" >
                             </div>
                         </div>
     
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>英文名称
+                                英文名称
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="data.pbdEnglishName" placeholder="请输入英文名称">
+                                <input type="text" class="form-control input-sm" v-model="data.pbdEnglishName" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌网址
+                                品牌网址
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="data.pbdWebsite" placeholder="请输入品牌网址">
+                                <input type="text" class="form-control input-sm" v-model="data.pbdWebsite" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌描述
+                                品牌描述
                             </label>
                             <div class="controls col-md-6">
-                                <textarea v-model="data.pbdIntroduce" placeholder="请输入品牌描述" rows="2" cols="50" maxlength="256"></textarea>
+                                <textarea v-model="data.pbdIntroduce"  rows="2" cols="50" maxlength="256"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                </span>国家
+                            </label>
+                            <div class="controls col-md-6">
+                                <input type="text" class="form-control input-sm" v-model="data.pbdCountry" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label" >
+                                </span>是否停用
+                            </label>
+                            <div class="controls col-md-6" style="margin-top:1.3%">
+                               <span >
+                                <input type="checkbox" :checked="false" @click="isPbdDisPlay()" id="pbdCheckbox"></input>
+                                </span>
                             </div>
                         </div>
                         <div class="form-group" style="padding-bottom:10px;">
                             <label class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌Logo</label>
+                                品牌Logo</label>
                             <div class="controls col-md-6">
-                                <i class="fa fa-image pick-img" @click="showSelectPicDialog(1)" v-if="data.pbdLogoUrl==''" style="margin-top: 20px;"></i>
+                                <button class="btn" @click="showSelectPicDialog(1)" type="button" v-if="data.pbdLogoUrl==''">选择图片</button>
+                                <label v-if="data.pbdLogoUrl==''" class="control-label">
+                                未选择任何文件
+                                </label>
                                 <img :src="data.pbdLogoUrl" class="cursor" @click="showSelectPicDialog(1)" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>预览Logo
+                                </span>预览Logo
                             </label>
                             <div class="controls col-md-6">
-                                <i class="fa fa-image pick-img"  v-if="data.pbdLogoUrl==''" style="margin-top: 20px;"></i>
                                 <img :src="data.pbdLogoUrl" class="cursor"  height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>国家
-                            </label>
-                            <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="data.pbdCountry" placeholder="请输入国家">
-                            </div>
-                        </div>
+                       
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>品牌排序
                             </label>
                             <div class="controls col-md-6">
-                                <input type="text" class="form-control input-sm" v-model="data.pbdSort" placeholder="请输入品牌排序">
+                                <input type="text" class="form-control input-sm" v-model="data.pbdSort" >
                             </div>
                         </div>
                         
@@ -151,6 +165,15 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+         // 是否停用
+        isPbdDisPlay() {
+            var type = $("#pbdCheckbox").prop('checked');
+            if(type){
+                this.data.pbdDisplay = 0;
+            } else {
+                this.data.pbdDisplay = 1;
+            }
+        },
          // 显示选择图片
         showSelectPicDialog(type) {
             this.showSelectPic({ name: 'bannerPic', show: true, storeType: 4, single: true });
@@ -223,41 +246,37 @@ export default {
         // 提交信息
         submitInfo() {
             let data = this.data;
-            if (data.pbdName.replace(/\s/g, '') == '' || data.pbdName.length > 30) {
+            if (data.pbdName.replace(/\s/g, '') == '' || data.pbdName.length > 20) {
                 this.showMsg('请输入品牌名称(1~20字)');
                 return;
             }
-            if (data.pbdEnglishName.replace(/\s/g, '') == '' || data.pbdEnglishName.length > 70) {
+            if (data.pbdEnglishName.length > 30) {
                 this.showMsg('请输入英文名称(1~30字)');
                 return;
             }
-            if (data.pbdWebsite.replace(/\s/g, '') == '' || data.pbdWebsite.length > 70) {
+            if (data.pbdWebsite.length > 100) {
                 this.showMsg('请输入品牌网址(1~100字)');
                 return;
             }
-            if (data.pbdIntroduce.replace(/\s/g, '') == '' || data.pbdIntroduce.length > 70) {
+            if (data.pbdIntroduce.length > 100) {
                 this.showMsg('请输入品牌描述(1~100字)');
                 return;
             }
-            if (data.pbdCountry.replace(/\s/g, '') == '' || data.pbdCountry.length > 30) {
+            if (data.pbdCountry.length > 20) {
                 this.showMsg('请输入国家(1~20字)');
                 return;
             }
            
 
-            var reg = /^-?\d{0,10}$/
-              
+            var reg = /^\+?[1-9][0-9]{0,11}$/
+            
             let f = !reg.test(data.pbdSort)
             if (  f ) {
-                   this.showMsg("请输入1~11位整数")
+                   this.showMsg("请输入1~10位非0正整数")
                    //$(el).val(s.substring(0,s.length-1))
                     $(el).val("")
             }
 
-            if (data.pbdLogoUrl == "") {
-                this.showMsg('请上传logo');
-                return;
-            }
             let url = PBD_CREATE ;
             if (this.id != '') {
                 url =  PBD_EDIT  + '?pbdBrandId=' + this.id;
@@ -267,7 +286,7 @@ export default {
             client.postData(url, data).then(response => {
                 this.isLoading = false;
                 if (response.code != 200) {
-                    this.showMsg(response.msg);
+                    this.showMsg(response.message);
                 } else {
                     if (this.id != '') {
                         this.onhide('update');
@@ -322,8 +341,14 @@ export default {
                     this.data.pbdIntroduce = data.pbdIntroduce;
                     this.data.pbdCountry = data.pbdCountry;
                     this.data.pbdSort = data.pbdSort;
+                    this.data.pbdDisplay = data.pbdDisplay;
+                    if(this.data.pbdDisplay==1){
+                        $("#pbdCheckbox").prop('checked',false);
+                    } else{
+                        $("#pbdCheckbox").prop('checked',true);
+                    }
                 } else {
-                    this.showMsg(response.msg);
+                    this.showMsg(response.message);
                 }
             }, data => {
                 this.isLoading = false;

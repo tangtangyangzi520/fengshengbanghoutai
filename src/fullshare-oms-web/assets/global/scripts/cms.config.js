@@ -302,7 +302,7 @@ var  SPU_DELETE  =  OMS_TEST + "/spu/deleteSpus";             //sku上架或下�
 var  PBD_GET_LIST   =  OMS_TEST + "/pbd/list";                       //获取品牌列表
 var  PBD_CREATE     =  OMS_TEST + "/pbd/createProductBrand";         //新增品牌
 var  PBD_EDIT       =  OMS_TEST + "/pbd/editProductBrand";           //编辑品牌
-var  PBD_DELETE     =  OMS_TEST + "/pbd/deleteProductBrand";         //删除品牌
+var  PBD_DISPLAY    =  OMS_TEST + "/pbd/displayProductBrand";        //启用停用品牌
 var  PBD_GET_ONE    =  OMS_TEST + "/pbd/getProductBrandById";        //根据品牌ID获取品牌
 //数据字典
 var  SYSTEM_REASON       =  OMS_TEST + "/reason/getProductChartReasons";  //获取上榜理由

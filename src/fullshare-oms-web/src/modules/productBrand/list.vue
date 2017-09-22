@@ -4,13 +4,13 @@
             <page-title-bar>
                 <span slot="title">{{name}}列表{{countDesc}}</span>
             </page-title-bar>
-            <search :onchange="changeSearchOptions" :oncreate="getList"></search>
-            <div class="col-md-12 right">
-                <span v-if="selectItems.length>0" class="desc">已选
-                    <em>{{selectItems.length}}</em> 项 </span>
-                <button class="btn green" type="button" v-if="limitResource.good_word_add" @click="addBanner()" style="margin-left:10px;">添加{{name}}</button>
-                <button class="btn green-meadow" @click="getList(false,true)" type="button">搜索</button>
-            </div>
+            <button class="btn" type="button"  @click="addBanner()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white">添加</button>
+            <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
+                 <span  style="display:inline-block;"> 
+                       <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag"></search>
+                 </span>
+                <button class="btn green-meadow" @click="getList(false,true)" type="button" style="background-color:#66CC33">搜索</button>
+            </span> 
             <div style="height:5px;clear:both;"></div>
         </div>
         <div class="contentBlock" id="contentList">
@@ -18,22 +18,24 @@
                 <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                     <thead>
                         <tr>
-                            <th style="width:30%;">品牌Logo</th>
-                            <th style="width:7%;">品牌名称</th>
-                            <th style="width:7%;">英文名称</th>
+                            <th style="width:20%;">品牌Logo</th>
+                            <th style="width:10%;">品牌名称</th>
+                            <th style="width:10%;">英文名称</th>
                             <th style="width:10%;">品牌网址</th>
                             <th style="width:10%;">品牌描述</th>
                             <th style="width:10%;">国家</th>
+                            <th style="width:10%;">状态</th>
                             <th style="width:10%;">品牌排序</th>
                             <th style="">操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in dataList" @click="selectItem(item)">
-                            <td style="width:100px;text-align:center;vertical-align:middle;" >
-                                <p>
-                                    <a target="_blank" :href="item.pbdLogoUrl" title="查看大图">
-                                        <img :src="item.pbdLogoUrl" style="height:50px">
+                            <td  style="width:200px;text-align:center;vertical-align:middle;">
+                                <p >
+                                    <a  target="_blank" :href="item.pbdLogoUrl" title="查看大图">
+
+                                        <img :src="item.pbdLogoUrl" style="height:50px;width:150px" v-if="item.pbdLogoUrl != null">
                                     </a>
                                 </p>
                             </td>
@@ -42,10 +44,15 @@
                             <td>{{item.pbdWebsite}}</td>
                             <td>{{item.pbdIntroduce}}</td>
                             <td>{{item.pbdCountry}}</td>
+                            <td>
+                                <span v-if="item.pbdDisplay == 1">启用</span>
+                                <span v-if="item.pbdDisplay == 0">停用</span>
+                            </td>
                             <td>{{item.pbdSort}}</td>
                             <td style="text-align:center;vertical-align:middle;">
-                                <button type="button" v-if="limitResource.good_word_edit" class="btn btn-xs blue" @click.stop="showControlFunc(item,'edit')">编辑</button>
-                                <button type="button" v-if="limitResource.good_word_delete" @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button>
+                                <button type="button"  class="btn btn-xs blue" @click.stop="showControlFunc(item,'edit')">编辑</button>
+                                <button type="button" v-if="item.pbdDisplay == 1" @click.stop="showControlFunc(item,'unuse')" class="btn btn-xs red">停用</button>
+                                <button type="button" v-if="item.pbdDisplay == 0" @click.stop="showControlFunc(item,'use')" class="btn btn-xs green">启用</button>
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">
@@ -162,7 +169,6 @@ export default {
                 if (type == 'edit') {
                     this.wordEditId = item.pbdBrandId;
                     this.showAddDialog = true;
-                    //this.$router.go({ name: 'contentPublish', params: { type: 16, id: this.clickItems[0].pbdBrandId, controlType: '1/h1Text' } })
                 } else {
                     this.showControl = true;
                 }
@@ -246,8 +252,6 @@ export default {
     },
     created() {
         vueThis = this;
-        this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
-        console.log(JSON.parse(localStorage.getItem('limitResource')))
     },
     watch: {
     },

@@ -3,9 +3,13 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
-        <!--确定删除-->
-        <m-alert :title="'删除品牌'" :show-cancel-btn="true" :show="showDeleteDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div slot="content">确定删除吗？</div>
+        <!--确定停用-->
+        <m-alert :title="'停用品牌'" :show-cancel-btn="true" :show="showUnuseDialog" :onsure="ajaxControl" :onhide="hideMsg">
+            <div slot="content">确定停用吗？</div>
+        </m-alert>
+        <!--确定启用-->
+        <m-alert :title="'启用品牌'" :show-cancel-btn="true" :show="showUseDialog" :onsure="ajaxControl" :onhide="hideMsg">
+            <div slot="content">确定启用吗？</div>
         </m-alert>
         <loading :show="isLoading"></loading>
     </div>
@@ -42,7 +46,8 @@ export default {
             showAlertMsg: '',
             isLoading: false,
             importantData: null,
-            showDeleteDialog: false,
+            showUnuseDialog: false,
+            showUseDialog: false,
             rejectDesc: '',    //拒绝理由
             withdrawDesc: '',  //撤回说明
             important: '',//优先级选择
@@ -94,7 +99,8 @@ export default {
             this.showSubmitDialog = false;
             this.showWithdrawDialog = false;
             this.showPublishDialog = false;
-            this.showDeleteDialog = false;
+            this.showUnuseDialog = false;
+            this.showUseDialog = false;
             this.showPutawayDialog = false;
             this.showSoldOutDialog = false;
             this.showImportantDialog = false;
@@ -107,121 +113,15 @@ export default {
             if (!val) return;
             this.options = {};
             switch (this.type) {
-                case 'submit':
-                    this.showSubmitDialog = true;
-                    this.tips = '提交成功';
-                    this.url = COMPONENT_SUBMIT + "?componentId=" + this.items[0].componentId;
+                case 'unuse':
+                    this.tips = '停用成功';
+                    this.url = PBD_DISPLAY + "?pbdBrandId=" + this.items[0].pbdBrandId+"&pbdDisplay=" + this.items[0].pbdDisplay;
+                    this.showUnuseDialog = true;
                     break;
-                case 'reject':
-                    this.rejectDesc = '';
-                    this.showRejectDialog = true;
-                    this.tips = '成功拒绝';
-                    this.url = COMPONENT_REJECT;
-                    this.options = { "id": this.items[0].componentId, "rejectOption": this.rejectDesc };
-                    break;
-                case 'publish':
-                    this.tips = '发布成功';
-                    this.url = COMPONENT_DEPLOY + "?componentId=" + this.items[0].componentId;
-                    this.showPublishDialog = true;
-                    break;
-                case 'putaway':
-                    this.tips = '上架成功';
-                    this.url = COMPONENT_PUTAWAY;
-                    this.options = [];
-                    this.items.forEach(item=>{
-                        this.options.push(item.componentId);
-                    })
-                    this.showPutawayDialog = true;
-                    break;
-                case 'soldOut':
-                    this.tips = '下架成功';
-                    this.url = COMPONENT_SOLDOUT;
-                    this.options = [];
-                    this.items.forEach(item=>{
-                        this.options.push(item.componentId);
-                    })
-                    this.showSoldOutDialog = true;
-                    break;
-                case 'important':
-                    this.tips = '设置成功';
-                    this.isLoading = true;
-                    // 获取原数据
-                    client.postData(COMPONENT_GET + '?componentId=' + this.items[0].componentId, {}).then(response => {
-                        this.isLoading = false;
-                        if (response.code == 200) {
-                            this.importantData = response.data;
-                        } else {
-                            this.showMsg(response.msg);
-                        }
-                    }, data => {
-                        this.isLoading = false;
-                        this.showMsg('网络连接错误');
-                    })
-                    // 保存修改的数据接口
-                    this.url = COMPONENT_SET;
-                    this.showImportantDialog = true;
-                    break;
-                case 'delete':
-                    this.tips = '删除成功';
-                    this.url = PBD_DELETE + "?pbdBrandId=" + this.items[0].pbdBrandId;
-                    this.showDeleteDialog = true;
-                    break;
-                case 'withdraw':
-                    this.withdrawDesc = '';
-                    this.showWithdrawDialog = true;
-                    this.tips = '撤回成功';
-                    this.url = COMPONENT_WITHDRAW;
-                    this.options = { "id": this.items[0].componentId, "deployOption": this.withdrawDesc };
-                    break;
-                case 'publishAll':
-                    this.showPublishDialog = true;
-                    this.tips = '发布成功';
-                    this.url = COMPONENT_BATCH_DEPLOY;
-                    this.options = [];
-                    this.items.forEach(item => {
-                        if (item.deployStatus == 5 || item.deployStatus == 1 || item.deployStatus == 0) {
-                            this.options.push(item.componentId);
-                        }
-                    })
-                    break;
-                case 'withdrawAll':
-                    this.withdrawDesc = '';
-                    this.showWithdrawDialog = true;
-                    this.tips = '撤回成功';
-                    this.options = [];
-                    this.items.forEach(item => {
-                        if (item.deployStatus == 2) {
-                            this.options.push(item.componentId);
-                        }
-                    })
-                    break;
-                case 'rejectAll':
-                    this.rejectDesc = '';
-                    this.showRejectDialog = true;
-                    this.tips = '成功拒绝';
-                    this.options = [];
-                    this.items.forEach(item => {
-                        if (item.deployStatus == 5) {
-                            this.options.push(item.componentId);
-                        }
-                    })
-                    break;
-                case 'submitAll':
-                    this.showSubmitDialog = true;
-                    this.tips = '提交成功';
-                    this.options = [];
-                    this.url = COMPONENT_BATCH_SUBMIT;
-                    this.items.forEach(item => {
-                        if (item.deployStatus == 3 || item.deployStatus == 4) {
-                            this.options.push(item.componentId);
-                        }
-                    })
-                    break;
-                case 'getMoreArticle':
-                    this.showGetArticleDialog = true;
-                    this.tips = '操作成功';
-                    this.options = [];
-                    this.url = ARTICLE_PULL_THIRD_ARTICLE;
+                case 'use':
+                    this.tips = '启用成功';
+                    this.url = PBD_DISPLAY + "?pbdBrandId=" + this.items[0].pbdBrandId+"&pbdDisplay=" + this.items[0].pbdDisplay;
+                    this.showUseDialog = true;
                     break;
                 default:
                     break;

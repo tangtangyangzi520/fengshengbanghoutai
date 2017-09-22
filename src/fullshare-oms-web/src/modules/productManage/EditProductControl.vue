@@ -5,7 +5,18 @@
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form">
     
-                       <br> <div class="form-group">
+                       <br>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span>商品类型：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                                <input type="radio" name="leixing" v-model="request.spuCountryType" value="1" checked >国内&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="leixing" v-model="request.spuCountryType" value="2" >跨境
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>商品名称：
                             </label>
@@ -13,7 +24,7 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuName" placeholder="" maxLength="50">
                             </div>
                         </div>
-    
+
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 商品广告词：
@@ -53,7 +64,7 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开" maxLength="50">
                             </div>
                         </div>
-                        <div class="form-group">
+                       <!--  <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 商品简介：
                             </label>
@@ -61,7 +72,7 @@
                                 <textarea class="form-control input-sm" v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="50">
                                 </textarea> 
                             </div>
-                        </div>
+                        </div> -->
                        
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
@@ -98,12 +109,21 @@
                             <label for="title" class="col-sm-3 control-label">
                                 上榜理由：
                             </label>
-                            <div class="col-md-4">
-                                <select class="form-control" v-model="shangb" size=11 multiple="multiple">
+                            <div class="col-md-4" style="background-color:white;width:600px" >
+                               <!--  <select class="form-control" v-model="shangb" size=11 multiple="multiple">
                                      
                                      <option v-for="item in shangbanglist" :value="item.keyValue">{{item.keyValue}}</option>
-                                 </select>
-                            </div>
+                                 </select> -->
+                                
+                                  <div  style="display:inline-block;width:280px;margin-top:2%" v-for="(index,item) in shangbanglist">
+                                  <input type="checkbox" name="shangbang" v-model="shangb" :value="item.keyValue" @click="shangbang($event)"/>{{item.keyValue}}
+                                  <br v-if="(index+1) % 2 == 0">
+                                </div>
+                                <br>
+                            </div> 
+                            <div class="col-md-8" >
+                            <span style="color:red"><span v-for="i in 63">&nbsp;</span>注：最多可选择3个理由</span>
+                           </div>
                         </div>
                         
     
@@ -185,8 +205,8 @@
                                 参与消保类型：
                             </label>
                             <div class="controls col-md-4" id="selects" >
-                               <span  class="insu" v-for="data in insurancelist">
-                                <input type="checkbox"   :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo" style="width:16px;height:16px;margin-right:2px">&nbsp;&nbsp;{{ data.keyValue }}<br>
+                               <span  class="insuedit" v-for="data in insurancelist">
+                                <input type="checkbox"   :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" style="width:16px;height:16px;margin-right:2px">&nbsp;&nbsp;{{ data.keyValue }}<br>
                                 </span>
                             </div>
                         </div>
@@ -315,13 +335,14 @@ export default {
             singleimgList:[],
             product:{},
             request:{
+                "spuCountryType":1,
                 "spuCarriageId":-1,//运费模板id
                 "spuType": 1,
                 "spuShareUrl":'',
                 "spuPic": '',
                 "spuId":0,
                 "spuAppSummary": "",
-                "spuPcSummary": "",
+                //"spuPcSummary": "",
                 "spuName": "",
                 "spuCatId": -1,
                 "spuKeyword":"",
@@ -403,6 +424,18 @@ export default {
         }
     },
     methods: {
+      shangbang(event){
+        console.log(this.shangb)
+         let el = event.currentTarget;
+           if(this.shangb.length >= 3){
+                $(el).removeAttr("checked")
+                //this.showMsg("最多选择3个理由")
+            }else{
+                 this.request.pcrList.pcrReason = this.shangb 
+                 //alert(this.request.pcrList.pcrReason)
+            }
+
+      },
         //增加属性选项
         addsxxx( event ) {
             let el = event.currentTarget;
@@ -511,25 +544,13 @@ export default {
             let el = event.currentTarget;
              $(el).parent().parent().children("td").remove()  
            },
-         addProperty(){ 
-             if( $("#base div[id!=\"0\"]").length > 3 )  {
-                this.showMsg("销售属性总数最多4组!");
-                  return
-             }
-             var el = $("#0").clone(true,true).attr("id",++this.idnum).show()//append("<a class=\"delete\" href=\"javascript:closeProperty()\">×</a>").show()
+        addItem() {
 
-             el.prependTo($("#base"))
-             $("#div1").hide()    
-             $(".box2 .delete").on("click",this.closexssx)        
-         },
-
-    addItem() {
-
-         if( this.request.spuName == '' ){
+            if( $.trim(this.request.spuName)  == '' ){
                 this.showMsg("请输入商品名称")
                 return
             }
-        if( this.request.spuName.length >= 50 ){
+            if( this.request.spuName.length >= 50 ){
                 this.showMsg("商品名称不能超过50字")
                 return
             }
@@ -542,14 +563,14 @@ export default {
                 this.showMsg("商品关键词不能超过50字")
                 return
             }
-           /* if( this.request.spuShareUrl.length >= 100 ){
+            if( $.trim(this.request.spuShareUrl) == '' ){
+                this.showMsg("请输入有赞商品地址")
+                return
+            }
+            if( this.request.spuShareUrl.length >= 100 ){
                 this.showMsg("有赞商品地址不能超过100字")
                 return
-            }*/
-            /*if( this.request.spuPcSummary.length >= 50 ){
-                this.showMsg("商品简介不能超过50字")
-                return
-            }*/
+            }
             if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
                 this.showMsg("专家观点不能少于30字")
                 return
@@ -564,7 +585,7 @@ export default {
             }
 
         this.request.spuId = this.spuid
-        this.request.spuAppSummary = this.request.spuPcSummary
+        //this.request.spuAppSummary = this.request.spuPcSummary
       if(this.request.spuBrandId < 0 ){
         this.showMsg("请选择品牌")
         return
@@ -616,11 +637,11 @@ export default {
     //保消类型
          let arr = [];
          let sid = this.spuid
-        // alert($($(".insu input:checked")).length)
-         $(".insu input:checked").each(function(i , v){
+         console.log($($(".insuedit :checked")).length)
+         $(".insuedit input:checked").each(function(i , v){
              //let ar = {"piInsuranceId": '',"piInsurance":'',"piSort":'', }
                let ar = $(v).val().split(",")
-               let av = { "piSpuId": sid, "piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2], }
+               let av = { "piSpuId": sid, "piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2],"piDesc":ar[3], }
                arr.push(av)
          })
         /* if(arr.length == 0 ){
@@ -629,6 +650,20 @@ export default {
          }*/
          console.log(arr)
          this.request.piList = arr 
+
+          if(this.yunfei == 0 && $.trim(this.request.spuFreight) == ''){
+             this.showMsg("请设置统一邮费的价格")
+             return
+        }
+        if(this.yunfei ==1 && this.request.spuCarriageId ==-1){
+             this.showMsg("请选择运费模板")
+             return
+        }
+        if(this.yunfei == 0){
+           this.request.spuCarriageId = -1
+        }else{
+          this.request.spuFreight = -1
+        }
     //上架时间
       
       if( this.rad == 2 ){
@@ -1018,6 +1053,15 @@ export default {
                    client.postData( SPU_GET_BY_ID  + "?spuId="+this.spuid, {}).then(data => {  //192.168.4.249
                 this.isLoading = false;
                   if (data.code == 200) {
+
+                    //消保回显
+                    $(data.data.piList).each(function(index,pi){
+                      $(".insuedit input").each(function(i,v){
+                         if(($(v).val()+'').indexOf(pi.piInsurance+'') >= 0){
+                            $(v).prop("checked","true");  
+                         }
+                      })
+                    })
                     //运费模板回显
                     
                     if(data.data.spuCarriageId >0){
@@ -1050,19 +1094,9 @@ export default {
                     for(var i=0;i< data.data.reasonsList.length;i++){
                           this.shangb.push(data.data.reasonsList[i].pcrReason) 
                     }
-                    $("#selects span").each(function(index,val){
-
-                        for(var i=0;i< data.data.piList.length;i++){
-
-                          if(data.data.piList[i].piInsurance +','+data.data.piList[i].piInsuranceId+','+data.data.piList[i].piSort == $($(val).children("input")).val()){
-
-                                 $($(val).children("input")).prop("checked","true");  
-                          }
-                    }
-                })
                     this.request.spuShareUrl = data.data.spuShareUrl
                     this.request.spuAppSummary = data.data.spuAppSummary 
-                    this.request.spuPcSummary = data.data.spuPcSummary 
+                    //this.request.spuPcSummary = data.data.spuPcSummary 
                     this.request.spuName = data.data.spuName 
                     this.request.spuCatId = data.data.spuCatId
                     this.request.spuKeyword = data.data.spuKeyword
@@ -1072,7 +1106,7 @@ export default {
                     this.request.spuFreight = data.data.spuFreight
                     this.request.spuPackingList = data.data.spuPackingList
                     this.request.spuPlanShelvesDate = data.data.spuPlanShelvesDate
-    
+                    this.request.spuCountryType = data.data.spuCountryType
                   //标签回显
                    data.data.tagList.forEach(item=> {
                     if(item.prpTagType == 100){
@@ -1130,18 +1164,6 @@ export default {
         },
         spuid(val) {
             
-        },
-        shangb() {
-            if(this.shangb.length > 3){
-                this.showMsg("最多选择3个理由")
-                 $($("#selects span").children("input")).removeAttr("checked") 
-                return
-            }else{
-                 this.request.pcrList.pcrReason = this.shangb 
-                 //alert(this.request.pcrList.pcrReason)
-            }
-               
-                
         },
         cflag() {
             

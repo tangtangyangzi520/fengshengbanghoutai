@@ -531,7 +531,6 @@ export default {
             //options.componentType = [12];
 
             /*this.dataList =  {"code":200,"msg":"操作成功","serverTime":"0","data":[{"maxSalePrice":110.00,"minSalePrice":110.00,"totalStockNum":110,"totalSaleNum":1,"spuId":"900646218680655873","spuName":"iphone","spuCreatedTime":1503566566000,"spuModifyTime":1503567684000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777344","spuName":"string","spuCreatedTime":1503883598000,"spuModifyTime":1503883598000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777345","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777346","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777347","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777348","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777349","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777350","spuName":"string","spuCreatedTime":1503883601000,"spuModifyTime":1503883601000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777351","spuName":"string","spuCreatedTime":1503883601000,"spuModifyTime":1503883601000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777352","spuName":"string","spuCreatedTime":1503883601000,"spuModifyTime":1503883601000}],"page":{"currentPage":1,"pageSize":10,"startIndex":0,"totalPage":6,"totalSize":52}}.data*/
-
             client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -594,7 +593,6 @@ export default {
     },
     created() {
         vueThis = this;
-        this.getList()
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
     },
     watch: {

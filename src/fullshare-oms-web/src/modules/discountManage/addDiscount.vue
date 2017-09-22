@@ -14,6 +14,7 @@
                          <input type="text" class="form-control input-sm" v-model="request.mkcName" placeholder="请填写活动名称" required="required" maxLength="15" > 
                     </div>&nbsp;&nbsp;15个字以内
             </div>
+            <br>
             <div class="form-group">
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>生效时间：
@@ -28,6 +29,7 @@
                         pattern="^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$">
                   </div>  <br> 
             </div>
+            <br>
             <div class="form-group">
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>活动标签：
@@ -39,7 +41,7 @@
 
                     </div>
             </div>
-           
+            <br> <br>
              <div class="form-group">
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>选择商品：
@@ -48,19 +50,26 @@
                          <input type="text" class="form-control input-sm" v-model="request.spuName" placeholder="限时折扣" > 
                          活动期间展示于商品详情的价格旁边，2至5字。
                     </div> -->
-                      <button class="btn yellow-crusta" type="button" @click="showselect" >选择商品</button>
-
+                      <button class="btn yellow-crusta" type="button" @click="showselect" >添加</button>
+                      <br><br>
+                      <span style="margin-left:25%">
+                        批量减价 <input type="number" class="input-sm-2"   v-model="reduce" min="0"/> 元  &nbsp;&nbsp;
+                      <a style="text-decoration:none" @click="plreduce()">确定</a> &nbsp;&nbsp;&nbsp;
+                      <a style="text-decoration:none" @click="plcut()">取消</a>
+                     </span>  
+                     <br><br>
             </div>
-                        <div class="form-group" v-for="spu in spuList">
+                        <div class="form-group" v-for="(index,spu) in spuList">
                         <table class="tab" id="t" style="width:1000px" border="1" cellspacing="0" cellpadding="0">  
                         <thead>
                           <tr>
                              <th style="width:10%">
+                                 <input type="checkbox" v-model="spu.checked"></input> 
                                  <a :id="'desc'+spu.spuId"  class="orderBy" style="display:none;text-decoration:none" @click="orderBy(false,spu.spuId)">▼</a>
                                  <a :id="'asc'+spu.spuId" class="orderBy" style="text-decoration:none" @click="orderBy(true,spu.spuId)">▲</a>
                                
                              </th>
-                             <th style="width:40%">
+                             <th style="width:35%">
                                   <p>
                                     <a target="_blank" :href="spu.imgUrl" title="查看大图">
                                         <img :src="spu.imgUrl" class="img-rounded" style="height:60px; width:80px">
@@ -71,10 +80,11 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;库存:{{spu.totalSaleNum}}</h4>
                                 </a>
                              </th>
-                             <th style="width:20%"> 批量减价 <input type="text" class="input-sm"  @keyup="reduceBefore(spu.spuId,spu.minSalePrice,$event)" v-model="spu.reduce" :id="'before'+spu.spuId" >  </th>
-                             <th style="width:15%"> 减价后<input type="text" class="input-sm" @keyup="refuceAfter(spu.spuId,spu.minSalePrice,$event)" :id="'after'+spu.spuId" > </th>
-<!--                              <th style="width:15%"></th>
- -->                          </tr>
+                             <th style="width:20%"> 减价 &nbsp;&nbsp;<input type="number" class="input-sm" @click="reduceBefore(spu.spuId,spu.minSalePrice,$event)"  @keyup="reduceBefore(spu.spuId,spu.minSalePrice,$event)" v-model="spu.reduce" :id="'before'+spu.spuId"/>  
+                             </th>
+                             <th style="width:15%"> 减价后<input type="number" class="input-sm" @keyup="refuceAfter(spu.spuId,spu.minSalePrice,$event)" :id="'after'+spu.spuId" > </th>
+                             <th style="width:5%"><a style="text-decoration:none" @click="cut(index)">取消</a></th>
+                        </tr>
                           
                         </thead>
                              <tbody :id="'tab'+spu.spuId" style="display:none">
@@ -86,14 +96,14 @@
                                   </td>
                                   <td style="width:40%"> SKU组合 </td>
                                   <td style="width:20%"> 原价（元） </td>
-                                  <td style="width:15%"> 减价后</td>
+                                  <td style="width:15%" colspan="2"> 减价后</td>
 <!--                                   <td style="width:15%"> 操作</td>
  -->                                </tr>
                                 <tr v-for=" g in spu.skuList" style="height:20%"  @click="selectItem(g)">  
                                    <td style="width:10%"> <!-- <input type="checkbox" :checked="g.checked"></input> --> </td>
                                    <td style="width:40%"> {{ g.skuName }} </td>
                                    <td style="width:20%"> {{ g.skuSalePrice }}</td>
-                                    <td style="width:15%"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"  >  -->{{g.skureduce}} </td>
+                                    <td style="width:15%" colspan="2"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"  >  -->{{g.skureduce}} </td>
                                   <!--     <td style="width:15%"> 
                                   <button type="button"  @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button> </td>
  -->                                </tr>
@@ -112,7 +122,7 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
-        <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideselDialog" @spu-data="getSelected"></select-spu>
+        <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideselDialog" @spu-data="getSelected" :spulist="spuList"></select-spu>
         <div class="loading" style="position:fixed;z-index:11111;" v-if="isLoading">
             <div class="page-spinner-bar">
                 <div class="bounce1"></div>
@@ -146,6 +156,7 @@ export default {
     },
     data() {
         return {
+            reduce:0,
             mktEnd:"",
             spuList:[],
             time:"",
@@ -211,7 +222,29 @@ export default {
         }
     },
     methods: {
-         refuceAfter(id , min) {
+         plreduce(){
+            this.spuList.forEach(spu =>{
+                $("#before"+spu.spuId).val(this.reduce)
+                $("#before"+spu.spuId).click()
+            })
+         },
+         plcut(){
+             let arra = new Array()
+             this.spuList.forEach(spu =>{
+                if( !spu.checked ){
+                   arra.push(spu)
+                }
+             })
+             this.spuList = []
+             arra.forEach((spu,index) =>{
+              this.spuList.$set(index,spu)
+             })
+         },
+         cut(index){
+            this.spuList.splice(index,1)   
+         },
+         refuceAfter(id , min,event) {
+           
              let el = event.currentTarget
              var reg = /^-?\d{0,9}\.?\d{0,2}$/
              let s = $(el).val()+""
@@ -239,20 +272,21 @@ export default {
                          $("#before"+id).val('')
                          $("#after"+id).val('')
                          spu.skuList.forEach(sku =>{
-                         sku.skuSalePrice = ""
+                            sku.skureduce = ""
                         })
 
                         return false
                     }else{
                          $("#before"+id).val( price )
                          spu.skuList.forEach(sku =>{
-                         sku.skuSalePrice = sku.skuMarketProPrice - price
+                         sku.skureduce = sku.skuSalePrice - price
                         })
                     } 
                 }
              })
          },
          reduceBefore(id , min,event) {
+             
              let el = event.currentTarget
              var reg = /^-?\d{0,9}\.?\d{0,2}$/
              let s = $(el).val()+""
@@ -264,7 +298,7 @@ export default {
                    this.spuList.forEach(spu =>{
                         if(spu.spuId == id){
                         spu.skuList.forEach(sku =>{
-                        sku.skuSalePrice = ''
+                        sku.skureduce = ''
                         })
                     }
                 })
@@ -275,18 +309,19 @@ export default {
                 if(spu.spuId == id){
                     let price = ( min - $("#before"+id).val() ).toFixed(2)
                     if( price < 0 ){
+                        $("#before"+id).val('')
+                        $(el).val('')
                         $(el).blur()
                         this.showMsg("减价后售价不能少于0")
-                        $("#before"+id).val('')
                         $("#after"+id).val('')
                          spu.skuList.forEach(sku =>{
-                         sku.skuSalePrice = ""
+                         sku.skureduce = ""
                         })
                         return false
                     }else{
                         $("#after"+id).val( price )
                         spu.skuList.forEach(sku =>{
-                        sku.skuSalePrice = sku.skuMarketProPrice - $("#before"+id).val() 
+                        sku.skureduce = sku.skuSalePrice - $("#before"+id).val() 
                         })
                     }
                 }
@@ -376,9 +411,11 @@ export default {
 
         },
         getSelected( data ) {
-            this.spuList = []
-             console.log(data)
+             this.spuList = []
              this.spuList = data
+             this.spuList.forEach(spu =>{
+                spu.checked = false
+             })
         },
         showselect() {
              this.showSpuDialog = true

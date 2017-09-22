@@ -2,7 +2,7 @@
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'500px'">
             <div slot="content">
-                    <textarea v-model="editDemoData.orsDemo" placeholder="最多可输入256个字" rows="10" cols="50" maxlength="256"></textarea>
+                    <textarea v-model="editDemoData.ordDemo" placeholder="最多可输入256个字" rows="10" cols="50" maxlength="256"></textarea>
             </div>
             <span slot="btnList">
                 <button type="button" @click.stop="editDetailDemo" class="btn default blue">提交</button>
@@ -64,8 +64,8 @@ export default {
                 "painOptions": []
             },
             editDemoData:{
-                "orsId":0,
-                "orsDemo":'',
+                "ordOrderId":0,
+                "ordDemo":'',
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
@@ -84,7 +84,7 @@ export default {
     methods: {
         //提交商家备注
         editDetailDemo(){
-            this.editDemoData.orsId=this.id;
+            this.editDemoData.ordOrderId=this.id;
             client.postData(ORDER_EDIT_DEMO,this.editDemoData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {

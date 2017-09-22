@@ -25,6 +25,22 @@
                 </div>
             </div>
         </div>
+          <div class="col-md-4">
+            <div class="form-group">
+                <label class="col-md-3">订单状态:</label>
+                <div class="col-md-9">
+                    <m-select :data="stateList" :placeholder="'请选择内容'" :change-func="selectStateFunc" :class="'fixedIcon'"></m-select>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-4">
+            <div class="form-group">
+                <label class="col-md-3">物流方式:</label>
+                <div class="col-md-9">
+                    <m-select :data="logiTypeList" :placeholder="'请选择内容'" :change-func="selectLogiTypeFunc" :class="'fixedIcon'"></m-select>
+                </div>
+            </div>
+        </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label class="col-md-3">下单时间：</label>
@@ -39,26 +55,10 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3">订单状态:</label>
-                <div class="col-md-9">
-                    <m-select :data="stateList" :placeholder="'请选择内容'" :change-func="selectStateFunc" :class="'fixedIcon'"></m-select>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label class="col-md-3">物流方式:</label>
-                <div class="col-md-9">
-                    <m-select :data="logiTypeList" :placeholder="'请选择内容'" :change-func="selectLogiTypeFunc" :class="'fixedIcon'"></m-select>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
                 <label class="col-md-3">实付金额:</label>
                 <div class="col-md-9 time-box">
                     <div><input type="text" class="form-control inline-block" :placeholder="'输入最低金额'" v-model="searchOptions.lowOrsOpenPay" @blur="checkAmount(searchOptions.lowOrsOpenPay)"></div>
-                    <div>至</div>
+                    <div>~</div>
                     <div><input type="text" class="form-control inline-block" :placeholder="'输入最高金额'" v-model="searchOptions.highOrsOpenPay" @blur="checkAmount(searchOptions.highOrsOpenPay)"></div>
                 </div>
             </div>
@@ -104,7 +104,7 @@ export default {
     data() {
         return {
             stateList: [
-                { id: -1, name: '全部' }, { id: 0, name: '待付款' }, { id: 1, name: '待发货' }, { id: 2, name: '已发货' }, { id: 3, name: '已完成' }, { id: 4, name: '已关闭' }, { id: 5, name: '已取消' }, { id: 6, name: '售后线下处理' }
+                { id: -1, name: '全部' }, { id: 0, name: '待付款' }, { id: 1, name: '待发货' }, { id: 2, name: '已发货' }, { id: 3, name: '已完成' }, { id: 4, name: '已关闭' }, { id: 5, name: '售后线下处理' }
             ],
             logiTypeList: [
                 { id: -1, name: '全部' }, { id: 1, name: '快递发货' }, { id: 2, name: '上门自提' }

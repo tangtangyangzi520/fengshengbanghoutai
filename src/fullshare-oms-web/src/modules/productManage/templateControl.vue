@@ -47,8 +47,9 @@
                 <button type="button" class="btn green-meadow" @click="submitInfo">下架</button>  -->
                 <!--  <button type="button" class="btn purple" @click="submitInfo">预览</button>  -->
                   <button type="button" class="btn blue" @click="save">保存</button> 
+                  <button type="button" class="btn green" @click="up()" >上架</button>
+                  <button type="button" class="btn default" @click="down()" >下架</button>
                   <button type="button" class="btn yellow-crusta" @click="preview()">预览</button> 
-                  <button type="button" class="btn default" @click="hideDialog()" >取消</button>
             </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
@@ -183,6 +184,27 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        up() {
+            client.postData( SPU_EDIT_UP_DOWN ,  { "ids": [this.getspu.id], "spuShelvesStatus": 1 }).then(data => {
+                if (data.code == 200) {
+                    this.showMsg("上架成功")
+            }else {
+                    this.showMsg(data.msg);
+                }}, data => {
+                this.showMsg("上架失败,请重试");
+            })
+         },
+         down() {
+            client.postData( SPU_EDIT_UP_DOWN ,  { "ids": [this.getspu.id], "spuShelvesStatus": 0 }).then(data => {
+                if (data.code == 200) {
+                    this.showMsg("下架成功")
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.showMsg("下架失败,请重试");
+            })
+         },
         preview() {
             this.tflag = !this.tflag
             this.showAddDialog = true;
