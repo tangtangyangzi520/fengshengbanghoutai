@@ -1,99 +1,90 @@
 <template>
+    <!-- 销售属性添加页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :ide="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'800px'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :idp="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
             <div slot="content">
-                <div class="row nopadding">
-                    <form class="form-horizontal" name="addForm" role="form">
-                        
-                        <div class="col-md-6">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>属性名称:
-                            </label>
-                            <div class="controls col-md-9">
-                                <input type="hidden" class="form-control input-sm" v-model="data.pcraCatId">
-                                <input type="text" class="form-control input-sm" v-model="data.pcaName" placeholder="请输入属性名称">
-                            </div>
+                <form class="form-horizontal" name="addForm" role="form">
+                    <!-- 属性名称输入框 -->
+                    <div class="row">
+                        <label for="title" class="col-sm-3 control-label">
+                            <span class="required">* </span>属性名称:
+                        </label>
+                        <div class="controls col-md-6">
+                            <!-- <input type="hidden" class="form-control input-sm" v-model="pcraCatId"> -->
+                            <input type="text" class="form-control input-sm" v-model="data.pcaName" placeholder="请输入属性名称">
                         </div>
-    
-                        <div class="col-md-6">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required"></span>是否必填
-                            </label>
-                          
-                            <div class="controls col-md-4" >
-                                <!-- {{data.pcaRequired}}-->
-                                <input type="checkbox" v-model="data.pcaRequired"  ><br>
-                            </div>
+                    </div>
+                    <!-- 编辑属性值 -->
+                    <div class="row">
+                        <p>
+                            <h4>编辑属性值</h4>
+                        </p>
+                        <div>
+                            <button type="button" class="btn btn-xs blue" @click="addOption()">添加</button>
                         </div>
-					
-                        <!--<div class="col-md-6" >
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required"></span>是否默认展示</label>
-                            <div class="controls col-md-4">
-                                    <input type="checkbox"  v-model="data.pcaSaleProp"  />
-                            </div>
-                        </div>-->
-                          <div class="col-md-6" >
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required"></span>销售属性</label>
-                            <div class="controls col-md-4">
-                                <!--{{data.pcaSaleProp}} -->
-                                    <input type="checkbox"  v-model="data.pcaAtrrType"  />
-                            </div>
-                        </div>
-						<div class="col-md-6">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required"></span>备注:
-                            </label>
-                            <div class="controls col-md-9">
-                                <input type="text" class="form-control input-sm" v-model="data.pcaMemo" placeholder="请输入备注">
-                            </div>
-                        </div>
-						
-						<div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                <span class="required">*</span>属性类型：</label>
-						
-                         <div class="col-md-3">
-                                <select v-model="data.pcaInputType" class="type">
-                                    <option value="-1">请选择</option>
-                                    <option v-for="item in inputtypesList" :value="item.key">{{item.keyValue}}</option>
-                                </select>
-                           </div>     
-                        <!-- 标签选择 -->
-                     <!--  <button type="button" class="btn btn-xs blue" @click.stop="showAttrOption(itemobj)">编辑属性值</button> -->
-                </div>
+                        </br>
+                        <table class="table table-striped table-bordered table-hover" id="attrOption-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:;">属性值</th>
+                                    <th style="width:;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attrOptionTbody">
+                                <tr v-for="(index,itemobj) in data.optionList" :key="index">
+                                    <!--<td><input type="hidden" v-model="itemobj.pcaoId"/></td>  @blur="save" @dblclick="edit($event)" -->
+                                    <td>
+                                        <!-- <span v-if="!editing" @dblclick="edit">{{itemobj.pcaoName}}</span> -->
+                                        <input type="text" ref="input" :value="itemobj.pcaoName" v-model="itemobj.pcaoName" /></td>
+                                    <td>
+                                        <button type="button" class="btn btn-xs blue" @click="deleteOption(index)">删除</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
             </div>
+            <!-- 操作按钮 -->
             <span slot="btnList">
-                <button type="button" class="btn blue" @click="submitInfo">保存</button>
-                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn blue" @click="submitInfo()" @blur="save">确定</button>
+                <button type="button" class="btn default" data-dismiss="modal">关闭</button>
             </span>
         </m-alert>
-      <!--   <attr-option-control v-if="!destroyControlDialog" :idp="ide" :show="!showDialog" :onhide="hideAddDialog"></attr-option-control> -->
 
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
+
+        <!--删除属性值确认弹出框-->
+        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
+            <div slot="content">确定删除吗？</div>
+        </m-alert>
+
+        <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
         <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
             <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
         </div>
-      
-        <loading :show="isLoading"></loading>
-        <!-- 标签选择弹窗 -->
-        <tag-tree v-if="showTagTreeSelect" :list="tagsList" :onselect="selectTagFunc" :oncancel="showTagDialog"></tag-tree>
-
+        <div class="loading" style="position:fixed;z-index:11111;" v-if="isLoading">
+            <div class="page-spinner-bar">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
     </div>
 </template>
+
 <script>
 import client from '../../common/utils/client';
-import tagTree from '../common/tagTree';
+import control from './control';
 import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
-import loading from '../common/loading';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
 
 export default {
-    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, tagTree, loading },
+    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, control },
     props: {
+        pcaId: 0,
         show: {
             type: Boolean,
             value: false
@@ -102,40 +93,41 @@ export default {
             type: Function,
             value: () => { }
         },
-        selectedid: {
+        pcaid: {
             type: String,
             value: 0
         },
-        pcaid:{
+        pcaoId: {
             type: String,
             value: 0
-        }
+        },
+        pcaList: [],//该分类下的属性,用来判断重名
+        catId:0,//分类id
     },
     data() {
         return {
-            pcaInputType:-1,
             isLoading: false,
             showDialog: false,
             showPage: false,
-            showPainListSelect: true,
-            //获取属性类型
-            inputtypesList:[],
-            componentShowOption: {},
+            showControl: false,
+            controlType: '',
+            clickItems: [],   //点击操作的数据项
+            dataList: [],
             data: {
-                "pcraCatId":0,
-                "pcaName": "",
-                "pcaRequired":0,
-                "pcaSaleProp": 0,
-                "pcaAtrrType":0,
-                "pcaMemo": "",
-                "pcaInputType":-1
+                "pcraCatId": 0,  //分类主键
+                "pcaName": "",//属性名称
+                "optionList": [{
+                    "pcaoName": "",
+                }],
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
-            title: '添加分类属性',
-           
+            title: '添加/修改自定义属性',
+            selectPicType: 1, //logo类型
+            pcaoIdNum: 0,
+            selRow: {},
         }
     },
     vuex: {
@@ -146,60 +138,34 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
-     
-         // 获取属性类型列表
-        getinputtypeList() {
-            client.postData(PCA_INPUTTYPES, {}).then(data => {
-                if (data.code == 200) {
-                    
-                    let list = data.data;
-                    console.log(list);
-                    this.inputtypesList = list;
+        //添加一行
+        addOption() {
+            //    console.log("pcaId is "+this.pcaid);
+            this.data.optionList.push({ "pcaoName": "" });
+            this.pcaoIdNum++;
+        },
+        //弹出删除确认
+        deleteOption(data) {
+            this.data.optionList.splice(data,1);
+        },
+        // 回显数据
+        getList() {
+            let url = PCAO_GET_ID; // 按属性ID查询属性值列表
+            client.postData(url + '?pcaoAtrrId=' + this.pcaid).then(response => {
+                this.isLoading = false;
+                if (response.code == 200) {
+                    let list = response.data;
+                    // console.log(list);
+                    this.dataList = list;
+                    // this.stateList = client.global.deployStatusSelect;
                 } else {
-                    this.showMsg(data.msg);
+                    this.showMsg(response.msg);
                 }
-            }, data => {
-            })
+            });
         },
-        // 选择属性类型回调
-        selectinputtypesFunc(list) {
-            let types = [];
-            list.forEach((item) => {
-                types.push(item.id);
-            })
-            this.typeListSelect = types;
-            if (this.typeListSelect.length != 0) {
-                this.searchOptions.types = this.typeListSelect;
-            } else {
-                this.searchOptions.types = [];
-            }
-            this.setOptions();
-        },
-        setOptions() {
-            let options = this.searchOptions;
-             if (options.types && options.types.length == 0) {
-                delete options.types;
-            }
-        },
-        // 弹出选择标签弹窗
-        showTagDialog() {
-            this.showTagTreeSelect = !this.showTagTreeSelect;
-        },
-        //  showAttrOption(itemobj){
-        //     this.showDialog=false;
-           
-        //     this.pcaId = itemobj.pcaId;
-        //      console.log(this.pcaId);
-        // },
-        // 选择组件回调
-        selectComponentFunc(list) {
-            if (list[0].componentType == 27 || list[0].componentType == 15 || list[0].componentType == 13) {
-                this.contentSelect = list[0].subtitle;
-            } else {
-                this.contentSelect = list[0].title;
-            }
-            this.data.subComponentId = list[0].componentId;
-            this.showComponent = false;
+        // 隐藏选择资源弹窗
+        cancelSelect() {
+            this.showSelectPic({ show: false });
         },
         // 隐藏选择组件弹窗
         cancelSelectComponent() {
@@ -212,8 +178,6 @@ export default {
                 this.onhide();
             }, 300)
         },
-       
-      
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;
@@ -224,65 +188,36 @@ export default {
             this.showAlert = true;
         },
         hideMsg() {
+            this.showDeleteDialog = false;
             this.showAlert = false;
-        },
-        clearInfo() {
-            this.data = {
-                "pcaName": "",
-                "pcaRequired": 0,
-                "pcaSaleProp": "",
-                "pcaMemo": "",
-                "pcaAtrrType":1,
-                "pcaInputType":0
-            }
-           
-           // this.getPainList();
+            this.showControl = false;
         },
         // 提交信息
         submitInfo() {
-            let data =  this.data;
-            if (this.data.pcaName.replace(/\s/g, '') == '' || this.data.pcaName.length > 10) {
-                this.showMsg('请输入属性名称(1~10字)');
+            //属性名称唯一性校验
+            for (let index = 0; index < this.pcaList.length; index++) {
+                 if (this.pcaList[index].pcaName == this.data.pcaName) {
+                    this.showMsg('属性名已经存在，请输入新的属性名!');
+                    return;
+                }
+            }
+            //属性值唯一性校验
+            let set = new Set();
+            this.data.optionList.forEach(item => {
+                set.add(item.pcaoName);
+            });
+            if (set.size < this.data.optionList.length) {
+                this.showMsg('属性值重复，请输入新的属性值!');
                 return;
             }
-            //if(this.data.pcaName)
-             //属性类型判空
-            if(this.data.pcaInputType < 0 ){
-                this.showMsg("请选择属性类型");
-                return
-            }
-            if(data.pcaRequired ){
-                data.pcaRequired=1
-            }else{
-                data.pcaRequired=0
-            }
-            if( data.pcaSaleProp){
-              data.pcaSaleProp=1
-            }else{
-              data.pcaSaleProp=0     
-            }
-            if(data.pcaAtrrType ){
-                data.pcaAtrrType=2
-            }else{
-                 data.pcaAtrrType=1
-            }
-          //添加选项
-            let url = SALEPCA_CREATE;
-
-            if (this.pcaid!= '') {
-               // alert(this.pcaid);
-                url = PCA_EDIT+ '?pcaId=' + this.pcaid;
-                  data.pcaId = this.pcaid;
-                 
-            } 
-            this.isLoading = true;
-            data.pcraCatId=this.selectedid;
-            client.postData(url, data).then(response => {
+            //提交属性选项
+            let url = SALE_CREATE; //添加属性值url
+            client.postData(url, this.data).then(response => {
                 this.isLoading = false;
                 if (response.code != 200) {
-                    this.showMsg(response.message);
+                    this.showMsg(response.msg);
                 } else {
-                    if (this.pcaid != '') {
+                    if (this.id != '') {
                         this.onhide('update');
                     } else {
                         this.onhide('create');
@@ -290,67 +225,31 @@ export default {
                 }
             }, response => {
                 this.isLoading = false;
-                this.showMsg(response.message);
-            })
-        }
+                // this.showMsg('网络连接错误');
+            }
+            );
+
+        },
+
     },
     created() {
-        this.data.pcraCatId= this.selectedid
-        this.getinputtypeList();
-        //this.getPainList();
+
     },
     watch: {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
+            this.data.pcraCatId=this.catId;
         },
         pcaid() {
-            this.data = {
-                "selectedid":"",
-                "pcaName": "",
-                "pcaRequired":0,      
-                "pcaSaleProp":0,                     
-                "pcaMemo": "",
-                "pcaInputType":0,
-                "pcaAtrrType":1
-            }
-          
-            if (this.pcaid == '') {
-                this.tagsList = [];
-                this.title = '添加分类属性';
-                setTimeout(() => {
-                    this.typesList = client.global.componentTypes;
-                }, 30)
-                return;
-            }
-            this.title = '编辑分类属性';
-            this.isLoading = true;
-            client.postData(PCA_GET_ID + '?pcaId=' + this.pcaid, {}).then(response => {
-                this.isLoading = false;
-                if (response.code == 200) {
-                   // let data = response.data;
-                   let data = response.data;
-                    this.data.pcraCatId =data.selectedid;
-                    this.data.pcaName = data.pcaName;
-                    this.data.pcaSaleProp = data.pcaSaleProp;
-                    this.data.pcaRequired = data.pcaRequired;
-                    this.data.pcaMemo = data.pcaMemo;
-                    this.data.pcaInputType=data.pcaInputType;
-                    this.data.pcaAtrrType= data.pcaAtrrType;
-                   
-                } else {
-                    this.showMsg(response.msg);
-                }
-            }, data => {
-                this.isLoading = false;
-                this.showMsg(response.msg);
-            })
-        }
+            this.getList();
+        },
+
     },
     ready() {
-       // this.typesList = client.global.componentTypes;
+        this.typesList = client.global.componentTypes;
     },
     beforeDestroy() {
     }
-};
+}
 </script>

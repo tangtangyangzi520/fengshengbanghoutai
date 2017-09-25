@@ -1,46 +1,48 @@
 <template>
+    <!-- 通用属性-编辑属性值页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;"  v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :idp="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
             <div slot="content">
                 <div class="row">
                     <div>
-                         <button type="button" class="btn btn-xs blue" @click="addOption()" style="position:fixed;right:15%;top:10%;">添加</button>
+                         <p><button type="button" class="btn btn-xs blue" @click="addOption()">添加</button></p></br>
                     </div>
-                <!-- <div style="position: absolute;top:30px;left:0;width:100%;height:100%;overflow :auto">  -->
                     <form class="form-horizontal" name="addForm" role="form">
-                            <table class="table table-striped table-bordered table-hover" id="attrOption-table">
-                                <thead>
-                                    <tr>
+                        <table class="table table-striped table-bordered table-hover" id="attrOption-table">
+                            <thead>
+                                <tr>
                                     <th style="width:;">属性值</th>
                                     <th style="width:;">操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="attrOptionTbody">
-                                    <tr v-for="itemobj in dataList">                                   
-                                        <!--<td><input type="hidden" v-model="itemobj.pcaoId"/></td>  @blur="save" @dblclick="edit($event)" -->                               
-                                        <td>
-                                        <!-- <span v-if="!editing" @dblclick="edit">{{itemobj.pcaoName}}</span> -->
-                                        <input type="text" ref="input"  :value="itemobj.pcaoName" v-model="itemobj.pcaoName"/></td>
-                                        <td>
-                                            <button type="button" class="btn btn-xs blue" @click.stop="deleteOption(itemobj)">删除</button>
-                                        </td>
-                                    </tr>                            
-                                </tbody>
-                            </table>
-                        </form>
-                    </div>
-                <!-- </div> -->
+                                </tr>
+                            </thead>
+                            <tbody id="attrOptionTbody">
+                                <tr v-for="(index, itemobj) in dataList">                                                                  
+                                    <td>
+                                        <p style="padding-top:2px;">
+                                            <input type="text" ref="input" :value="itemobj.pcaoName" v-model="itemobj.pcaoName"/>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p style="padding-top:4px;">
+                                            <button type="button" class="btn btn-xs blue" @click.stop="deleteOption(itemobj, index)">删除</button>
+                                        </p>
+                                    </td>
+                                </tr>                            
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
             </div>
             <span slot="btnList">
-                <button type="button" class="btn blue" @click="submitInfo()"  @blur="save">确定</button>
-                <button type="button" class="btn default" data-dismiss="modal" >关闭</button>
+                <button type="button" class="btn blue" @click="submitInfo()" @blur="save">确定</button>
+                <button type="button" class="btn default" data-dismiss="modal">关闭</button>
             </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
 
-          <!--确定删除-->
+        <!--确定删除-->
         <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
             <div slot="content">确定删除吗？</div>
         </m-alert>
@@ -58,16 +60,15 @@
         </div>
     </div>
 </template>
+
 <script>
 import client from '../../common/utils/client';
-//import control from './control';
 import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
+
 export default {
     components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList },
     props: {
-       
-        pcaId:0,
         show: {
             type: Boolean,
             value: false
@@ -76,25 +77,20 @@ export default {
             type: Function,
             value: () => { }
         },
-        pcaid:{
-            type: String,
-            value: 0 
-        },
         pcaoId:{
             type: String,
             value: 0 
-        }
+        },
+        optlist: [] // 父页面传值
     },
     data() {
         return {
-           
             isLoading: false,
             showDialog: false,
             showPage: false,
             showControl: false,
-            controlType:'',
-            dataList:[],
-            clickItems: [],   //点击操作的数据项
+            dataList:[], // 属性值list
+            clickItems: [],   // 点击操作的数据项
             itemobj: {
                 "pcaoName": ""
             },
@@ -103,9 +99,10 @@ export default {
             showAlertMsg: '',
             removeAddDialog: false,
             title: '编辑属性值',
-            selectPicType: 1,//logo类型
-            pcaoIdNum : 0,
-            selRow : {},
+            selectPicType: 1,// logo类型
+            pcaoIdNum : 0,// 属性值数量
+            selRow : {},// 删除行数据
+            deleteIndex: "",// 删除行索引
         }
     },
     vuex: {
@@ -116,58 +113,30 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
-           
-        //添加一行
+        // 添加一行
         addOption(){
-            //.log("pcaId is "+this.pcaid);
-            this.dataList.push( { "pcaoName":"" });
+            this.dataList.push({"pcaoName" : ""});
             
             this.pcaoIdNum++;
             // if(pcaoIdNum<=2 || pcaoIdNum>=50){
             //       this.showMsg("属性值最少2个最多50个");
             // }
         },
-        //删除一行
-        deleteOption(itemobj){
-            this.selRow = itemobj;
-            this.showControl = true;
+        // 删除确认弹出框
+        deleteOption(itemobj, index){
+            this.deleteIndex = index;// 删除行索引
+            this.selRow = itemobj;// 删除行数据
+            this.showControl = true;// 弹出删除确认
         },
+        // 删除属性值
         ajaxControlDel(){
-            if(this.selRow.pcaoId==null){
-                let index = this.dataList.findIndex( item => item.pcaoId == this.selRow.pcaoId );
-                this.dataList.splice(index,1); 
-            }else{
-               // this.controlType = type;
-                this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
-                let url=PCAO_DELETE+'?pcaoId=' + this.selRow.pcaoId;
-                client.postData(url).then(data =>{
-                    this.isLoading = false;     
-                    this.getList();
-                }); 
-            } 
-           
+            this.dataList.splice(this.deleteIndex, 1); //删除索引为deleteIndex的元素
         },
-        //按属性ID查询属性值列表
-        getList(){
-            let url=PCAO_GET_ID;
-           client.postData(url+'?pcaoAtrrId='+this.pcaid).then(response =>{
-                 this.isLoading = false;                  
-                if (response.code == 200) {
-                    let list = response.data;
-                   // console.log(list);
-                    this.dataList = list;
-                   // this.stateList = client.global.deployStatusSelect;
-                } else {
-                    this.showMsg(response.msg);
-                }
-               
-            });
-        },
-         // 隐藏选择资源弹窗
+        // 隐藏选择资源弹窗
         cancelSelect() {
             this.showSelectPic({ show: false });
         },
-         // 隐藏选择组件弹窗
+        // 隐藏选择组件弹窗
         cancelSelectComponent() {
             this.showComponent = false;
         },
@@ -196,11 +165,9 @@ export default {
             this.itemobj = {
                 "pcaoName": ""
             }
-            
         },
         // 提交信息
         submitInfo() {
-           // let data = this.data
             /**属性值是否存在较验 */
             var isSubmit = true;
             this.dataList.forEach(item => {
@@ -216,68 +183,36 @@ export default {
             /**属性值长度较验 */
             var arr =[];
             this.dataList.forEach(item=> {
-              console.log(item.pcaoName.length-1) 
-            if((item.pcaoName.length-1)==-1){
-                   this.showMsg('请输入属性值') 
-                   isSubmit = false;
-            } 
-            if ( (item.pcaoName.length)>10){
-                    this.showMsg('属性值不能超过10个字');
+                if((item.pcaoName.length-1)==-1){
+                    this.showMsg('请输入属性值') 
                     isSubmit = false;
-            }
-               //arr.push(item.pcaoName) 
-            })
-             //console.log((arr[arr.length-1]));
-            // if ((arr[arr.length-1])== '' || ((arr[arr.length-1]).length) >= 10) {
-            //      this.showMsg('请输入属性值(属性值不能超过10个字)');
-            //      isSubmit = false;
-            // }
-            if(!isSubmit) {
-              //  console.log("返回");
-                return;
-            }
-            //console.log("继续提交了");
-            //提交属性选项
-            let url= PCAO_CREATE;         
-           // console.log("值~~~"+this.dataList);         
-            client.postData(url,{  "pcaoList": this.dataList,
-                                   "pcaoAtrrId": this.pcaid,
-            }).then(response => {
-              
-                    this.isLoading = false;
-                    if (response.code != 200) {
-                        this.showMsg(response.msg);
-                    } else {
-                        if (this.id != '') {
-                            this.onhide('update');
-                        } else {
-                            this.onhide('create');
-                        }
-                    }
-                }, response => {
-                    this.isLoading = false;
-                    this.showMsg('网络连接错误');
+                } 
+                if ((item.pcaoName.length)>10){
+                        this.showMsg('属性值不能超过10个字');
+                        isSubmit = false;
                 }
-            );
-       
-        },  
+            });
+           
+            if(!isSubmit) {
+                return;
+            }        
+            
+            this.$emit("attroptionlist", this.dataList);// 向父组件传递属性值list
+            this.showPage = false;
+            this.showDialog = false;
+        }
     }, 
-    
     created() {
      
     },
     watch: {
         show() {
+            this.dataList = Object.assign([], this.optlist);// 创建新的实例,回显属性值数据
             this.showPage = this.show;
             this.showDialog = this.show;
-        },
-        pcaid(){
-            this.getList();        
-        },
-        
+        }
     },
     ready() {
-       
         this.typesList = client.global.componentTypes;
     },
     beforeDestroy() {

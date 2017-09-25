@@ -1,97 +1,120 @@
 <template>
+    <!-- 通用属性列表页面 -->
     <div>
         <div class="page-bar min-bar">
             <page-title-bar>
                 <span slot="title">类目通用属性设置</span>
             </page-title-bar>
             <div class="col-md-12 right">
-               <span v-if="selectItems.length>0" class="desc">已选
-                    <em>{{selectItems.length}}</em> 项 </span>   
-                <button class="btn green" type="button"   @click="addItem()" style="margin-left:10px;">添加</button>
-                <!-- <button class="btn green-meadow" @click="getList(false,true)" type="button">搜索</button> -->
+                <span v-if="selectItems.length>0" class="desc">已选<em>{{selectItems.length}}</em> 项 </span>   
+                <!-- <p><button class="btn green" type="button" @click="addItem()" v-show="isShowAddBtn" style="margin-left:100px;">新增</button></p> -->
             </div>
             <div style="height:5px;clear:both;"></div>
         </div>
         <div>
-                <div class="col-md-3" style="height:500px;overflow:auto;">
-                    <div class="tree-demo jstree jstree-1 jstree-default">
+            <div class="col-md-3" style="height:500px;overflow:auto;">
+                <div class="tree-demo jstree jstree-1 jstree-default">
                     <ul class="jstree-container-ul jstree-children jstree-wholerow-ul jstree-no-dots">
                         <treeview  :model="treeList" :select="selectItem"></treeview>
                         <template v-for="model in selectListSearch">
                             <treeview :model="model" :select="selectItem"></treeview>
                         </template>
                     </ul>
-                    </div> 
-                </div>
-                <div class="col-md-6" id="contentList" style="width:75%;">
-                    <table class="table table-striped table-bordered table-hover" id="category-table">
-                        <thead>
-                            <tr>
-                            <th >属性名称</th>
-                            <th >属性类型</th>
-							<th >是否必填</th>
-							<th >是否默认展示</th>
-							<th >属性值列表</th>
-							<th >所属类目</th>
-                            <th >创建时间</th>
-							<th >排序号</th>
-                            <th >操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="itemobj in dataList" >
-                                <td>{{itemobj.pcaName}}</td>
-                                <td >
-                                    <span class="label label-info" v-show="itemobj.pcaInputType==1">单选</span>
-                                    <span class="label label-info" v-show="itemobj.pcaInputType==2">多选</span>
-                                    <span class="label label-info" v-show="itemobj.pcaInputType==3">下拉列表</span>
-                                    <span class="label label-info" v-show="itemobj.pcaInputType==4">单行文本</span>
-                                    <span class="label label-info" v-show="itemobj.pcaInputType==5">多行文本</span>
-                                </td>
-                                <!--{{itemobj.pcaInputType}}-->
-                                <td>
-                                    <p style="padding-top:5px;">
-                                        <span class="label label-default" v-if="itemobj.pcaRequired!=1">否</span>
-                                        <span class="label label-success" v-else>是</span>
-                                    </p>
-                                </td>
-                                <td>
-                                     <p style="padding-top:5px;">
-                                        <span class="label label-default" v-if="itemobj.pcaSaleProp!=1">否</span>
-                                        <span class="label label-success" v-else>是</span>
-                                    </p>
-                                </td> 
-                                <td>
-                                    <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
-                                </td>
-                                <td>{{selectTreetext}}</td>
-                                <!-- <td>{{itemobj.pcraCatId}}</td> -->
-                                <td>{{itemobj.pcaCreatedTime|filterTime}}</td>
-                                <td>{{itemobj.pcaSortNo}}</td>
-                                <td>
-                                     <button type="button" v-show="selectTreeId==itemobj.pcraCatId"  class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')">编辑</button>
-                                     <button type="button"  v-show="selectTreeId==itemobj.pcraCatId" @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red">删除</button>
-                                     <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'editvalue')">编辑属性值</button>
-                                </td>
-                            </tr>
-                            <tr v-if="dataList.length==0">
-                                <td colspan="9" class="center">暂无数据</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                  <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>     
-
-                </div>
-
+                </div> 
             </div>
+            <div class="col-md-3"> 
+                <p><button class="btn green" type="button" @click="addItem()" v-show="isShowAddBtn">新增</button></p></br>
+            </div>
+            <div class="col-md-6" id="contentList" style="width:75%;">
+                <table class="table table-striped table-bordered table-hover" id="category-table">
+                    <thead>
+                        <tr>
+                        <th >属性名称</th>
+                        <th >属性类型</th>
+                        <th >是否必填</th>
+                        <th >是否默认展示</th>
+                        <th >属性值列表</th>
+                        <th >所属类目</th>
+                        <th >创建时间</th>
+                        <th >排序号</th>
+                        <th >操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="itemobj in dataList" >
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <span>{{itemobj.pcaName}}</span>
+                                </p>
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <span v-show="itemobj.pcaInputType==1">单选</span>
+                                    <span v-show="itemobj.pcaInputType==2">多选</span>
+                                    <span v-show="itemobj.pcaInputType==3">下拉列表</span>
+                                    <span v-show="itemobj.pcaInputType==4">单行文本</span>
+                                    <span v-show="itemobj.pcaInputType==5">多行文本</span>
+                                </p>
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <span v-if="itemobj.pcaRequired==1">√</span>
+                                </p>
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <span v-if="itemobj.pcaUseFlag==1">√</span>
+                                </p>
+                            </td> 
+                            <td>
+                                <!-- <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title=""> -->
+                                <p style="padding-top:5px;">
+                                    <span>{{ itemobj.pcaoList | filterPcaoList }}</span>
+                                </p>
+                                <!-- </div> -->
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <span>{{ getNameByTreeId(treeList, itemobj.pcraCatId) }}</span>
+                                </p>
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <span>{{ itemobj.pcaCreatedTime | filterTime }}</span>
+                                </p>   
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <span>{{ itemobj.pcaSortNo }}</span>
+                                </p>
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <button type="button" v-show="selectTreeId==itemobj.pcraCatId"  class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')">修改</button>
+                                    <button type="button" v-show="selectTreeId==itemobj.pcraCatId" @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red">删除</button>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr v-if="dataList.length==0">
+                            <td colspan="9" class="center">暂无数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- 分页 -->
+                <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>     
+            </div>
+        </div>
        
-        <!-- 创建分类属性弹窗 -->       
-      <productatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :show="showAddDialog" :onhide="hideAddDialog"></productatrr-control>
-      <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :show="showDialog" :onhide="hideAddDialog"></attr-option-control>
-         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
+        <!-- 添加/编辑通用属性页面 -->       
+        <productatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :show="showAddDialog" :onhide="hideAddDialog"></productatrr-control>
+        <!-- 编辑属性值弹出框 -->
+        <!-- <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :show="showDialog" :onhide="hideAddDialog"></attr-option-control> -->
+        
+        <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert> 
-           <!--确定删除-->
+
+        <!-- 删除确认弹出框 -->
         <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
             <div slot="content">确定删除吗？</div>
         </m-alert>
@@ -103,17 +126,16 @@
         <loading :show="isLoading"></loading>
     </div> 
 </template>
-<script>
 
+<script>
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect, itemList } from '../../components';
 import loading from '../common/loading';
 import productatrrControl from './productatrrControl';
 import treeview from '../common/tagTreeItem';
 import attrOptionControl from './attrOptionControl';
-export default {
 
-    
+export default {
     props: {
         list: Array, // 已选列表
         show: Boolean,
@@ -149,7 +171,7 @@ export default {
             pcaEditId:'',
             pcaId:'',
             changeObj:false,
-             selRow : {},
+            selRow : {},
             lastSearchOptions: {},
             controlType:'',
             searchOptions: {
@@ -163,19 +185,31 @@ export default {
                     totalPage: 0,
                     totalSize: 0
                 }
-            }
+            },
+            isShowAddBtn: false, // 是否显示添加按钮
         }
     },
     filters: {
-       
+        // 格式化时间
         filterTime(time) {
-            return client.formateTime(time);
+            return client.formateTime(time);// 格式化时间
+        },
+        // 格式化属性值
+        filterPcaoList(pcaoList){
+            let attrs = "";
+            for(let i=0; i<pcaoList.length; i++){
+                if(i != pcaoList.length-1){
+                    attrs += pcaoList[i].pcaoName + "、";
+                }else{
+                    attrs += pcaoList[i].pcaoName;
+                }
+            }
+            return attrs;
         }
     },
     methods: {
-        
-
-         addItem() {
+        // 添加按钮
+        addItem() {
             this.showAddDialog = true;
             this.pcaEditId='';
             this.pcaId='';
@@ -206,36 +240,37 @@ export default {
         },
             
         //查看商品
-        showProductFunc(){
-            location.href='/dist/#!/product';
-        },
-        selectOk() {
-            this.onselect(this.selectList);
-        },
-        
+        // showProductFunc(){
+        //     location.href='/dist/#!/product';
+        // },
+        // selectOk() {
+        //     this.onselect(this.selectList);
+        // },
         // 获取标签属性列表
-        getTagType() {
-            this.isLoading = true;
-            client.postData(TAG_TYPE_GET, {}).then(data => {
-                this.isLoading = false;
-                if (data.code == 200) {
-                    data.data.forEach(item => {
-                        item.id = item.typeId;
-                        item.name = item.typeName;
-                    })
-                    this.labelType = data.data;
-                    this.labelTypeActive = data.data[1];
-                    this.getTreeList(this.labelTypeActive.id);
-                } else {
-                    this.showMsg(data.msg);
-                }
-            }, data => {
-                this.isLoading = false;
-            })
-        },
+        // getTagType() {
+        //     this.isLoading = true;
+        //     client.postData(TAG_TYPE_GET, {}).then(data => {
+        //         this.isLoading = false;
+        //         if (data.code == 200) {
+        //             data.data.forEach(item => {
+        //                 item.id = item.typeId;
+        //                 item.name = item.typeName;
+        //             });
+        //             this.labelType = data.data;
+        //             this.labelTypeActive = data.data[1];
+        //             this.getTreeList(this.labelTypeActive.id);
+        //         } else {
+        //             this.showMsg(data.msg);
+        //         }
+        //     }, data => {
+        //         this.isLoading = false;
+        //     });
+        // },
+
+        // 编辑/删除按钮弹框事件
         showControlFunc(itemobj, type) {
             this.controlType = type;
-             this.selRow = itemobj;
+            this.selRow = itemobj;
             if (!itemobj) {
                 if (this.selectItems.length != 0) {
                     this.clickItems = this.selectItems;
@@ -243,27 +278,22 @@ export default {
                 }
             } else {
                 this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
-                if (type == 'edit') {
+                if (type == 'edit') {// 编辑操作
                     this.pcaEditId = this.selRow.pcaId;
-                    console.log(this.showControl);
                     this.showAddDialog = true;
-                }
-                else if(type == 'editvalue'){
-                    this.pcaEditId = this.selRow.pcaId;
-                  //  this.getOptions();
-                    this.showDialog = true; 
-                }
-                else {
+                }else if (type == 'delete') {// 删除操作
                     this.showControl = true;
                 }
             }
         },
+        // 删除分类属性及对应的属性值
         ajaxControlDel(){
-                let url=PCA_DELETE+'?pcaId=' + this.selRow.pcaId;
-                client.postData(url).then(data =>{
-                    this.isLoading = false;     
-                    this.getList();
-                });  
+            let url = PCA_REMOVE + '?pcaId=' + this.selRow.pcaId;
+            // 发送请求
+            client.postData(url).then(data => {
+                this.isLoading = false;     
+                this.getList();
+            });  
         },
         hideControlFunc(type) {
             if (type == 'success') {
@@ -275,6 +305,7 @@ export default {
         changeSearchOptions(options) {
             this.searchOptions = options;
         },
+        // 获取列表数据
         getList(page, firstSearch){
             let options;
              if (!firstSearch) {
@@ -282,10 +313,9 @@ export default {
                 options = this.lastSearchOptions;
             } else {
                 this.searchOptions.parentIds = this.parentIds;
-                this.searchOptions.pcaSaleProp =0;
-                this.searchOptions.pcaAtrrType =1;
+                this.searchOptions.pcaSaleProp = 0;
+                this.searchOptions.pcaAtrrType = 1;
                 options = Object.assign({}, this.searchOptions);
-               // console.log(options);
             }
             if (page) {
                 options.page = page;
@@ -293,25 +323,25 @@ export default {
             this.isLoading = true;
             this.dataList = [];
             this.lastSearchOptions = options;
-             // 统计数据
+            // 统计数据
             this.getCount(options);
+
             client.postData(PCA_GET_BY_PCRACATIDS, options).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.forEach(item => {
                         item.checked = false;
-                    })
+                    });
                     this.dataList = data.data;
-                   this.page = data.page;
+                    this.page = data.page;
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.isLoading = false;
-            })
+            });
         },
         getCount(options) {
-           // options.componentType = [16];
             client.postData(PCA_GET_BY_PCRACATIDS, options).then(data => {
                 if (data.code == 200) {
                     this.countDesc = data.data;
@@ -319,9 +349,9 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-            })
+            });
         },
-        //拿到树形数据
+        // 拿到树形数据
         getTreeList(typeId) {
             this.isLoading = true;
             client.postData(TAG_LIST_GET + '?typeId=' + typeId, {}).then(data => {
@@ -329,18 +359,17 @@ export default {
                 if (data.code == 200) {
                     data.data.root.children.forEach(item => {
                         this.filterData(item);
-                    })
+                    });
                     data.data.root.isOpen = true;
                     data.data.root.isSelected = false;
                     data.data.root.isShow = true;
                     this.treeList = data.data.root; 
-                    // this.selectList = Array.from(this.selectListSet);
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.isLoading = false;
-            })
+            });
         },
         // 处理树形数据
         filterData(item) {
@@ -354,55 +383,55 @@ export default {
                 this.selectListSet = new Set();
                 this.selectList.forEach(o => {
                     this.selectListSet.add(o);
-                })
+                });
             }
             item.isShow = true;
             if (item.children.length != 0) {
                 item.children.forEach(subitem => {
                     this.filterData(subitem);
-                })
+                });
             }
-            
         },
         // 选中一个项时触发
         selectItem(item) {
-            this.selectTreeId = item.id;
-            this.selectTreetext=item.text;
-            //console.log("id="+item.id+",value="+item.text);
-            this.parentIds = client.getParentIdList(this.treeList, item);
-           // this.parentTexts = client.getParentTextList(this.treeList,item);
-            this.getList(false, true);
-             console.log(this.parentIds);
-              console.log(this.parentTexts);
-        },
-       
-        
-        handlerSearch(item) {
-            item.isShow = true;
-            if (this.searchKey.replace(/\s/g, '') != '') {
-                if (item.text.indexOf(this.searchKey) == -1 && this.searchKey.replace(/\s/g, '') != '') {
-                    item.isShow = false;
-                } else {
-                    this.selectListSearch.push(item);
-                    //console.log(item);
-                }
-            }
-            if (item.children.length != 0) {
-                item.children.forEach(subitem => {
-                    this.handlerSearch(subitem);
-                })
+            // root节点[丰盛]不做操作
+            if(item.id != 0){
+                this.isShowAddBtn = true; // 显示出添加按钮
+    
+                this.selectTreeId = item.id;
+                this.selectTreetext=item.text;
+                this.parentIds = client.getParentIdList(this.treeList, item);
+                this.getList(false, true);
+            }else{
+                this.dataList = [];// 清空列表
+                this.isShowAddBtn = false; // 隐藏添加按钮
             }
         },
-        selectLabelPropFunc(item) {
-            if (item == '') {
-                this.labelTypeActive = this.labelType[1];
-            } else {
-                this.labelTypeActive = item;
-            }
-            this.selectListSearch = [];
-            this.searchKey = '';
-            this.getTreeList(this.labelTypeActive.id);
-        },
+        // handlerSearch(item) {
+        //     item.isShow = true;
+        //     if (this.searchKey.replace(/\s/g, '') != '') {
+        //         if (item.text.indexOf(this.searchKey) == -1 && this.searchKey.replace(/\s/g, '') != '') {
+        //             item.isShow = false;
+        //         } else {
+        //             this.selectListSearch.push(item);
+        //         }
+        //     }
+        //     if (item.children.length != 0) {
+        //         item.children.forEach(subitem => {
+        //             this.handlerSearch(subitem);
+        //         })
+        //     }
+        // },
+        // selectLabelPropFunc(item) {
+        //     if (item == '') {
+        //         this.labelTypeActive = this.labelType[1];
+        //     } else {
+        //         this.labelTypeActive = item;
+        //     }
+        //     this.selectListSearch = [];
+        //     this.searchKey = '';
+        //     this.getTreeList(this.labelTypeActive.id);
+        // },
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;
@@ -417,17 +446,40 @@ export default {
             this.showDeleteDialog = false;
             this.showAlert = false;
             this.showControl = false;
+        },
+        //根据树节点id获取所在元素父级名称
+        getNameByTreeId(treeList, treeId){
+            if(treeList.id == treeId){
+                return treeList.text;
+            } else {
+                return this.deepLoop(treeList.children, treeId);// 调用递归方法
+            }
+        },
+        // 递归方法
+        deepLoop(treeItem, treeId){
+            var text = "";
+            treeItem.forEach(item => {
+                if(text == ""){ // 解决ES6 forEach没办法结束循环问题
+                    if((item.id+"") == (treeId+"")){
+                        text = item.text;
+                        return false;
+                    } else {
+                        text = this.deepLoop(item.children, treeId);
+                        return false;
+                    }
+                }
+            });
+            return text;
         }
     },
-
     created() {
-        this.getTreeList(100);
+        this.getTreeList(100); // 获取树数据
     },
     ready() {
     }
-    
 }
 </script>
+
 <style lang="less" scope>
 .page-container-bg-solid .page-bar, .page-content-white .page-bar {
    margin: 0 0 20px 0;

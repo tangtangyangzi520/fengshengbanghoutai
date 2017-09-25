@@ -326,6 +326,12 @@ var ORDER_EXPORT       =  OMS_TEST + "/order/exportOrder";               //修�
 var APP_SPU_GET_ONE =  APP_TEST + "/spu/getAppProductSpuById";  //根据spuID获取信息
 
 //类目属性模块
+//=========================================新增加(chensenrong)====================================================//
+var PCA_INSERT      = OMS_TEST + "/pca/insertProductCategoryAtrr";          //添加分类属性及属性选项
+var PCA_QUERY_BYID  = OMS_TEST + "/pca/queryProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性及属性选项
+var PCA_UPDATE      = OMS_TEST + "/pca/updateProductCategoryAtrr";          //修改分类属性及属性选项
+var PCA_REMOVE      = OMS_TEST + "/pca/delete";                             //删除分类属性及属性选项
+//===============================================================================================================//
 var PCA_CREATE      = OMS_TEST +"/pca/createProductCategoryAtrr";        //分类属性添加
 var PCA_GET_ID      = OMS_TEST +"/pca/getProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性
 var PCA_EDIT        = OMS_TEST +"/pca/editProductCategoryAtrr";          //分类属性修改

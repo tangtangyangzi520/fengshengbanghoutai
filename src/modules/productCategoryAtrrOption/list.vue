@@ -1,35 +1,41 @@
 <template>
+    <!-- 销售属性列表页面 -->
     <div>
         <div class="page-bar min-bar">
             <page-title-bar>
                 <span slot="title">类目销售属性设置（SKU属性）</span>
             </page-title-bar>
             <div class="col-md-12 right">
-               <span v-if="selectItems.length>0" class="desc">已选
+                <span v-if="selectItems.length>0" class="desc">已选
                     <em>{{selectItems.length}}</em> 项 </span>   
-                <button class="btn green" type="button"   @click="addItem()" style="margin-left:10px;">添加</button>
+               
                 <!-- <button class="btn green-meadow" @click="getList(false,true)" type="button">搜索</button> -->
             </div>
             <div style="height:5px;clear:both;"></div>
         </div>
+        <!-- 销售属性树菜单 -->
         <div>
-                <div class="col-md-3" style="height:500px;overflow:auto;">
-                    <div class="tree-demo jstree jstree-1 jstree-default">
+            <div class="col-md-3" style="height:500px;overflow:auto;">
+                <div class="tree-demo jstree jstree-1 jstree-default">
                     <ul class="jstree-container-ul jstree-children jstree-wholerow-ul jstree-no-dots">
                         <treeview  :model="treeList" :select="selectItem"></treeview>
                         <template v-for="model in selectListSearch">
                             <treeview :model="model" :select="selectItem"></treeview>
                         </template>
                     </ul>
-                    </div> 
-                </div>
-                <div class="col-md-6" id="contentList" style="width:75%;">
-                     <table class="table table-striped table-bordered table-hover" id="category-table">
+                </div> 
+            </div>
+            <!-- 销售属性列表 -->
+            <div class="col-md-6" id="contentList" style="width:75%;">
+                <p><h3>属性列表</h3></p></br>
+                <p> <button class="btn green" type="button"  @click="addItem()" v-show="isLastLevel" style="margin-left:10px;">添加自定义属性</button></p>
+                </br>
+                <table class="table table-striped table-bordered table-hover" id="category-table">
                     <thead>
                         <tr>
-                            <th style="width:36%;">属性名称</th>
-                            <th style="width:7%;">属性值</th>
-							<th style="width:15%;">所属类目</th>
+                            <th style="width:15%;">属性名称</th>
+                            <th style="width:20%;">属性值</th>
+                            <th style="width:15%;">所属类目</th>
                             <th style="width:10%;">创建时间</th>
                             <th style="width:20%;">操作</th>
                         </tr>
@@ -38,17 +44,15 @@
                         <tr v-for="itemobj in dataList" >
                             <td>{{itemobj.pcaName}}</td>
                             <td>
-                              <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
-                              </td>
-                             <td>{{itemobj.pcraCatId}}</td>
-                             <!-- <td>{{selectTreetext}}</td>  -->
+                                <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
+                            </td>
+                            <!-- <td>{{itemobj.pcraCatId}}</td> -->
+                            <td>{{selectTreetext}}</td> 
                             <td>{{itemobj.pcaCreatedTime|filterTime}}</td>
-                              <td>
-                              
-                               <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')">编辑</button>                            
-                               <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red">删除</button>
-                                <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'editvalue')">编辑属性值</button>
-                               
+                            <td>
+                                <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" v-show="isLastLevel">编辑</button>                            
+                                <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" v-show="isLastLevel">删除</button>
+                                <!-- <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'editvalue')">编辑属性值</button> -->
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">
@@ -56,19 +60,21 @@
                         </tr>
                     </tbody>
                 </table>
-                  <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>     
-
-                </div>
-
+                <!-- 分页 -->
+                <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>     
             </div>
+        </div>
        
-        <!-- 创建分类属性弹窗 -->       
-      <saleproductatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :show="showAddDialog" :onhide="hideAddDialog"></saleproductatrr-control>
-      <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :show="showDialog" :onhide="hideAddDialog"></attr-option-control>
-         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
+        <!-- 添加销售属性页面 -->       
+        <saleproductatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :cat-id="selectTreeId" :show="showAddDialog" :onhide="hideAddDialog" :pca-list="dataList"></saleproductatrr-control>
+        <!-- 编辑销售属性页面 -->
+        <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :pca-item="pcaItem2" :show="showDialog" :onhide="hideAddDialog" :pca-name2="listPcaName" :pca-list="dataList"></attr-option-control>
+
+        <!-- 提交确认弹出框 -->
+        <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert> 
-                  <!--确定删除-->
+        <!--删除确认弹出框-->
         <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
             <div slot="content">确定删除吗？</div>
         </m-alert>
@@ -76,17 +82,16 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert> 
-
         <loading :show="isLoading"></loading>
     </div> 
 </template>
-<script>
 
+<script>
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect, itemList } from '../../components';
 import loading from '../common/loading';
 import saleproductatrrControl from './saleproductatrrControl';
-import attrOptionControl from '../productCategoryAtrr/attrOptionControl';
+import attrOptionControl from './attrOptionControl';
 import treeview from '../common/tagTreeItem';
 
 export default {
@@ -118,16 +123,18 @@ export default {
             showAddDialog: false,
             showControl: false,
             showDialog:false,
-            selectTreeId:0,
+            selectTreeId:0,//分类树id
             selectTreetext:'',
             parentIds : 0,
             clickItems: [],   //点击操作的数据项
             pcaEditId:'',
             pcaId:'',
+            listPcaName:'',
+            pcaItem2:{},//被编辑对象
             changeObj:false,
             lastSearchOptions: {},
             controlType:'',
-             selRow : {},
+            selRow : {},
             searchOptions: {
                 parentIds: 0,
                 pcaSaleProp:1,
@@ -139,17 +146,17 @@ export default {
                     totalPage: 0,
                     totalSize: 0
                 }
-            }
+            },
+            isLastLevel: false, //是否显示[添加/编辑/删除]按钮
         }
     },
     filters: {
-       
         filterTime(time) {
             return client.formateTime(time);
         }
     },
     methods: {
-         addItem() {
+        addItem() {
             this.showAddDialog = true;
             this.pcaEditId='';
             this.pcaId='';
@@ -208,7 +215,8 @@ export default {
         },
         showControlFunc(itemobj, type) {
             this.controlType = type;
-             this.selRow = itemobj;
+            this.selRow = itemobj;
+            this.listPcaName = itemobj.pcaName;
             if (!itemobj) {
                 if (this.selectItems.length != 0) {
                     this.clickItems = this.selectItems;
@@ -216,26 +224,27 @@ export default {
                 }
             } else {
                 this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
-                if (type == 'edit') {
+                if (type == 'edit') { // 编辑操作
                     this.pcaEditId = this.selRow.pcaId;
-                    this.showAddDialog = true;
+                    this.showDialog = true; // 弹出编辑页面(attrOptionControl.vue)
+                    this.pcaItem2=itemobj;
                 }
-               else  if(type == 'editvalue'){
+                else  if(type == 'editvalue'){
                     this.pcaEditId = this.selRow.pcaId;
                   //  this.getOptions();
-                    this.showDialog = true; 
+                    this.showDialog = true; // 弹出编辑页面(attrOptionControl.vue)
                 }
                 else {
                     this.showControl = true;
                 }
             }
         },
-         ajaxControlDel(){
-                let url=PCA_DELETE+'?pcaId=' + this.selRow.pcaId;
-                client.postData(url).then(data =>{
-                    this.isLoading = false;     
-                    this.getList();
-                });  
+        ajaxControlDel(){
+            let url=PCA_DELETE+'?pcaId=' + this.selRow.pcaId;
+            client.postData(url).then(data =>{
+                this.isLoading = false;     
+                this.getList();
+            });  
         },
         hideControlFunc(type) {
             if (type == 'success') {
@@ -334,18 +343,24 @@ export default {
                     this.filterData(subitem);
                 })
             }
-            
         },
         // 选中一个项时触发
         selectItem(item) {
-            this.selectTreeId = item.id;
-            this.selectTreetext=item.text;
+            this.selectTreeId = item.id; // 选中的树id
+            this.selectTreetext = item.text; // 选中的树名称
             //console.log("id="+item.id+",value="+item.text);
-            this.parentIds = client.getParentIdList(this.treeList, item);
+            this.parentIds = client.getParentIdList(this.treeList, item); // 获取选中的所有父id
             this.getList(false, true);
+
+            // 通过判断children的length==0,则为最后一级,最后一级才显示添加/编辑/删除按钮
+            let childrenLength = item.children.length;
+            if(childrenLength == 0){// 最后一级
+                this.isLastLevel = true;// 显示按钮
+            }else{
+                this.isLastLevel = false;// 隐藏按钮
+            }
         },
        
-        
         handlerSearch(item) {
             item.isShow = true;
             if (this.searchKey.replace(/\s/g, '') != '') {
@@ -389,13 +404,14 @@ export default {
     },
 
     created() {
-        this.getTreeList(100);
+        this.getTreeList(100);// 获取树数据
     },
     ready() {
     }
     
 }
 </script>
+
 <style lang="less" scope>
 .page-container-bg-solid .page-bar, .page-content-white .page-bar {
    margin: 0 0 20px 0;

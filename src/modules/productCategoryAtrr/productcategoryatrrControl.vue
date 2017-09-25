@@ -79,6 +79,7 @@
 
     </div>
 </template>
+
 <script>
 import client from '../../common/utils/client';
 import tagTree from '../common/tagTree';
@@ -243,10 +244,10 @@ export default {
             }else{
                 data.pcaRequired=0
             }
-            if( data.pcaSaleProp){
-              data.pcaSaleProp=1
+            if(data.pcaSaleProp){
+                data.pcaSaleProp=1
             }else{
-              data.pcaSaleProp=0     
+                data.pcaSaleProp=0     
             }
             
           //添加选项
@@ -255,8 +256,7 @@ export default {
             if (this.pcaid!= '') {
                 //alert(this.pcaid);
                 url = PCA_EDIT+ '?pcaId=' + this.pcaid;
-                  data.pcaId = this.pcaid;
-                 
+                data.pcaId = this.pcaid;
             } 
             this.isLoading = true;
             data.pcraCatId=this.selectedid;
