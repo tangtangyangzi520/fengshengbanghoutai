@@ -1,5 +1,5 @@
 <template>
-    <!-- 销售属性编辑页面 -->
+    <!-- 销售属性-编辑页面(作废) -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :idp="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
             <div slot="content">
@@ -32,7 +32,7 @@
                                 </tr>
                             </thead>
                             <tbody id="attrOptionTbody">
-                                <tr v-for="itemobj in dataList">
+                                <tr v-for="itemobj in dataList" v-if="itemobj.pcaoUseFlag == 1">
                                     <!--<td><input type="hidden" v-model="itemobj.pcaoId"/></td>  @blur="save" @dblclick="edit($event)" -->
                                     <td>
                                         <!-- <span v-if="!editing" @dblclick="edit">{{itemobj.pcaoName}}</span> -->
@@ -46,6 +46,7 @@
                     </div>
                 </form>
             </div>
+            
             <!-- 操作按钮 -->
             <span slot="btnList">
                 <button type="button" class="btn blue" @click="submitInfo()" @blur="save">确定</button>
@@ -57,9 +58,13 @@
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
 
-        <!--删除属性值确认弹出框-->
-        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
+        <!-- 删除新添加的属性值确认弹出框 -->
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
             <div slot="content">确定删除吗？</div>
+        </m-alert>
+        <!-- 删除回显的属性值确认弹出框 -->
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showDelExistOption" :onsure="sureDelete" :onhide="hideMsg">
+            <div slot="content">删除此数据可能会影响商品销售属性的展示,确定删除吗？</div>
         </m-alert>
 
         <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
@@ -124,10 +129,13 @@ export default {
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
-            title: '添加/修改自定义属性',
+            title: '修改自定义属性',
             selectPicType: 1, //logo类型
             pcaoIdNum: 0,
             selRow: {},
+            deleteIndex: "",// 删除行索引
+            showDelExistOption: false,// 删除回显属性值弹框
+            ExistOptionId: "",// 所要删除的回显属性值id
         }
     },
     vuex: {
@@ -141,7 +149,7 @@ export default {
         //添加一行
         addOption() {
             //    console.log("pcaId is "+this.pcaid);
-            this.dataList.push({ "val": "" });
+            this.dataList.push({ "pcaId": "","pcaName": "","pcaUseFlag" : "1" });
             this.pcaoIdNum++;
         },
         //弹出删除确认
@@ -155,7 +163,6 @@ export default {
                 let index = this.dataList.findIndex(item => item.pcaoId == this.selRow.pcaoId);
                 this.dataList.splice(index, 1);
             } else {
-                // this.controlType = type;
                 this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
                 let url = PCAO_DELETE + '?pcaoId=' + this.selRow.pcaoId;
                 client.postData(url).then(data => {
@@ -171,9 +178,8 @@ export default {
                 this.isLoading = false;
                 if (response.code == 200) {
                     let list = response.data;
-                    // console.log(list);
+                    console.log(list);
                     this.dataList = list;
-                    // this.stateList = client.global.deployStatusSelect;
                 } else {
                     this.showMsg(response.msg);
                 }
@@ -192,7 +198,7 @@ export default {
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide("cancel");
-            }, 300)
+            }, 300);
         },
         showMsg(msg, title) {
             if (title) {
@@ -210,7 +216,7 @@ export default {
         },
         // 提交信息
         submitInfo() {
-            console.log(this.pcaName2);//属性名称
+    console.log(this.pcaName2);//属性名称
             let pcaList2,url;
             //属性名称唯一性校验
             pcaList2=Object.assign([],this.pcaList);
@@ -219,7 +225,7 @@ export default {
                     pcaList2.splice(index,1);
                 }
             }
-            console.log(pcaList2);
+    console.log(pcaList2);
             pcaList2.forEach(item => {
                 if (item.pcaName == this.pcaName2) {
                     this.showMsg('这个属性名已经存在，请输入新的属性名!');

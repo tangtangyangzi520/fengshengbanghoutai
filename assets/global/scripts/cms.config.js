@@ -327,23 +327,26 @@ var APP_SPU_GET_ONE =  APP_TEST + "/spu/getAppProductSpuById";  //根据spuID获
 
 //类目属性模块
 //=========================================新增加(chensenrong)====================================================//
-var PCA_INSERT      = OMS_TEST + "/pca/insertProductCategoryAtrr";          //添加分类属性及属性选项
+var PCA_INSERT      = OMS_TEST + "/pca/insertProductCategoryAtrr";          //添加通用属性及属性选项
 var PCA_QUERY_BYID  = OMS_TEST + "/pca/queryProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性及属性选项
-var PCA_UPDATE      = OMS_TEST + "/pca/updateProductCategoryAtrr";          //修改分类属性及属性选项
-var PCA_REMOVE      = OMS_TEST + "/pca/delete";                             //删除分类属性及属性选项
+var PCA_UPDATE      = OMS_TEST + "/pca/updateProductCategoryAtrr";          //修改通用属性及属性选项
+var PCA_REMOVE      = OMS_TEST + "/pca/removeProductCategoryAtrr";          //删除通用属性及属性选项
+var SALE_CREATE     = OMS_TEST + "/pca/createSaleSpuCategoryAtrr";          //添加销售属性及属性选项
+var SALE_UPDATE     = OMS_TEST + "/pca/editSaleSpuCategoryAtrr";            //修改销售属性及属性选项
+var SALE_DELETE     = OMS_TEST + "/pca/removeSaleSpuCategoryAtrr";          //删除销售属性及属性选项
 //===============================================================================================================//
 var PCA_CREATE      = OMS_TEST +"/pca/createProductCategoryAtrr";        //分类属性添加
 var PCA_GET_ID      = OMS_TEST +"/pca/getProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性
 var PCA_EDIT        = OMS_TEST +"/pca/editProductCategoryAtrr";          //分类属性修改
-var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds";             //根据分类ID获取SPU分类属性
+var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds";            //根据分类ID获取SPU分类属性
 var PCA_GET_BY_PCRACATIDS   = OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据分类ID获取SPU分类属性分页查询
 var PCA_DELETE      = OMS_TEST + "/pca/deleteProductCategoryAtrr";       //删除SPU分类属性
 var PCA_INPUTTYPES  = OMS_TEST +"/pca/getpcaInputTypes";                 //根据"parentCode"获取数据字典
-var SALEPCA_CREATE  =  OMS_TEST +"/pca/createSaleProductCategoryAtrr"; //销售属性添加
+var SALEPCA_CREATE  =  OMS_TEST +"/pca/createSaleProductCategoryAtrr";   //销售属性添加
 
-var PCAO_DELETE     = OMS_TEST +  "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
-var PCAO_CREATE     = OMS_TEST +  "/pcao/createPacoandpcaoName";           //添加属性选项
-var PCAO_GET_ID     = OMS_TEST +   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId"; //根据分类属性ID获取属性选项值
+var PCAO_DELETE     = OMS_TEST + "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
+var PCAO_CREATE     = OMS_TEST + "/pcao/createPacoandpcaoName";           //添加属性选项
+var PCAO_GET_ID     = OMS_TEST + "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId"; //根据分类属性ID获取属性选项值
 
 //营销模块
 var MKT_LIST   =  OMS_TEST+ "/mkt/list";                      //优惠券/活动条件查询

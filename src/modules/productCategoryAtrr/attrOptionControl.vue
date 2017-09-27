@@ -16,7 +16,7 @@
                                 </tr>
                             </thead>
                             <tbody id="attrOptionTbody">
-                                <tr v-for="(index, itemobj) in dataList">                                                                  
+                                <tr v-for="(index, itemobj) in dataList" v-if="itemobj.pcaoUseFlag == 1">                                                                  
                                     <td>
                                         <p style="padding-top:2px;">
                                             <input type="text" ref="input" :value="itemobj.pcaoName" v-model="itemobj.pcaoName"/>
@@ -42,9 +42,13 @@
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
 
-        <!--确定删除-->
-        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
+        <!-- 删除新添加的属性值确认弹出框 -->
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
             <div slot="content">确定删除吗？</div>
+        </m-alert>
+        <!-- 删除回显的属性值确认弹出框 -->
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showDelExistOption" :onsure="sureDelete" :onhide="hideMsg">
+            <div slot="content">删除此数据可能会影响商品销售属性的展示,确定删除吗？</div>
         </m-alert>
         
         <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
@@ -81,7 +85,7 @@ export default {
             type: String,
             value: 0 
         },
-        optlist: [] // 父页面传值
+        optlist: [], // 父页面传过来的属性值list
     },
     data() {
         return {
@@ -89,11 +93,15 @@ export default {
             showDialog: false,
             showPage: false,
             showControl: false,
-            dataList:[], // 属性值list
+            dataList:[{// 属性值list
+                    "pcaoId": "",
+                    "pcaoName": "",
+                    "pcaoUseFlag" : "1"
+            }], 
             clickItems: [],   // 点击操作的数据项
-            itemobj: {
-                "pcaoName": ""
-            },
+            // itemobj: {
+            //     "pcaoName": ""
+            // },
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
@@ -103,6 +111,8 @@ export default {
             pcaoIdNum : 0,// 属性值数量
             selRow : {},// 删除行数据
             deleteIndex: "",// 删除行索引
+            showDelExistOption: false,// 删除回显属性值弹框
+            ExistOptionId: "",// 所要删除的回显属性值id
         }
     },
     vuex: {
@@ -115,22 +125,46 @@ export default {
     methods: {
         // 添加一行
         addOption(){
-            this.dataList.push({"pcaoName" : ""});
-            
-            this.pcaoIdNum++;
-            // if(pcaoIdNum<=2 || pcaoIdNum>=50){
-            //       this.showMsg("属性值最少2个最多50个");
-            // }
+            // 首先判断属性值数量在2-50个之间
+            if(this.pcaoIdNum <= 2){
+                this.dataList.push({ "pcaoId": "","pcaoName": "","pcaoUseFlag" : "1" });// 添加一行
+                this.pcaoIdNum++; // 属性值数量+1
+            }else if(this.pcaoIdNum >= 50){
+                this.showMsg("属性值最少2个最多50个");
+            }else if(this.pcaoIdNum>2 && this.pcaoIdNum<50){
+                this.dataList.push({ "pcaoId": "","pcaoName": "","pcaoUseFlag" : "1" });// 添加一行
+                this.pcaoIdNum++; // 属性值数量+1
+            }else{
+                this.showMsg("属性值最少2个最多50个");
+            }
         },
         // 删除确认弹出框
         deleteOption(itemobj, index){
-            this.deleteIndex = index;// 删除行索引
-            this.selRow = itemobj;// 删除行数据
-            this.showControl = true;// 弹出删除确认
+            // 判断删除的是回显的数据还是新增的数据(通用选项pcaoId判别)
+            if(itemobj.pcaoId == ""){
+                // 删除的是新添加的数据
+                this.deleteIndex = index;// 删除行索引
+                this.selRow = itemobj;// 删除行数据
+                this.showControl = true;// 弹出删除确认
+            }else{
+                this.ExistOptionId = itemobj.pcaoId;
+                this.showDelExistOption = true;
+            }
         },
-        // 删除属性值
+        // 删除新添加属性值
         ajaxControlDel(){
             this.dataList.splice(this.deleteIndex, 1); //删除索引为deleteIndex的元素
+            this.pcaoIdNum--;// 属性值数量-1
+        },
+        // 删除回显属性值(隐藏,将pcaoUseFlag设置为0)
+        sureDelete(){ 
+            for (let item of this.dataList) {
+                if(item.pcaoId == this.ExistOptionId){
+                    item.pcaoUseFlag = 0;
+                    this.ExistOptionId = -1;// 清空数据
+                    this.pcaoIdNum--;// 属性值数量-1
+                }
+            }
         },
         // 隐藏选择资源弹窗
         cancelSelect() {
@@ -160,27 +194,25 @@ export default {
             this.showDeleteDialog = false;
             this.showAlert = false;
             this.showControl = false;
-        },
-        clearInfo() {
-            this.itemobj = {
-                "pcaoName": ""
-            }
+            this.showDelExistOption = false;
         },
         // 提交信息
         submitInfo() {
-            /**属性值是否存在较验 */
+            // 数据校验
             var isSubmit = true;
-            this.dataList.forEach(item => {
-                let pid = item.pcaoId;
-                let pname = item.pcaoName;
-                this.dataList.forEach(item2 => {
-                    if(pid != item2.pcaoId && pname == item2.pcaoName){
-                        this.showMsg('这个属性值已经存在，请输入新的属性值!');
-                        isSubmit = false;
+            if(this.dataList.length > 1){
+                for(let i=0; i<this.dataList.length; i++){
+                    if(this.dataList[i].pcaoUseFlag == 1){// 排除禁用的
+                        for(let j=i+1; j<this.dataList.length; j++){
+                            if(this.dataList[j].pcaoUseFlag == 1 && this.dataList[i].pcaoName == this.dataList[j].pcaoName){
+                                this.showMsg('这个属性值已经存在，请输入新的属性值!');
+                                return;
+                            }
+                        }
                     }
-                });
-            });
-            /**属性值长度较验 */
+                }
+            }
+
             var arr =[];
             this.dataList.forEach(item=> {
                 if((item.pcaoName.length-1)==-1){
@@ -188,15 +220,19 @@ export default {
                     isSubmit = false;
                 } 
                 if ((item.pcaoName.length)>10){
-                        this.showMsg('属性值不能超过10个字');
-                        isSubmit = false;
+                    this.showMsg('属性值不能超过10个字');
+                    isSubmit = false;
                 }
             });
-           
             if(!isSubmit) {
                 return;
-            }        
-            
+            }
+
+            if(this.pcaoIdNum < 2 || this.pcaoIdNum > 50){
+                this.showMsg('属性值最少2个最多50个!');
+                return;
+            }
+
             this.$emit("attroptionlist", this.dataList);// 向父组件传递属性值list
             this.showPage = false;
             this.showDialog = false;
@@ -208,6 +244,7 @@ export default {
     watch: {
         show() {
             this.dataList = Object.assign([], this.optlist);// 创建新的实例,回显属性值数据
+            this.pcaoIdNum = this.optlist.length;// 回显属性值数量
             this.showPage = this.show;
             this.showDialog = this.show;
         }

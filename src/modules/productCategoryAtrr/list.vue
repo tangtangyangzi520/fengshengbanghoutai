@@ -43,9 +43,11 @@
                     <tbody>
                         <tr v-for="itemobj in dataList" >
                             <td>
-                                <p style="padding-top:5px;">
+                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="{{itemobj.pcaName}}">
+                                <!-- <p style="padding-top:5px;"> -->
                                     <span>{{itemobj.pcaName}}</span>
-                                </p>
+                                <!-- </p> -->
+                                </div>
                             </td>
                             <td>
                                 <p style="padding-top:5px;">
@@ -63,15 +65,15 @@
                             </td>
                             <td>
                                 <p style="padding-top:5px;">
-                                    <span v-if="itemobj.pcaUseFlag==1">√</span>
+                                    <span v-if="itemobj.pcaIsShow==1">√</span>
                                 </p>
                             </td> 
                             <td>
-                                <!-- <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title=""> -->
-                                <p style="padding-top:5px;">
+                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="{{ itemobj.pcaoList | filterPcaoList }}">
+                                <!-- <p style="padding-top:5px;"> -->
                                     <span>{{ itemobj.pcaoList | filterPcaoList }}</span>
-                                </p>
-                                <!-- </div> -->
+                                <!-- </p> -->
+                                </div>
                             </td>
                             <td>
                                 <p style="padding-top:5px;">
@@ -106,17 +108,17 @@
         </div>
        
         <!-- 添加/编辑通用属性页面 -->       
-        <productatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :show="showAddDialog" :onhide="hideAddDialog"></productatrr-control>
+        <productatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :show="showAddDialog" :onhide="hideAddDialog" :pca-list="dataListTemp" :pca-name2="listPcaName"></productatrr-control>
         <!-- 编辑属性值弹出框 -->
         <!-- <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :show="showDialog" :onhide="hideAddDialog"></attr-option-control> -->
         
-        <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert> 
 
         <!-- 删除确认弹出框 -->
-        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
-            <div slot="content">确定删除吗？</div>
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
+            <div slot="content">删除此数据可能会影响商品属性的展示,确定删除吗？</div>
         </m-alert>
         
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
@@ -142,7 +144,7 @@ export default {
         onselect: Function,
         oncancel: Function
     },
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect,  loading, productatrrControl, treeview, itemList ,attrOptionControl},
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, loading, productatrrControl, treeview, itemList, attrOptionControl},
     data() {
         return {
             name: '',
@@ -151,7 +153,7 @@ export default {
             isShow:false,
             isLoading: false,
             treeList: [],
-            dataList: [],
+            dataList: [],// 列表list
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
@@ -163,7 +165,7 @@ export default {
             showAddDialog: false,
             showControl: false,
             showDialog:false,
-            selectTreeId:0,
+            selectTreeId:0, //类目id
             selectTreetext:'',
             parentIds : 0,
             parentTexts:'',
@@ -187,6 +189,8 @@ export default {
                 }
             },
             isShowAddBtn: false, // 是否显示添加按钮
+            listPcaName: "",// 属性名称,传递给子组件
+            dataListTemp: [],// 当前类目下的list, 传递给子组件
         }
     },
     filters: {
@@ -198,10 +202,12 @@ export default {
         filterPcaoList(pcaoList){
             let attrs = "";
             for(let i=0; i<pcaoList.length; i++){
-                if(i != pcaoList.length-1){
-                    attrs += pcaoList[i].pcaoName + "、";
-                }else{
-                    attrs += pcaoList[i].pcaoName;
+                if(pcaoList[i].pcaoUseFlag == 1){
+                    if(i != pcaoList.length-1){
+                        attrs += pcaoList[i].pcaoName + "、";
+                    }else{
+                        attrs += pcaoList[i].pcaoName;
+                    }
                 }
             }
             return attrs;
@@ -210,6 +216,16 @@ export default {
     methods: {
         // 添加按钮
         addItem() {
+            // 封装当前类目下的数据list,用于传递给子组件做属性名称去重判断
+            let arr = [];       
+            let tempList = Object.assign([], this.dataList);
+            for(let i=0; i<tempList.length; i++){                
+                if(tempList[i].pcraCatId == this.selectTreeId){
+                    arr.push(tempList[i]);
+                }
+            }
+            this.dataListTemp = arr;
+
             this.showAddDialog = true;
             this.pcaEditId='';
             this.pcaId='';
@@ -238,39 +254,11 @@ export default {
                 this.getList();
             }
         },
-            
-        //查看商品
-        // showProductFunc(){
-        //     location.href='/dist/#!/product';
-        // },
-        // selectOk() {
-        //     this.onselect(this.selectList);
-        // },
-        // 获取标签属性列表
-        // getTagType() {
-        //     this.isLoading = true;
-        //     client.postData(TAG_TYPE_GET, {}).then(data => {
-        //         this.isLoading = false;
-        //         if (data.code == 200) {
-        //             data.data.forEach(item => {
-        //                 item.id = item.typeId;
-        //                 item.name = item.typeName;
-        //             });
-        //             this.labelType = data.data;
-        //             this.labelTypeActive = data.data[1];
-        //             this.getTreeList(this.labelTypeActive.id);
-        //         } else {
-        //             this.showMsg(data.msg);
-        //         }
-        //     }, data => {
-        //         this.isLoading = false;
-        //     });
-        // },
-
         // 编辑/删除按钮弹框事件
         showControlFunc(itemobj, type) {
             this.controlType = type;
             this.selRow = itemobj;
+            this.listPcaName = itemobj.pcaName;
             if (!itemobj) {
                 if (this.selectItems.length != 0) {
                     this.clickItems = this.selectItems;
@@ -279,6 +267,16 @@ export default {
             } else {
                 this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
                 if (type == 'edit') {// 编辑操作
+                    // 封装当前类目下的数据list,用于传递给子组件做属性名称去重判断
+                    let arr = [];       
+                    let tempList = Object.assign([], this.dataList);
+                    for(let i=0; i<tempList.length; i++){                
+                        if(tempList[i].pcraCatId == itemobj.pcraCatId){
+                            arr.push(tempList[i]);
+                        }
+                    }
+                    this.dataListTemp = arr;
+
                     this.pcaEditId = this.selRow.pcaId;
                     this.showAddDialog = true;
                 }else if (type == 'delete') {// 删除操作
@@ -290,9 +288,15 @@ export default {
         ajaxControlDel(){
             let url = PCA_REMOVE + '?pcaId=' + this.selRow.pcaId;
             // 发送请求
-            client.postData(url).then(data => {
-                this.isLoading = false;     
-                this.getList();
+            client.postData(url).then(response => {
+                this.isLoading = false; 
+                if (response.code != 200) {
+                    //this.showMsg(response.msg);
+                    this.showMsg("操作失败!");
+                }else{
+                    this.showMsg(response.msg);
+                    this.getList();
+                }    
             });  
         },
         hideControlFunc(type) {
@@ -407,31 +411,6 @@ export default {
                 this.isShowAddBtn = false; // 隐藏添加按钮
             }
         },
-        // handlerSearch(item) {
-        //     item.isShow = true;
-        //     if (this.searchKey.replace(/\s/g, '') != '') {
-        //         if (item.text.indexOf(this.searchKey) == -1 && this.searchKey.replace(/\s/g, '') != '') {
-        //             item.isShow = false;
-        //         } else {
-        //             this.selectListSearch.push(item);
-        //         }
-        //     }
-        //     if (item.children.length != 0) {
-        //         item.children.forEach(subitem => {
-        //             this.handlerSearch(subitem);
-        //         })
-        //     }
-        // },
-        // selectLabelPropFunc(item) {
-        //     if (item == '') {
-        //         this.labelTypeActive = this.labelType[1];
-        //     } else {
-        //         this.labelTypeActive = item;
-        //     }
-        //     this.selectListSearch = [];
-        //     this.searchKey = '';
-        //     this.getTreeList(this.labelTypeActive.id);
-        // },
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;

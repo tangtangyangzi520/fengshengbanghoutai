@@ -1,5 +1,5 @@
 <template>
-    <!-- 销售属性列表页面 -->
+    <!-- 销售属性-列表页面 -->
     <div>
         <div class="page-bar min-bar">
             <page-title-bar>
@@ -8,7 +8,6 @@
             <div class="col-md-12 right">
                 <span v-if="selectItems.length>0" class="desc">已选
                     <em>{{selectItems.length}}</em> 项 </span>   
-               
                 <!-- <button class="btn green-meadow" @click="getList(false,true)" type="button">搜索</button> -->
             </div>
             <div style="height:5px;clear:both;"></div>
@@ -27,8 +26,8 @@
             </div>
             <!-- 销售属性列表 -->
             <div class="col-md-6" id="contentList" style="width:75%;">
-                <p><h3>属性列表</h3></p></br>
-                <p> <button class="btn green" type="button"  @click="addItem()" v-show="isLastLevel" style="margin-left:10px;">添加自定义属性</button></p>
+                <div><h3>属性列表</h3></div>
+                <div><button class="btn green" type="button"  @click="addItem()" v-show="isLastLevel">添加自定义属性</button></div>
                 </br>
                 <table class="table table-striped table-bordered table-hover" id="category-table">
                     <thead>
@@ -42,17 +41,31 @@
                     </thead>
                     <tbody>
                         <tr v-for="itemobj in dataList" >
-                            <td>{{itemobj.pcaName}}</td>
                             <td>
-                                <span v-for="p in itemobj.pcaoList">{{p.pcaoName}},</span>
+                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="{{itemobj.pcaName}}">
+                                    <!-- <p style="padding-top:5px;"> -->
+                                        {{itemobj.pcaName}}
+                                    <!-- </p> -->
+                                </div>
                             </td>
-                            <!-- <td>{{itemobj.pcraCatId}}</td> -->
-                            <td>{{selectTreetext}}</td> 
-                            <td>{{itemobj.pcaCreatedTime|filterTime}}</td>
                             <td>
-                                <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" v-show="isLastLevel">编辑</button>                            
-                                <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" v-show="isLastLevel">删除</button>
-                                <!-- <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'editvalue')">编辑属性值</button> -->
+                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="{{ itemobj.pcaoList | filterPcaoList }}">
+                                <!-- <p style="padding-top:5px;"> -->
+                                    <span>{{ itemobj.pcaoList | filterPcaoList }}</span>
+                                <!-- </p> -->
+                                </div>
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">{{ getNameByTreeId(treeList, itemobj.pcraCatId) }}</p>
+                            </td> 
+                            <td>
+                                <p style="padding-top:5px;">{{itemobj.pcaCreatedTime | filterTime}}</p>
+                            </td>
+                            <td>
+                                <p style="padding-top:5px;">
+                                    <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" v-show="isLastLevel">修改</button>                            
+                                    <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" v-show="isLastLevel">删除</button>
+                                </p>
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">
@@ -66,17 +79,17 @@
         </div>
        
         <!-- 添加销售属性页面 -->       
-        <saleproductatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :cat-id="selectTreeId" :show="showAddDialog" :onhide="hideAddDialog" :pca-list="dataList"></saleproductatrr-control>
+        <saleproductatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :cat-id="selectTreeId" :show="showAddDialog" :pca-name2="listPcaName" :onhide="hideAddDialog" :pca-list="dataList"></saleproductatrr-control>
         <!-- 编辑销售属性页面 -->
         <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :pca-item="pcaItem2" :show="showDialog" :onhide="hideAddDialog" :pca-name2="listPcaName" :pca-list="dataList"></attr-option-control>
 
         <!-- 提交确认弹出框 -->
-        <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert> 
         <!--删除确认弹出框-->
-        <m-alert :title="'删除内容'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
-            <div slot="content">确定删除吗？</div>
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showControl" :onsure="ajaxControlDel" :onhide="hideMsg">
+            <div slot="content">删除此数据可能会影响商品属性的展示,确定删除吗？</div>
         </m-alert>
 
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
@@ -102,7 +115,7 @@ export default {
         onselect: Function,
         oncancel: Function
     },
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect,  loading, saleproductatrrControl, treeview, itemList ,attrOptionControl},
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect, loading, saleproductatrrControl, treeview, itemList, attrOptionControl},
     data() {
         return {
             name: '',
@@ -111,7 +124,7 @@ export default {
             isShow:false,
             isLoading: false,
             treeList: [],
-            dataList: [],
+            dataList: [],// 列表list
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
@@ -129,7 +142,7 @@ export default {
             clickItems: [],   //点击操作的数据项
             pcaEditId:'',
             pcaId:'',
-            listPcaName:'',
+            listPcaName:'',// 属性名称,用来传递给子组件
             pcaItem2:{},//被编辑对象
             changeObj:false,
             lastSearchOptions: {},
@@ -153,13 +166,33 @@ export default {
     filters: {
         filterTime(time) {
             return client.formateTime(time);
+        },
+        // 格式化属性值
+        filterPcaoList(pcaoList){
+            let attrs = "";
+            for(let i=0; i<pcaoList.length; i++){
+                if(pcaoList[i].pcaoUseFlag == 1){
+                    if(i != pcaoList.length-1){
+                        attrs += pcaoList[i].pcaoName + "、";
+                    }else{
+                        attrs += pcaoList[i].pcaoName;
+                    }
+                }
+            }
+            return attrs;
         }
     },
     methods: {
+        // 弹出添加页面
         addItem() {
-            this.showAddDialog = true;
-            this.pcaEditId='';
-            this.pcaId='';
+            // 判断属性数量是否超过4个
+            if(this.dataList.length >=4){
+                this.showMsg('销售属性数量最多只能4个!');
+            }else{
+                this.showAddDialog = true;
+                this.pcaEditId='';
+                this.pcaId='';
+            }
         }, 
         hideAddDialog(control) {
             this.pcaEditId = '';
@@ -183,36 +216,7 @@ export default {
                 }, 200)
                 this.getList();
             }
-        },
-            
-        //查看商品
-        showProductFunc(){
-            location.href='/dist/#!/product';
-        },
-        selectOk() {
-            this.onselect(this.selectList);
-        },
-        
-        // 获取标签属性列表
-        getTagType() {
-            this.isLoading = true;
-            client.postData(TAG_TYPE_GET, {}).then(data => {
-                this.isLoading = false;
-                if (data.code == 200) {
-                    data.data.forEach(item => {
-                        item.id = item.typeId;
-                        item.name = item.typeName;
-                    })
-                    this.labelType = data.data;
-                    this.labelTypeActive = data.data[1];
-                    this.getTreeList(this.labelTypeActive.id);
-                } else {
-                    this.showMsg(data.msg);
-                }
-            }, data => {
-                this.isLoading = false;
-            })
-        },
+        }, 
         showControlFunc(itemobj, type) {
             this.controlType = type;
             this.selRow = itemobj;
@@ -226,36 +230,23 @@ export default {
                 this.clickItems = typeof this.selRow == 'array' ? this.selRow : [this.selRow];
                 if (type == 'edit') { // 编辑操作
                     this.pcaEditId = this.selRow.pcaId;
-                    this.showDialog = true; // 弹出编辑页面(attrOptionControl.vue)
+                    //this.showDialog = true; // 弹出编辑页面(attrOptionControl.vue)
+                    this.showAddDialog = true;
                     this.pcaItem2=itemobj;
-                }
-                else  if(type == 'editvalue'){
-                    this.pcaEditId = this.selRow.pcaId;
-                  //  this.getOptions();
-                    this.showDialog = true; // 弹出编辑页面(attrOptionControl.vue)
-                }
-                else {
+                }else if (type == 'delete') {
                     this.showControl = true;
                 }
             }
         },
+        // 删除操作
         ajaxControlDel(){
-            let url=PCA_DELETE+'?pcaId=' + this.selRow.pcaId;
+            let url = SALE_DELETE + '?pcaId=' + this.selRow.pcaId;
             client.postData(url).then(data =>{
                 this.isLoading = false;     
                 this.getList();
             });  
         },
-        hideControlFunc(type) {
-            if (type == 'success') {
-                this.getList();
-            }
-            this.showControl = false;
-        },
-        // 搜索条件变化
-        changeSearchOptions(options) {
-            this.searchOptions = options;
-        },
+        // 查询列表数据
         getList(page, firstSearch){
             let options;
              if (!firstSearch) {
@@ -266,7 +257,6 @@ export default {
                 this.searchOptions.pcaSaleProp =1;
                 this.searchOptions.pcaAtrrType =2;
                 options = Object.assign({}, this.searchOptions);
-               // console.log(options);
             }
             if (page) {
                 options.page = page;
@@ -281,9 +271,9 @@ export default {
                 if (data.code == 200) {
                     data.data.forEach(item => {
                         item.checked = false;
-                    })
+                    });
                     this.dataList = data.data;
-                   this.page = data.page;
+                    this.page = data.page;
                 } else {
                     this.showMsg(data.msg);
                 }
@@ -292,7 +282,6 @@ export default {
             })
         },
         getCount(options) {
-           // options.componentType = [16];
             client.postData(PCA_GET_BY_PCRACATIDS, options).then(data => {
                 if (data.code == 200) {
                     this.countDesc = data.data;
@@ -300,7 +289,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-            })
+            });
         },
         //拿到树形数据
         getTreeList(typeId) {
@@ -310,7 +299,7 @@ export default {
                 if (data.code == 200) {
                     data.data.root.children.forEach(item => {
                         this.filterData(item);
-                    })
+                    });
                     data.data.root.isOpen = true;
                     data.data.root.isSelected = false;
                     data.data.root.isShow = true;
@@ -335,57 +324,36 @@ export default {
                 this.selectListSet = new Set();
                 this.selectList.forEach(o => {
                     this.selectListSet.add(o);
-                })
+                });
             }
             item.isShow = true;
             if (item.children.length != 0) {
                 item.children.forEach(subitem => {
                     this.filterData(subitem);
-                })
+                });
             }
         },
         // 选中一个项时触发
         selectItem(item) {
-            this.selectTreeId = item.id; // 选中的树id
-            this.selectTreetext = item.text; // 选中的树名称
-            //console.log("id="+item.id+",value="+item.text);
-            this.parentIds = client.getParentIdList(this.treeList, item); // 获取选中的所有父id
-            this.getList(false, true);
-
-            // 通过判断children的length==0,则为最后一级,最后一级才显示添加/编辑/删除按钮
-            let childrenLength = item.children.length;
-            if(childrenLength == 0){// 最后一级
-                this.isLastLevel = true;// 显示按钮
+            // root节点[丰盛]不做操作 
+            if(item.id != 0){
+                this.selectTreeId = item.id;// 选中的树id
+                this.selectTreetext = item.text;// 选中的树名称
+                //console.log("id="+item.id+",value="+item.text);
+                this.parentIds = client.getParentIdList(this.treeList, item);// 获取选中的所有父id
+                this.getList(false, true);
+    
+                // 通过判断children的length==0,则为最后一级,最后一级才显示添加/编辑/删除按钮
+                let childrenLength = item.children.length;
+                if(childrenLength == 0){// 最后一级
+                    this.isLastLevel = true;// 显示按钮
+                }else{
+                    this.isLastLevel = false;// 隐藏按钮
+                }
             }else{
+                this.dataList = [];// 清空列表数据
                 this.isLastLevel = false;// 隐藏按钮
             }
-        },
-       
-        handlerSearch(item) {
-            item.isShow = true;
-            if (this.searchKey.replace(/\s/g, '') != '') {
-                if (item.text.indexOf(this.searchKey) == -1 && this.searchKey.replace(/\s/g, '') != '') {
-                    item.isShow = false;
-                } else {
-                    this.selectListSearch.push(item);
-                    //console.log(item);
-                }
-            }
-            if (item.children.length != 0) {
-                item.children.forEach(subitem => {
-                    this.handlerSearch(subitem);
-                })
-            }
-        },
-        selectLabelPropFunc(item) {
-            if (item == '') {
-                this.labelTypeActive = this.labelType[1];
-            } else {
-                this.labelTypeActive = item;
-            }
-            this.selectListSearch = [];
-            this.searchKey = '';
-            this.getTreeList(this.labelTypeActive.id);
         },
         showMsg(msg, title) {
             if (title) {
@@ -400,9 +368,32 @@ export default {
             this.showDeleteDialog = false;
             this.showAlert = false;
             this.showControl = false;
+        },
+        //根据树节点id获取所在元素父级名称
+        getNameByTreeId(treeList, treeId){
+            if(treeList.id == treeId){
+                return treeList.text;
+            } else {
+                return this.deepLoop(treeList.children, treeId);// 调用递归方法
+            }
+        },
+        // 递归方法
+        deepLoop(treeItem, treeId){
+            var text = "";
+            treeItem.forEach(item => {
+                if(text == ""){ // 解决ES6 forEach没办法结束循环问题
+                    if((item.id+"") == (treeId+"")){
+                        text = item.text;
+                        return false;
+                    } else {
+                        text = this.deepLoop(item.children, treeId);
+                        return false;
+                    }
+                }
+            });
+            return text;
         }
     },
-
     created() {
         this.getTreeList(100);// 获取树数据
     },
