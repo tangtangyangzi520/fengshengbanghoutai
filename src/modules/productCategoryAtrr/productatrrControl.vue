@@ -5,52 +5,46 @@
             <div slot="content">
                 <div class="row nopadding">
                     <form class="form-horizontal" name="addForm" role="form">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="title" class="col-sm-3 control-label">
-                                    <span class="required">* </span>属性名称：
-                                </label>
-                                <div class="controls col-md-8">
-                                    <input type="hidden" class="form-control input-sm" v-model="data.pcraCatId">
-                                    <input type="text" class="form-control input-sm" v-model="data.pcaName" placeholder="请输入属性名称,限30个字符以内">
-                                </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">
+                                <span class="required">* </span>属性名称：
+                            </label>
+                            <div class="controls col-md-4">
+                                <input type="hidden" class="form-control input-sm" v-model="data.pcraCatId">
+                                <input type="text" class="form-control input-sm" style="margin-top:0px;" v-model="data.pcaName" placeholder="请输入属性名称,限30个字符以内">
                             </div>
                             <div class="col-md-6">
                                 <label for="title" class="col-sm-3 control-label">是否必填：</label>
-                                <div class="controls col-md-3" style="padding-top:6px;">
+                                <div class="controls col-md-3" style="padding-top:4px;">
                                     <input type="checkbox" v-model="data.pcaRequired" />
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="title" class="col-sm-4 control-label">是否默认展示：</label>
-                                <div class="controls col-md-3" style="padding-top:6px;">
-                                    <input type="checkbox" v-model="data.pcaIsShow" />
-                                </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">是否默认展示：</label>
+                            <div class="controls col-md-4" style="padding-top:4px;">
+                                <input type="checkbox" v-model="data.pcaIsShow" />
                             </div>
                             <div class="col-md-6">
                                 <label for="title" class="col-sm-3 control-label">备注：</label>
                                 <div class="controls col-md-8">
-                                    <input type="text" class="form-control input-sm" v-model="data.pcaMemo" placeholder="请输入备注">
+                                    <input type="text" class="form-control input-sm" style="margin-top:0px;" v-model="data.pcaMemo" placeholder="请输入备注">
                                 </div>
                             </div>
 						</div>
-                        <div class="row" >
-                            <div class="col-md-6">
-                                <label class="col-sm-3 control-label">
-                                    <span class="required">*</span>属性类型：
-                                </label>
-                                <div class="col-md-3" style="padding-top:6px;">
-                                    <select v-model="data.pcaInputType" class="type">
-                                        <option value="-1">请选择</option>
-                                        <option v-for="item in inputtypesList" :value="item.key">{{item.keyValue}}</option>
-                                    </select>
-                                </div> 
-                                <div class="col-md-4" style="padding-top:6px;">
-                                    <!-- 编辑属性值链接 -->
-                                    <a v-show="isShowEditAttrLink" @click.stop="showEditAttrDialog">编辑属性值</a>
-                                </div>
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">
+                                <span class="required">*</span>属性类型：
+                            </label>
+                            <div class="col-md-3">
+                                <select v-model="data.pcaInputType" class="form-control input-sm" style="margin-top:0px;">
+                                    <option value="-1">请选择</option>
+                                    <option v-for="item in inputtypesList" :value="item.key">{{item.keyValue}}</option>
+                                </select>
+                            </div> 
+                            <div class="col-md-4" style="padding-top:7px;">
+                                <!-- 编辑属性值链接 -->
+                                <a v-show="isShowEditAttrLink" @click.stop="showEditAttrDialog">编辑属性值</a>
                             </div>
                         </div>     
                     </form> 
