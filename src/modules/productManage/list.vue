@@ -74,7 +74,13 @@
                             </td>
                             <td style="width:13%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
                                    font-style: normal;">{{"￥"+item.minSalePrice+"  ~ ￥"+item.maxSalePrice}}</td>
-                            <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}
+                            <td style="text-align:center;vertical-align:middle;">
+                                 <span v-if="item.totalStockNum > 0">    
+                                {{item.totalStockNum}}
+                                </span>
+                                <span v-else>
+                                    库存不足
+                                </span>
                                 <p style="padding-top:5px;">
                                     <span class="label label-default" v-if="item.spuShelvesStatus!=1">下架</span>
                                     <span class="label label-success" v-else>上架</span>
@@ -83,12 +89,7 @@
 
                             <td style="text-align:center;vertical-align:middle;">
                                 <a  style="text-decoration:none;" title="订单列表"  @click.stop="order(item.spuId,item.spuName)"> 
-                                <span v-if="item.totalSaleNum > 0">    
-                                {{item.totalSaleNum}}
-                                </span>
-                                <span v-else>
-                                    库存不足
-                                </span>
+                                   {{item.totalSaleNum}}
                                 </a>
                                
                                  <!--  商品状态 -->
@@ -359,8 +360,8 @@ export default {
             this.isLoading = true;
             this.dataList = [];
             this.lastSearchOptions = options;
-            this.spuName =  JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,}) +""
-            $("input[name='request']").val(JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,}) +"")
+            this.spuName =  JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,}) +""
+            $("input[name='request']").val(JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,}) +"")
             var url= SPU_EXPORT // 
             $("#exportForm").attr("action",url);  
             $("#exportForm").submit();  

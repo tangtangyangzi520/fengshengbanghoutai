@@ -125,7 +125,7 @@ export default {
     methods: {
         //添加品牌
         addBanner() {
-            this.wordEditId = '';
+            this.wordEditId = '0';
             this.showAddDialog = true;
         },
         hideAddDialog(control) {

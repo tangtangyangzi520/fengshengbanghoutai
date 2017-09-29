@@ -40,7 +40,7 @@
                                     {{itemDetail.ordOriginal*itemDetail.ordSkuNum}}
                                 </td>
                                 <td align="center" style="width:12%;">
-                                    -{{itemDetail.ordShareAmount}}
+                                    -{{getCampaignAmount(itemDetail)}}
                                 </td>
                                 <td align="center" style="width:12%;">
                                     <input type="text" class="form-control" v-model="itemDetail.ordChangePrice" @blur="checkChangePrice(itemDetail)">
@@ -58,7 +58,7 @@
                         <div>
                             &nbsp;&nbsp;&nbsp;&nbsp;买家实付： {{calculateActAmount()}}{{actAmount()}}
                             <div>
-                                &nbsp;&nbsp;&nbsp;&nbsp;买家实付 = 原价 + 总优惠金额 + 运费 + 总涨价或减价(涨价或减价：如果为减价，则需输入负值；如果为涨价,则需输入正值。)
+                                &nbsp;&nbsp;&nbsp;&nbsp;买家实付 = 原价 - 总优惠金额 + 运费 + 总涨价或减价(涨价或减价：如果为减价，则需输入负值；如果为涨价,则需输入正值。)
                             </div>
                         </div>
                     </div>
@@ -173,13 +173,14 @@ export default {
         },
         //计算实付款
         actAmount() {
-            let changePriceSum = 0, price = 0;
+            let changePriceSum = 0, price = 0,totalCampaignAmount=0;
             this.editPaymentData.orderDetailList.forEach(item => {
                 price = item.ordChangePrice == '' ? 0 : item.ordChangePrice;
                 changePriceSum = Number(changePriceSum) + Number(price);
                 this.editPaymentData.ordActAmount = Number(this.editPaymentData.ordActAmount) + Number(price);
+                totalCampaignAmount=Number(totalCampaignAmount)+Number(this.getCampaignAmount(item));
             });
-            return Number(this.editPaymentData.ordAmount) - Number(this.editPaymentData.ordCampaignShareAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
+            return Number(this.editPaymentData.ordAmount) - Number(totalCampaignAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
         },
         //获取改价字符串
         getChangePriceString() {
@@ -191,10 +192,25 @@ export default {
             });
             return string;
         },
+        //获取总优惠
+        getTotalCampaignAmount() {
+            let string = '', list = [], price = 0;
+            this.editPaymentData.orderDetailList.forEach(item => {
+                price = this.getCampaignAmount(item);
+                price = price == "" ? 0 : price;
+                list.push(price);
+                string = list.join("+");
+            });
+            return string;
+        },
+        //计算商品优惠金额
+        getCampaignAmount(item) {
+            return Number(item.ordShareAmount) + Number(item.ordCampaignAmount) + Number(item.ordDiscount);
+        },
         //计算买家实付算式
         calculateActAmount(num) {
-            let amount = '', changePriceString = this.getChangePriceString();
-            amount = this.editPaymentData.ordAmount + "-" + this.editPaymentData.ordCampaignShareAmount + "+" + (this.editPaymentData.ordTransportAmount == '' ? 0 : this.editPaymentData.ordTransportAmount) +
+            let amount = '', changePriceString = this.getChangePriceString(), ordCampaignShareAmount = this.getTotalCampaignAmount();
+            amount = this.editPaymentData.ordAmount + "-(" + this.getTotalCampaignAmount() + ")+" + (this.editPaymentData.ordTransportAmount == '' ? 0 : this.editPaymentData.ordTransportAmount) +
                 "+(" + changePriceString + ")=";
             return amount;
         },

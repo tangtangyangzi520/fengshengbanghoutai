@@ -334,20 +334,20 @@ var PCA_REMOVE      = OMS_TEST + "/pca/removeProductCategoryAtrr";          //�
 var SALE_CREATE     = OMS_TEST + "/pca/createSaleSpuCategoryAtrr";          //添加销售属性及属性选项
 var SALE_UPDATE     = OMS_TEST + "/pca/editSaleSpuCategoryAtrr";            //修改销售属性及属性选项
 var SALE_DELETE     = OMS_TEST + "/pca/removeSaleSpuCategoryAtrr";          //删除销售属性及属性选项
-var GET_ATRR_LIST   = OMS_TEST + "/pca/getAtrrListByPcraCatId";             //根据分类ID获取属性数据(无分页)
+var GET_ATRR_LIST   = OMS_TEST + "/pca/getAtrrListByPcraCatId";            //根据分类ID获取属性数据(无分页)
 //===============================================================================================================//
 var PCA_CREATE      = OMS_TEST +"/pca/createProductCategoryAtrr";        //分类属性添加
 var PCA_GET_ID      = OMS_TEST +"/pca/getProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性
 var PCA_EDIT        = OMS_TEST +"/pca/editProductCategoryAtrr";          //分类属性修改
-var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds";            //根据分类ID获取SPU分类属性
+var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds";             //根据分类ID获取SPU分类属性
 var PCA_GET_BY_PCRACATIDS   = OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据分类ID获取SPU分类属性分页查询
 var PCA_DELETE      = OMS_TEST + "/pca/deleteProductCategoryAtrr";       //删除SPU分类属性
 var PCA_INPUTTYPES  = OMS_TEST +"/pca/getpcaInputTypes";                 //根据"parentCode"获取数据字典
-var SALEPCA_CREATE  =  OMS_TEST +"/pca/createSaleProductCategoryAtrr";   //销售属性添加
+var SALEPCA_CREATE  =  OMS_TEST +"/pca/createSaleProductCategoryAtrr"; //销售属性添加
 
-var PCAO_DELETE     = OMS_TEST + "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
-var PCAO_CREATE     = OMS_TEST + "/pcao/createPacoandpcaoName";           //添加属性选项
-var PCAO_GET_ID     = OMS_TEST + "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId"; //根据分类属性ID获取属性选项值
+var PCAO_DELETE     = OMS_TEST +  "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
+var PCAO_CREATE     = OMS_TEST +  "/pcao/createPacoandpcaoName";           //添加属性选项
+var PCAO_GET_ID     = OMS_TEST +   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId"; //根据分类属性ID获取属性选项值
 
 //营销模块
 var MKT_LIST   =  OMS_TEST+ "/mkt/list";                      //优惠券/活动条件查询
@@ -364,7 +364,8 @@ var PCT_LIST   =  OMS_TEST+ "/pc/list";                               //运费�
 var PCT_PCLIST =  OMS_TEST+ "/pc/pcList";                               //运费模板列表(只有pc)
 
 //地区模块
-var AREA_GET_LIST = OMS_TEST + "/area/provinceList"; //获取所有的省份
+var AREA_GET_LIST = OMS_TEST + "/area/list"; //获取所有的省份
 
-
-
+//系统配置管理
+var SYSTEM_SETTING_LIST = OMS_TEST + "/systemSetting/list"; //获取所有系统配置参数
+var SYSTEM_SETTING_EDIT = OMS_TEST + "/systemSetting/edit"; //编辑所有系统配置参数

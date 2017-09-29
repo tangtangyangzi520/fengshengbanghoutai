@@ -11,9 +11,9 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3">收货人名称:</label>
+                <label class="col-md-3">买家昵称:</label>
                 <div class="col-md-9">
-                    <input type="text" class="form-control" v-model="searchOptions.ordReceiveName">
+                    <input type="text" class="form-control" v-model="searchOptions.orsMemberNickname">
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <button class="btn red" type="button" @click="clearOptions()">清空查询条件</button>
+                <button class="btn blue" type="button" @click="clearOptions()">清空查询条件</button>
             </div>
         </div>
     </form>
@@ -92,7 +92,8 @@ export default {
         oncreate: {
             type: Function,
             default: () => { }
-        }
+        },
+
     },
     vuex: {
         getters: {
@@ -110,12 +111,12 @@ export default {
                 { id: -1, name: '全部' }, { id: 1, name: '快递发货' }, { id: 2, name: '上门自提' }
             ],
             orderTypeList: [
-                { id: -1, name: '全部' }, { id: 0, name: '普通订单' }, { id: 1, name: '跨境订单' }
+                { id: -1, name: '全部' }, { id: 1, name: '普通订单' }, { id: 0, name: '跨境订单' }
             ],
             lastSearchOptions: {},
             searchOptions: {
                 ordOrderNo: '',
-                ordReceiveName: '',
+                orsMemberNickname: '',
                 ordReceiveMobile: '',
                 ordStatus: -1,
                 ordLogiType: -1,
@@ -138,14 +139,14 @@ export default {
         //校验查询金额
         checkAmount(data){
             if(!/^[0-9]*$/.test(data) || data < 0){
-                this.$parent.showMsg("请输入不小于0的数字");
+                this.$parent.showMsg("请输入不小于0的整数");
             }
         },
         //清空查询条件
         clearOptions() {
             this.searchOptions = {
                 ordOrderNo: '',
-                ordReceiveName: '',
+                orsMemberNickname: '',
                 ordReceiveMobile: '',
                 ordStatus: -1,
                 ordLogiType: -1,
@@ -229,8 +230,8 @@ export default {
         ordOrderNo(val) {
             this.searchOptions.ordOrderNo = val;
         },
-        ordReceiveName(val) {
-            this.searchOptions.ordReceiveName = val;
+        orsMemberNickname(val) {
+            this.searchOptions.orsMemberNickname = val;
         },
         ordReceiveMobile(val) {
             this.searchOptions.ordReceiveMobile = val;

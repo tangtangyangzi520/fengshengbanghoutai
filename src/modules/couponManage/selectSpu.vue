@@ -41,8 +41,8 @@
                                 <tr>
                                     <th style="width:20%">
                                        
-                                        <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(this.unSelectedList)">全选</button>
-                                        <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(this.unSelectedList)">反选</button>
+                                       <!--  <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(this.unSelectedList)">全选</button>
+                                        <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(this.unSelectedList)">反选</button> -->
                                     </th>
                                     <th style="width:60%;">商品信息</th>
                                     <th style="width:20%;">库存</th>
@@ -85,19 +85,19 @@
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th style="width:10%">
+                                   <!--  <th style="width:10%">
                                         <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(this.selectedList)">全选</button>
                                         <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(this.selectedList)">反选</button>
-                                    </th>
+                                    </th> -->
                                     <th style="width:80%;">商品信息</th>
                                     <th style="width:10%;">库存</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="item in selectedList" @click="selectOne(item)">
-                                    <td style="text-align:center;vertical-align:middle;">
+                                    <!-- <td style="text-align:center;vertical-align:middle;">
                                         <input type="checkbox" :checked="item.checked"></input>
-                                    </td>
+                                    </td> -->
                                     <td class="tdTitle">
                                         <p>
                                             <a target="_blank" :href="item.imgUrl" title="查看大图">
@@ -108,7 +108,7 @@
                                             <h4 class="tt"><p style="color:#6699CC">商品编码:{{item.spuCode}}</p>{{item.spuName}}</h4>
                                         </a>
                                     </td>
-                                    <td>{{item.pbdName}}</td>
+                                    <td>{{item.totalStockNum}}</td>
                                 </tr>
                                 <tr v-if="selectedList.length==0">
                                     <td colspan="9" class="center">暂无数据</td>
@@ -138,8 +138,8 @@
 <script>
 import client from '../../common/utils/client';
 import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList,paging } from '../../components';
-import loading from './loading';
-import treeview from './tagTreeItem';
+import loading from '../common/loading';
+import treeview from '../common/tagTreeItem';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
 export default {
     components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading,treeview,paging },
@@ -227,19 +227,29 @@ export default {
         //将一个list中选中的数据转移到另一个list中
         moveData(sourceList,targetList){
             let index;
-        if( sourceList.length > 0 ){
-            for (index = sourceList.length-1; index >=0; index--){
-                if(sourceList[index].checked==true){
+            if( sourceList.length > 0 ){
+                for (index = sourceList.length-1; index >=0; index--){
+                  if(sourceList[index].checked==true){
                     targetList.push(sourceList[index]);
                     sourceList.splice(index,1);
-                    }
+                   }
                 }
             }
         },
         selectSpu(){
+            if(this.selectedList.length > 0){
+                this.selectedList[0].checked=false
+                this.unSelectedList.push(this.selectedList[0])
+            }
+            this.selectedList = []
             this.moveData(this.unSelectedList,this.selectedList);
         },
         unSelectSpu(){
+            if(this.selectedList.length > 0){
+                this.selectedList[0].checked=false
+                this.unSelectedList.push(this.selectedList[0])
+            }
+            this.selectedList = []
             this.moveData(this.selectedList,this.unSelectedList);
         },
          //拿到树形数据
@@ -302,6 +312,13 @@ export default {
         },
         selectOne(item){//单选
             item.checked = !item.checked;
+            if(item.checked){
+                this.unSelectedList.forEach(data=>{
+                    if(item.spuId != data.spuId){
+                         data.checked = false 
+                    }    
+                })
+            }
         },
         //获取未选商品数据
         getUnSelectedList(page, firstSearch){

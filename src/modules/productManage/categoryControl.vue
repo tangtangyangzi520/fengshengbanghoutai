@@ -5,32 +5,59 @@
    
         <div class="form-group">        
             <div class="" style="margin-left:30%">
-                  类目搜索： <input type="text" class="input input-sm" v-model="data.title" placeholder="请输入关键字">
-                    <button class="btn green-meadow" @click="getLEIMUList" type="button">搜索</button>
+                  类目搜索： <input type="text" class="input input-sm" v-model="keyWord" placeholder="请输入关键字" maxlength="15" />
+                    <button class="btn green-meadow" @click="search()" type="button">搜索</button>
             </div>
         </div>
+        <div id="search" @mouseout="resulthide($event)">
+           <span  style="color:#A9A9A9;margin-left:6.3%;margin-top:5%;display:block">匹配到{{searchResult.length}}个类目</span>
+           <div id="inside">
+            <ul>
+               <li v-for="(index,item) in searchResult">
+                  <a  @click="selected(index)" v-if="item.length == 3">
+                    <span class="result">{{item[0].text}}&nbsp;&gt;&gt;&nbsp;{{item[1].text}}&nbsp;&gt;&gt;&nbsp;
+                    {{item[2].text.substring(0,item[2].text.indexOf(keyWord))}}
+                    <span style="margin:-4px;padding:-4px;color:#00CC00">{{keyWord}}</span> 
+                    {{ item[2].text.substring((item[2].text.indexOf(keyWord)+keyWord.length),
+                    (item[2].text.length)) }}</span></a>
+
+                  <a  @click="selected(index)" v-if="item.length == 2">
+                    <span class="result">{{item[0].text}}&nbsp;&gt;&gt;&nbsp;
+                    {{item[1].text.substring(0,item[1].text.indexOf(keyWord))}}
+                    <span style="margin:-4px;padding:-4px;color:#00CC00">{{keyWord}}</span> 
+                    {{ item[1].text.substring((item[1].text.indexOf(keyWord)+keyWord.length),
+                    (item[1].text.length)) }}</span>
+                  </a>
+                  <a  @click="selected(index)" v-if="item.length == 1">
+                    <span class="result">{{item[0].text.substring(0,item[0].text.indexOf(keyWord))}}
+                    <span style="margin-left:-1px;margin-right:-2px;color:#00CC00">{{keyWord}}</span> 
+                    {{ item[0].text.substring((item[0].text.indexOf(keyWord)+keyWord.length),
+                    (item[0].text.length)) }}</span></a>
+              </li> 
+           </ul>
+         </div>
+       </div>
        <input type="text" style="margin-left: 10%;" class="input"  placeholder="">
        <input type="text" class="input"  placeholder="">
        <input type="text" class="input"  placeholder="">
-       <div class="box" style="margin-left: 10%;">
-           <ul>
-               <li v-for="item in firstList"><a @click="secondbuild(item,$event)">{{item.text}}</a><span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:15%"> > </span> </li> 
+       <div id="firstsearch" class="boxex box" style="margin-left: 10%;">
+           <ul >
+               <li v-for="item in firstList"><a class="result" @click="secondbuild(item,$event)">{{item.text}}</a><span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:15%"> > </span> </li> 
            </ul>
        </div>  
-       <div class="box">
-           <ul>
-               <li v-for="item in secondList"><a @click="thirdbuild(item,$event)">{{item.text}}</a><span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:15%"> > </span> </li> 
+       <div class="boxex box" id="secondsearch">
+           <ul >
+               <li v-for="item in secondList"><a class="result" @click="thirdbuild(item,$event)">{{item.text}}</a><span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:15%"> > </span> </li> 
            </ul>
        </div>  
-       <div class="box">
-           <ul>
-               <li v-for="item in thirdList"><a :id="item.id" @click="thirdSelect(item,$event)">{{item.text}}</a><span v-for="i in 4">&nbsp;</span> <span style="float:right;margin-right:6%"> > </span> </li> 
+       <div class="boxex box">
+           <ul >
+               <li v-for="item in thirdList"><a class="result" :id="item.id" @click="thirdSelect(item,$event)">{{item.text}}</a><span v-for="i in 4">&nbsp;</span> <span style="float:right;margin-right:6%"> > </span> </li> 
            </ul>
        </div> <br><br>  
        <div style="text-align:center">           
-       <button class="btn blue"  @click="addItem()" type="button">下一步</button>
-       <div>
-       </div>
+       <button class="btn blue"  @click="addItem()" type="button">下一步</button><br>
+       <div style="position:absolute;top:95%;left:25%;opacity:0.8">请谨慎选择类目信息，商品一旦发布，类目信息不可修改！</div>
       </div>
       </div>
       </m-alert>
@@ -64,6 +91,8 @@ export default {
     },
     data() {
         return {
+            keyWord:"",
+            searchResult:[],
             flag: false,
             sele:[],
             selectArray:[],
@@ -96,6 +125,107 @@ export default {
         }
     },
     methods: {
+        getEvent(e) {  
+             return e || window.event;  
+        },  
+        checkHover(e, target) {  
+            if (this.getEvent(e).type == "mouseover") {  
+                return !this.contains(target, this.getEvent(e).relatedTarget  
+                        || this.getEvent(e).fromElement)  
+                        && !((this.getEvent(e).relatedTarget || this.getEvent(e).fromElement) === target);  
+            } else {  
+                return !this.contains(target, this.getEvent(e).relatedTarget  
+                        || this.getEvent(e).toElement)  
+                        && !((this.getEvent(e).relatedTarget || this.getEvent(e).toElement) === target);  
+            }  
+        },  
+        contains(parentNode, childNode) {  
+            if (parentNode.contains) {  
+                return parentNode != childNode && parentNode.contains(childNode);  
+            } else {  
+                return !!(parentNode.compareDocumentPosition(childNode) & 16);  
+            }  
+         },  
+         resulthide(e){
+            if(this.checkHover(e,$("#search")[0] )){  
+               $("#search").hide()
+            }  
+         },
+         selected(index){
+            if(this.searchResult[index].length == 3){
+                  this.sele = []
+                  this.searchResult[index].forEach((item,index)=>{
+                    this.sele.$set(index,item.text);
+                    this.sele.$set(index+3,item.id);
+                 })
+                 this.addItem()
+            }else if(this.searchResult[index].length == 1 ){
+                 let text = this.searchResult[index][0].text
+                 let container = $("#firstsearch") , scrollTo =  $("#firstsearch a[class='result']:contains('"+text+"')")
+                 scrollTo[0].click()
+                  setTimeout(()=>{
+                    container.animate({
+                        scrollTop: scrollTo.offset().top 
+                         - container.offset().top + container.scrollTop() -10
+                    })   
+                },100) 
+                $("#search").hide()
+            }else if(this.searchResult[index].length == 2){
+                 let text = this.searchResult[index][0].text
+                 let container = $("#firstsearch") , scrollTo =  $("#firstsearch a[class='result']:contains('"+text+"')")
+                 scrollTo[0].click()
+                 setTimeout(()=>{
+                    container.animate({
+                        scrollTop: scrollTo.offset().top 
+                         - container.offset().top + container.scrollTop()-10
+                    })   
+                },100) 
+                  $("#search").hide()
+                 setTimeout(()=>{
+                     text = this.searchResult[index][1].text
+                     let container2 = $("#secondsearch") , scrollTo2 =  $("#secondsearch a[class='result']:contains('"+text+"')")
+                    scrollTo2[0].click()
+                    setTimeout(()=>{
+                    container2.animate({
+                        scrollTop: scrollTo2.offset().top 
+                         - container2.offset().top + container2.scrollTop()-10
+                    })   
+                },100) 
+                   
+            },200)
+                 
+            }
+
+         },
+         search(){
+            this.searchResult = []
+            this.leimuList.forEach(fir=>{
+                if( fir.text.indexOf(this.keyWord+'') >= 0 ){
+                            let arr1 = []
+                            arr1.push(fir)
+                            this.searchResult.push(arr1)
+                        }
+                fir.children.forEach(sec=>{
+                     if( sec.text.indexOf(this.keyWord+'') >= 0 ){
+                            let arr2 = []
+                            arr2.push(fir)
+                            arr2.push(sec)
+                            this.searchResult.push(arr2)
+                        }
+                    sec.children.forEach(thi=>{
+                        if( thi.text.indexOf(this.keyWord+'') >= 0 ){
+                            let arr = []
+                            arr.push(fir)
+                            arr.push(sec)
+                            arr.push(thi)
+                            console.log(fir.text+"->"+sec.text+"->"+thi.text)
+                            this.searchResult.push(arr)
+                        }
+                    })
+                })
+            })
+            $("#search").show()
+         },
          addItem() {
             let msg =""
             if( this.sele[1] == null || this.sele[2] == null){
@@ -367,11 +497,11 @@ export default {
 <style lang="less" scoped>
     .box{
         margin-left: 2%;
-        overflow-x: scroll;
+        overflow: auto;
         height: 200px;
         width: 25%;
         display:inline-block;
-        background-color:#F0F0F0;
+        background: rgba(228,228,228,1);
         border:1px solid #000;
     }
     .input{
@@ -394,5 +524,28 @@ export default {
     .selected a{
         color:blue
     }
-
+    #search{
+        //overflow-x: scroll;
+        border:1px solid #CCCCCC;
+        width:400px;
+        height:255px;
+        position:absolute;
+        top:15%;
+        left:25%;
+        background-color:white;
+        display:none;
+    }
+     #inside{
+        overflow: auto;
+        //border:1px solid #CCCCCC;
+        background: rgba(242,242,242,1);
+        width:350px;
+        height:190px;
+        position:relative;
+        top:1%;
+        left:6.2%;
+    }
+    .result:hover{
+        color:blue
+    }
 </style>

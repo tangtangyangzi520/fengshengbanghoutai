@@ -278,7 +278,7 @@ export default {
             }
 
             let url = PBD_CREATE ;
-            if (this.id != '') {
+            if (this.id != 0) {
                 url =  PBD_EDIT  + '?pbdBrandId=' + this.id;
                 data.pbdBrandId = this.id;
             }
@@ -288,7 +288,7 @@ export default {
                 if (response.code != 200) {
                     this.showMsg(response.message);
                 } else {
-                    if (this.id != '') {
+                    if (this.id != 0) {
                         this.onhide('update');
                     } else {
                         this.onhide('create');
@@ -320,7 +320,19 @@ export default {
                 "pbdCountry": "",
                 "pbdSort": ""
             }
-            if (this.id == '') {
+            this.isLoading = true;
+            client.postData(  PBD_GET_MAXSORT).then(response => {
+                this.isLoading = false;
+                if (response.code == 200) {
+                    this.data.pbdSort = response.data + 1;
+                } else {
+                        this.showMsg(response.msg);
+                }
+            }, data => {
+                this.isLoading = false;
+                this.showMsg('网络连接错误');
+            })
+            if (this.id == 0) {
                 this.title = '添加品牌';
                 setTimeout(() => {
                     this.typesList = client.global.componentTypes;

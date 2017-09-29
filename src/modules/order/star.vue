@@ -1,15 +1,44 @@
 <template>
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'500px'">
+
             <div slot="content">
-                    <textarea v-model="editDemoData.ordDemo" placeholder="最多可输入256个字" rows="10" cols="50" maxlength="256"></textarea>
-                    
+                <a style="font-size:30px;color:#ffcc00;text-decoration:none;" v-if="starValue >=1" @click="setStarValue(1)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#DCDCDC;text-decoration:none;" v-if="starValue <1" @click="setStarValue(1)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#ffcc00;text-decoration:none;" v-if="starValue >=2" @click="setStarValue(2)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#DCDCDC;text-decoration:none;" v-if="starValue <2" @click="setStarValue(2)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#ffcc00;text-decoration:none;" v-if="starValue >=3" @click="setStarValue(3)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#DCDCDC;text-decoration:none;" v-if="starValue <3" @click="setStarValue(3)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#ffcc00;text-decoration:none;" v-if="starValue >=4" @click="setStarValue(4)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#DCDCDC;text-decoration:none;" v-if="starValue <4" @click="setStarValue(4)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#ffcc00;text-decoration:none;" v-if="starValue >=5" @click="setStarValue(5)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+                <a style="font-size:30px;color:#DCDCDC;text-decoration:none;" v-if="starValue <5" @click="setStarValue(5)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </a>
+
             </div>
-            {{this.editDemoData.ordDemo}}
-            <span slot="btnList">
-                <button type="button" @click.stop="editDetailDemo" class="btn default blue">提交</button>
+            <div slot="btnList">
+                <button type="button" @click.stop="addStar" class="btn default blue">提交</button>
                 <button type="button" class="btn default" data-dismiss="modal">取消</button>
-            </span>
+            </div>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
@@ -38,11 +67,14 @@ export default {
             type: Function,
             value: () => { }
         },
+        starnum: {
+            type: Number,
+            value: 0
+        },
         id: {
             type: String,
             value: 0
         },
-        ordsubdemo:""
     },
     data() {
         return {
@@ -51,6 +83,7 @@ export default {
             showPage: false,
             showPainListSelect: true,
             painIdsSelect: [],
+            starValue: 0,
             painList: [],
             componentShowOption: {},
             data: {
@@ -65,16 +98,16 @@ export default {
                 "painIds": [],
                 "painOptions": []
             },
-            editDemoData:{
-                "ordOrderId":0,
-                "ordDemo":'',
+            addStarData: {
+                "ordStar": 0,
+                "orsubId": 0
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
-            title: '商家备注',
-            sourceDemo:'',//取消时回显
+            title: '加星',
+            sourceStar:0,//用来取消时回显数据
         }
     },
     vuex: {
@@ -85,19 +118,22 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
-        //提交商家备注
-        editDetailDemo(){
-            this.editDemoData.ordOrderId=this.id;
-            client.postData(ORDER_EDIT_DEMO,this.editDemoData).then(data => {
-                this.isLoading = false;
+        //设置显示星数
+        setStarValue(num) {
+            this.starValue = num;
+        },
+        //加星操作
+        addStar() {
+            this.addStarData.ordStar = this.starValue;
+            this.addStarData.orsubId = this.id;
+            client.postData(ORDER_ADD_STAR, this.addStarData).then(data => {
                 if (data.code == 200) {
                     this.showMsg(data.msg);
-                    this.$parent.getList(false,true);
+                    this.$parent.getList(false, true);
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                this.isLoading = false;
             });
         },
         // 选择组件回调
@@ -116,7 +152,7 @@ export default {
         },
         hideDialog() {
             this.showDialog = false;
-            this.editDemoData.ordDemo= this.sourceDemo;
+            this.starValue=this.sourceStar;
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
@@ -135,22 +171,23 @@ export default {
             this.showAlert = false;
             this.hideDialog();
         },
-       
+
     },
-    computed(){
-        
+    computed() {
+
     },
     created() {
-        
+
     },
     watch: {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
         },
-        ordsubdemo(){
-            this.editDemoData.ordDemo = this.ordsubdemo;
-             this.sourceDemo= this.ordsubdemo;
+        starnum() {
+            this.starValue = 0;
+            this.starValue = this.starnum;
+            this.sourceStar= this.starnum;
         },
     },
     ready() {

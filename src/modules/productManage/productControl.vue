@@ -117,24 +117,24 @@
                             上榜理由：
                           </label>
                           <div class="col-md-4" style="background-color:white;width:600px" >
-                               <!--  <select class="form-control" v-model="shangb" size=11 multiple="multiple">
-                                     
-                                     <option v-for="item in shangbanglist" :value="item.keyValue">{{item.keyValue}}</option>
-                                   </select> -->
-
+                               
                                    <div  style="display:inline-block;width:280px;margin-top:2.5%" v-for="(index,item) in shangbanglist">
                                     <input type="checkbox" name="shangbang" v-model="shangb" :value="item.keyValue" @click="shangbang($event)"/>{{item.keyValue}}
                                     <br v-if="(index+1) % 2 == 0">
                                   </div>
                                   <br><br>
                                 </div> 
-                                <div class="col-md-8" >
-                                  <span style="color:red"><span v-for="i in 63">&nbsp;</span>注：最多可选择3个理由</span>
+                                <div class="col-md-11" >
+                                    <span v-for="(index,i) in createshangbanglist">
+                                        <span v-for="ii in 58">&nbsp;</span>
+                                        <input type="text" style="display:inline-block;width:40%" v-model="i.pcrReason" @keyup="checkshangb(i)" maxLength="100">
+                                        <span v-if="index == createshangbanglist.length-1"><a @click="createshangbang()"  >+添加理由</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <a v-if="index > 0" @click="deleteshangbang(index)">-删除理由</a><br><br>
+                                    </span>
+                                    <span v-for="i in 58">&nbsp;</span><span style="color:red">注：最多可选择3个理由</span>
                                 </div>
                               </div>
-                        
-    
-                        <div class="form-group">
+                          <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 专家观点：
                             </label>
@@ -142,9 +142,63 @@
                                 <textarea class="form-control input-sm" v-model="request.spuExpertOption" placeholder="30-100个字以内" maxLength="100">
                                 </textarea> 
                             </div>
+                        </div>   
+         <hr style="height:1px;border:none;border-top:1px solid white;" />   
+                      <div class="form-group" v-for="radios in radioList">
+                            <label for="title" class="col-sm-3 control-label">
+                              <span class="required" v-if="radios.pcaRequired == 1">* </span> {{radios.pcaName}}：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                              <span v-for="radio in radios.pcaoList">
+                                <input type="radio" :name="radios.pcaName" v-model="radios.pcaCreator" :value="radio.pcaoId" >{{radio.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              </span>
+                            </div>
                         </div>
-    
+
+                        <div class="form-group" v-for="boxs in boxList">
+                            <label for="title" class="col-sm-3 control-label">
+                              <span class="required" v-if="boxs.pcaRequired == 1">* </span> {{boxs.pcaName}}：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                              <span v-for="box in boxs.pcaoList">
+                                <input type="checkbox" :name="radios.pcaName" v-model="box.checked"  >{{box.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              </span>
+                            </div>
+                        </div>
+
+                         <div class="form-group" v-for="selects in selectList">
+                            <label for="title" class="col-sm-3 control-label">
+                              <span class="required" v-if="selects.pcaRequired == 1">* </span> {{selects.pcaName}}：
+                            </label>
+                            <div class="controls col-md-3" style="margin-top:1%">
+                                   <select  v-model="selects.pcaCreator" >
+                                     <option value="-1" >请选择</option>
+                                     <option v-for="select in selects.pcaoList" :value="select.pcaoId">{{select.pcaoName}}</option>
+                                   </select>
+                            </div>
+                        </div>
+
+                         <div class="form-group" v-for="inputs in inputList">
+                            <label for="title" class="col-sm-3 control-label">
+                               <span class="required" v-if="inputs.pcaRequired == 1">* </span>{{inputs.pcaName}}：
+                            </label>
+                            <div class="controls col-md-6" style="margin-top:1%">
+                                <input type="text" class="form-control input-sm" v-model="inputs.pcaCreator"  maxLength="50">
+                            </div>
+                        </div>
+
+                         <div class="form-group" v-for="text in textList">
+                            <label for="title" class="col-sm-3 control-label">
+                               <span class="required" v-if="text.pcaRequired == 1">* </span>{{text.pcaName}}：
+                            </label>
+                            <div class="controls col-md-8" style="margin-top:1%">
+                                 <textarea rows="3" cols="50" v-model="text.pcaCreator" placeholder="100字以内" maxLength="100">
+                                </textarea> 
+                            </div>
+                        </div>
+
          <hr style="height:1px;border:none;border-top:1px solid white;" /><br>    
+
           <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                               <button type="button" class="btn purple" @click="reset()">重置基本属性</button> 
@@ -178,7 +232,7 @@
                            
                             <!-- <span v-for="a in 0">&nbsp;</span> -->
                          <span class="addsxxx" >
-                            <input type="checkbox" class="input tianjia" value="1" style="width:16px;height:16px;margin-right:3px"> <input type="text" style ="width: 5%; height:100%"  placeholder=""  @keyup="getcheck($event)">
+                            <input type="checkbox" class="input tianjia" value="1" style="width:16px;height:16px;margin-right:3px"> <input type="text" style ="width: 5%; height:100%"  placeholder=""  @keyup="getcheck($event)" maxLength="20">
                             <a class="" style="text-decoration:none" @click="addsxxx($event)" >添加&nbsp;&nbsp;&nbsp;&nbsp;</a>  
                         </span>
                             
@@ -200,13 +254,14 @@
                                 <span class="required">* </span>丰盛榜售价：
                             </label>
                             <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="sj" placeholder="" @keyup="checkfloat($event)">
+                               <input type="number" class="form-control input-sm" v-model="sj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"
+                               max="99999999"/>
                         </div>
                             <label for="title" class="col-sm-2 control-label">
                                 原价：
                             </label>
                             <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="yj" placeholder="" @keyup="checkfloat($event)">
+                               <input type="number" class="form-control input-sm" v-model="yj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"max="99999999"/>
                             </div>
                     </div>
                          <div class="form-group">  
@@ -214,13 +269,14 @@
                                 <span class="required">* </span>展示库存（件）：
                             </label>
                             <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="kc" placeholder="" @keyup="check($event)">
+                               <input type="number" class="form-control input-sm" v-model="kc" placeholder="" @keyup="check($event)" @change="check($event)" min="0" 
+                               max="2000000000"/>
                             </div>
                              <label for="title" class="col-sm-2 control-label">
                                 SKU编码：
                             </label>
                             <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="skubm" placeholder="">  
+                               <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="25">  
                             </div>
                        
                           <!--   <label for="title" class="col-sm-2 control-label">
@@ -235,9 +291,9 @@
                    <div id="base">
                         <div id="0" class="box2" style="display:none">
                             <a class="delete"  >×</a>   
-                            <input type="text" class="col-md-2 input" placeholder="销售属性名称">
+                            <input type="text" class="col-md-2 input" placeholder="销售属性名称" maxlength="60"/>
                             <br><br>                           
-                            <input type="text" class="col-md-2 input" v-for="i in 10 " placeholder="">
+                            <input type="text" class="col-md-2 input" v-for="i in 10 " placeholder="" maxlength="20"/>
                         </div>
                     </div>
                     <div id="dkej" class="form-group"> 
@@ -249,12 +305,16 @@
                         <table id="pltab" border="1" cellspacing="0" cellpadding="0" style="display:none">  
                           
                                 <tr style="text-align: center">
-                                   <td style="width:41.8%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
-                                   <td style="border:1px solid white;line-height:30px">￥<input class=" input2" type="text"  @keyup="sput($event,'.put0')"  /></td>
-                                   <td style="border:1px solid white">￥<input class=" input2" type="text"  @keyup="sput($event,'.put1')" /></td>
-                                   <td style="border:1px solid white">  <input class=" input2" type="text"  @keyup="sput($event,'.put2')" /></td>
-                                   <td style="border:1px solid white">  <input class=" input2" type="text"  @keyup="ssput($event,'.put3')" /></td>
-                                   <td style="border:1px solid white;width:17%">  <input class=" input2" type="text"  @keyup="ssput($event,'.put4')" /></td>
+                                   <td style="width:42.4%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
+                                   <td style="border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  
+                                    @change="sput($event,'.put0')" min="0"max="99999999"/></td>
+                                   <td style="border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')" 
+                                    min="0"max="99999999"/></td>
+                                   <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put2')" @change="ssput($event,'.put2')"
+                                    min="0"max="2000000000"/></td>
+                                   <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
+                                    min="0"max="2000000000"/></td>
+                                   <td style="border:1px solid white;width:17%">  <input class=" input2" type="text"  maxLength="25" /></td>
                                 </tr>
 
                             
@@ -273,11 +333,12 @@
                                 <tr v-for="(index,group) in xssxList">
                                    <td>{{index+1}}<input class="input2" type="hidden" :value="index+1"/></td>
                                    <td style="width:40%;;line-height:30px"> <a class="dele" @click="close($event,index)" >×</a> {{ group }} <input class="input2" type="hidden" :value="group"/></td>
-                                   <td>￥<input class="put0 input2" type="text"  @keyup="checkfloat($event)"/></td>
-                                   <td>￥<input class="put1 input2" type="text"  @keyup="checkfloat($event)"/></td>
-                                   <td>  <input class="put2 input2" type="text"  @keyup="check($event)"/></td>
-                                   <td>  <input class="put3 input2" type="text"  @keyup="check($event)"/></td>
-                                   <td style="width:17%">  <input class="put4 input2" type="text"  /></td>
+                                   <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999"/></td>
+                                   <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999"/></td>
+                                   <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000"/></td>
+                                   <td>  <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000"/></td>
+                                   <td style="width:17%">  <input class="put4 input2" type="text" 
+                                    maxLength="25" /></td>
                                 </tr>
 
                              </tbody>
@@ -338,7 +399,8 @@
                               </div>
                               <h4 class="col-md-1">￥</h4>
                               <div class="col-sm-5" >
-                                  <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"/></div>
+                                  <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"
+                                  @keyup="check($event)" @change="check($event)"/></div>
                               <br><br><br>
                               <div class="col-md-4" >
                                  <input type="radio" name="yunfei" v-model="yunfei" value="1">运费模板</div>
@@ -369,8 +431,18 @@
                                 <span v-if="index < 3">
                                 <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" checked style="width:16px;height:16px;margin-right:3px">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
                                 <span v-else  >
-                                 <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" style="width:16px;height:16px;margin-right:3px">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
+                                 <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" style="width:16px;height:16px;margin-right:3px" @click="insurance($event)">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
                                 </span>
+                                <div style="background-color:white;border: 1px solid black;width:340px"><br>
+                                  <span v-for="(index,i) in createinsurancelist">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;类型<input type="text" style="display:inline-block" v-model="i.keyValue"    @keyup="checkinsurance(i,1)" 
+                                    maxLength="50"/> <br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;描述<input type="text" style="display:inline-block" v-model="i.description" @keyup="checkinsurance(i,2)"
+                                    maxLength="100"/>
+                                    <span v-if="index == createinsurancelist.length-1"><a @click="createinsurance()"  >+添加</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    <a v-if="index > 0" @click="deleteinsurance(index)">-删除</a><br><br>
+                                  </span>
+                                </div>
                             </div>
                         </div>
 
@@ -379,7 +451,7 @@
                                 包装清单：<br><font color="#A8A8A8">200字以内</font>
                             </label>
                             <div class="controls col-md-7">
-                                <textarea class="form-control input-sm" v-model="request.spuPackingList" placeholder="200字以内" maxLength="200">
+                                <textarea rows="3" cols="50" v-model="request.spuPackingList" placeholder="200字以内" maxLength="200">
                                 </textarea> 
                             </div>
                         </div>
@@ -394,7 +466,7 @@
                                 <br>
                                 <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
                                 </span>
-                       <div class="col-md-6 time-box">
+                       <div class="col-md-6 time-box" id="selecttime" style="display:none">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" v-model="time" id="createStartTime0"/>
                                 <select  v-model="hour" style="width:90px; height:27px">
                                     <option value="-1">选择小时</option>
@@ -493,6 +565,8 @@ export default {
                 "tagList":[],//标签集合
                 "skuList":[]
             },
+            createshangbanglist:[{"pcrReason": "",}],
+            createinsurancelist:[{"keyValue":"","description":""}],
             yunfei:0,       //0:统一邮费  1:运费模板
             rad:1,         //上架状态 1:立刻  2:设定
             hour : -1,     //上架时间小时
@@ -501,7 +575,12 @@ export default {
             insurancelist: [], //CheckBox消保类型集合 
             shangb :[],
             shangbanglist: [],
-            sxlist: [],
+            radioList:[], //通用属性集合  单选
+            boxList:[], //通用属性集合    多选
+            selectList:[], //通用属性集合 选择
+            inputList:[], //通用属性集合  单行文本
+            textList:[], //通用属性集合   多行文本
+            sxlist: [], // 销售属性集合
             carriageList:[],//运费模板
             img:"http://img1.fshtop.com/1502701860183.jpg",
             xssxList:[],
@@ -557,30 +636,6 @@ export default {
                 "id":0,
 
             }
-            /*searchOptions: {
-                zt : "1",//状态
-                title: '',
-                spuCode:'',
-                spuName: '',
-                subtitle: '',
-                creators: [],
-                //experts: [],
-                pains: [],
-                deployStatus: -1,
-                createStartTime: '',
-                createEndTime: '',
-                modifyedStartTime: '',
-                modifyedEndTime: '',
-                skuChannels: [],
-                submitStatus: -1,
-                page: {
-                    currentPage: 1,
-                    pageSize: 10,
-                    startIndex: 0,
-                    totalPage: 0,
-                    totalSize: 0
-                }
-            }*/
         }
     },
     vuex: {
@@ -591,22 +646,143 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
-        shangbang(event){
-          console.log(this.shangb)
-          let el = event.currentTarget;
-           if(this.shangb.length >= 3){
-                $(el).removeAttr("checked")
-                this.showMsg("最多选择3个理由")
+        //填写消保类型校验
+        checkinsurance(val,num){
+            let count = 0;
+            if(num ==1){
+               if($.trim(val.description) == "" ){
+                   this.createinsurancelist.forEach(data=>{
+                   if($.trim(data.description) != "" || $.trim(data.keyValue) != ""){
+                      count++
+                      } 
+                   })
+                   if( $(".insu input:checked").length + count > 5 ){
+                      val.keyValue = ""
+                      this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                   }
+               }
             }else{
-                 this.request.pcrList.pcrReason = this.shangb 
-                 //alert(this.request.pcrList.pcrReason)
+               if($.trim(val.keyValue) == "" ){
+                   this.createinsurancelist.forEach(data=>{
+                   if($.trim(data.description) != "" || $.trim(data.keyValue) != ""){
+                      count++
+                      } 
+                   })
+                   if( $(".insu input:checked").length + count > 5 ){
+                      val.description = ""
+                      this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                   }
+                }
             }
-
+        },
+        //填写上榜理由校验
+        checkshangb(val){
+          let count = 0;
+           this.createshangbanglist.forEach(data=>{
+               if($.trim(data.pcrReason)){
+                  count++
+               } 
+           })
+           if(this.shangb.length + count > 3 ){
+              val.pcrReason = ""
+              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+           }
+        },
+        //勾选消保类型校验
+        insurance(event){
+             let el = event.currentTarget;
+             if( this.createinsurancelist.length ==1  ){
+                if( $.trim(this.createinsurancelist[0].keyValue) != "" || $.trim(this.createinsurancelist[0].description) != ""){
+                   if( $(".insu input:checked").length + this.createinsurancelist.length > 5){
+                      if($(el).is(':checked')){
+                         $(el).removeAttr("checked")
+                         this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                         return
+                      }
+                  }
+                }
+             }else if( this.createinsurancelist.length > 1  ){
+                 if( $(".insu input:checked").length + this.createinsurancelist.length > 5){
+                   if($(el).is(':checked')){
+                    $(el).removeAttr("checked")
+                    this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                    return
+                    }
+                 }
+             }    
+               if($(".insu input:checked").length > 5){
+                 if($(el).is(':checked')){
+                    $(el).removeAttr("checked")
+                    this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                  }
+                }
+        },
+        //删除自定义上榜理由
+        deleteshangbang(index){
+            this.createshangbanglist.splice(index)
+        },
+        //添加上榜理由
+        createshangbang(){
+            if( this.shangb.length >= 3){
+              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+              return
+            }
+            if( this.shangb.length + this.createshangbanglist.length >= 3){
+              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+              return
+            }
+            this.createshangbanglist.push({"pcrReason": "",})
+        },
+        //删除自定义消保类型
+        deleteinsurance(index){
+            this.createinsurancelist.splice(index)
+        },
+        //添加消保类型
+        createinsurance(){
+            if(  $(".insu input:checked").length  >= 5){
+              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+              return
+            }
+            if( $(".insu input:checked").length + this.createinsurancelist.length >= 5){
+              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+              return
+            }
+            this.createinsurancelist.push({"keyValue":"","description":""})
+        },
+        //勾选上榜理由时校验
+      shangbang(event){
+         let el = event.currentTarget;
+         if( this.createshangbanglist.length ==1  ){
+            if( $.trim(this.createshangbanglist[0].pcrReason) != ""){
+               if( this.shangb.length + this.createshangbanglist.length >= 3){
+                 if($(el).is(':checked')){
+                    $(el).removeAttr("checked")
+                    this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+                    return
+                }
+              }
+            }
+         }else if( this.createshangbanglist.length > 1  ){
+             if( this.shangb.length + this.createshangbanglist.length >= 3){
+              if($(el).is(':checked')){
+                $(el).removeAttr("checked")
+                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+                return
+                }
+             }
+         }    
+           if(this.shangb.length >= 3){
+             if($(el).is(':checked')){
+                $(el).removeAttr("checked")
+                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+              }
+            }
       },
         sput(event,clazz) {
               let el = event.currentTarget;
-                var reg = /^-?\d{0,9}\.?\d{0,2}$/
-               let s = $(el).val()+""
+              //$(el).val(Math.abs($(el).val()).toFixed(2))
+              var reg = /^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/
+              let s = $(el).val()+""
               let f = !reg.test(s)
             if (  f ) {
                    this.showMsg("请输入数字")
@@ -617,10 +793,12 @@ export default {
               $(clazz).val($(el).val())
         },
         ssput(event,clazz) {
-              let el = event.currentTarget;
-                   var reg = /^-?\d{0,10}$/
+               let el = event.currentTarget;
+               $(el).val(Math.abs($(el).val()))
+               $(el).val(Math.round($(el).val()))
+               var reg = /^\d{0,10}$/
                let s = $(el).val()+""
-              let f = !reg.test(s)
+               let f = !reg.test(s)
             if (  f ) {
                    this.showMsg("请输入整数")
                    $(el).val("")
@@ -641,10 +819,11 @@ export default {
         },
          //小数校验
         checkfloat(event){
-               let el = event.currentTarget;
-               var reg = /^-?\d{0,9}\.?\d{0,2}$/
+               let el = event.currentTarget
+               //$(el).val(Math.abs($(el).val()).toFixed(2))
+               var reg = /^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/
                let s = $(el).val()+""
-              let f = !reg.test(s)
+               let f = !reg.test(s)
             if (  f ) {
                    this.showMsg("请输入数字")
                    //$(el).val(s.substring(0,s.length-1))
@@ -654,6 +833,8 @@ export default {
         //整数校验
          check(event){
                let el = event.currentTarget;
+                $(el).val(Math.abs($(el).val()))
+               $(el).val(Math.round($(el).val()))
                var reg = /^-?\d{0,10}$/
                let s = $(el).val()+""
               let f = !reg.test(s)
@@ -669,7 +850,7 @@ export default {
             arr.push(this.par[3])
             arr.push(this.par[4])
             arr.push(this.par[5])
-            client.postData(  PCA_GET_BY_CATID , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
+            client.postData(  PCA_GET_BY_CATID , {"parentIds" :arr ,"pcaAtrrType":2}  ).then(data => {
                 if (data.code == 200) {
 
                     this.sxlist = data.data;
@@ -1019,6 +1200,60 @@ export default {
                 this.showMsg("有赞商品地址不能超过100字")
                 return
             }
+                   //品牌判空
+            if(this.request.spuBrandId < 0 ){
+              this.showMsg("请选择品牌")
+              return
+            }
+
+             this.request.tagList = []
+            //类目标签
+            if( this.tagsList.length == 0){
+                  this.showMsg("请选择展示类目标签")
+                  return
+            }
+              this.tagsList.forEach((per,index)=>{
+                   this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
+              })
+            //人群标签
+           
+            if( this.personList.length == 0){
+                  this.showMsg("请选择人群标签")
+                  return
+            }
+              this.personList.forEach((per,index)=>{
+                   this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
+              })
+            //内容标签
+            if( this.neirongList.length == 0){
+                  this.showMsg("请选择内容标签")
+                  return
+            }
+              this.neirongList.forEach((per,index)=>{
+                   this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
+              })
+
+                 //上榜理由
+            this.request.pcrList = []
+            if(this.shangb.length > 3 ){
+                this.showMsg("最多选择3个上榜理由")
+                return
+             }
+            this.shangb.forEach((data,index)=>{
+                    let val = this.shangbanglist.find(item=>item.keyValue == data)
+                    this.request.pcrList.push( {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
+                    //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
+                 })
+             this.createshangbanglist.forEach(data=>{
+                   if( $.trim(data.pcrReason) ){
+                      this.request.pcrList.push({"pcrReason": data.pcrReason,"pcrSortNo":-1,})
+                   }
+              })
+             if(this.request.pcrList.length > 3){
+                  this.showMsg("最多选择3个上榜理由")
+                  return
+             }
+
             if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
                 this.showMsg("专家观点不能少于30字")
                 return
@@ -1030,6 +1265,52 @@ export default {
             if( this. request.spuPackingList.length >= 200 ){
                 this.showMsg("包装清单不能超过200字")
                 return
+            }
+            let sxmsg = ""
+            this.radioList.forEach(i =>{
+               if(i.pcaRequired == 1){
+                    if(!i.pcaCreator){
+                    sxmsg += "属性("+i.pcaName+")必须选择!    "
+                  }
+               }
+            })
+            this.boxList.forEach(i =>{
+               let f = false
+               if(i.pcaRequired == 1){
+                  i.pcaoList.forEach(pcao=>{
+                     if(pcao.checked){
+                       f = true
+                     }
+                  })
+                  if(!f){
+                      sxmsg += "属性("+i.pcaName+")必须选择!    "
+                  }
+               }
+            })
+            this.selectList.forEach(i =>{
+               if(i.pcaRequired == 1){
+                   if(i.pcaCreator == -1){
+                    sxmsg += "属性("+i.pcaName+")必须选择!    "
+                  }
+               }
+            })
+            this.inputList.forEach(i =>{
+               if(i.pcaRequired == 1){
+                   if(!i.pcaCreator){
+                    sxmsg += "属性("+i.pcaName+")必须填!    "
+                  }
+               }
+            })
+            this.textList.forEach(i =>{
+               if(i.pcaRequired == 1){
+                  if(!i.pcaCreator){
+                    sxmsg += "属性("+i.pcaName+")必须填!     "
+                  }
+               }
+            })      
+            if( sxmsg ){
+              this.showMsg(sxmsg)
+              return
             }
               this.request.spuCatId = this.par[5];
               let item = $("#itemList>tr")
@@ -1103,13 +1384,12 @@ export default {
                                      pcaoList.push(newbase)
                                       skuname += $($($(".addsxxx")[d]).children("input:checked").next(":text")).val()+","
                                 // 基本属性和添加属性没有选的时候.判断属性是否必须填
-                            }else if( $($(zc).children("span[class='pcao']").children("input:checked")).length == 0 &&  $($($(".addsxxx")[d]).children("input:checked")).length == 0
+                            }/*else if( $($(zc).children("span[class='pcao']").children("input:checked")).length == 0 &&  $($($(".addsxxx")[d]).children("input:checked")).length == 0
                                        && $($(bname[d]).children("input:hidden")[7]).val() == 1 ){
 
                                        msg2 = "属性名(" +$($(bname[d]).children("input:hidden")[0]).val() +")的属性值必须填 ! "
                                        return false
-                               }
-
+                               }*/
                       })
 
                      if( msg2 != ''){
@@ -1417,7 +1697,7 @@ export default {
                             */
                             
                     if( $(el[2]).val() == ''){
-                        msg += "第"+$(el[0]).val()+"行: 未填写丰盛榜售价___________"
+                        msg += "第"+$(el[0]).val()+"行: 未填写丰盛榜售价_________________"
                         //return
                     }
                     /*if( $(el[3]).val() == ''){
@@ -1425,7 +1705,7 @@ export default {
                         //return
                     }*/
                     if( $(el[4]).val() == ''){
-                        msg += "第"+$(el[0]).val()+"行: 未填写展示库存___________"
+                        msg += "第"+$(el[0]).val()+"行: 未填写展示库存_________________"
                         //return
                     }
                    /* if( $(el[5]).val() == ''){
@@ -1433,7 +1713,7 @@ export default {
                         //return
                     }        */
                     if( $(el[6]).val() == ''){
-                        msg += "第"+$(el[0]).val()+"行: 未填写sku编码___________"
+                        msg += "第"+$(el[0]).val()+"行: 未填写sku编码_________________"
                         //return
                     }
                     if(msg){
@@ -1472,44 +1752,7 @@ export default {
       }
        //sku
       this.request.skuList = spulist
-      //品牌判空
-      if(this.request.spuBrandId < 0 ){
-        this.showMsg("请选择品牌")
-        return
-      }
-
-       this.request.tagList = []
-      //类目标签
-     /* if( this.tagsList.length == 0){
-            this.showMsg("请选择展示类目标签")
-            return
-      }*/
-        this.tagsList.forEach((per,index)=>{
-             this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
-        })
-      //人群标签
-     
-     /* if( this.personList.length == 0){
-            this.showMsg("请选择人群标签")
-            return
-      }*/
-        this.personList.forEach((per,index)=>{
-             this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
-        })
-      //内容标签
-      /*if( this.neirongList.length == 0){
-            this.showMsg("请选择内容标签")
-            return
-      }*/
-        this.neirongList.forEach((per,index)=>{
-             this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
-        })
-      
-        //上榜理由
-        if(this.shangb.length > 3 ){
-            this.showMsg("最多选择3个上榜理由")
-            return
-         }
+ 
     /* if(this.shangb.length == 0 ){
             this.showMsg("上榜理由不能为空")
             return
@@ -1523,13 +1766,23 @@ export default {
       
     //保消类型
          let arr = [];
-
+          
          $(".insu input:checked").each(function(i , v){
              //let ar = {"piInsuranceId": '',"piInsurance":'',"piSort":'', }
                let ar = $(v).val().split(",")
                let av = {"piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2],"piDesc":ar[3], }//
                arr.push(av)
          })
+          this.createinsurancelist.forEach(data=>{
+               if($.trim(data.keyValue) && $.trim(data.description) ){
+                   let av = {"piInsurance":data.keyValue,"piDesc":data.description, }
+                   arr.push(av)
+               }
+          })
+           if( arr .length > 5){
+              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+              return
+            }
           this.request.piList = arr 
          /*if(arr.length == 0 ){
             this.showMsg("消保类型不能为空")
@@ -1555,16 +1808,8 @@ export default {
       } else {
            this.request.spuPlanShelvesDate = ""
       } 
-      //
         
          //this.request.spuAppSummary = this.request.spuPcSummary
-
-        this.shangb.forEach((data,index)=>{
-                let val = this.shangbanglist.find(item=>item.keyValue == data)
-                this.request.pcrList.$set(index, {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
-                //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
-             })
-
         if(this.yunfei == 0 && $.trim(this.request.spuFreight) == ''){
              this.showMsg("请设置统一邮费的价格")
              return
@@ -1702,12 +1947,15 @@ export default {
         },
         // 弹出选择标签弹窗
         showTagDialog() {
+            this.tagsList = []
             this.showTagTreeSelect = !this.showTagTreeSelect;
         },
         showperDialog() {
+            this.personList = []
             this.showperTreeSelect = !this.showperTreeSelect;
         },
         showneiDialog() {
+            this.neirongList = []
             this.showneiTreeSelect = !this.showneiTreeSelect;
         },
         // 移除某个标签
@@ -1742,9 +1990,10 @@ export default {
             if(flag){
                  alert("请选择到最后一级标签。")
                this.data.labelIds = []
+               this.neirongList = list;
                return
             }else{
-                this.neirongList = list;
+               this.neirongList = list;
                this.showneiTreeSelect = !this.showneiTreeSelect;
             }
         },
@@ -1784,9 +2033,10 @@ export default {
             if(flag){
                 alert("请选择到最后一级标签。")
                this.data.labelIds = []
+               this.tagsList = list;
                return
             }else{
-               this.tagsList = list;
+                this.tagsList = list;
                 this.showTagTreeSelect = !this.showTagTreeSelect;
             }
         },
@@ -1880,11 +2130,28 @@ export default {
          this.getCarriageList() 
     },
     watch: {
-        stime(val) {
-            let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/
-            if(!reg.test(val)){
+        rad(val){
+           if(val == 1){
+             $("#selecttime").hide()
+           }else{
+             $("#selecttime").show()
+           }
+        },
+        time(val) {
+            if( val ) {
+              let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/
+              if(!reg.test(val)){
                 this.showMsg('日期格式不合法')
-                this.stime = '' 
+                this.time = "" 
+                return
+              }
+             val = val.replace(/-/g,"/")
+             let end = new Date(val)
+             if(end <= new Date()){
+               this.showMsg('上架时间不可以小于现在时间')
+               this.time = "" 
+               return
+               }
             }
         },
         "request.spuFreight":{　　
@@ -1913,18 +2180,46 @@ export default {
             arr.push(this.par[3])
             arr.push(this.par[4])
             arr.push(this.par[5])
-           client.postData(  PCA_GET_BY_CATID  , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
+            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
+                if (data.code == 200) {
+                    data.data.forEach(sx =>{
+                      if(sx.pcaInputType==1){
+                        sx.pcaCreator = ""
+                        this.radioList.push(sx)
+                      }else if(sx.pcaInputType==2){
+                        sx.pcaoList.forEach(item=>{
+                          item.checked = false
+                        })
+                        this.boxList.push(sx)
+                      }else if(sx.pcaInputType==3){
+                        sx.pcaCreator = -1
+                        this.selectList.push(sx)
+                      }else if(sx.pcaInputType==4){
+                        sx.pcaCreator = ""
+                        this.inputList.push(sx)
+                      }else if(sx.pcaInputType==5){
+                        sx.pcaCreator = ""
+                        this.textList.push(sx)
+                      }
+                    })
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.showMsg("获取通用属性失败,请刷新重试");
+            })
+            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":2}  ).then(data => {
                 if (data.code == 200) {
                     this.sxlist = data.data;
                     if(this.sxlist.length >= 4){
-                        $("#dkej").hide()
+                        //$("#dkej").hide()
                         $("#addsx").hide()
                     }   
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                this.showMsg("获取基本属性失败,请刷新重试");
+                this.showMsg("获取销售属性失败,请刷新重试");
             })
         },
         par(){

@@ -6,11 +6,11 @@
                    <div style="text-align:center;background-color:white">
                        <img style="height:260px" :src="banner">
                           <h5 ><font size=3 style="float:left">{{ spuName}}</font></h5>
-                            <br>
-                    <h4 style="color:red">
+                <br>
+                    <h4 style="color:red;margin-left:-1%">
                               <strong style="float:left" v-if="minSalePrice == maxSalePrice">￥{{ minSalePrice }}</strong>
                               <strong style="float:left" v-else>￥{{minSalePrice+ "~" + maxSalePrice}}</strong></h4> 
-                            <br>
+                <br>
                 <hr style="color:#909090">
                         <div style="margin-top:3%;margin-bottom:3%">
                             <font style="color:DimGray">

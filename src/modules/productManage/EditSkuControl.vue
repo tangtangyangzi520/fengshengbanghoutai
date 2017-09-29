@@ -25,11 +25,15 @@
 
                                    <td style="width:40%" >  <a class="dele"  @click="close(g.skuId)" >×</a> <span style="padding-left:8.3%"> {{ g.skuAtrr }} </span>
                                    </td>
-                                   <td>￥<input class=" input2" type="text" v-model="g.skuSalePrice"    @keyup="checkfloat($event)"/></td>
+                                   <td>￥<input class=" input2" type="number" v-model="g.skuSalePrice"    @keyup="checkfloat($event)" @change="checkfloat($event)"
+                                    min="0" max="99999999"/></td>
 
-                                   <td>￥<input class=" input2" type="text" v-model="g.skuMarketSalePrice" @keyup="checkfloat($event)"/></td>
-                                   <td>  <input class=" input2" type="text" v-model="g.skuShowNum"         @keyup="check($event)"/></td>
-                                   <td>  <input class=" input2" type="text" v-model="g.skuStockNum"        @keyup="check($event)"/></td>
+                                   <td>￥<input class=" input2" type="number" v-model="g.skuMarketSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)"
+                                    min="0" max="99999999"/></td>
+                                   <td>  <input class=" input2" type="number" v-model="g.skuShowNum"         @keyup="check($event)" @change="check($event)"
+                                    min="0" max="2000000000"/></td>
+                                   <td>  <input class=" input2" type="number" v-model="g.skuStockNum"        @keyup="check($event)" @change="check($event)"
+                                    min="0" max="2000000000"/></td>
                                    <td style="width:17%" > {{ g.skuCode }}  </td>
                                 </tr>
                              </tbody>
@@ -156,11 +160,12 @@ export default {
         //小数校验
         checkfloat(event){
                let el = event.currentTarget;
-               var reg = /^-?\d{0,9}\.?\d{0,2}$/
+               //$(el).val(Math.abs($(el).val()).toFixed(2))
+               var reg = /^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/
                let s = $(el).val()+""
-              let f = !reg.test(s)
+               let f = !reg.test(s)
             if (  f ) {
-                   this.showMsg("请输入数字")
+                   alert("请输入数字")
                    //$(el).val(s.substring(0,s.length-1))
                     $(el).val("")
                }
@@ -168,11 +173,13 @@ export default {
         //整数校验
          check(event){
                let el = event.currentTarget;
-               var reg = /^-?\d{0,10}$/
+               $(el).val(Math.abs($(el).val()))
+               $(el).val(Math.round($(el).val()))
+               var reg = /^\d{0,10}$/
                let s = $(el).val()+""
-              let f = !reg.test(s)
+               let f = !reg.test(s)
             if (  f ) {
-                   this.showMsg("请输入整数")
+                   alert("请输入整数")
                    //$(el).val(s.substring(0,s.length-1))
                     $(el).val("")
                }

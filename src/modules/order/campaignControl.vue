@@ -1,22 +1,13 @@
 <template>
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showReasonDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'600px'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'500px'">
             <div slot="content">
-                <!-- <m-select :data="cancelReasonList" :placeholder="'请选择取消原因'" :change-func="selectReasonFunc" :class="'fixedIcon'" ></m-select> -->
-                <div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">取消原因：</label>
-                    <div class="controls col-md-6">
-                    <select v-model="editReasonData.ordCancelReason" class="type" id="ordCancelReason">
-                        <option v-for="item in cancelReasonList" :value="item.keyValue">{{item.keyValue}}</option>
-                    </select>
-                </div>
-                </div>
-                <span slot="btnList">
-                    <button type="button" @click.stop="editCancelReason" class="btn default blue">确定</button>
-                    <button type="button" class="btn default" data-dismiss="modal">取消</button>
-                </span>
+                    <textarea v-model="editDemoData.ordDemo" placeholder="最多可输入256个字" rows="10" cols="50" maxlength="256"></textarea>
             </div>
+            <span slot="btnList">
+                <button type="button" @click.stop="editDetailDemo" class="btn default blue">提交</button>
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+            </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
@@ -50,18 +41,11 @@ export default {
             type: String,
             value: 0
         },
-        setdata:{},
-        sendReq:false,
     },
     data() {
         return {
-            editReasonData:{
-                "ordOrderId":0,
-                "ordStatus":5,
-                "ordCancelReason":'',
-            },
             isLoading: false,
-            showReasonDialog: false,
+            showDialog: false,
             showPage: false,
             showPainListSelect: true,
             painIdsSelect: [],
@@ -79,12 +63,15 @@ export default {
                 "painIds": [],
                 "painOptions": []
             },
+            editDemoData:{
+                "ordOrderId":0,
+                "ordDemo":'',
+            },
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
-            title: '取消订单',
-            cancelReasonList:[],
+            title: '商家备注',
         }
     },
     vuex: {
@@ -95,48 +82,36 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
-        //提交原因
-        editCancelReason(){
-            this.editReasonData.ordOrderId=this.id;
-            console.log(this.editCancelReason);
-            if(this.editReasonData.ordCancelReason==''){
-                this.showMsg("请选择订单状态");
-                return;
-            }
-            client.postData(ORDER_EDIT_REASON,this.editReasonData).then(data => {
+        //提交商家备注
+        editDetailDemo(){
+            this.editDemoData.ordOrderId=this.id;
+            client.postData(ORDER_EDIT_DEMO,this.editDemoData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.hideDialog();
-                    this.$parent.getList();
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.isLoading = false;
             });
-
         },
-        //获取取消原因
-        getCancelReasonList(){
-            let url=ORDER_CANCEL_REASON;
-            client.postData(url,{}).then(data => {
-               // this.isLoading = false;
-                if (data.code != 200) {
-                    this.showMsg(data.msg);
-                } else {
-                    this.cancelReasonList=data.data;
-                }
-            }, data => {
-                //this.isLoading = false;
-                this.showMsg(data.msg);
-            })
+        // 选择组件回调
+        selectComponentFunc(list) {
+            if (list[0].componentType == 27 || list[0].componentType == 15 || list[0].componentType == 13) {
+                this.contentSelect = list[0].subtitle;
+            } else {
+                this.contentSelect = list[0].title;
+            }
+            this.data.subComponentId = list[0].componentId;
+            this.showComponent = false;
         },
         // 隐藏选择组件弹窗
         cancelSelectComponent() {
             this.showComponent = false;
         },
         hideDialog() {
-            this.showReasonDialog = false;
+            this.showDialog = false;
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
@@ -156,16 +131,16 @@ export default {
         },
        
     },
+    computed(){
+        
+    },
     created() {
         
     },
     watch: {
-        sendReq(){
-            this.getCancelReasonList();
-        },
         show() {
             this.showPage = this.show;
-            this.showReasonDialog = this.show;
+            this.showDialog = this.show;
         },
     },
     ready() {
