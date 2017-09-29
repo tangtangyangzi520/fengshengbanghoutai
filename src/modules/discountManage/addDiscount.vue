@@ -19,14 +19,13 @@
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>生效时间：
                 </label>
-                    <div class="controls col-md-2 ">
+                    <div class="controls col-md-3 ">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择生效时间" id="createStartTime3" v-model="request.mktStart" required="required" 
                           /> 
                     </div>
                        <div class="col-md-1 ">至</div>
-                    <div class="controls col-md-2 nopadding ">
-                       <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime3" v-model="mktEnd" required="required" 
-                        pattern="^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$">
+                    <div class="controls col-md-3 nopadding ">
+                       <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime3" v-model="mktEnd" required="required" >
                   </div>  <br> 
             </div>
             <br>
@@ -53,7 +52,7 @@
                       <button class="btn yellow-crusta" type="button" @click="showselect" >添加</button>
                       <br><br>
                       <span style="margin-left:25%">
-                        批量减价 <input type="number" class="input-sm-2"   v-model="reduce" min="0"/> 元  &nbsp;&nbsp;
+                        批量减价 <input type="number" class="input-sm-2"   v-model="reduce" step="0.01" @keyup="integer($event)" min="0.01" max="9999999"/> 元  &nbsp;&nbsp;
                       <a style="text-decoration:none" @click="plreduce()">确定</a> &nbsp;&nbsp;&nbsp;
                       <a style="text-decoration:none" @click="plcut()">取消</a>
                      </span>  
@@ -67,7 +66,6 @@
                                  <input type="checkbox" v-model="spu.checked"></input> 
                                  <a :id="'desc'+spu.spuId"  class="orderBy" style="display:none;text-decoration:none" @click="orderBy(false,spu.spuId)">▼</a>
                                  <a :id="'asc'+spu.spuId" class="orderBy" style="text-decoration:none" @click="orderBy(true,spu.spuId)">▲</a>
-                               
                              </th>
                              <th style="width:35%">
                                   <p>
@@ -77,12 +75,12 @@
                                 </p>
                                 <a  style="text-decoration:none;" title="预览商品"  > 
                                 <h4 class="tt"><p style="color:#6699CC">{{spu.spuName}}</p><span style="color:#FF9900">¥{{spu.minSalePrice}}</span>
-                                &nbsp;&nbsp;&nbsp;&nbsp;库存:{{spu.totalSaleNum}}</h4>
+                                &nbsp;&nbsp;&nbsp;&nbsp;库存:{{spu.totalStockNum}}</h4>
                                 </a>
                              </th>
-                             <th style="width:20%"> 减价 &nbsp;&nbsp;<input type="number" class="input-sm" @click="reduceBefore(spu.spuId,spu.minSalePrice,$event)"  @keyup="reduceBefore(spu.spuId,spu.minSalePrice,$event)" v-model="spu.reduce" :id="'before'+spu.spuId"/>  
+                             <th style="width:20%"> 减价 &nbsp;&nbsp;<input type="number" class="input-sm-2"    @keyup="reduceBefore(spu.spuId,spu.minSalePrice,$event)" :id="'before'+spu.spuId" step="0.01" required="required" min="0.01" @change="reduceBefore(spu.spuId,spu.minSalePrice,$event)" :max="spu.minSalePrice" @click="clickreduceBefore(spu.spuId,spu.minSalePrice,$event)" :value="spu.reduce"/>  元
                              </th>
-                             <th style="width:15%"> 减价后<input type="number" class="input-sm" @keyup="refuceAfter(spu.spuId,spu.minSalePrice,$event)" :id="'after'+spu.spuId" > </th>
+                             <th style="width:15%"> 减价后<input type="number" class="input-sm-1" @keyup="refuceAfter(spu.spuId,spu.minSalePrice,$event)" :id="'after'+spu.spuId" step="0.01" required="required" @change="refuceAfter(spu.spuId,spu.minSalePrice,$event)" min="0.01" :max="spu.minSalePrice"> 元</th>
                              <th style="width:5%"><a style="text-decoration:none" @click="cut(index)">取消</a></th>
                         </tr>
                           
@@ -222,9 +220,39 @@ export default {
         }
     },
     methods: {
+         integer(event){
+            var reg = /^[0-9]{1,6}([.]{1}[0-9]{1,2})?$/
+             let f = !reg.test(this.reduce+'')
+             if( f ){
+               this.reduce = 0
+               this.showMsg("请输入合法数字!")
+               return 
+             }
+            if(this.reduce <= 0 ){
+                this.showMsg("减价不能少于0")
+                return
+            }
+           // let el = event.currentTarget;
+            //$(el).val(Math.abs($(el).val()).toFixed(2))
+         },
          plreduce(){
+            
+             this.reduce = Math.abs(this.reduce).toFixed(2)
+             var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/
+             let f = !reg.test(this.reduce+'')
+             if( f ){
+               this.reduce = 0
+               this.showMsg("请输入合法数字!")
+               return 
+             }
+             if(this.reduce <= 0 ){
+                this.showMsg("减价不能少于0")
+                return
+            }
+            let list = [];
             this.spuList.forEach(spu =>{
-                $("#before"+spu.spuId).val(this.reduce)
+                spu.reduce = this.reduce;
+                $("#before"+spu.spuId).val(this.reduce);
                 $("#before"+spu.spuId).click()
             })
          },
@@ -244,15 +272,15 @@ export default {
             this.spuList.splice(index,1)   
          },
          refuceAfter(id , min,event) {
-           
              let el = event.currentTarget
-             var reg = /^-?\d{0,9}\.?\d{0,2}$/
+             //$(el).val(Math.abs($(el).val()))
+             var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/
              let s = $(el).val()+""
              let f = !reg.test(s)
              if (  f ) {
                    $(el).blur()
                    $(el).val("")
-                   $("#before"+id).val('')
+                   $("#before"+id).val("")
                     this.spuList.forEach(spu =>{
                         if(spu.spuId == id){
                         spu.skuList.forEach(sku =>{
@@ -260,7 +288,7 @@ export default {
                         })
                     }
                 })
-                   this.showMsg("请输入数字")
+                   this.showMsg("请输入合法数字!")
                    return
                }
              this.spuList.forEach(spu =>{
@@ -268,15 +296,16 @@ export default {
                     let price = ( min - $("#after"+id).val() ).toFixed(2)
                     if( price < 0 ){
                         $(el).blur()
-                        this.showMsg("减价后售价不能高于原价")
-                         $("#before"+id).val('')
-                         $("#after"+id).val('')
+                        this.showMsg("减价后售价不能高于原价!")
+                         $("#before"+id).val("")
+                         $("#after"+id).val("")
                          spu.skuList.forEach(sku =>{
                             sku.skureduce = ""
                         })
 
                         return false
                     }else{
+                         spu.reduce = price
                          $("#before"+id).val( price )
                          spu.skuList.forEach(sku =>{
                          sku.skureduce = sku.skuSalePrice - price
@@ -285,40 +314,86 @@ export default {
                 }
              })
          },
-         reduceBefore(id , min,event) {
-             
+         clickreduceBefore(id , min,event) {      
              let el = event.currentTarget
-             var reg = /^-?\d{0,9}\.?\d{0,2}$/
+             //$(el).val(Math.abs($(el).val()))
+             var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/
              let s = $(el).val()+""
              let f = !reg.test(s)
              if (  f ) {
-                   $(el).blur()
+                   //$(el).blur()
                    $(el).val("")
-                   $("#after"+id).val('')
+                   $("#after"+id).val("")
                    this.spuList.forEach(spu =>{
                         if(spu.spuId == id){
-                        spu.skuList.forEach(sku =>{
-                        sku.skureduce = ''
+                            spu.skuList.forEach(sku =>{
+                            sku.skureduce = ""
                         })
                     }
                 })
-                   this.showMsg("请输入数字")
+                   //this.showMsg("请输入合法数字!")
                    return
                }
              this.spuList.forEach(spu =>{
                 if(spu.spuId == id){
                     let price = ( min - $("#before"+id).val() ).toFixed(2)
                     if( price < 0 ){
-                        $("#before"+id).val('')
-                        $(el).val('')
+                        $("#before"+id).val("")
+                        $(el).val("")
                         $(el).blur()
-                        this.showMsg("减价后售价不能少于0")
-                        $("#after"+id).val('')
+                        this.showMsg("减价后售价不能少于0!")
+                        $("#after"+id).val("")
                          spu.skuList.forEach(sku =>{
                          sku.skureduce = ""
                         })
                         return false
                     }else{
+                        spu.reduce = $("#before"+id).val()
+                        $("#after"+id).val( price )
+                        spu.skuList.forEach(sku =>{
+                        sku.skureduce = sku.skuSalePrice - $("#before"+id).val() 
+                        })
+                    }
+                }
+             })
+         },
+         reduceBefore(id , min,event) {      
+           
+             let el = event.currentTarget
+             //$(el).val(Math.abs($(el).val()))
+             var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/
+             let s = $(el).val()+""
+             let f = !reg.test(s)
+             if (  f ) {
+                   $(el).blur()
+                   $(el).val("")
+                   $("#after"+id).val("")
+                   this.spuList.forEach(spu =>{
+                        if(spu.spuId == id){
+                            spu.skuList.forEach(sku =>{
+                            sku.skureduce = ""
+                        })
+                    }
+                })
+                   this.showMsg("请输入合法数字!")
+                   return
+               }
+             this.spuList.forEach(spu =>{
+                if(spu.spuId == id){
+                    let price = ( min - $("#before"+id).val() ).toFixed(2)
+                    if( price < 0 ){
+                        $("#before"+id).val("")
+                        $(el).val("")
+                        $(el).blur()
+                        this.showMsg("减价后售价不能少于0!")
+                        $("#after"+id).val("")
+                         spu.skuList.forEach(sku =>{
+                         sku.skureduce = ""
+                        })
+                        return false
+                    }else{
+                        //alert(1)
+                        spu.reduce = $("#before"+id).val()
                         $("#after"+id).val( price )
                         spu.skuList.forEach(sku =>{
                         sku.skureduce = sku.skuSalePrice - $("#before"+id).val() 
@@ -332,16 +407,21 @@ export default {
          },
          addItem2(ev) {
             this.request.cmisList = []
+            if(this.spuList.length == 0 ){
+                this.showMsg("请先添加商品!")
+                return
+            }
             this.spuList.forEach(spu => {
+                console.log(spu)
                     //if( sku.skuSalePrice != '' ){
                        this.request.cmisList.push( {
                           "enableStatus": 1,//0-无效，1-有效
                           "misCampaignId": 0,//活动主键
-                          "misDiscountPrice": spu.reduce,//限时折扣价
                           "misMandatory": 1,//是否必要产品：0-非必要产品，1-必要产品
                           "misMcnId": 0,  //条件主键
                           "misSpuId": spu.spuId, //产品主键
                           "misType": 1 ,//商品类型：1-a商品，2-b商品 
+                          "misDiscountPrice": spu.reduce,//限时折扣价
                     })
                // }
             })
@@ -349,7 +429,7 @@ export default {
                 client.postData( MKT_EDIT , this.request).then(data => {
                 this.isLoading = true
                 if (data.code == 200) {
-                        this.showMsg("编辑限时折扣成功")
+                        this.showMsg("编辑限时折扣成功!")
                  this.isLoading = false
                     setTimeout(() => {
                         this.hideDialog()
@@ -358,14 +438,14 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                      this.showMsg("编辑限时折扣失败"+data.message);
+                      this.showMsg("编辑限时折扣失败!"+data.message);
              })
 
             }else{
                 client.postData( MKT_CREATE , this.request).then(data => {
                 this.isLoading = true
                 if (data.code == 200) {
-                        this.showMsg("新健限时折扣成功")
+                        this.showMsg("新建限时折扣成功!")
                  this.isLoading = false
                     setTimeout(() => {
                         this.hideDialog()
@@ -374,7 +454,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                      this.showMsg("新健限时折扣失败"+data.message)
+                      this.showMsg("新建限时折扣失败!"+data.message)
                 })
             }
              ev.preventDefault();  
@@ -411,11 +491,12 @@ export default {
 
         },
         getSelected( data ) {
-             this.spuList = []
-             this.spuList = data
-             this.spuList.forEach(spu =>{
+            this.spuList = null;
+             data.forEach(spu =>{
                 spu.checked = false
+                spu.reduce = 0.00
              })
+             this.spuList = data
         },
         showselect() {
              this.showSpuDialog = true
@@ -521,13 +602,37 @@ export default {
         
     },
     watch: {
+         "request.mktStart":{　　
+          　handler(val,oldVal){
+                if( val ) {
+                  let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?$/
+                  if(!reg.test(val)){
+                    this.showMsg('日期格式不合法')
+                    this.request.mktStart = "" 
+                    return
+                  }
+                }　
+               val = val.replace(/-/g,"/")
+                let start = new Date(val)
+                if(this.mktEnd){
+                   let end = new Date( this.mktEnd.replace(/-/g,"/") )
+                   if( end < start ){
+                    this.showMsg('生效时间不可以大于过期时间')
+                    this.request.mktStart = ""
+                    return
+                   }
+                    this.time = (end - start)/24/3600/1000
+                }       
+          },　　　　　　　　　　
+          deep:true　　　　　　　　
+        },
         dflag() {
           client.postData(  MKT_GET_ID  +"?mkcCampaignId="+this.mkcid , {}).then(response => {
                 this.isLoading = false;
                 if (response.code == 200) {
                    this.request.mkcCampaignId =  response.data.mkcCampaignId
                    this.request.mkcName = response.data.mkcName
-                   var sjtime  = new Date(response.data.mktStart)
+                    let sjtime  = new Date(response.data.mktStart)
                     this.request.mktStart = sjtime.getFullYear() 
                     if( sjtime.getMonth()+1 >= 10 ){
                           this.request.mktStart += "-"+(sjtime.getMonth()+1)
@@ -535,12 +640,27 @@ export default {
                         this.request.mktStart += "-0"+(sjtime.getMonth()+1)
                     }
                     if( sjtime.getDate() >= 10 ){
-                         this.request.mktStart += "-"+sjtime.getDate()
+                         this.request.mktStart += "-"+sjtime.getDate()+" "
                     }else{
-                        this.request.mktStart += "-0"+sjtime.getDate()
+                        this.request.mktStart += "-0"+sjtime.getDate()+" "
                     }
-
-                    var endtime  = new Date(response.data.mktEnd)
+                    if( sjtime.getHours() >= 10 ){
+                         this.request.mktStart += ""+sjtime.getHours()+":"
+                    }else{
+                        this.request.mktStart += "0"+sjtime.getHours()+":"
+                    }
+                    if( sjtime.getMinutes() >= 10 ){
+                         this.request.mktStart += ""+sjtime.getMinutes()+":"
+                    }else{
+                        this.request.mktStart += "0"+sjtime.getMinutes()+":"
+                    }
+                    if( sjtime.getSeconds() >= 10 ){
+                         this.request.mktStart += ""+sjtime.getSeconds()
+                    }else{
+                        this.request.mktStart += "0"+sjtime.getSeconds()
+                    }
+                     
+                    let endtime  = new Date(response.data.mktEnd)
                     this.mktEnd = endtime.getFullYear() 
                     if( endtime.getMonth()+1 >= 10 ){
                           this.mktEnd += "-"+(endtime.getMonth()+1)
@@ -548,9 +668,24 @@ export default {
                         this.mktEnd += "-0"+(endtime.getMonth()+1)
                     }
                     if( endtime.getDate() >= 10 ){
-                         this.mktEnd += "-"+endtime.getDate()
+                         this.mktEnd += "-"+endtime.getDate()+" "
                     }else{
-                        this.mktEnd += "-0"+endtime.getDate()
+                        this.mktEnd += "-0"+endtime.getDate()+" "
+                    }
+                    if( endtime.getHours() >= 10 ){
+                         this.mktEnd += ""+endtime.getHours()+":"
+                    }else{
+                        this.mktEnd += "0"+endtime.getHours()+":"
+                    }
+                    if( endtime.getMinutes() >= 10 ){
+                         this.mktEnd += ""+endtime.getMinutes()+":"
+                    }else{
+                        this.mktEnd += "0"+endtime.getMinutes()+":"
+                    }
+                    if( endtime.getSeconds() >= 10 ){
+                         this.mktEnd += ""+endtime.getSeconds()
+                    }else{
+                        this.mktEnd += "0"+endtime.getSeconds()
                     }
                     this.request.mktEnd = this.mktEnd
                     //
@@ -562,6 +697,7 @@ export default {
                              response.data.misList.forEach(m => {
                                   if( m.misSpuId == spu.spuId ){
                                    // sku.checked = true
+                                    $("#before"+spu.spuId).val(m.misDiscountPrice)
                                     spu.reduce = m.misDiscountPrice
                                     spu.skuList.forEach( sku => {
                                         sku.skureduce = sku.skuSalePrice - spu.reduce
@@ -570,7 +706,16 @@ export default {
                             
                         })
                     })
+
                     this.spuList = response.data.spuList
+                    setTimeout(()=>{
+                         this.spuList.forEach(spu=>{
+                        $("#before"+spu.spuId).val(spu.reduce)
+                        $("#before"+spu.spuId).click()
+                    })
+
+                    },300)
+                   
                    /* item.skuList.forEach(sku => {
                             sku.checked = false
                             sku.skuSalePrice = ''
@@ -582,10 +727,24 @@ export default {
             })
         },
         mktEnd(val) {
-            if( this.request.mktStart ){
+            if( val ) {
+              let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?$/
+              if(!reg.test(val)){
+                this.showMsg('日期格式不合法')
+                this.mktEnd = ""
                 this.request.mktEnd = ""
-                val = val.replace(/-/g,"/")
+                return
+              }
+            }
+              val = val.replace(/-/g,"/")
                 let end = new Date(val)
+                if(end <= new Date()){
+                  this.showMsg('过期时间不可以小于现在时间')
+                  this.mktEnd = ""
+                  this.request.mktEnd = ""
+                  return
+                }
+            if( this.request.mktStart ){
                 let start = new Date( this.request.mktStart.replace(/-/g,"/") )
                 if( end < start ){
                     this.showMsg('生效时间不可以大于过期时间')
@@ -593,7 +752,7 @@ export default {
                     this.request.mktEnd = ""
                     return
                 }
-                this.time = (end - start)/24/3600/1000
+                this.time = Math.round((end - start)/24/3600/1000)
                 this.request.mktEnd = val
             }
         },
@@ -652,8 +811,10 @@ export default {
     },
     ready() {   
         
-         $('#createStartTime3').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('#createEndTime3').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
+         $('#createStartTime3').val('').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', language: 'zh-CN', autoclose: 'true', minView: 2 ,  weekStart: 1,
+        todayBtn:  1, todayHighlight: 1,  startView: 2, forceParse: 1, showMeridian: 1,});
+        $('#createEndTime3').val('').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', language: 'zh-CN', autoclose: 'true', minView: 2 ,  weekStart: 1,
+        todayBtn:  1, todayHighlight: 1,  startView: 2, forceParse: 1, showMeridian: 1,});
         $("#submitform1").on("submit",this.addItem2);  
       
     },

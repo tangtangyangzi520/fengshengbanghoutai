@@ -7,7 +7,7 @@
                 <div class="form-group">
                     <label class="col-md-4 ">&nbsp;&nbsp;商品名称</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" v-model="searchOptions.spuName">
+                        <input type="text" class="form-control" v-model="searchOptions.spuName" maxLength="50"/>
                     </div>
                 </div>
             </div>
@@ -16,7 +16,7 @@
                 <div class="form-group">
                     <label class="col-md-4 ">商品编码</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" v-model="searchOptions.spuCode">
+                        <input type="text" class="form-control" v-model="searchOptions.spuCode" maxLength="50"/>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <label class="col-md-4 "> SKU编码</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" v-model="searchOptions.skuCode">
+                        <input type="text" class="form-control" v-model="searchOptions.skuCode" maxLength="50"/>
                     </div>
                 </div>
             </div> 
@@ -214,10 +214,10 @@ export default {
                 //experts: [],
                 pains: [],
                 deployStatus: -1,
-                createStartTime: '',
-                createEndTime: '',
-                modifyedStartTime: '',
-                modifyedEndTime: '',
+                //createStartTime: '',
+                //createEndTime: '',
+                //modifyedStartTime: '',
+                //modifyedEndTime: '',
                 skuChannels: [],
                 submitStatus: -1,
                 page: {
@@ -243,8 +243,8 @@ export default {
         // 过滤请求参数，空值的字段删除
         setOptions() {
             let options = this.searchOptions;
-            options.createStartTime = options.createEndTime = options.modifyedStartTime = options.modifyedEndTime = '';
-            let createStartTime = $('#createStartTime').val(),
+            //options.createStartTime = options.createEndTime = options.modifyedStartTime = options.modifyedEndTime = '';
+           /* let createStartTime = $('#createStartTime').val(),
                 createEndTime = $('#createEndTime').val(),
                 modifyedStartTime = $('#modifyedStartTime').val(),
                 modifyedEndTime = $('#modifyedEndTime').val();
@@ -259,7 +259,7 @@ export default {
             }
             if (modifyedEndTime != '') {
                 options.modifyedEndTime = modifyedEndTime + " 23:59:59";
-            }
+            }*/
             for (let item in options) {
                 if (options[item] === '') {
                     delete options[item];

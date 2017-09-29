@@ -45,7 +45,7 @@
                                <!--  <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderBy(false)">▼</a>
                                 <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true)">▲</a> -->
                             </th>
-                            <th style="width:20%;">有限期</th>
+                            <th style="width:20%;">有效期</th>
                             <th style="width:10%;">领取人/次</th>
                             <th style="width:10%;">已使用</th>
                             <th style="">操作</th>
@@ -211,7 +211,10 @@ export default {
     methods: {
          //打开编辑页面
         add() {
-            this.showEditDialog = true;
+            this.mktid = -100
+            setTimeout(()=>{
+                 this.showEditDialog = true;
+            },100)
         },
         showEdit(id) {
             this.mktid = id
@@ -275,7 +278,7 @@ export default {
                     //重新加入
                     this.destroyControlDialog = false;
                 }, 200)
-                this.getList();
+                this.getList(false,true);
             }
 
          } ,
@@ -298,7 +301,7 @@ export default {
                     //重新加入
                     this.destroyControlDialog = false;
                 }, 200)
-                this.getList();
+                this.getList(false,true);
             }
 
          } ,
@@ -351,7 +354,7 @@ export default {
                     //重新加入
                     this.destroyControlDialog = false;
                 }, 200)
-                this.getList();
+                //this.getList();
             }
         },
         // 搜索条件变化
@@ -359,6 +362,7 @@ export default {
             this.searchOptions = options;
         },
         showControlFunc(item, type) {
+            this.clickItems = [];
             this.controlType = type;
              //this.showEditDialog = true;
             //console.log(item);
@@ -379,7 +383,7 @@ export default {
         },
         hideControlFunc(type) {
             if (type == 'success') {
-                this.getList();
+                //this.getList();
             }
             this.showControl = false;
         },
@@ -457,7 +461,6 @@ export default {
     },
     created() {
         vueThis = this;
-        this.getList()
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
     },
     watch: {

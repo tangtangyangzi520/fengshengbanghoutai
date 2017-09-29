@@ -3,7 +3,9 @@
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'500px'">
             <div slot="content">
                     <textarea v-model="editDemoData.ordDemo" placeholder="最多可输入256个字" rows="10" cols="50" maxlength="256"></textarea>
+                    
             </div>
+            {{this.editDemoData.ordDemo}}
             <span slot="btnList">
                 <button type="button" @click.stop="editDetailDemo" class="btn default blue">提交</button>
                 <button type="button" class="btn default" data-dismiss="modal">取消</button>
@@ -18,7 +20,6 @@
         <div style="position:fixed;z-index:11111;" v-show="showComponent">
             <select-component-all v-show="showComponent" :options="componentShowOption" :onselect="selectComponentFunc" :oncancel="cancelSelectComponent"></select-component-all>
         </div>
-        <loading :show="isLoading"></loading>
     </div>
 </template>
 <script>
@@ -41,6 +42,7 @@ export default {
             type: String,
             value: 0
         },
+        ordsubdemo:""
     },
     data() {
         return {
@@ -72,6 +74,7 @@ export default {
             showAlertMsg: '',
             removeAddDialog: false,
             title: '商家备注',
+            sourceDemo:'',//取消时回显
         }
     },
     vuex: {
@@ -88,7 +91,8 @@ export default {
             client.postData(ORDER_EDIT_DEMO,this.editDemoData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
-                    this.hideDialog();
+                    this.showMsg(data.msg);
+                    this.$parent.getList(false,true);
                 } else {
                     this.showMsg(data.msg);
                 }
@@ -112,6 +116,7 @@ export default {
         },
         hideDialog() {
             this.showDialog = false;
+            this.editDemoData.ordDemo= this.sourceDemo;
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
@@ -128,6 +133,7 @@ export default {
         },
         hideMsg() {
             this.showAlert = false;
+            this.hideDialog();
         },
        
     },
@@ -141,6 +147,10 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
+        },
+        ordsubdemo(){
+            this.editDemoData.ordDemo = this.ordsubdemo;
+             this.sourceDemo= this.ordsubdemo;
         },
     },
     ready() {

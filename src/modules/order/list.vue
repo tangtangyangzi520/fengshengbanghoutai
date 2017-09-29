@@ -10,11 +10,11 @@
             <div class="col-md-12 left">
                 <div class="col-md-4"></div>
                 <div class="col-md-6">
-                    <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
-                    <button class="btn yellow-crusta" type="button" @click="exportOrder">批量导出</button>
+                    <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>
+                    <button class="btn blue" type="button" @click="exportOrder">批量导出</button>
                     <!--                 <button class="btn yellow-crusta" type="button" @click="selectSpu" >选择商品</button>
-                                -->
-                    <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button>
+                                                                                                        -->
+                    <button class="btn blue" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button>
                 </div>
             </div>
             <form id="exportForm" method="POST">
@@ -34,7 +34,7 @@
             <div style="height:5px;clear:both;"></div>
         </div>
         <div class="contentBlock" id="contentList">
-             <div class="table-responsive col-md-12">
+            <div class="table-responsive col-md-12">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
@@ -49,7 +49,14 @@
                 </table>
             </div>
             <div class="table-responsive col-md-12" v-for="itemSet in dataList" :key="itemSet.orstNo">
-                <div>订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：需要支付接口提供数据 &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="col-md-12">
+                    <div class="col-md-9">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}} &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
+                        <a href="javascript:;" @click="showDetail(itemSet,itemSub)">查看详情</a>--
+                        <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])">备注</a> --
+                        <a href=" " @click="setStar(itemSet.orderSubList[0])">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
                 </div>
                 <table class="table table-striped table-bordered table-hover">
                     <tbody v-for="itemSub in itemSet.orderSubList" :key="itemSub.ordOrderNo">
@@ -93,15 +100,15 @@
                                 </p>
                             </td>
                             <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
-                                <p>{{itemSub.ordMemberId}}</p>
+                                <p>{{itemSet.orsMemberNickname}}</p>
                                 <p>{{itemSub.ordReceiveName}}</p>
                                 <p>{{itemSub.ordReceiveMobile}}</p>
                             </td>
                             <td align="center" style="width:15%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
-                                <p>
-                                        <a href="javascript:;" @click="showDetail(itemSet,itemSub)">查看详情</a>--
-                                        <a href="javascript:;" @click="setDemo(itemSub.ordOrderId)">备注</a>
-                                        --<a href="javascript:;">加星</a>
+                                <p v-if="itemSet.orderSubList.length > 1">
+                                    <a href="javascript:;" @click="showDetail(itemSet,itemSub)">查看详情</a>--
+                                    <a href="javascript:;" @click="setDemo(itemSub)">备注</a> --
+                                    <a href="javascript:;" @click="setStar(itemSub)">加星</a>
                                 </p>
                                 <p>¥ {{itemSub.ordActAmount}}</p>
                                 <p>{{ordPayChannel(itemSet.orsPayChannel)}}</p>
@@ -122,7 +129,7 @@
         <!-- 创建订单详情弹窗 -->
         <order-control v-if="!destroyControlDialog" :id="orderEditId" :set-data="orderSetData" :sub-data="orderSubData" :show="showAddDialog" :onhide="hideAddDialog"></order-control>
         <!-- 创建订单备注弹窗 -->
-        <demo-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showDemoDialog" :onhide="hideDemoDialog"></demo-control>
+        <demo-control v-if="!destroyControlDialog" :id="ordOrderId" :ordsubdemo="ordDemo" :show="showDemoDialog" :onhide="hideDemoDialog"></demo-control>
         <!-- 创建修改订单状态弹窗 -->
         <change-status-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showStatusDialog" :onhide="hideStatusDialog"></change-status-control>
         <!-- 创建取消订单弹窗 -->
@@ -131,6 +138,8 @@
         <change-payment-control v-if="!destroyControlDialog" :sub-data="orderSubData" :show="showPaymentDialog" :onhide="hidePaymentDialog"></change-payment-control>
         <!-- 测试选择商品弹窗 -->
         <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideAddDialog" @spu-data="getSelected"></select-spu>
+        <!--加星-->
+        <star v-if="!destroyControlDialog" :id="ordOrderId" :starnum="ordStar" :show="showStarDialog" :onhide="hideStarDialog"></star>
         <!-- 创建预览商品弹窗 -->
         <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showpreDialog" :onhide="hidePreDialog" :pspuid="lspuid" :pflag="lflag" :imgflag="limgflag"></preview>
 
@@ -158,11 +167,12 @@ import changeStatusControl from './changeStatusControl';
 import cancelOrderControl from './cancelOrderControl';
 import changePaymentControl from './changePaymentControl';
 import preview from '../productManage/preview';
+import star from './star';
 let vueThis = null;
 export default {
     components: {
         pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control,
-        loading, orderControl, demoControl, changeStatusControl, cancelOrderControl, changePaymentControl, selectSpu, preview
+        loading, orderControl, demoControl, changeStatusControl, cancelOrderControl, changePaymentControl, selectSpu, preview, star
     },
     props: {
         title: '',
@@ -191,6 +201,7 @@ export default {
             showAlert: false,
             showAddDialog: false,
             showDemoDialog: false,
+            showStarDialog: false,
             showStatusDialog: false,
             showReasonDialog: false,
             showPaymentDialog: false,
@@ -208,9 +219,11 @@ export default {
             orderSubData: null,
             orsId: 0,
             ordOrderId: 0,
+            ordStar: 0,
+            ordDemo: "",
             testSelectedSpu: [],
-            checkedList:[true,false,false,false,false,false,false],//用来使被选中标签高亮
-            
+            checkedList: [true, false, false, false, false, false, false],//用来使被选中标签高亮
+
         }
     },
     computed: {
@@ -263,8 +276,16 @@ export default {
         },
         //备注
         setDemo(data) {
-            this.ordOrderId = data;
+            this.ordOrderId = data.ordOrderId;
+            this.ordDemo = data.ordDemo;
             this.showDemoDialog = true;
+        },
+        //加星
+        setStar(data) {
+            console.log(data);
+            this.ordOrderId = data.ordOrderId;
+            this.ordStar = data.ordStar
+            this.showStarDialog = true;
         },
         //支付渠道显示
         ordPayChannel(payChannel) {
@@ -281,10 +302,10 @@ export default {
         //通过点击订单状态查询订单列表
         getListByState(num) {
             for (let index = 0; index < this.checkedList.length; index++) {//被选中标签高亮
-                if(index==num+1){
-                    this.checkedList.splice(index,1,true);
-                }else{
-                    this.checkedList.splice(index,1,false);
+                if (index == num + 1) {
+                    this.checkedList.splice(index, 1, true);
+                } else {
+                    this.checkedList.splice(index, 1, false);
                 }
             }
             this.checkedbtn = num;
@@ -339,29 +360,35 @@ export default {
                 this.onhide('cancel');
             }, 300)
         },
-        hideDemoDialog(){
+        hideDemoDialog() {
             this.showDemoDialog = false
             setTimeout(() => {
                 this.onhide('cancel');
             }, 300)
         },
-        hideStatusDialog(){
+        hideStatusDialog() {
             this.showStatusDialog = false
             setTimeout(() => {
                 this.onhide('cancel');
             }, 300)
         },
-        hideReasonDialog(){
+        hideReasonDialog() {
             this.showReasonDialog = false
             setTimeout(() => {
                 this.onhide('cancel');
-            }, 300)            
+            }, 300)
         },
-        hidePaymentDialog(){
+        hidePaymentDialog() {
             this.showPaymentDialog = false
             setTimeout(() => {
                 this.onhide('cancel');
-            }, 300)            
+            }, 300)
+        },
+        hideStarDialog() {
+            this.showStarDialog = false
+            setTimeout(() => {
+                this.onhide('cancel');
+            }, 300)
         },
         // 搜索条件变化
         changeSearchOptions(options) {
@@ -373,8 +400,22 @@ export default {
             }
             this.showControl = false;
         },
+        //数据校验
+        checkOptions() {
+            if (!/^[0-9]*$/.test(this.searchOptions.lowOrsOpenPay) || this.searchOptions.lowOrsOpenPay < 0) {
+                this.showMsg("实付金额请输入不小于0的整数");
+                return false;
+            }
+            if (!/^[0-9]*$/.test(this.searchOptions.highOrsOpenPay) || this.searchOptions.highOrsOpenPay < 0) {
+                this.showMsg("实付金额请输入不小于0的整数");
+                return false;
+            }
+            return true;
+        },
         getList(page, firstSearch) {
             let options, url = ORDER_GET_LIST;
+            //数据校验
+            if(!this.checkOptions()) return;
             if (!firstSearch) {
                 // 拿最后一次请求的参数
                 options = this.lastSearchOptions;
@@ -429,7 +470,7 @@ export default {
             })
         },
         selectItem(item) {
-            item.checked = !item.checked;
+            //item.checked = !item.checked;
         },
         showMsg(msg, title) {
             if (title) {

@@ -187,7 +187,7 @@ export default {
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
-            title: '选择商品',
+            title: '选择活动商品',
             searchList:[{id:1,name:'商品编码'},{id:2,name:'商品名称'}],
             searchType:1,
             searchWord:'',
@@ -208,6 +208,7 @@ export default {
     methods: {
         //过滤未选择数据
         filterList(){
+            console.log(this.selectedList+"selectedList")
             let sourceList=this.unSelectedList,targetList=this.selectedList,index,index2;
             for (index = sourceList.length-1; index >=0; index--){
                 for (index2 = targetList.length-1; index2 >=0; index2--){
@@ -226,10 +227,12 @@ export default {
         //将一个list中选中的数据转移到另一个list中
         moveData(sourceList,targetList){
             let index;
+        if( sourceList.length > 0 ){
             for (index = sourceList.length-1; index >=0; index--){
                 if(sourceList[index].checked==true){
                     targetList.push(sourceList[index]);
                     sourceList.splice(index,1);
+                    }
                 }
             }
         },

@@ -5,7 +5,7 @@
                 <!-- <m-select :data="cancelReasonList" :placeholder="'请选择取消原因'" :change-func="selectReasonFunc" :class="'fixedIcon'" ></m-select> -->
                 <div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">订单状态：</label>
+                    <label class="col-sm-3 control-label">取消原因：</label>
                     <div class="controls col-md-6">
                     <select v-model="editReasonData.ordCancelReason" class="type" id="ordCancelReason">
                         <option v-for="item in cancelReasonList" :value="item.keyValue">{{item.keyValue}}</option>

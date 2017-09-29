@@ -69,7 +69,8 @@
                             <div class="col-md-3" style="text-align:center;">
                                 <span v-if="this.subData.ordStatus==3">{{subData.completeTime}}</span>
                             </div>
-                            </br></br>
+                            </br>
+                            </br>
                         </div>
                     </div>
                     <!-- 订单信息 -->
@@ -90,15 +91,15 @@
                                 </tr>
                                 <tr>
                                     <td width="30%">订单类型: </td>
-                                    <td width="70%">{{orderTypeDisplay(setData.ordOrderType)}}</td>
+                                    <td width="70%">{{orderTypeDisplay(subData.ordOrderType)}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%">付款方式: </td>
-                                    <td width="70%">{{ordPayChannel(itemSet.orsPayChannel)}}</td>
+                                    <td width="70%">{{ordPayChannel(setData.orsPayChannel)}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%">买家昵称: </td>
-                                    <td width="70%">{{subData.ordMemberId}}</td>
+                                    <td width="70%">{{setData.orsMemberNickname}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%">姓名: </td>
@@ -110,11 +111,11 @@
                                 </tr>
                                 <tr>
                                     <td width="30%">配送方式: </td>
-                                    <td width="70%">{{ordLogiType(setData.ordLogiType)}}</td>
+                                    <td width="70%">{{ordLogiType(subData.ordLogiType)}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%">收货信息: </td>
-                                    <td width="70%">{{ordAddress(setData.orderSubList[0])}}</td>
+                                    <td width="70%">{{ordAddress(subData)}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%">买家留言: </td>
@@ -124,18 +125,24 @@
                         </div>
 
                         <div class="col-md-6 myBorder">
-                            <h4>订单状态: {{subData.ordStatusDisplay}}</h4>
+                             <h4>订单状态:
+                                <span v-if="subData.ordStatus==0">&nbsp;&nbsp;商品已拍下,等待买家付款 </span>
+                                <span v-if="subData.ordStatus==1">&nbsp;&nbsp;买家已付款,等待商家发货 </span>
+                                <span v-if="subData.ordStatus==2">&nbsp;&nbsp;商家已发货,等待交易成功 </span>
+                                <span v-if="subData.ordStatus==3">&nbsp;&nbsp;交易完成 </span>
+                                <span v-if="subData.ordStatus==4">&nbsp;&nbsp;交易关闭 </span>
+                            </h4>
                             <div v-if="subData.ordStatus==0">如买家未在规定时间内付款,订单将按照设置逾期自动关闭;</div>
                             <div v-if="subData.ordStatus==1">买家已付款至你的财付通账户,请尽快发货,否则买家有权申请退款;</div>
                             <div v-if="subData.ordStatus==2">买家如在
                                 <span style="color:red;">7天内</span>没有申请退款,交易将自动完成;</div>
                             <div v-if="subData.ordStatus==3">
-                                <p></p>
+                                </br>
                             </div>
-                            <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</div>
+                            <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</br></br></div>
                             <div>
-
-                                <a @click.stop="setDemo(setData.orsId)">备注</a>
+                                <a @click.stop="setDemo(subData)">备注</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a @click.stop="setStar(subData)">加星</a>
                                 <p>
                                     <button type="button" v-show="(subData.ordStatus==0)" @click.stop="editPayAmount(subData)" class="btn btn-xs blue">修改价格</button>
                                     <button type="button" v-show="(subData.ordStatus==0)" @click.stop="cancelOrder(subData)" class="btn btn-xs blue">取消订单</button>
@@ -157,13 +164,16 @@
                             <tr>
                                 <td width="20%">
                                     <p>{{subData.ordOrderNo}}</p>
-                                    <p>----需要交易单号----</p>
+                                    <p>{{setData.orsPayNum}}</p>
                                     <p>{{ordPayChannel(setData.orsPayChannel)}}</p>
                                 </td>
-                                <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordMemberId}}:{{setData.buyerMessage}}</td>
+                                <td width="20%" align="center" style="vertical-align:middle;">{{subData.orsMemberNickname}}:{{setData.buyerMessage}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordPayTime}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordActAmount}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{payStatus(setData.orsPayStatus)}}</td>
+                            </tr>
+                             <tr>
+                                <td colspan="5" style="text-align:left">累计收款：&nbsp;&nbsp;{{subData.ordAmount}}元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实收款：&nbsp;&nbsp;{{subData.ordActAmount}}元</td>
                             </tr>
                         </table>
 
@@ -181,6 +191,10 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr>
+                                <td colspan="6" style="text-align:left"><span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {{subData.ordLogiCompany}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}</td>
+                                </tr>
                                 <tr v-for="(index,itemDetail) in subData.orderDetailList">
                                     <td class="tdTitle" style="width:26%;">
                                         <p>商品编码:{{itemDetail.detailSku.skuCode}}</p>
@@ -192,7 +206,7 @@
                                         <h4>
                                             <a style="text-decoration:none;" title="预览商品" @click.stop="previewpro(itemDetail.detailSpu.spuId)">{{itemDetail.detailSpu.spuName}}</a>
                                         </h4>
-                                        
+
                                         <p>发货地: 需要提供发货地</p>
                                         <p>规格: {{itemDetail.detailSku.skuName}}</p>
                                     </td>
@@ -205,15 +219,44 @@
                                     <td align="center" style="width:10%;vertical-align:middle;">
                                         <!-- 优惠 -->
                                         {{itemDetail.ordShareAmount}}
-                                        <td align="center" style="width:10%;vertical-align:middle;">
-                                            {{detailActAmount(itemDetail)}}
-                                        </td>
-                                        <td align="center" style="width:10%;vertical-align:middle;">
-                                            {{subData.ordStatusDisplay}}
-                                        </td>
+                                    </td>
+                                    <td align="center" style="width:10%;vertical-align:middle;">
+                                        {{detailActAmount(itemDetail)}}
+                                    </td>
+                                    <td align="center" style="width:10%;vertical-align:middle;">
+                                        {{subData.ordStatusDisplay}}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="right">
+                            订单共{{totalNum()}}件商品，总计：¥{{subData.ordActAmount}}（含运费 ￥{{subData.ordTransportAmount}}）
+                            <!-- <div style="width:50px;" @mouseenter.stop="showCompaign" @mouseleave.stop="showCompaign">
+                                    <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
+                                </div> -->
+                            <img style="" @mouseout="hidePreferentialContent($event)" @mouseover="showPreferentialContent($event)" src="u7027.jpg">
+                            <table class="table table-striped table-bordered table-hover" id="PreferentialContent">
+                                <thead>
+                                    <tr style="background-color:#F2F2F2;height:40px;">
+                                        <th style="width:65%;text-align:center;border-right:none;border-left:none; ">包含以下抵扣方式</th>
+                                        <th style="width:35%;text-align:center;border-right:none;border-left:none;">金额（元）</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;">
+                                        <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
+                                          {{item.ordCampaign.mkcName}} <br>  ({{item.ordCampaign.mkcRemark}}) 
+                                        </td>
+                                        <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
+                                            {{item.ordShareAmount}}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="subData.orderDetailList.length==0">
+                                        <td colspan="2">暂无数据</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -221,6 +264,8 @@
                 <button type="button" class="btn default" data-dismiss="modal">确定</button>
             </span>
         </m-alert>
+        <!-- 优惠信息气泡 -->
+        <campaign-control v-if="!destroyControlDialog" :show="showCampaignStatus" :onhide="hideCampaignDialog"></campaign-control>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
@@ -238,9 +283,10 @@ import client from '../../common/utils/client';
 import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
 import loading from '../common/loading';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
+import campaignControl from './campaignControl';
 export default {
     components: {
-        selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading,
+        selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, campaignControl
     },
     props: {
         show: {
@@ -293,6 +339,7 @@ export default {
             showAlertMsg: '',
             removeAddDialog: false,
             title: '订单详情',
+            showCampaignStatus: false,
         }
     },
     vuex: {
@@ -303,6 +350,18 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        //隐藏优惠券信息
+        hidePreferentialContent(event) {
+            $("#PreferentialContent").hide()
+        },
+        //鼠标移至图标,显示优惠内容
+        showPreferentialContent(event) {
+            $("#PreferentialContent").show()
+        },
+        // //优惠券信息
+        // showCompaign() {
+        //     this.showCampaignStatus = !this.showCampaignStatus;
+        // },
         //取消订单
         cancelOrder(itemSub) {
             this.$parent.cancelOrder(itemSub);
@@ -315,8 +374,12 @@ export default {
         setDemo(orsId) {
             this.$parent.setDemo(orsId);
         },
+        //加星
+        setStar(data) {
+            this.$parent.setStar(data);
+        },
         //查看商品预览
-        previewpro(data){
+        previewpro(data) {
             this.$parent.previewpro(data);
         },
         //进度条
@@ -331,9 +394,17 @@ export default {
                 default: ;
             }
         },
+        //商品总件数
+        totalNum() {
+            let totalNum = 0;
+            this.subData.orderDetailList.forEach(item => {
+                totalNum += item.ordSkuNum;
+            });
+            return totalNum;
+        },
         //商品小计
         detailActAmount(itemDetail) {
-            return itemDetail.ordPromotion * itemDetail.ordSkuNum
+            return itemDetail.ordOriginal * itemDetail.ordSkuNum
         },
         //显示支付状态
         payStatus(payStatus) {
@@ -372,9 +443,10 @@ export default {
         },
         // 显示订单类型
         orderTypeDisplay(orderType) {
+            console.log("1111111"+orderType);
             switch (orderType) {
                 case 0: return '普通订单';
-                case 1: return '跨境顶大';
+                case 1: return '跨境订单';
                 default: ;
             }
         },
@@ -402,6 +474,12 @@ export default {
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
+            }, 300)
+        },
+        hideCampaignDialog() {
+            this.showCampaignStatus = false;
+            setTimeout(() => {
+                this.showCampaignStatus = true;
             }, 300)
         },
         showMsg(msg, title) {
@@ -517,6 +595,7 @@ export default {
     ready() {
         this.typesList = client.global.componentTypes;
         this.showPainListSelect = true;
+
     },
     beforeDestroy() {
         this.showPainListSelect = false;
@@ -526,5 +605,26 @@ export default {
 <style>
 .myBorder {
     border-top: 1px solid #000
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s
+}
+
+#PreferentialContent {
+    border: 2px solid #CCCCCC;
+    width: 300px;
+    position: absolute;
+    bottom: -10%;
+    left: 70%;
+    background-color: white;
+    display: none;
+}
+
+#PreferentialContent td {
+    background-color: white;
+    border-right: 2px solid #D7D7D7;
+    border-left: 2px solid #D7D7D7;
 }
 </style>

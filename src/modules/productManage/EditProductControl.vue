@@ -109,7 +109,7 @@
                             <label for="title" class="col-sm-3 control-label">
                                 上榜理由：
                             </label>
-                            <div class="col-md-4" style="background-color:white;width:600px" >
+                            <div class="col-md-4" style="background-color:white;width:600px;" >
                                <!--  <select class="form-control" v-model="shangb" size=11 multiple="multiple">
                                      
                                      <option v-for="item in shangbanglist" :value="item.keyValue">{{item.keyValue}}</option>
@@ -121,9 +121,15 @@
                                 </div>
                                 <br>
                             </div> 
-                            <div class="col-md-8" >
-                            <span style="color:red"><span v-for="i in 63">&nbsp;</span>注：最多可选择3个理由</span>
-                           </div>
+                             <div class="col-md-11" >
+                                    <span v-for="(index,i) in createshangbanglist">
+                                        <span v-for="ii in 58">&nbsp;</span>
+                                        <input type="text" style="display:inline-block;width:40%" v-model="i.pcrReason" @keyup="checkshangb(i)" maxLength="100"/>
+                                        <span v-if="index == createshangbanglist.length-1"><a @click="createshangbang()"  >+添加理由</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <a v-if="index > 0" @click="deleteshangbang(index)">-删除理由</a><br><br>
+                                    </span>
+                                    <span v-for="i in 58">&nbsp;</span><span style="color:red">注：最多可选择3个理由</span>
+                                </div>
                         </div>
                         
     
@@ -132,7 +138,7 @@
                                 专家观点：
                             </label>
                             <div class="controls col-md-8">
-                                <textarea  v-model="request.spuExpertOption" placeholder="30-100个字以内" maxLength="100">
+                                <textarea  v-model="request.spuExpertOption" placeholder="30-100个字以内" maxLength="100" cols="50" rows="3">
                                 </textarea> 
                             </div>
                         </div>
@@ -187,7 +193,8 @@
                               </div>
                               <h4 class="col-md-1">￥</h4>
                               <div class="col-sm-5" >
-                                  <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"/></div>
+                                  <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"
+                                  @keyup="check($event)" @change="check($event)"/></div>
                               <br><br><br>
                               <div class="col-md-4" >
                                  <input type="radio" name="yunfei" v-model="yunfei" value="1">运费模板</div>
@@ -206,8 +213,18 @@
                             </label>
                             <div class="controls col-md-4" id="selects" >
                                <span  class="insuedit" v-for="data in insurancelist">
-                                <input type="checkbox"   :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" style="width:16px;height:16px;margin-right:2px">&nbsp;&nbsp;{{ data.keyValue }}<br>
+                                <input type="checkbox"   :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" style="width:16px;height:16px;margin-right:2px" @click="insurance($event)">&nbsp;&nbsp;{{ data.keyValue }}<br>
                                 </span>
+                                <div style="background-color:white;border: 1px solid black;width:340px"><br>
+                                  <span v-for="(index,i) in createinsurancelist">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;类型<input type="text" style="display:inline-block" v-model="i.keyValue" @keyup="checkinsurance(i,1)"
+                                    maxLength="50"/> <br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;描述<input type="text" style="display:inline-block" v-model="i.description" @keyup="checkinsurance(i,2)"
+                                    maxLength="100"/>
+                                    <span v-if="index == createinsurancelist.length-1"><a @click="createinsurance()"  >+添加</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    <a v-if="index > 0" @click="deleteinsurance(index)">-删除</a><br><br>
+                                  </span>
+                                </div>
                             </div>
                         </div>
 
@@ -216,7 +233,7 @@
                                 包装清单：<br><font color="#A8A8A8">200字以内</font>
                             </label>
                             <div class="controls col-md-7">
-                                <textarea  v-model="request.spuPackingList" placeholder="200字以内" maxLength="200">
+                                <textarea rows="3" cols="50" v-model="request.spuPackingList" placeholder="200字以内" maxLength="200">
                                 </textarea> 
                             </div>
                         </div>
@@ -235,7 +252,7 @@
                                 <br>
                                 <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
                                 </span>
-                       <div class="col-md-6 time-box">
+                       <div class="col-md-6 time-box" id="selecttime1" style="display:none">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTime1" v-model="stime"/>
                                 <select  v-model="hour" style="width:90px; height:27px">
                                     <option value="-1">选择小时</option>
@@ -358,6 +375,8 @@ export default {
                 "tagList":[],//标签集合
                 "detailsList": []
             },
+            createshangbanglist:[{"pcrReason": "",}],
+            createinsurancelist:[{"keyValue":"","description":""}],
             carriageList:[],//运费模板
             yunfei:0,       //0:统一邮费  1:运费模板
             hour : -1,
@@ -424,17 +443,151 @@ export default {
         }
     },
     methods: {
-      shangbang(event){
-        console.log(this.shangb)
-         let el = event.currentTarget;
-           if(this.shangb.length >= 3){
-                $(el).removeAttr("checked")
-                //this.showMsg("最多选择3个理由")
+      //整数校验
+         check(event){
+               let el = event.currentTarget;
+                $(el).val(Math.abs($(el).val()))
+               $(el).val(Math.round($(el).val()))
+               var reg = /^-?\d{0,10}$/
+               let s = $(el).val()+""
+              let f = !reg.test(s)
+            if (  f ) {
+                   this.showMsg("请输入整数")
+                   //$(el).val(s.substring(0,s.length-1))
+                    $(el).val("")
+               }
+        },
+        //填写消保类型校验
+        checkinsurance(val,num){
+            let count = 0;
+            if(num ==1){
+               if($.trim(val.description) == "" ){
+                   this.createinsurancelist.forEach(data=>{
+                   if($.trim(data.description) != "" || $.trim(data.keyValue) != ""){
+                      count++
+                      } 
+                   })
+                   if( $(".insuedit input:checked").length + count > 5 ){
+                      val.keyValue = ""
+                      this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                   }
+               }
             }else{
-                 this.request.pcrList.pcrReason = this.shangb 
-                 //alert(this.request.pcrList.pcrReason)
+               if($.trim(val.keyValue) == "" ){
+                   this.createinsurancelist.forEach(data=>{
+                   if($.trim(data.description) != "" || $.trim(data.keyValue) != ""){
+                      count++
+                      } 
+                   })
+                   if( $(".insuedit input:checked").length + count > 5 ){
+                      val.description = ""
+                      this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                   }
+                }
             }
-
+        },
+        //填写上榜理由校验
+        checkshangb(val){
+          let count = 0;
+           this.createshangbanglist.forEach(data=>{
+               if($.trim(data.pcrReason)){
+                  count++
+               } 
+           })
+           if(this.shangb.length + count > 3 ){
+              val.pcrReason = ""
+              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+           }
+        },
+        //勾选消保类型校验
+        insurance(event){
+             let el = event.currentTarget;
+             if( this.createinsurancelist.length ==1  ){
+                if( $.trim(this.createinsurancelist[0].keyValue) != "" || $.trim(this.createinsurancelist[0].description) != ""){
+                   if( $(".insuedit input:checked").length + this.createinsurancelist.length > 5){
+                      if($(el).is(':checked')){
+                         $(el).removeAttr("checked")
+                         this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                         return
+                      }
+                  }
+                }
+             }else if( this.createinsurancelist.length > 1  ){
+                 if( $(".insuedit input:checked").length + this.createinsurancelist.length > 5){
+                   if($(el).is(':checked')){
+                    $(el).removeAttr("checked")
+                    this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                    return
+                    }
+                 }
+             }    
+               if($(".insuedit input:checked").length > 5){
+                 if($(el).is(':checked')){
+                    $(el).removeAttr("checked")
+                    this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+                  }
+                }
+        },
+        //删除自定义上榜理由
+        deleteshangbang(index){
+            this.createshangbanglist.splice(index)
+        },
+        //添加上榜理由
+        createshangbang(){
+            if( this.shangb.length >= 3){
+              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+              return
+            }
+            if( this.shangb.length + this.createshangbanglist.length >= 3){
+              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+              return
+            }
+            this.createshangbanglist.push({"pcrReason": "",})
+        },
+        //删除自定义消保类型
+        deleteinsurance(index){
+            this.createinsurancelist.splice(index)
+        },
+        //添加消保类型
+        createinsurance(){
+            if(  $(".insuedit input:checked").length  >= 5){
+              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+              return
+            }
+            if( $(".insuedit input:checked").length + this.createinsurancelist.length >= 5){
+              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+              return
+            }
+            this.createinsurancelist.push({"keyValue":"","description":""})
+        },
+        //勾选上榜理由时校验
+      shangbang(event){
+         let el = event.currentTarget;
+         if( this.createshangbanglist.length ==1  ){
+            if( $.trim(this.createshangbanglist[0].pcrReason) != ""){
+               if( this.shangb.length + this.createshangbanglist.length >= 3){
+                 if($(el).is(':checked')){
+                    $(el).removeAttr("checked")
+                    this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+                    return
+                }
+              }
+            }
+         }else if( this.createshangbanglist.length > 1  ){
+             if( this.shangb.length + this.createshangbanglist.length >= 3){
+              if($(el).is(':checked')){
+                $(el).removeAttr("checked")
+                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+                return
+                }
+             }
+         }    
+           if(this.shangb.length >= 3){
+             if($(el).is(':checked')){
+                $(el).removeAttr("checked")
+                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
+              }
+            }
       },
         //增加属性选项
         addsxxx( event ) {
@@ -571,6 +724,10 @@ export default {
                 this.showMsg("有赞商品地址不能超过100字")
                 return
             }
+            if(this.request.spuBrandId < 0 ){
+                this.showMsg("请选择品牌")
+                return
+            }
             if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
                 this.showMsg("专家观点不能少于30字")
                 return
@@ -586,10 +743,7 @@ export default {
 
         this.request.spuId = this.spuid
         //this.request.spuAppSummary = this.request.spuPcSummary
-      if(this.request.spuBrandId < 0 ){
-        this.showMsg("请选择品牌")
-        return
-      }
+     
        this.request.tagList = []
       //类目标签
      /* if( this.tagsList.length == 0){
@@ -616,40 +770,48 @@ export default {
              this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum, "prpSpuId":this.spuid ,"prpSort":index} )
         })
       
-
-         //上榜理由
-         if(this.shangb.length > 3 ){
-            this.showMsg("最多选择3个上榜理由")
-            return
-         }
-
-       /* if(this.shangb.length == 0 ){
-            this.showMsg("请选择上榜理由")
-            return
-         }*/
-
-        this.shangb.forEach((data,index)=>{
-                let val = this.shangbanglist.find(item=>item.keyValue == data)
-                this.request.pcrList.$set(index, {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":this.spuid, }  );
-                //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
-             })
+     //上榜理由
+            this.request.pcrList = []
+            if(this.shangb.length > 3 ){
+                this.showMsg("最多选择3个上榜理由")
+                return
+             }
+            this.shangb.forEach((data,index)=>{
+                    let val = this.shangbanglist.find(item=>item.keyValue == data)
+                    this.request.pcrList.push( {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
+                    //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
+                 })
+             this.createshangbanglist.forEach(data=>{
+                   if( $.trim(data.pcrReason) ){
+                      this.request.pcrList.push({"pcrReason": $.trim(data.pcrReason),"pcrSortNo":-1,})
+                   }
+              })
+             if(this.request.pcrList.length > 3){
+                  this.showMsg("最多选择3个上榜理由")
+                  return
+             }
      
-    //保消类型
+         //保消类型
          let arr = [];
-         let sid = this.spuid
-         console.log($($(".insuedit :checked")).length)
+          
          $(".insuedit input:checked").each(function(i , v){
              //let ar = {"piInsuranceId": '',"piInsurance":'',"piSort":'', }
                let ar = $(v).val().split(",")
-               let av = { "piSpuId": sid, "piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2],"piDesc":ar[3], }
+               let av = {"piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2],"piDesc":ar[3], }//
                arr.push(av)
          })
-        /* if(arr.length == 0 ){
-            this.showMsg("请选择消保类型")
-            return
-         }*/
-         console.log(arr)
-         this.request.piList = arr 
+          this.createinsurancelist.forEach(data=>{
+               if($.trim(data.keyValue) && $.trim(data.description) ){
+                   let av = {"piInsurance":$.trim(data.keyValue),"piDesc":$.trim(data.description), }
+                   arr.push(av)
+               }
+          })
+           if( arr.length > 5){
+              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+              return
+            }
+          this.request.piList = arr 
+          //邮费
 
           if(this.yunfei == 0 && $.trim(this.request.spuFreight) == ''){
              this.showMsg("请设置统一邮费的价格")
@@ -873,7 +1035,8 @@ export default {
             })
             if(flag){
                  alert("请选择到最后一级标签。")
-               this.data.labelIds = []
+                this.data.labelIds = []
+                this.neirongList = list;
                return
             }else{
                 this.neirongList = list;
@@ -915,10 +1078,11 @@ export default {
             })
             if(flag){
                 alert("请选择到最后一级标签。")
-               this.data.labelIds = []
+                this.data.labelIds = []
+                this.tagsList = list;
                return
             }else{
-               this.tagsList = list;
+                this.tagsList = list;
                 this.showTagTreeSelect = !this.showTagTreeSelect;
             }
         },
@@ -1021,11 +1185,30 @@ export default {
          this.getCarriageList() 
     },
     watch: {
+       rad(val){
+           if(val == 1){
+             $("#selecttime1").hide()
+           }else{
+             $("#selecttime1").show()
+           }
+        },
         stime(val) {
-            let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/
-            if(!reg.test(val)){
+             if( val ) {
+              let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/
+              if(!reg.test(val)){
                 this.showMsg('日期格式不合法')
-                this.stime = '' 
+                this.stime = "" 
+                return
+              }
+             val = val.replace(/-/g,"/")
+             let end = new Date(val)
+             if(end <= new Date()){
+               //this.showMsg('上架时间不可以小于现在时间')
+               this.stime = "" 
+               this.hour = -1
+               this.minutes = -1
+               return
+               }
             }
         },
         "request.spuFreight":{　　
@@ -1055,13 +1238,24 @@ export default {
                   if (data.code == 200) {
 
                     //消保回显
-                    $(data.data.piList).each(function(index,pi){
-                      $(".insuedit input").each(function(i,v){
+                    for(var i=0;i< data.data.piList.length;i++){
+                         if(data.data.piList[i].piInsuranceId == -1){
+                           this.insurancelist.push({"keyValue":data.data.piList[i].piInsurance,
+                           "dictionnaryId":data.data.piList[i].piInsuranceId,
+                           "sortNo":data.data.piList[i].piSort,
+                           "description":data.data.piList[i].piDesc,})//data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description
+                         }
+                    }
+                    setTimeout(()=>{
+                       $(data.data.piList).each(function(index,pi){
+                         $(".insuedit input").each(function(i,v){
                          if(($(v).val()+'').indexOf(pi.piInsurance+'') >= 0){
                             $(v).prop("checked","true");  
                          }
                       })
                     })
+                    },300)
+                    
                     //运费模板回显
                     
                     if(data.data.spuCarriageId >0){
@@ -1084,6 +1278,9 @@ export default {
                         this.stime += "-0"+sjtime.getDate()
                     }
                     this.spuShelvesStatus = data.data.spuShelvesStatus
+                    if(this.spuShelvesStatus == 1){
+                      this.rad = 0
+                    }
                     this.uptime = data.data.spuOnShelvesTime
                    //this.stime = sjtime.getFullYear() + "-0"+(sjtime.getMonth()+1)+"-"+sjtime.getDate()
                      //alert(stime)
@@ -1091,6 +1288,11 @@ export default {
                     this.hour = sjtime.getHours()
                     this.minutes = sjtime.getMinutes()
                     //上榜理由回显
+                    for(var i=0;i< data.data.reasonsList.length;i++){
+                        if(data.data.reasonsList[i].pcrSortNo == -1){
+                              this.shangbanglist.push({"keyValue":data.data.reasonsList[i].pcrReason,"pcrSortNo":-1})
+                          }
+                      }
                     for(var i=0;i< data.data.reasonsList.length;i++){
                           this.shangb.push(data.data.reasonsList[i].pcrReason) 
                     }

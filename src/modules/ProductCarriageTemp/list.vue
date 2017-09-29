@@ -3,18 +3,33 @@
     <div style="background-color:white">
         <div class="page-bar min-bar">
             <page-title-bar>
-                <span slot="title">运费模板列表</span>
+                <span slot="title">运费模板</span>
             </page-title-bar>
-            <a><div  id="6" class="cha3"    style="float:left"    @click="changeClass(-1)">快递发货</div></a>  
-           <!--  <a> <div id="0" class="select2"  style="float:left"   @click="changeClass(0)">未开始</div></a>   
-            <a><div  id="2" class="select2"  style="float:left"  @click="changeClass(2)">进行中</div></a>
-            <a><div  id="1" class="select2"  style="float:left"  @click="changeClass(1)">已结束</div></a> -->
+            <a><div  id="kdfh" class="select3"    style="float:left;margin-left:1.4%;"    @click="changeClass(1)">快递发货</div></a>  
+            <a><div  id="jysz" class="cha3"    style="float:left"    @click="changeClass(2)">交易设置</div></a>  
             <br>
                 <p style="text-align:center">
                     <hr style="height:3px;background-color:white;width:99%;margin-left:0.4%" >
                 </p>
-           
-            <button class="btn" type="button"  @click="addItem('add')" style="margin-left:6px;float:left;margin-top:10px;background-color:#1E90FF;color:white">新增运费模板</button>
+         <div id="jyszContext" style="display:none" class="contentBlock"><br><br>
+            <form id="systemSetting">
+                <span v-for="data in systemSettingList">
+                 <span v-if="data.settingName.indexOf('取消时间') >=0">
+                   <span v-for="i in 20">&nbsp;</span><span span style="font-weight:bold;font-size:18px">待付款订单取消时间设置</span><br><br>
+                   <span v-for="i in 20">&nbsp;</span><span style="font-size:16px">拍下未付款订单<input type="number" required="required" min = "0" max="1000" v-model="data.settingValue" @keyup="integer($event)" @change="integer($event)"/>分钟内未付款，自动取消订单</span><br><br>
+                 </span>
+                 <span v-if="data.settingName.indexOf('收货时间') >=0">
+                   <span v-for="i in 20">&nbsp;</span><span span style="font-weight:bold;font-size:18px">发货后自动确认收货时间设置</span><br><br>
+                   <span v-for="i in 20">&nbsp;</span><span style="font-size:16px">发货后<input type="number" required="required" min="0" max="30" v-model="data.settingValue" @keyup="integer($event)" @change="integer($event)"/>天，自动确认收货</span><br><br>
+                 </span>
+               </span>
+                <span v-for="i in 20">&nbsp;</span><span v-for="i in 40">&nbsp;</span>
+                <input type="submit" style="display:none" id="systemSettingSubmit">
+                <button type="button" class="btn blue" @click="save()">保存</button>
+            </form>
+        </div>
+        <span id="kdfhContext" >
+            <button class="btn" type="button"  @click="addItem('add')" style="margin-left:1.4%;float:left;margin-top:2%;background-color:#1E90FF;color:white">新增运费模板</button>
 
             <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
                  <span  style="display:inline-block;"> 
@@ -22,16 +37,14 @@
                  </span>
                  <!-- <button class="btn green-meadow" @click="search()" type="button" style="background-color:#66CC33">搜索</button> -->
             </span>
-            <br>
+            <br><br>
             <!-- <div class="col-md-12 right" style="display:inline-block">
                 <span v-if="selectItems.length>0" class="desc">已选
                     <em>{{selectItems.length}}</em> 项 </span>
                 
             </div> -->
-            
-        </div>
-        <br> <h4 style="text-align:center" v-if="dataList.length==0"> 暂无数据,请先新增运费模板 </h4>
-        <div class="contentBlock" style="overflow-x: scroll;">
+        <br> <h4 style="text-align:center" v-if="dataList.length==0"> 暂无数据,请先新增运费模板 </h4><br>
+        <div class="contentBlock" style="overflow:auto;">
             <div class="table-responsive col-md-12" v-for="items in dataList" >
                 <table class="table table-striped table-bordered table-hover discount " >
                     <thead>
@@ -115,6 +128,8 @@
                     </tbody>
                 </table>
             </div>
+           </span>
+           
         </div>
         <form action="" id="exportForm" method="post"> 
                <input type="hidden" name="request" /> 
@@ -124,8 +139,7 @@
         </form>
        <!--  <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> -->
         <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
-         <addpct v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList" :dflag="disflag" :pct-arrs="pctArr"></addpct> 
-      
+        <addpct v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList" :dflag="disflag" :pct-arrs="pctArr"></addpct> 
         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert>
@@ -157,6 +171,7 @@ export default {
     components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control,addpct, loading,/* manageControl,productControl,categoryControl,EditProductControl,EditSkuControl,preview ,orderList*/ },
     data() {
         return {
+            systemSettingList:[],
             disflag:false,
             pctArr:{},
             lflag:false,
@@ -199,6 +214,32 @@ export default {
         }
     },
     methods: {
+        integer(event){
+            let el = event.currentTarget;
+            $(el).val(Math.abs($(el).val()))
+            $(el).val(Math.round($(el).val()))
+            var reg = /^\d{0,4}$/
+            let s = $(el).val()+""
+            let f = !reg.test(s)
+            if (  f ) {
+                    $(el).val("")
+               }
+         },
+        save(){
+           $("#systemSettingSubmit").click()
+        },
+        saveSystemSetting(ev){
+             client.postData( SYSTEM_SETTING_EDIT , this.systemSettingList).then(data => {
+                if (data.code == 200) {
+                        //this.showMsg("保存成功!")
+                        alert("保存成功!")
+                } 
+            }, data => {
+                    //this.showMsg("保存失败!"+data.message)
+                    alert("保存失败!"+data.message)
+                })
+             ev.preventDefault();  
+        },
         editItem(arr) {
             this.pctArr = Object.assign({},arr);
             this.disflag = !this.disflag
@@ -244,29 +285,24 @@ export default {
                     //重新加入
                     this.destroyControlDialog = false;
                 }, 200)
-                this.getList();
+                this.getList(false,true);
             }
 
          } ,
         //点击改变样式
         changeClass(obj) {
-                $("#desc").show()
-                $("#asc").hide()
-             $("#"+obj).removeClass("select3").addClass("cha3");
-            if(obj == "-1"){
-              $("#0,#2,#1").removeClass("cha3").addClass("select3");
-                this.par = -1
-            }else if(obj == "0"){
-                $("#-1,#2,#1").removeClass("cha3").addClass("select3");
-                this.par = 0
-            }else  if(obj == "2"){
-                $("#-1,#0,#1").removeClass("cha3").addClass("select3");
-                this.par = 2
+            if(obj == 1){
+                $("#kdfhContext").show()
+                $("#jyszContext").hide()
+                $("#jysz").removeClass("select3").addClass("cha3");
+                $("#kdfh").removeClass("cha3").addClass("select3");
+                this.getList()
             }else{
-                $("#0,#2,#-1").removeClass("cha3").addClass("select3");
-                this.par = 1
+                $("#kdfhContext").hide()
+                $("#jyszContext").show()
+                $("#kdfh").removeClass("select3").addClass("cha3");
+                $("#jysz").removeClass("cha3").addClass("select3");
             }
-             //this.getList(false,true);
         },
         //打开编辑页面
         showEdit(item, type) {
@@ -363,6 +399,19 @@ export default {
             }, data => {
                 this.isLoading = false;
             })
+
+            client.postData( SYSTEM_SETTING_LIST , {}).then(data => {  //192.168.4.249
+                if (data.code == 200) {
+                    this.systemSettingList = data.data
+                    this.systemSettingList.forEach(data=>{
+                        if(data.settingName.indexOf("收货时间")>=0){
+                            data.settingValue = data.settingValue/60/24
+                        }
+                    })
+                } 
+            }, data => {
+                this.showMsg("获取系统配置失败!"+data.msg);
+            })
         },
         selectAll() {
             this.dataList.forEach(item => {
@@ -395,7 +444,7 @@ export default {
     },
     created() {
         vueThis = this;
-        this.getList()
+        //this.getList()
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
     },
     watch: {
@@ -407,6 +456,7 @@ export default {
     },
     ready() {
         client.resetListHeight();
+         $("#systemSetting").on("submit",this.saveSystemSetting)
     }
 };
 </script>
@@ -425,6 +475,7 @@ export default {
     text-align:center;
     line-height: 30px;
     font-weight:bold;
+    background-color: white
 };
 .cha3{
     margin-left: 6px;

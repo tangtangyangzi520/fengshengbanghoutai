@@ -96,12 +96,12 @@
                             <td style="text-align:center;vertical-align:middle;">
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
                             <span v-if="item.mkcStatus == 3 " >已失效
-                            <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs default">删除</button>
+                           
                             </span>
                             <span v-else>
                             <button type="button"  class="btn btn-xs blue" @click.stop="editItem(item.mkcCampaignId)">编辑</button>
                             <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showControlFunc(item.mkcCampaignId,'submit')">使失效</button>
-                            
+                            <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs default">删除</button>
                             </span>
                                  <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
                                     <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>
@@ -424,7 +424,7 @@ export default {
             this.searchOptions = options;
         },
         showControlFunc(item, type) {
-
+            this.clickItems = [];
             this.controlType = type;this.showControl = true;
              //this.showEditDialog = true;
             //console.log(item);
@@ -526,7 +526,6 @@ export default {
     },
     created() {
         vueThis = this;
-        this.getList()
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
     },
     watch: {

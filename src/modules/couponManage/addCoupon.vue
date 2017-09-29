@@ -14,7 +14,7 @@
                                 <span class="required">* </span>优惠券名称：
                             </label>
                             <div class="controls col-md-3">
-                                <input type="text" class="form-control input-sm" v-model="request.mkcName" placeholder="" required="required" :maxLength="a"/>
+                                <input type="text" class="form-control input-sm" v-model="request.mkcName" placeholder="" required="required" :maxLength="a" />
                                 <input id="sub" type="submit" style="display:none" id="name"/>
                             </div>&nbsp;&nbsp;10个字以内
                           </div>
@@ -24,7 +24,8 @@
                                 <span class="required">* </span>发放总量：
                             </label>
                             <div class="col-md-2"  style="margin:0">
-                                <input type="number" max="999999999" class="form-control input-sm" v-model="request.mkcTotalAmount" placeholder=""  required="required" min="0"/>
+                                <input type="number" max="2147483647" class="form-control input-sm" v-model="request.mkcTotalAmount" placeholder=""  required="required" min="1" 
+                                  @keyup="integer($event)" @change="integer($event)"/>
                             </div>
                             <label  class="col-sm-0 control-label" >
                                张
@@ -37,11 +38,12 @@
                             <div class="col-md-8 nopadding">
 
                             <div class="col-md-3" >
-                                <input type="radio"  v-model="" value="指定金额" checked >指定金额&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio"  v-model="" value="指定金额" checked :class="{ 'active': isActive }" >指定金额&nbsp;&nbsp;&nbsp;&nbsp;
                             </div>
                                <br> <br>
                                <div class="col-md-2" >面值：</div>
-                               <div class="col-md-3" ><input type="number" class="form-control input-sm" v-model="request.mkcPrice" placeholder="" required="required" max="9999999" min="0"/></div>
+                               <div class="col-md-3" ><input type="number" class="form-control input-sm" v-model="request.mkcPrice" placeholder="" required="required" max="999999" min="1" :class="{ 'active': isActive }"
+                                @keyup="integer($event)" @change="integer($event)"/></div>
                                  <label  class="col-sm-0 control-label" >
                                元
                             </label>
@@ -57,13 +59,13 @@
                                        <div class="col-md-8 nopadding">
 
                             <div class="col-md-3" >
-                                <input type="radio" name="menkan" v-model="menkan" value="0" checked >不限制&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="menkan" v-model="menkan" value="0" checked :class="{ 'active': isActive }">不限制&nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <br> <br>
                                 <div class="col-sm-2" >
-                                <input type="radio" name="menkan" v-model="menkan" value="1"  >满&nbsp;&nbsp;&nbsp;&nbsp; 
+                                <input type="radio" name="menkan" v-model="menkan" value="1"  :class="{ 'active': isActive }">满&nbsp;&nbsp;&nbsp;&nbsp; 
                                 </div>
-                                <div class="col-md-3" >  <input type="number" class="form-control input-sm" v-model="request.mkcUsedCondition" placeholder="" max="9999999" required="required" min="1"/></div>
+                                <div class="col-md-3" >  <input type="number" class="form-control input-sm" v-model="request.mkcUsedCondition" placeholder="" max="999999" required="required" min="0" @keyup="integer($event)" @change="integer($event)" :class="{ 'active': isActive }"/></div>
                                
                                <label  class="col-sm-0 control-label" >
                                元可使用
@@ -81,7 +83,7 @@
                                 <span class="required">* </span>每人限领：
                             </label>
                             <div class="col-md-3">
-                                <select class="form-control" v-model="request.mkcJoinTimes">
+                                <select class="form-control" v-model="request.mkcJoinTimes" :class="{ 'active': isActive }">
                                      <option value="0">不限张</option>
                                      <option v-for="item in timesList" :value="item">{{item}}张</option>
                                  </select>
@@ -92,29 +94,29 @@
 
                         <div class="form-group" >
                           <label for="title" class="col-sm-3 control-label">
-                            <span class="required">* </span>有限期：
+                            <span class="required">* </span>有效期：
                           </label>
                           <div class="col-md-8 nopadding">
 
                             <div class="col-md-3" >
-                              <input type="radio" name="" v-model="" value="不限制"  checked >固定日期&nbsp;&nbsp;&nbsp;&nbsp;
+                              <input type="radio"  v-model="" value="不限制"  checked :class="{ 'active': isActive }" name="lingquan">固定日期&nbsp;&nbsp;&nbsp;&nbsp;
                             </div>
                             <br> <br>
                             <label for="title" class="col-sm-3 control-label">
                               <span class="required">* </span>生效时间：
                             </label>
                             <div class="controls col-md-4 ">
-                              <input type="text" class="form-control inline-block datePicker" placeholder="选择生效时间" id="createStartTime2" v-model="request.mktStart" required="required"> 
+                              <input type="text" class="form-control inline-block datePicker" placeholder="选择生效时间" id="createStartTime2" v-model="request.mktStart" required="required" :class="{ 'active': isActive }" > 
                             </div><br><br>
                             <label for="title" class="col-sm-4 control-label">
-                              <span class="required">* </span>过期时间：
+                              <span class="required" :class="{ 'active': isActive }">* </span>过期时间：
                             </label>
                             <div class="controls col-md-4 ">
-                              <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime2" v-model="mktEnd" required="required"> <br>
+                              <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime2" v-model="mktEnd" required="required" :class="{ 'active': isActive }"> <br>
                             </div>
                             <div class="col-sm-8" >
-                              <input type="radio" name="lingquan" v-model="" value="不限制" checked>领到券当日开始 {{ time }} 天内生效<br><br>
-                              <input type="radio" name="lingquan" v-model="" value="不限制"        >领到券次日开始 {{ time }} 天内生效
+                              <input type="radio" name="lingquan" v-model="" value="不限制"  :class="{ 'active': isActive }">领到券当日开始 {{ time }} 天内生效<br><br>
+                              <input type="radio" name="lingquan" v-model="" value="不限制"       :class="{ 'active': isActive }" >领到券次日开始 {{ time }} 天内生效
                             </div>
                           </div></div>
 <br>
@@ -123,9 +125,9 @@
                                 <span class="required">* </span>可使用商品：
                             </label>
                             <div class="controls col-md-4">
-                                <input type="radio" name="useful" v-model="useful" value="0" checked >全店商品&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="useful" v-model="useful" value="1" >指定商品&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button class="btn yellow-crusta" type="button" @click="showselect" style="display:none" id="selectSpu">选择商品</button>
+                                <input type="radio" name="useful" v-model="request.mkcUsedType" value="1" checked >全店商品&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="useful" v-model="request.mkcUsedType" value="0" >指定商品&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="btn yellow-crusta" type="button" @click="showselect" style="display:none" id="selectSpu">添加商品</button>
                             </div>
                         </div>
                         <div class="form-group" v-for="spu in spuList">
@@ -135,11 +137,19 @@
                              <th style="width:10%">
                                  <a :id="'desc'+spu.spuId"  class="orderBy" style="display:none;text-decoration:none" @click="orderBy(false,spu.spuId)">▼</a>
                                  <a :id="'asc'+spu.spuId" class="orderBy" style="text-decoration:none" @click="orderBy(true,spu.spuId)">▲</a>
-                                <input type="checkbox" :checked="spu.checked" @click="reverseList(spu)"></input>
+                                <!-- <input type="checkbox" :checked="spu.checked" @click="reverseList(spu)"></input> -->
                                <!--  <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(spu)">全选</button>
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(spu)">反选</button> -->
                              </th>
-                             <th style="width:50%">{{spu.spuName}}</th>
+                             <th style="width:50%"> <p>
+                                    <a target="_blank" :href="spu.imgUrl" title="查看大图">
+                                        <img :src="spu.imgUrl" class="img-rounded" style="height:60px; width:80px">
+                                    </a>
+                                </p>
+                                <a  style="text-decoration:none;" title="预览商品"  > 
+                                <h4 class="tt"><p style="color:#6699CC">{{spu.spuName}}</p><span style="color:#FF9900">&nbsp;&nbsp;&nbsp;&nbsp;¥{{spu.minSalePrice}}</span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<!-- 库存:{{spu.totalStockNum}} --></h4>
+                                </a></th>
                              <th style="width:40%">{{spu.spuCreatedTime|filterTime}}</th>
                           </tr>
                         </thead>
@@ -174,7 +184,7 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
-        <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideselDialog" @spu-data="getSelected"></select-spu>
+        <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideselDialog" @spu-data="getSelected" :spulist="spuList"></select-spu>
         <div class="loading" style="position:fixed;z-index:11111;" v-if="isLoading">
             <div class="page-spinner-bar">
                 <div class="bounce1"></div>
@@ -185,7 +195,7 @@
 </div>
 </template>
 <script>
-import selectSpu from '../common/selectSpu';
+import selectSpu from './selectSpu';
 import client from '../../common/utils/client';
 import {  mAlert, mSelect, mMultiSelect, itemList ,selectComponentAll} from '../../components';
 export default {
@@ -209,8 +219,8 @@ export default {
     },
     data() {
         return {
+            isActive:true,
             menkan:0,
-            useful :0,
             a:10,
             mktEnd:"",
             spuList:[],
@@ -218,6 +228,7 @@ export default {
             mkcUsedCondition:0,
             timesList:[1,2,3,4,5,10],
             request:{
+              "mkcUsedType":1,//使用类型： 1全店商品 0指定商品
               "mkcCampaignId":0,
               "cmisList": [],
               "mkcJoinTimes": 0,// 每人参加次数
@@ -277,11 +288,32 @@ export default {
         }
     },
     methods: {
+         integer(event){
+            let el = event.currentTarget;
+            $(el).val(Math.abs($(el).val()))
+            $(el).val(Math.round($(el).val()))
+            var reg = /^\d{0,10}$/
+            let s = $(el).val()+""
+            let f = !reg.test(s)
+            if (  f ) {
+                    $(el).val("")
+               }
+         },
          addItem(){
               $("#sub").click()
          },
          addItem2(ev) {
-
+            if(this.menkan == 1 && this.request.mkcUsedCondition <= 0 ){
+                this.showMsg("使用门槛必须大于0!")
+                return
+            }
+             if(this.menkan ==  0 ){
+                this.request.mkcUsedCondition = 0
+            }
+            if(this.request.mkcUsedType == 0 && this.spuList.length == 0){
+              this.showMsg("请先指定商品!")
+              return
+            }
             this.request.cmisList = []
             this.spuList.forEach(item => {
                //item.skuList.forEach(sku => {
@@ -306,7 +338,7 @@ export default {
                 client.postData( MKT_EDIT , this.request).then(data => {
                 this.isLoading = true
                 if (data.code == 200) {
-                        this.showMsg("编辑优惠券成功")
+                        this.showMsg("编辑优惠券成功!")
                  this.isLoading = false
                     setTimeout(() => {
                         this.hideDialog()
@@ -315,14 +347,14 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                      this.showMsg("编辑优惠券失败"+data.message);
+                      this.showMsg("编辑优惠券失败!"+data.message);
              })
 
             }else{
                 client.postData( MKT_CREATE , this.request).then(data => {
                 this.isLoading = true
                 if (data.code == 200) {
-                        this.showMsg("新健优惠券成功")
+                        this.showMsg("新建优惠券成功!")
                  this.isLoading = false
                     setTimeout(() => {
                         this.hideDialog()
@@ -331,7 +363,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                      this.showMsg("新健优惠券失败"+data.message)
+                      this.showMsg("新建优惠券失败!"+data.message)
                 })
             }
              ev.preventDefault();  
@@ -401,6 +433,7 @@ export default {
         },
         hideDialog() {
             //this.par = []
+            this.isActive = false
             this.showDialog = false;
             setTimeout(() => {
                 this.showPage = false;
@@ -477,15 +510,43 @@ export default {
         
     },
     watch: {
-        useful(val) {
-          if(val == 0){
+        "request.mktStart":{　　
+          　handler(val,oldVal){　
+               if( val ) {
+                let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?$/
+                if(!reg.test(val)){
+                  this.showMsg('日期格式不合法')
+                  this.request.mktStart = "" 
+                  return
+                }
+              }
+               val = val.replace(/-/g,"/")
+                let start = new Date(val)
+                if(this.mktEnd){
+                   let end = new Date( this.mktEnd.replace(/-/g,"/") )
+                   if( end < start ){
+                    this.showMsg('生效时间不可以大于过期时间')
+                    this.request.mktStart = ""
+                    return
+                   }
+                    this.time = (end - start)/24/3600/1000
+                }       
+          },　　　　　　　　　　
+          deep:true　　　　　　　　
+        },
+        "request.mkcUsedType":{　
+         handler(val,oldVal){　
+          if(val == 1){
             $("#selectSpu").hide()
           }else{
             $("#selectSpu").show()
           }
-
+        },
+         deep:true　　　　　　　　
         },
         coflag() {
+           this.isActive = true
+           $(".active").attr("disabled","disabled")
            this.request.mkcCampaignId= this.mkttid
            this.title = "编辑优惠券"
            client.postData(  MKT_GET_ID  +"?mkcCampaignId="+this.mkttid , {}).then(response => {
@@ -500,7 +561,7 @@ export default {
                     this.request.mkcType       = response.data.mkcType
                     this.request.mkcUsedCondition= response.data.mkcUsedCondition
                    //开始时间
-                   var sjtime  = new Date(response.data.mktStart)
+                    let sjtime  = new Date(response.data.mktStart)
                     this.request.mktStart = sjtime.getFullYear() 
                     if( sjtime.getMonth()+1 >= 10 ){
                           this.request.mktStart += "-"+(sjtime.getMonth()+1)
@@ -508,12 +569,27 @@ export default {
                         this.request.mktStart += "-0"+(sjtime.getMonth()+1)
                     }
                     if( sjtime.getDate() >= 10 ){
-                         this.request.mktStart += "-"+sjtime.getDate()
+                         this.request.mktStart += "-"+sjtime.getDate()+" "
                     }else{
-                        this.request.mktStart += "-0"+sjtime.getDate()
+                        this.request.mktStart += "-0"+sjtime.getDate()+" "  
+                    }
+                    if( sjtime.getHours() >= 10 ){
+                         this.request.mktStart += ""+sjtime.getHours()+":"
+                    }else{
+                        this.request.mktStart += "0"+sjtime.getHours()+":"
+                    }
+                    if( sjtime.getMinutes() >= 10 ){
+                         this.request.mktStart += ""+sjtime.getMinutes()+":"
+                    }else{
+                        this.request.mktStart += "0"+sjtime.getMinutes()+":"
+                    }
+                    if( sjtime.getSeconds() >= 10 ){
+                         this.request.mktStart += ""+sjtime.getSeconds()
+                    }else{
+                        this.request.mktStart += "0"+sjtime.getSeconds()
                     }
                     //过期时间
-                    var endtime  = new Date(response.data.mktEnd)
+                    let endtime  = new Date(response.data.mktEnd)
                     this.mktEnd = endtime.getFullYear() 
                     if( endtime.getMonth()+1 >= 10 ){
                           this.mktEnd += "-"+(endtime.getMonth()+1)
@@ -521,9 +597,24 @@ export default {
                         this.mktEnd += "-0"+(endtime.getMonth()+1)
                     }
                     if( endtime.getDate() >= 10 ){
-                         this.mktEnd += "-"+endtime.getDate()
+                         this.mktEnd += "-"+endtime.getDate()+" "
                     }else{
-                        this.mktEnd += "-0"+endtime.getDate()
+                        this.mktEnd += "-0"+endtime.getDate()+" "
+                    }
+                    if( endtime.getHours() >= 10 ){
+                         this.mktEnd += ""+endtime.getHours()+":"
+                    }else{
+                        this.mktEnd += "0"+endtime.getHours()+":"
+                    }
+                    if( endtime.getMinutes() >= 10 ){
+                         this.mktEnd += ""+endtime.getMinutes()+":"
+                    }else{
+                        this.mktEnd += "0"+endtime.getMinutes()+":"
+                    }
+                    if( endtime.getSeconds() >= 10 ){
+                         this.mktEnd += ""+endtime.getSeconds()
+                    }else{
+                        this.mktEnd += "0"+endtime.getSeconds()
                     }
                     //使用门槛回显
                     if(this.request.mkcUsedCondition > 0 ){
@@ -531,9 +622,9 @@ export default {
                     }
                     this.request.mktEnd = this.mktEnd
                     //可使用商品回显
-                    if( response.data.spuList.length > 0 ){
-                       this.useful = 1
-                    }
+                    //if( response.data.spuList.length > 0 ){
+                    this.request.mkcUsedType = response.data.mkcUsedType
+                   // }
                      response.data.spuList.forEach( spu => {
                         //spu.skuList.forEach( sku => {
                              //sku.checked = false
@@ -554,17 +645,36 @@ export default {
             })
         },
         mktEnd(val) {
-            if( this.request.mktStart ){
-                val = val.replace(/-/g,"/")
+            if( val ) {
+              let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?$/
+              if(!reg.test(val)){
+                this.showMsg('日期格式不合法!')
+                this.mktEnd = ""
+                this.request.mktEnd = ""
+                return
+              }
+            }
+    
+              val = val.replace(/-/g,"/")
                 let end = new Date(val)
+           if(this.mkttid <= 0 ){
+                if(end <= new Date()){
+                  this.showMsg('过期时间不可以小于现在时间!')
+                  this.mktEnd = ""
+                  this.request.mktEnd = ""
+                  return
+                }
+            }
+                
+            if( this.request.mktStart ){
                 let start = new Date( this.request.mktStart.replace(/-/g,"/") )
                 if( end < start ){
-                    this.showMsg('生效时间不可以大于过期时间')
+                    this.showMsg('生效时间不可以大于过期时间!')
                     this.mktEnd = ""
                     this.request.mktEnd = ""
                     return
                 }
-                this.time = (end - start)/24/3600/1000
+                this.time = Math.round((end - start)/24/3600/1000)
                 this.request.mktEnd = val
             }
         },
@@ -623,8 +733,10 @@ export default {
     },
     ready() {   
         
-         $('#createStartTime2').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('#createEndTime2').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
+         $('#createStartTime2').val('').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', language: 'zh-CN', autoclose: 'true', minView: 2 ,  weekStart: 1,
+        todayBtn:  1, todayHighlight: 1,  startView: 2, forceParse: 1, showMeridian: 1,});
+        $('#createEndTime2').val('').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', language: 'zh-CN', autoclose: 'true', minView: 2 ,  weekStart: 1,
+        todayBtn:  1, todayHighlight: 1,  startView: 2, forceParse: 1, showMeridian: 1,});
         $("#submitform").on("submit",this.addItem2);  
       
     },
@@ -709,5 +821,7 @@ export default {
 .dele:hover{
     color:red
 }
-
+.active{
+ 
+}
 </style>
