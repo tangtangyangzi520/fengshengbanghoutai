@@ -23,7 +23,7 @@
                                            <input type="checkbox" :checked="g.checked"></input>
                                    </td>
 
-                                   <td style="width:40%" >  <a class="dele"  @click="close(g.skuId)" >×</a> <span style="padding-left:8.3%"> {{ g.skuAtrr }} </span>
+                                   <td style="width:40%" >  <!-- <a class="dele"  @click="close(g.skuId)" >×</a>  --><span style="padding-left:8.3%"> {{ g.skuAtrr }} </span>
                                    </td>
                                    <td>￥<input class=" input2" type="number" v-model="g.skuSalePrice"    @keyup="checkfloat($event)" @change="checkfloat($event)"
                                     min="0" max="99999999"/></td>
