@@ -2,7 +2,7 @@
     <div>
         <div class="page-bar min-bar">
             <page-title-bar>
-                <span slot="title">订单管理{{countDesc}}</span>
+                <span slot="title">订单列表{{countDesc}}</span>
             </page-title-bar>
             <search :onchange="changeSearchOptions" :oncreate="getList"></search>
             </br>
@@ -50,7 +50,7 @@
             </div>
             <div class="table-responsive col-md-12" v-for="itemSet in dataList" :key="itemSet.orstNo">
                 <div class="col-md-12">
-                    <div class="col-md-9">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}} &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="col-md-9"><span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span> &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                     <div class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
                         <a href="javascript:;" @click="showDetail(itemSet,itemSub)">查看详情</a>--
@@ -72,10 +72,10 @@
                                     </a>
                                 </p>
                                 <h4>
-                                    <a style="text-decoration:none;" title="预览商品" @click.stop="previewpro(itemDetail.detailSpu.spuId)">{{itemDetail.detailSpu.spuName}}</a>
+                                    <a style="text-decoration:none;color:green;" title="预览商品" @click.stop="previewpro(itemDetail.detailSpu.spuId)">{{itemDetail.detailSpu.spuName}}</a>
                                 </h4>
-                                <p>{{itemDetail.detailSku.skuName}}</p>
-                                <p>SKU编码：{{itemDetail.detailSku.skuCode}}</p>
+                                <p><span style="color:black;">{{itemDetail.detailSku.skuName}}</span></p>
+                                <p><span style="color:black;">SKU编码：{{itemDetail.detailSku.skuCode}}</span></p>
                             </td>
                             <td align="center" style="width:7%;vertical-align:middle;">
                                 <p style="padding-top:5px;">
@@ -499,9 +499,6 @@ export default {
         show() {
             this.showPage = this.show
             this.showDialog = this.show
-        },
-        orderSubData(value) {
-            console.log(value.ordActAmount);
         },
     },
     route: {
