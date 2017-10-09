@@ -71,7 +71,9 @@
                             </tbody>
                         </table>
                         <!-- 分页条 -->
-                        <paging v-if="unSelectedList.length>0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
+                       <!--  <paging v-if="unSelectedList.length>0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> -->
+                       <h4 v-if="unSelectedList.length>0" style="text-align:center" >
+                       共 {{unSelectedList.length}}条数据</h4>
                     </div>
                     <!-- 选择按钮 -->
                     <div class="col-md-1 right">
@@ -210,11 +212,27 @@ export default {
         filterList(){
             console.log(this.selectedList+"selectedList")
             let sourceList=this.unSelectedList,targetList=this.selectedList,index,index2;
+            let arr = []
             for (index = sourceList.length-1; index >=0; index--){
                 for (index2 = targetList.length-1; index2 >=0; index2--){
                     if(sourceList[index].spuId==targetList[index2].spuId){
                         sourceList.splice(index,1);
+                        arr.push(index2)
                         break;
+                    }
+                }
+            }
+            if(arr.length < targetList.length){
+                for(let i = 0; i < targetList.length; i++){
+                    let flag = true
+                    for(let j = 0; j < arr.length; j++){
+                        if(arr[j] == i){
+                            flag = false
+                            break
+                        }
+                    }
+                    if(flag){
+                        targetList.splice(i,1);
                     }
                 }
             }
@@ -435,6 +453,9 @@ export default {
             this.showPage = this.show;
             this.showDialog = this.show;
             this.selectedList=this.spulist;
+            if(this.searchOptions.spuCatId > 100){
+                this.getUnSelectedList(false,true)
+            }
         },
 
     },

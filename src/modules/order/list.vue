@@ -64,7 +64,7 @@
                             <td class="tdTitle" style="width:26%;">
                                 <p v-if="index===0 && itemSet.orderSubList.length>1">
                                     子订单号:{{itemSub.ordOrderNo}}&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span v-if="itemSub.ordOrderType==0" style="color:blue;">跨境订单</span>
+                                    <span v-if="itemSub.ordOrderType==1" style="color:blue;">跨境订单</span>
                                 </p>
                                 <p>
                                     <a target="_blank" :href="itemDetail.detailSpu.spuPic" title="查看大图">

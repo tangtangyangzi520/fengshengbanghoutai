@@ -167,7 +167,7 @@
                                     <p>{{setData.orsPayNum}}</p>
                                     <p>{{ordPayChannel(setData.orsPayChannel)}}</p>
                                 </td>
-                                <td width="20%" align="center" style="vertical-align:middle;">{{subData.orsMemberNickname}}:{{setData.buyerMessage}}</td>
+                                <td width="20%" align="center" style="vertical-align:middle;">{{setData.orsMemberNickname}}:{{setData.buyerMessage}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordPayTime}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordActAmount}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{payStatus(setData.orsPayStatus)}}</td>

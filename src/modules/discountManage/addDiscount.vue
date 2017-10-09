@@ -12,24 +12,25 @@
                 </label>
                     <div class="controls col-md-4">
                          <input type="text" class="form-control input-sm" v-model="request.mkcName" placeholder="请填写活动名称" required="required" maxLength="15" > 
-                    </div>&nbsp;&nbsp;15个字以内
+                    </div>&nbsp;&nbsp;<p style="margin-left:-1.7%;margin-top:-1.2%">
+                        <span style="color:#999999">15个字以内</span></p>
             </div>
             <br>
             <div class="form-group">
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>生效时间：
                 </label>
-                    <div class="controls col-md-3 ">
+                    <div class="controls col-md-2 ">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择生效时间" id="createStartTime3" v-model="request.mktStart" required="required" 
                           /> 
                     </div>
-                       <div class="col-md-1 ">至</div>
-                    <div class="controls col-md-3 nopadding ">
+                       <div class="col-md-1" style="margin-top:0.5%;margin-left:-1.2%">至</div>
+                    <div class="controls col-md-2 nopadding" style="margin-left:-4%">
                        <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime3" v-model="mktEnd" required="required" >
                   </div>  <br> 
             </div>
-            <br>
-            <div class="form-group">
+            <br >
+            <div class="form-group" style="margin-top:0.8%">
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>活动标签：
                 </label>
@@ -40,8 +41,8 @@
 
                     </div>
             </div>
-            <br> <br>
-             <div class="form-group">
+            <br> <br><br>
+             <div class="form-group" >
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>选择商品：
                 </label>
@@ -49,59 +50,64 @@
                          <input type="text" class="form-control input-sm" v-model="request.spuName" placeholder="限时折扣" > 
                          活动期间展示于商品详情的价格旁边，2至5字。
                     </div> -->
-                      <button class="btn yellow-crusta" type="button" @click="showselect" >添加</button>
+                      <button class="btn yellow-crusta" type="button" @click="showselect" 
+                      style="margin-left:1.57%">添加</button>
                       <br><br>
-                      <span style="margin-left:25%">
-                        批量减价 <input type="number" class="input-sm-2"   v-model="reduce" step="0.01" @keyup="integer($event)" min="0.01" max="9999999"/> 元  &nbsp;&nbsp;
+                      <span style="margin-left:26.5%">
+                        批量减价 <input type="number" class="input-sm-2"   v-model="reduce" step="0.01" @keyup="integer($event)" @blur="integer($event)" min="0.00" max="9999999"/> 元  &nbsp;&nbsp;
                       <a style="text-decoration:none" @click="plreduce()">确定</a> &nbsp;&nbsp;&nbsp;
                       <a style="text-decoration:none" @click="plcut()">取消</a>
                      </span>  
                      <br><br>
             </div>
                         <div class="form-group" v-for="(index,spu) in spuList">
-                        <table class="tab" id="t" style="width:1000px" border="1" cellspacing="0" cellpadding="0">  
+                        <table class="tab" id="t" style="width:850px;margin-left:16.5%" border="1" cellspacing="0"   cellpadding="0">  
                         <thead>
                           <tr>
-                             <th style="width:10%">
+                             <th style="width:7%">
                                  <input type="checkbox" v-model="spu.checked"></input> 
                                  <a :id="'desc'+spu.spuId"  class="orderBy" style="display:none;text-decoration:none" @click="orderBy(false,spu.spuId)">▼</a>
                                  <a :id="'asc'+spu.spuId" class="orderBy" style="text-decoration:none" @click="orderBy(true,spu.spuId)">▲</a>
                              </th>
-                             <th style="width:35%">
+                             <th style="width:35%;text-align:left">
                                   <p>
                                     <a target="_blank" :href="spu.imgUrl" title="查看大图">
                                         <img :src="spu.imgUrl" class="img-rounded" style="height:60px; width:80px">
                                     </a>
                                 </p>
                                 <a  style="text-decoration:none;" title="预览商品"  > 
-                                <h4 class="tt"><p style="color:#6699CC">{{spu.spuName}}</p><span style="color:#FF9900">¥{{spu.minSalePrice}}</span>
-                                &nbsp;&nbsp;&nbsp;&nbsp;库存:{{spu.totalStockNum}}</h4>
+                                <h4 class="tt"><p style="color:#333333;margin-bottom:2.8%;font-weight:400;font-style:normal;
+                                    font-family:'Arial Normal', 'Arial'">{{spu.spuName}}</p><span style="color:#FF9900">¥{{spu.minSalePrice}}</span>
+                                    <span style="color:#333333;font-size:14px;font-family:'Arial Normal', 'Arial'">
+                                &nbsp;&nbsp;&nbsp;&nbsp;库存:{{spu.totalStockNum}}</span>
+                                </h4>
                                 </a>
                              </th>
-                             <th style="width:20%"> 减价 &nbsp;&nbsp;<input type="number" class="input-sm-2"    @keyup="reduceBefore(spu.spuId,spu.minSalePrice,$event)" :id="'before'+spu.spuId" step="0.01" required="required" min="0.01" @change="reduceBefore(spu.spuId,spu.minSalePrice,$event)" :max="spu.minSalePrice" @click="clickreduceBefore(spu.spuId,spu.minSalePrice,$event)" :value="spu.reduce"/>  元
+                             <th style="width:20%"> 减价 &nbsp;&nbsp;<input type="number" class="input-sm-2"    @keyup="reduceBefore(spu.spuId,spu.minSalePrice,$event)" :id="'before'+spu.spuId" step="0.01" required="required" min="0.01" @change="reduceBefore(spu.spuId,spu.minSalePrice,$event)" :max="spu.minSalePrice" @click="clickreduceBefore(spu.spuId,spu.minSalePrice,$event)" :value="spu.reduce"
+                                @blur="reduceBefore(spu.spuId,spu.minSalePrice,$event)"/>  元
                              </th>
-                             <th style="width:15%"> 减价后<input type="number" class="input-sm-1" @keyup="refuceAfter(spu.spuId,spu.minSalePrice,$event)" :id="'after'+spu.spuId" step="0.01" required="required" @change="refuceAfter(spu.spuId,spu.minSalePrice,$event)" min="0.01" :max="spu.minSalePrice"> 元</th>
+                             <th style="width:18%"> 减价后<input type="number" class="input-sm-1" @keyup="refuceAfter(spu.spuId,spu.minSalePrice,$event)" :id="'after'+spu.spuId" step="0.01" required="required" @change="refuceAfter(spu.spuId,spu.minSalePrice,$event)" min="0.01" :max="spu.minSalePrice" @blur="refuceAfter(spu.spuId,spu.minSalePrice,$event)"> 元</th>
                              <th style="width:5%"><a style="text-decoration:none" @click="cut(index)">取消</a></th>
                         </tr>
                           
                         </thead>
                              <tbody :id="'tab'+spu.spuId" style="display:none">
                                 <tr >   
-                                  <td style="width:10%">
+                                  <td style="width:7%">
                                  <!--        
                                      <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(spu)">全选</button>
                                      <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(spu)">反选</button> -->
                                   </td>
-                                  <td style="width:40%"> SKU组合 </td>
+                                  <td style="width:35%"> SKU组合 </td>
                                   <td style="width:20%"> 原价（元） </td>
-                                  <td style="width:15%" colspan="2"> 减价后</td>
+                                  <td style="width:18%" colspan="2"> 减价后</td>
 <!--                                   <td style="width:15%"> 操作</td>
  -->                                </tr>
                                 <tr v-for=" g in spu.skuList" style="height:20%"  @click="selectItem(g)">  
-                                   <td style="width:10%"> <!-- <input type="checkbox" :checked="g.checked"></input> --> </td>
-                                   <td style="width:40%"> {{ g.skuName }} </td>
+                                   <td style="width:7%"> <!-- <input type="checkbox" :checked="g.checked"></input> --> </td>
+                                   <td style="width:35%"> {{ g.skuName }} </td>
                                    <td style="width:20%"> {{ g.skuSalePrice }}</td>
-                                    <td style="width:15%" colspan="2"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"  >  -->{{g.skureduce}} </td>
+                                    <td style="width:18%" colspan="2"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"  >  -->{{g.skureduce}} </td>
                                   <!--     <td style="width:15%"> 
                                   <button type="button"  @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button> </td>
  -->                                </tr>
@@ -112,9 +118,11 @@
                  </form>
             </div>
 
-            <span slot="btnList">
+            <span slot="btnList" >
+                <div style="text-align:center">
                 <button type="button" class="btn blue" @click="addItem()">保存</button>
                 <button type="button" class="btn default" @click="hideDialog()" >取消</button>
+            </div>
             </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
@@ -228,10 +236,10 @@ export default {
                this.showMsg("请输入合法数字!")
                return 
              }
-            if(this.reduce <= 0 ){
+            /*if(this.reduce <= 0 ){
                 this.showMsg("减价不能少于0")
                 return
-            }
+            }*/
            // let el = event.currentTarget;
             //$(el).val(Math.abs($(el).val()).toFixed(2))
          },
@@ -246,7 +254,7 @@ export default {
                return 
              }
              if(this.reduce <= 0 ){
-                this.showMsg("减价不能少于0")
+                this.showMsg("减价幅度不能少于0")
                 return
             }
             let list = [];
@@ -411,6 +419,16 @@ export default {
                 this.showMsg("请先添加商品!")
                 return
             }
+            if(new Date(this.request.mktStart).getTime() - new Date().getTime() < 60000){
+                   this.showMsg('生效时间请比现在时间大于1分钟以上')
+                   $("#createStartTime3").val("")
+                   return
+            }    
+            if(new Date(this.request.mktEnd).getTime() - new Date(this.request.mktStart).getTime() < 60000){
+                   this.showMsg('过期时间请比生效时间大于1分钟以上')
+                   $("#createEndTime3").val("")
+                   return
+            }    
             this.spuList.forEach(spu => {
                 console.log(spu)
                     //if( sku.skuSalePrice != '' ){
@@ -810,13 +828,53 @@ export default {
         }
     },
     ready() {   
-        
-         $('#createStartTime3').val('').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', language: 'zh-CN', autoclose: 'true', minView: 2 ,  weekStart: 1,
-        todayBtn:  1, todayHighlight: 1,  startView: 2, forceParse: 1, showMeridian: 1,});
-        $('#createEndTime3').val('').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', language: 'zh-CN', autoclose: 'true', minView: 2 ,  weekStart: 1,
-        todayBtn:  1, todayHighlight: 1,  startView: 2, forceParse: 1, showMeridian: 1,});
+          let dates = $("#createStartTime3,#createEndTime3");
+          dates.datetimepicker({
+          dateFormat: "yy-mm-dd",
+          timeFormat: 'HH:mm:ss',
+          showMonthAfterYear: true,
+          changeMonth: true, 
+          changeYear: true,
+          buttonImageOnly: true,
+          showSecond: true,
+          stepHour: 1,
+          stepMinute: 1,
+          stepSecond: 1,
+          closeText: '确定',
+          prevText: '&#x3c;上月',
+          nextText: '下月&#x3e;',
+          currentText: '今天',
+          monthNames: ['一月','二月','三月','四月','五月','六月',
+          '七月','八月','九月','十月','十一月','十二月'],
+          monthNamesShort: ['一','二','三','四','五','六',
+          '七','八','九','十','十一','十二'],
+          dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+          dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+          dayNamesMin: ['日','一','二','三','四','五','六'],
+          weekHeader: '周',
+          showAnim:'highlight',
+          isClear:true, //是否显示清空 
+          isRTL: false,
+          onSelect: function(selectedDate){
+             var option = this.id == "createStartTime3" ? "minDate" : "maxDate";
+             dates.not(this).datepicker("option", option, selectedDate );
+          },
+          onClose: function(data,inst){   
+             dates.removeAttr("disabled")
+          },
+          beforeShow: function(){
+             dates.attr("disabled","disabled")
+             if( $("#createStartTime3").datepicker( 'getDate' ) != null ){
+               return
+             }
+              $(this).datepicker('option', 'minDate', new Date() )
+          },
+      });
+          dates.on("click",function(){
+           
+            $(this).attr("disabled","disabled")
+          })
         $("#submitform1").on("submit",this.addItem2);  
-      
     },
     beforeDestroy() {
         this.showPainListSelect = false;

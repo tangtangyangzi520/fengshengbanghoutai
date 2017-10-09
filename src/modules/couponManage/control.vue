@@ -101,6 +101,10 @@ export default {
         onhide: {
             type: Function,
             default: () => { }
+        },
+        search: {
+            type: Function,
+            default: () => { }
         }
     },
     data() {
@@ -147,6 +151,7 @@ export default {
                 if (data.code == 200) {
                     this.onhide('success')
                     this.showMsg(this.tips);
+                    this.search(false,true);
                 } else {
                     this.showMsg(data.msg);
                 }

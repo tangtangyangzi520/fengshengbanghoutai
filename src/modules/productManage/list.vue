@@ -344,10 +344,12 @@ export default {
             }, 300)
         },
         previewpro(val) {
-            this.lspuid = val
-            this.limgflag = !this.limgflag
-            this.lflag = !this.lflag
-            this.showpreDialog = true;
+            setTimeout(()=>{
+                this.lspuid = val
+                this.limgflag = !this.limgflag
+                this.lflag = !this.lflag
+                this.showpreDialog = true;
+            },100)          
         },
         productexport() {
              let options;

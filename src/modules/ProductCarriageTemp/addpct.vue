@@ -21,9 +21,9 @@
                     <div class="controls col-md-2 ">
                         <input type="radio" name="menkan" v-model="" value="0" checked >按件数&nbsp;&nbsp;&nbsp;&nbsp;
                   </div>  <br> 
-            </div>
+            </div><br>
              <div class="form-group">
-                <label for="title" class="col-sm-3 control-label">
+                <label for="title" class="col-sm-3 control-label" >
                     配送区域：
                 </label>
                         <div class="controls col-md-9" >
@@ -56,14 +56,16 @@
                             <td style="width:11%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;font-style: normal;border-right:none;border-left:none;text-align:left"> &nbsp; &nbsp;{{g.pctFirstNum}}
                             </td>
                             <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
-                                <input type="number" class="input-sm" v-model="g.pctFirstPrice"  min="0" max="999999" required="required"  @keyup="integer($event)" @change="integer($event)"> 
+                                <input type="number" class="input-sm" v-model="g.pctFirstPrice"  min="0" max="999999" required="required"  @keyup="integer($event)" @change="integer($event)"
+                                @blur="integer($event)" /> 
                             </td>
 
                             <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
                                                        &nbsp;&nbsp;{{g.pctOtherNum}}
                             </td>
                             <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
-                                 <input type="number" class="input-sm" v-model="g.pctOtherPrice"  min="0" max="999999" required="required"  @keyup="integer($event)" @change="integer($event)"/> 
+                                 <input type="number" class="input-sm" v-model="g.pctOtherPrice"  min="0" max="999999" required="required"  @keyup="integer($event)" @change="integer($event)"
+                                 @blur="integer($event)"/> 
                             </td>
                         </tr>
                     </tbody>
@@ -169,7 +171,7 @@ export default {
             let el = event.currentTarget;
             $(el).val(Math.abs($(el).val()))
             $(el).val(Math.round($(el).val()))
-            var reg = /^\d{0,3}$/
+            var reg = /^\d{0,2}$/
             let s = $(el).val()+""
             let f = !reg.test(s)
             if (  f ) {

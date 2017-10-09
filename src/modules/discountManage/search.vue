@@ -284,6 +284,23 @@ export default {
         //this.getPainTree();
     },
     watch: {
+        cflag() {
+           if( (this.firstActive ==0 && this.secondActive == 0 && this.thirdActive == 0) || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
+              this.oncreate(false, true);
+           }else{
+               alert("选择经营类目不完整")
+
+           }
+        },
+        parent(val){
+           this.searchOptions.mkcStatus = val;
+           if( (this.firstActive + this.secondActive + this.thirdActive) == 0 || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
+              this.oncreate(false, true);
+           }else{
+               alert("选择类目不完整")
+
+           }
+        },
         showthirdActive(val) {
             this.searchOptions.showCatIdList[2] = val
 

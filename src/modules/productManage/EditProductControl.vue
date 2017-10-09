@@ -239,7 +239,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
+                            <label for="title" class="col-sm-5 control-label">
                                 开始时间：
                             </label>
                             <span v-if="spuShelvesStatus == 1">
@@ -252,16 +252,16 @@
                                 <br>
                                 <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
                                 </span>
-                       <div class="col-md-6 time-box" id="selecttime1" style="display:none">
+                       <div class="col-md-9 time-box" id="selecttime1" style="display:none">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTime1" v-model="stime"/>
-                                <select  v-model="hour" style="width:90px; height:27px">
+                               <!--  <select  v-model="hour" style="width:90px; height:27px">
                                     <option value="-1">选择小时</option>
                                     <option v-for="item in 24" :value="item">{{item}}时</option>
                                 </select>&nbsp;&nbsp;
                                 <select v-model="minutes" style="width:90px; height:27px">
                                     <option value="-1">选择分钟</option>
                                     <option v-for="item in 60" :value="item">{{item}}分</option>
-                                </select>
+                                </select> -->
                         </div>  
                     </div>
                 </span>
@@ -379,8 +379,6 @@ export default {
             createinsurancelist:[{"keyValue":"","description":""}],
             carriageList:[],//运费模板
             yunfei:0,       //0:统一邮费  1:运费模板
-            hour : -1,
-            minutes : -1,
             stime :"",
             insurancelist: [],
             shangb :[],
@@ -778,7 +776,9 @@ export default {
              }
             this.shangb.forEach((data,index)=>{
                     let val = this.shangbanglist.find(item=>item.keyValue == data)
-                    this.request.pcrList.push( {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
+                    if(val != null){
+                      this.request.pcrList.push( {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
+                    }
                     //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
                  })
              this.createshangbanglist.forEach(data=>{
@@ -827,33 +827,25 @@ export default {
           this.request.spuFreight = -1
         }
     //上架时间
-      
       if( this.rad == 2 ){
-           if( this.hour == -1 || this.minutes == -1 || this.time == ""){
+           if( this.stime == ""){
             this.showMsg("请输入上架时间")
             return
            }
-           this.request.spuPlanShelvesDate = this.stime//+" "+this.hour+":"+this.minutes
-           if( this.hour>= 10 ){
-                          this.request.spuPlanShelvesDate += " "+this.hour
-                    }else{
-                        this.request.spuPlanShelvesDate += " 0"+this.hour
-                    }
-                    if( this.minutes >= 10 ){
-                          this.request.spuPlanShelvesDate += ":"+this.minutes
-                    }else{
-                        this.request.spuPlanShelvesDate+= ":0"+this.minutes
-                    }
+           if(new Date(this.stime).getTime() - new Date().getTime() < 60000){
+                   this.showMsg('上架时间请比现在时间大于1分钟以上')
+                   this.stime = ""
+                   return
+           }    
+           this.request.spuPlanShelvesDate = this.stime//
       } else {
            this.request.spuPlanShelvesDate = ""
       } 
-
         //商品图片判空
-       
-       /* if(this.resourceList.length == 0 ){
+        if(this.request.resourceList.length == 0 ){
             this.showMsg("商品图片至少上传一张")
             return
-         }*/
+         }
         //详情图片管理
          this.singleimgList.forEach((data,index)=>{
                 this.request.resourceList.$set(index, data)
@@ -1194,21 +1186,19 @@ export default {
         },
         stime(val) {
              if( val ) {
-              let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/
+             let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])))?$/
               if(!reg.test(val)){
                 this.showMsg('日期格式不合法')
                 this.stime = "" 
                 return
               }
-             val = val.replace(/-/g,"/")
+             /*val = val.replace(/-/g,"/")
              let end = new Date(val)
              if(end <= new Date()){
-               //this.showMsg('上架时间不可以小于现在时间')
+               this.showMsg('上架时间请比现在时间大于1分钟以上')
                this.stime = "" 
-               this.hour = -1
-               this.minutes = -1
                return
-               }
+               }*/
             }
         },
         "request.spuFreight":{　　
@@ -1273,9 +1263,19 @@ export default {
                         this.stime += "-0"+(sjtime.getMonth()+1)
                     }
                     if( sjtime.getDate() >= 10 ){
-                          this.stime += "-"+sjtime.getDate()
+                          this.stime += "-"+sjtime.getDate()+" "
                     }else{
-                        this.stime += "-0"+sjtime.getDate()
+                        this.stime += "-0"+sjtime.getDate()+" "
+                    }
+                    if( sjtime.getHours() >= 10 ){
+                         this.stime += ""+sjtime.getHours()+":"
+                    }else{
+                        this.stime += "0"+sjtime.getHours()+":"
+                    }
+                    if( sjtime.getMinutes() >= 10 ){
+                         this.stime += ""+sjtime.getMinutes()
+                    }else{
+                        this.stime += "0"+sjtime.getMinutes()
                     }
                     this.spuShelvesStatus = data.data.spuShelvesStatus
                     if(this.spuShelvesStatus == 1){
@@ -1284,9 +1284,6 @@ export default {
                     this.uptime = data.data.spuOnShelvesTime
                    //this.stime = sjtime.getFullYear() + "-0"+(sjtime.getMonth()+1)+"-"+sjtime.getDate()
                      //alert(stime)
-                  
-                    this.hour = sjtime.getHours()
-                    this.minutes = sjtime.getMinutes()
                     //上榜理由回显
                     for(var i=0;i< data.data.reasonsList.length;i++){
                         if(data.data.reasonsList[i].pcrSortNo == -1){
@@ -1424,12 +1421,48 @@ export default {
         }
     },
     ready() {   
-        
         this.typesList = client.global.componentTypes;
         this.showPainListSelect = true;
-
-        $('#createStartTime1').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        
+        let dates = $("#createStartTime1");
+          dates.datetimepicker({
+          dateFormat: "yy-mm-dd",
+          timeFormat: 'HH:mm',
+          showMonthAfterYear: true,
+          changeMonth: true, 
+          changeYear: true,
+          buttonImageOnly: true,
+          stepHour: 1,
+          stepMinute: 1,
+          closeText: '确定',
+          prevText: '&#x3c;上月',
+          nextText: '下月&#x3e;',
+          currentText: '今天',
+          monthNames: ['一月','二月','三月','四月','五月','六月',
+          '七月','八月','九月','十月','十一月','十二月'],
+          monthNamesShort: ['一','二','三','四','五','六',
+          '七','八','九','十','十一','十二'],
+          dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+          dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+          dayNamesMin: ['日','一','二','三','四','五','六'],
+          weekHeader: '周',
+          showAnim:'highlight',
+          isClear:true, //是否显示清空 
+          isRTL: false,
+          onSelect: function(selectedDate){
+           //var option = this.id == "createStartTime2" ? "minDate" : "maxDate";
+           //dates.not(this).datepicker("option", option, selectedDate );
+          },
+          onClose: function(data,inst){   
+             dates.removeAttr("disabled")
+          },
+          beforeShow: function(){
+             dates.attr("disabled","disabled")
+              $(this).datepicker('option', 'minDate', new Date() )
+          },
+      });
+          dates.on("click",function(){
+            $(this).attr("disabled","disabled")
+          })
     },
     beforeDestroy() {
         this.showPainListSelect = false;

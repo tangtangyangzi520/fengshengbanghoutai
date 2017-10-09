@@ -255,13 +255,14 @@
                             </label>
                             <div class="controls col-md-2">
                                <input type="number" class="form-control input-sm" v-model="sj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"
-                               max="99999999"/>
+                               max="99999999" @blur="checkfloat($event)"/>
                         </div>
                             <label for="title" class="col-sm-2 control-label">
                                 原价：
                             </label>
                             <div class="controls col-md-2">
-                               <input type="number" class="form-control input-sm" v-model="yj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"max="99999999"/>
+                               <input type="number" class="form-control input-sm" v-model="yj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"max="99999999"
+                               @blur="checkfloat($event)"/>
                             </div>
                     </div>
                          <div class="form-group">  
@@ -269,7 +270,7 @@
                                 <span class="required">* </span>展示库存（件）：
                             </label>
                             <div class="controls col-md-2">
-                               <input type="number" class="form-control input-sm" v-model="kc" placeholder="" @keyup="check($event)" @change="check($event)" min="0" 
+                               <input type="number" class="form-control input-sm" v-model="kc" placeholder="" @keyup="check($event)" @change="check($event)" min="0" @blur="check($event)"
                                max="2000000000"/>
                             </div>
                              <label for="title" class="col-sm-2 control-label">
@@ -306,14 +307,14 @@
                           
                                 <tr style="text-align: center">
                                    <td style="width:42.4%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
-                                   <td style="border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  
+                                   <td style="border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
                                     @change="sput($event,'.put0')" min="0"max="99999999"/></td>
-                                   <td style="border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')" 
-                                    min="0"max="99999999"/></td>
+                                   <td style="border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
+                                    @blur="sput($event,'.put1')"  min="0"max="99999999"/></td>
                                    <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put2')" @change="ssput($event,'.put2')"
-                                    min="0"max="2000000000"/></td>
+                                    min="0"max="2000000000" @blur="ssput($event,'.put2')"/></td>
                                    <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
-                                    min="0"max="2000000000"/></td>
+                                    min="0"max="2000000000" @blur="ssput($event,'.put3')"/></td>
                                    <td style="border:1px solid white;width:17%">  <input class=" input2" type="text"  maxLength="25" /></td>
                                 </tr>
 
@@ -333,10 +334,12 @@
                                 <tr v-for="(index,group) in xssxList">
                                    <td>{{index+1}}<input class="input2" type="hidden" :value="index+1"/></td>
                                    <td style="width:40%;;line-height:30px"> <a class="dele" @click="close($event,index)" >×</a> {{ group }} <input class="input2" type="hidden" :value="group"/></td>
-                                   <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999"/></td>
-                                   <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999"/></td>
-                                   <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000"/></td>
-                                   <td>  <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000"/></td>
+                                   <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
+                                    @blur="checkfloat($event)"/></td>
+                                   <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
+                                    @blur="checkfloat($event)"/></td>
+                                   <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
+                                   <td>  <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
                                    <td style="width:17%">  <input class="put4 input2" type="text" 
                                     maxLength="25" /></td>
                                 </tr>
@@ -466,16 +469,16 @@
                                 <br>
                                 <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
                                 </span>
-                       <div class="col-md-6 time-box" id="selecttime" style="display:none">
+                       <div class="col-md-8 time-box" id="selecttime" style="display:none">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" v-model="time" id="createStartTime0"/>
-                                <select  v-model="hour" style="width:90px; height:27px">
+                                <!-- <select  v-model="hour" style="width:90px; height:27px">
                                     <option value="-1">选择小时</option>
                                     <option v-for="item in 24" :value="item">{{item}}时</option>
                                 </select>&nbsp;&nbsp;
                                 <select v-model="minutes" style="width:90px; height:27px">
                                     <option value="-1">选择分钟</option>
                                     <option v-for="item in 60" :value="item">{{item}}分</option>
-                                </select>
+                                </select> -->
                         </div>  
                     </div>
                 </div>                                                      
@@ -569,8 +572,6 @@ export default {
             createinsurancelist:[{"keyValue":"","description":""}],
             yunfei:0,       //0:统一邮费  1:运费模板
             rad:1,         //上架状态 1:立刻  2:设定
-            hour : -1,     //上架时间小时
-            minutes : -1,  //上架时间分钟
             time :"",      //上架时间日期 
             insurancelist: [], //CheckBox消保类型集合 
             shangb :[],
@@ -1240,8 +1241,10 @@ export default {
                 return
              }
             this.shangb.forEach((data,index)=>{
-                    let val = this.shangbanglist.find(item=>item.keyValue == data)
+                  let val = this.shangbanglist.find(item=>item.keyValue == data)
+                  if(val != null){
                     this.request.pcrList.push( {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
+                  }
                     //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
                  })
              this.createshangbanglist.forEach(data=>{
@@ -1740,9 +1743,9 @@ export default {
                         "skuShowNum": $(el[4]).val(),  //展示库存
 
                     }
-                    console.log(sin)
+                    //console.log(sin)
                     spulist.push(sin)
-                    console.log(spulist)
+                    //console.log(spulist)
            }      
       })
 }
@@ -1790,21 +1793,16 @@ export default {
          }*/
          //上架时间
       if( $(".radios input:checked").val() == 2 ){
-           if( this.hour == -1 || this.minutes == -1 || this.time == ""){
-            this.showMsg("上架时间不能为空")
+            if( this.time == ""){
+            this.showMsg("请输入上架时间")
             return
            }
-           this.request.spuPlanShelvesDate = this.time//+" "+this.hour+":"+this.minutes
-           if( this.hour>= 10 ){
-                          this.request.spuPlanShelvesDate += " "+this.hour
-                    }else{
-                        this.request.spuPlanShelvesDate += " 0"+this.hour
-                    }
-                    if( this.minutes >= 10 ){
-                          this.request.spuPlanShelvesDate += ":"+this.minutes
-                    }else{
-                        this.request.spuPlanShelvesDate+= ":0"+this.minutes
-                    }
+           if(new Date(this.time).getTime() - new Date().getTime() < 60000){
+                   this.showMsg('上架时间请比现在时间大于1分钟以上')
+                   this.time = ""
+                   return
+           }    
+           this.request.spuPlanShelvesDate = this.time//
       } else {
            this.request.spuPlanShelvesDate = ""
       } 
@@ -2139,19 +2137,19 @@ export default {
         },
         time(val) {
             if( val ) {
-              let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/
+               let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])))?$/
               if(!reg.test(val)){
                 this.showMsg('日期格式不合法')
                 this.time = "" 
                 return
               }
-             val = val.replace(/-/g,"/")
+            /* val = val.replace(/-/g,"/")
              let end = new Date(val)
              if(end <= new Date()){
                this.showMsg('上架时间不可以小于现在时间')
                this.time = "" 
                return
-               }
+               }*/
             }
         },
         "request.spuFreight":{　　
@@ -2283,10 +2281,46 @@ export default {
     ready() {   
         this.typesList = client.global.componentTypes;
         this.showPainListSelect = true;
-         $('#createStartTime0').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('.datePicker').on('change', () => {
-            this.rad = 2
-        })
+        let dates = $("#createStartTime0");
+          dates.datetimepicker({
+          dateFormat: "yy-mm-dd",
+          timeFormat: 'HH:mm',
+          showMonthAfterYear: true,
+          changeMonth: true, 
+          changeYear: true,
+          buttonImageOnly: true,
+          stepHour: 1,
+          stepMinute: 1,
+          closeText: '确定',
+          prevText: '&#x3c;上月',
+          nextText: '下月&#x3e;',
+          currentText: '今天',
+          monthNames: ['一月','二月','三月','四月','五月','六月',
+          '七月','八月','九月','十月','十一月','十二月'],
+          monthNamesShort: ['一','二','三','四','五','六',
+          '七','八','九','十','十一','十二'],
+          dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+          dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+          dayNamesMin: ['日','一','二','三','四','五','六'],
+          weekHeader: '周',
+          showAnim:'highlight',
+          isClear:true, //是否显示清空 
+          isRTL: false,
+          onSelect: function(selectedDate){
+           //var option = this.id == "createStartTime2" ? "minDate" : "maxDate";
+           //dates.not(this).datepicker("option", option, selectedDate );
+          },
+          onClose: function(data,inst){   
+             dates.removeAttr("disabled")
+          },
+          beforeShow: function(){
+             dates.attr("disabled","disabled")
+              $(this).datepicker('option', 'minDate', new Date() )
+          },
+      });
+          dates.on("click",function(){
+            $(this).attr("disabled","disabled")
+          })
     },
     beforeDestroy() {
         this.showPainListSelect = false;

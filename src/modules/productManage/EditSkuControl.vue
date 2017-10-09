@@ -23,16 +23,16 @@
                                            <input type="checkbox" :checked="g.checked"></input>
                                    </td>
 
-                                   <td style="width:40%" >  <!-- <a class="dele"  @click="close(g.skuId)" >×</a>  --><span style="padding-left:8.3%"> {{ g.skuAtrr }} </span>
+                                   <td style="width:40%" >  <!-- <a class="dele"  @click="close(g.skuId)" >×</a>  --><span > {{ g.skuAtrr }} </span>
                                    </td>
-                                   <td>￥<input class=" input2" type="number" v-model="g.skuSalePrice"    @keyup="checkfloat($event)" @change="checkfloat($event)"
+                                   <td>￥<input class=" input2" type="number" v-model="g.skuSalePrice"    @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)"
                                     min="0" max="99999999"/></td>
 
-                                   <td>￥<input class=" input2" type="number" v-model="g.skuMarketSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)"
-                                    min="0" max="99999999"/></td>
-                                   <td>  <input class=" input2" type="number" v-model="g.skuShowNum"         @keyup="check($event)" @change="check($event)"
+                                   <td>￥<input class=" input2" type="number" v-model="g.skuMarketSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" 
+                                    @blur="checkfloat($event)"  min="0" max="99999999"/></td>
+                                   <td>  <input class=" input2" type="number" v-model="g.skuShowNum"         @keyup="check($event)" @change="check($event)" @blur="check($event)"
                                     min="0" max="2000000000"/></td>
-                                   <td>  <input class=" input2" type="number" v-model="g.skuStockNum"        @keyup="check($event)" @change="check($event)"
+                                   <td>  <input class=" input2" type="number" v-model="g.skuStockNum"        @keyup="check($event)" @change="check($event)"  @blur="check($event)"
                                     min="0" max="2000000000"/></td>
                                    <td style="width:17%" > {{ g.skuCode }}  </td>
                                 </tr>

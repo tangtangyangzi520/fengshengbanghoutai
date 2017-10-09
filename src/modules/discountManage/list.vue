@@ -88,7 +88,7 @@
                             <td style="text-align:center;vertical-align:middle;">
                                <span v-if="item.mkcStatus == 0">未开始</span>
                                <span v-if="item.mkcStatus == 2">进行中</span>
-                               <span v-if="item.mkcStatus == 1">已结束</span>
+                               <span v-if="item.mkcStatus == 1 || item.mkcStatus == 3">已结束</span>
                             </td>
                             
                           <!--   <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
@@ -99,7 +99,7 @@
                            
                             </span>
                             <span v-else>
-                            <button type="button"  class="btn btn-xs blue" @click.stop="editItem(item.mkcCampaignId)">编辑</button>
+                            <button type="button" v-if="par != 1" class="btn btn-xs blue" @click.stop="editItem(item.mkcCampaignId)">编辑</button>
                             <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showControlFunc(item.mkcCampaignId,'submit')">使失效</button>
                             <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs default">删除</button>
                             </span>
@@ -367,7 +367,6 @@ export default {
                 $("#0,#2,#-1").removeClass("cha2").addClass("select2");
                 this.par = 1
             }
-             //this.getList(false,true);
              
         },
         showEditspu(item, name , type) {

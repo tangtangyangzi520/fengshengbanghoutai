@@ -155,12 +155,35 @@ export default {
         },
         //过滤未选择数据
         filterList() {
-            let sourceList = this.unSelectedList, targetList = this.filtedList, index, index2;
+            let sourceList = this.unSelectedList, targetList = this.filtedList, index, index2,index3
+            let selectList = this.selectedList;
+            let arr = []
             for (index = sourceList.length - 1; index >= 0; index--) {
+                for (index3 = selectList.length - 1; index3 >= 0; index3--) {
+                    if (sourceList[index].name == selectList[index3].name) {
+                        arr.push(selectList[index3].name)
+                        break;
+                    }
+                }
                 for (index2 = targetList.length - 1; index2 >= 0; index2--) {
                     if (sourceList[index].name == targetList[index2].name) {
                         sourceList.splice(index, 1);
                         break;
+                    }
+                }
+            }
+            if(arr.length < selectList.length){
+                for(let i = 0; i < selectList.length; i++){
+                    let flag = true
+                    for(let j = 0; j < arr.length; j++){
+                        if(arr[j] == selectList[i].name){
+                            flag = false
+                            break
+                        }
+                    }
+                    if(flag){
+                        selectList.splice(i,1);
+                        --i
                     }
                 }
             }

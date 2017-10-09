@@ -29,11 +29,12 @@
             <div class="form-group">
                 <label class="col-md-3">下单时间：</label>
                 <div class="col-md-9 time-box">
-                    <div><input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTime"></div>
-                    <div>-</div>
-                    <div><input type="text" class="form-control inline-block datePicker" placeholder="选择结束时间" id="createEndTime"></div>
-                    <a @click="setTime(7)">近7天</a>
-                    <a @click="setTime(30)">近30天</a>
+                    <div><input type="text" class="form-control inline-block" placeholder="选择开始时间" id="createStartTime" style="font-size:0.5px"></div>
+                    <div style="margin-left:-0.1%">-</div>
+                    <div >
+                        <input type="text" class="form-control inline-block" placeholder="选择结束时间" id="createEndTime" style="font-size:0.5px"></div>
+                    <a @click="setTime(7)"  style="font-size:0.5px">近7天</a>
+                    <a @click="setTime(30)" style="font-size:0.5px">近30天</a>
                 </div>
             </div>
         </div>
@@ -58,7 +59,7 @@
                 <label class="col-md-3">实付金额：</label>
                 <div class="col-md-9 time-box">
                     <div><input type="text" class="form-control inline-block" :placeholder="'输入最低金额'" v-model="searchOptions.lowOrsOpenPay"></div>
-                    <div>--</div>
+                    <div>-</div>
                     <div><input type="text" class="form-control inline-block" :placeholder="'输入最高金额'" v-model="searchOptions.highOrsOpenPay"></div>
                 </div>
             </div>
@@ -241,8 +242,49 @@ export default {
         this.setOptions();
         this.onchange(this.searchOptions);
         this.oncreate(false, true);
-        $('#createStartTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('#createEndTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
+        let dates = $("#createStartTime,#createEndTime");
+          dates.datepicker({
+          dateFormat: "yy-mm-dd",
+          timeFormat: 'HH:mm',
+          showMonthAfterYear: true,
+          changeMonth: true, 
+          changeYear: true,
+          buttonImageOnly: true,
+          stepHour: 1,
+          stepMinute: 1,
+          closeText: '确定',
+          prevText: '&#x3c;上月',
+          nextText: '下月&#x3e;',
+          currentText: '今天',
+          monthNames: ['一月','二月','三月','四月','五月','六月',
+          '七月','八月','九月','十月','十一月','十二月'],
+          monthNamesShort: ['一','二','三','四','五','六',
+          '七','八','九','十','十一','十二'],
+          dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+          dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+          dayNamesMin: ['日','一','二','三','四','五','六'],
+          weekHeader: '周',
+          showAnim:'highlight',
+          isClear:true, //是否显示清空 
+          isRTL: false,
+          onSelect: function(selectedDate){
+           var option = this.id == "createStartTime" ? "minDate" : "maxDate";
+           dates.not(this).datepicker("option", option, selectedDate );
+          },
+          onClose: function(data,inst){   
+             dates.removeAttr("disabled")
+          },
+          beforeShow: function(){
+             dates.attr("disabled","disabled")
+             if( $("#createEndTime").datepicker( 'getDate' ) != null ){
+               return
+             }
+              $(this).datepicker('option', 'maxDate', new Date() )
+          },
+      });
+        dates.on("click",function(){
+            $(this).attr("disabled","disabled")
+          })
         $('.datePicker').on('change', () => {
             this.setOptions();
         })

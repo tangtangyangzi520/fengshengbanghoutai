@@ -123,7 +123,7 @@
                <input type="hidden" name="spuCatId" v-model="spuCatId"/> 
                <input type="hidden" name="skuCode" v-model="skuCode"/>  -->
         </form>
-        <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
+        <paging v-if="dataList.length > 0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
         
          <add-coupon v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :coflag="couflag" :mkttid="mktid"></add-coupon> 
         
@@ -133,7 +133,7 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
-        <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
+        <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType" :search="getList"></control>
         <loading :show="isLoading"></loading>
     </div>
 </template>

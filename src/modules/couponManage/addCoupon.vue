@@ -6,28 +6,30 @@
                     <form class="form-horizontal" name="addForm" role="form" id='submitform'>
                           <div class="col-md-12">   
                           <h5 > 基本信息 </h5> 
-                          <hr> <br>
+                          </div> 
+                           <div class="form-group" style="text-align:center">
+                              <hr style="height:1px;border:none;border-top:1px solid black;width:97%;margin-left:1.5%;" />
                           </div>
-                          <br> 
-                          <div class="form-group">
+                          <div class="form-group" style="margin-top:-0.2%">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>优惠券名称：
                             </label>
-                            <div class="controls col-md-3">
+                            <div class="controls col-md-3" style="margin-top:0.5%">
                                 <input type="text" class="form-control input-sm" v-model="request.mkcName" placeholder="" required="required" :maxLength="a" />
                                 <input id="sub" type="submit" style="display:none" id="name"/>
-                            </div>&nbsp;&nbsp;10个字以内
+                            </div>&nbsp;&nbsp;<p style="margin-left:-1.7%;margin-top:-0.4%">
+                              <span style="color:#999999">10个字以内</span></p>
                           </div>
     
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>发放总量：
                             </label>
-                            <div class="col-md-2"  style="margin:0">
+                            <div class="col-md-2"  style="margin-top:0.5%">
                                 <input type="number" max="2147483647" class="form-control input-sm" v-model="request.mkcTotalAmount" placeholder=""  required="required" min="1" 
                                   @keyup="integer($event)" @change="integer($event)"/>
                             </div>
-                            <label  class="col-sm-0 control-label" >
+                            <label  class="col-sm-0 control-label" style="margin-left:-0.5%;margin-top:0.4%">
                                张
                             </label>
                         </div>
@@ -37,17 +39,18 @@
                             </label>
                             <div class="col-md-8 nopadding">
 
-                            <div class="col-md-3" >
+                            <div class="col-md-3" style="margin-top:1.5%">
                                 <input type="radio"  v-model="" value="指定金额" checked :class="{ 'active': isActive }" >指定金额&nbsp;&nbsp;&nbsp;&nbsp;
                             </div>
                                <br> <br>
-                               <div class="col-md-2" >面值：</div>
-                               <div class="col-md-3" ><input type="number" class="form-control input-sm" v-model="request.mkcPrice" placeholder="" required="required" max="999999" min="1" :class="{ 'active': isActive }"
+                               <div class="col-md-2" style="margin-top:1%" >面值：</div>
+                               <div class="col-md-3" style="margin-left:-10%">
+                                <input type="number" class="form-control input-sm" v-model="request.mkcPrice" placeholder="" required="required" max="999999" min="1" :class="{ 'active': isActive }"
                                 @keyup="integer($event)" @change="integer($event)"/></div>
-                                 <label  class="col-sm-0 control-label" >
-                               元
+                                 <label  class="col-sm-0 control-label" 
+                                 style="margin-left:-0.8%;margin-top:-0.1%">元
                             </label>
-                            <div style="color:red">优惠券不能抵扣运费</div>
+                            <div style="color:#FF6633;margin-left:2%;margin-top:1.2%">优惠券不能抵扣运费</div>
                             </div>
                         </div>
                       
@@ -56,33 +59,36 @@
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>使用门槛：
                             </label>
-                                       <div class="col-md-8 nopadding">
-
-                            <div class="col-md-3" >
-                                <input type="radio" name="menkan" v-model="menkan" value="0" checked :class="{ 'active': isActive }">不限制&nbsp;&nbsp;&nbsp;&nbsp;
+                           <div class="col-md-8 nopadding">
+                            <div class="col-md-3" style="margin-top:1.5%">
+                                <input type="radio" name="menkan" v-model="menkan" value="0" checked :class="{ 'active': isActive }" >不限制&nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <br> <br>
-                                <div class="col-sm-2" >
+                                <div class="col-sm-2" style="margin-top:1%">
                                 <input type="radio" name="menkan" v-model="menkan" value="1"  :class="{ 'active': isActive }">满&nbsp;&nbsp;&nbsp;&nbsp; 
                                 </div>
-                                <div class="col-md-3" >  <input type="number" class="form-control input-sm" v-model="request.mkcUsedCondition" placeholder="" max="999999" required="required" min="0" @keyup="integer($event)" @change="integer($event)" :class="{ 'active': isActive }"/></div>
+                                <div class="col-md-3" style="margin-left:-10%;margin-top:0.4%">  
+                                  <input type="number" class="form-control input-sm" v-model="request.mkcUsedCondition" placeholder="" max="999999" required="required" min="0" @keyup="integer($event)" @change="integer($event)" :class="{ 'active': isActive }"/></div>
                                
-                               <label  class="col-sm-0 control-label" >
+                               <label  class="col-sm-0 control-label" style="margin-left:-0.6%;margin-top:0.5%">
                                元可使用
                                </label>
-                               <div style="color:red">使用门槛计算不包含运费</div>
-                               </div>
-                            </div>
+                               <div style="color:#FF6633;margin-left:2%;margin-top:1.2%">
+                               使用门槛计算不包含运费</div>
+                             </div>
+                         </div>
                        
-                        
-                       <div class="col-md-12">  <h5 > 基本规则 </h5>  <hr> <br></div>
-                       
+                         <hr style="background-color:white;display:block"> 
+                       <div class="col-md-12">  <h5 > 基本规则 </h5>  </div>
+                        <div class="form-group" style="text-align:center">
+                              <hr style="height:1px;border:none;border-top:1px solid black;width:97%;margin-left:1.5%;" />
+                          </div>
                       
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>每人限领：
                             </label>
-                            <div class="col-md-3">
+                            <div class="col-md-3" style="margin-top:0.5%">
                                 <select class="form-control" v-model="request.mkcJoinTimes" :class="{ 'active': isActive }">
                                      <option value="0">不限张</option>
                                      <option v-for="item in timesList" :value="item">{{item}}张</option>
@@ -90,48 +96,55 @@
                                 <!-- <m-select :data="brandList" :placeholder="'请选择内容'" :change-func="selectTagStatusFunc" :class="'fixedIcon'"></m-select> -->
                             </div>
                         </div>
-                        
-
                         <div class="form-group" >
                           <label for="title" class="col-sm-3 control-label">
                             <span class="required">* </span>有效期：
                           </label>
                           <div class="col-md-8 nopadding">
 
-                            <div class="col-md-3" >
-                              <input type="radio"  v-model="" value="不限制"  checked :class="{ 'active': isActive }" name="lingquan">固定日期&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div class="col-md-3" style="margin-top:1.5%">
+                              <input type="radio"  value="不限制"  checked :class="{ 'active': isActive }" >固定日期&nbsp;&nbsp;&nbsp;&nbsp;
                             </div>
                             <br> <br>
-                            <label for="title" class="col-sm-3 control-label">
+                            <label for="title" class="col-sm-3 control-label" style="margin-left:-10%">
                               <span class="required">* </span>生效时间：
                             </label>
                             <div class="controls col-md-4 ">
-                              <input type="text" class="form-control inline-block datePicker" placeholder="选择生效时间" id="createStartTime2" v-model="request.mktStart" required="required" :class="{ 'active': isActive }" > 
-                            </div><br><br>
-                            <label for="title" class="col-sm-4 control-label">
+                              <input type="text" class="form-control inline-block" placeholder="选择生效时间" 
+                              id="createStartTime2" v-model="request.mktStart" required="required" :class="{ 'active': isActive }" > 
+                            </div><br><br><br>
+                            <label for="title" class="col-sm-4 control-label" style="margin-left:-18.2%">
                               <span class="required" :class="{ 'active': isActive }">* </span>过期时间：
                             </label>
                             <div class="controls col-md-4 ">
-                              <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime2" v-model="mktEnd" required="required" :class="{ 'active': isActive }"> <br>
+                              <input type="text" class="form-control inline-block" placeholder="选择过期时间" 
+                              id="createEndTime2" v-model="mktEnd" required="required" :class="{ 'active': isActive }"> <br><br>
                             </div>
                             <div class="col-sm-8" >
-                              <input type="radio" name="lingquan" v-model="" value="不限制"  :class="{ 'active': isActive }">领到券当日开始 {{ time }} 天内生效<br><br>
-                              <input type="radio" name="lingquan" v-model="" value="不限制"       :class="{ 'active': isActive }" >领到券次日开始 {{ time }} 天内生效
+                              <input type="checkbox"  value="1" :class="{ 'active': isActive }"  
+                              @click="lingquancheck($event,1)" id="todaybox">&nbsp;&nbsp;领到券当天即刻开始
+                                 <input id="today" type="number" min="0" max="99" v-model="request.mkcDateNum" 
+                                 @keyup="integer($event)" @change="integer($event)" @blur="integer($event)"
+                                 style="display:none" class="active"/>天内有效<br><br>
+                              <input type="checkbox" value="2" :class="{ 'active': isActive }"  
+                              @click="lingquancheck($event,2)" id="nextbox">&nbsp;&nbsp;领到券次日开始 
+                                 <input id="nextDay" type="number" min="0" max="99" v-model="request.mkcDateNum" @keyup="integer($event)" @change="integer($event)" @blur="integer($event)" 
+                                 style="display:none" class="active" />天内有效
                             </div>
                           </div></div>
-<br>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>可使用商品：
                             </label>
-                            <div class="controls col-md-4">
+                            <div class="controls col-md-4" style="margin-top:1%">
                                 <input type="radio" name="useful" v-model="request.mkcUsedType" value="1" checked >全店商品&nbsp;&nbsp;&nbsp;&nbsp;
                                 <input type="radio" name="useful" v-model="request.mkcUsedType" value="0" >指定商品&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button class="btn yellow-crusta" type="button" @click="showselect" style="display:none" id="selectSpu">添加商品</button>
                             </div>
                         </div>
                         <div class="form-group" v-for="spu in spuList">
-                        <table class="tab" id="t" style="width:1000px" border="1" cellspacing="0" cellpadding="0">  
+                        <table class="tab" id="t" style="width:850px;margin-left:16%" border="1" 
+                        cellspacing="0" cellpadding="0">  
                         <thead>
                           <tr>
                              <th style="width:10%">
@@ -166,7 +179,7 @@
                             <label for="title" class="col-sm-3 control-label">
                                使用说明：
                             </label>
-                            <div class="controls col-md-6">
+                            <div class="controls col-md-6" style="margin-top:1%">
                                 <textarea v-model="request.mkcRemark" placeholder="填写活动的详细说明，支持换行,最多200字" maxLength="200" rows="7" cols="60">
                                 </textarea> 
                             </div>
@@ -228,6 +241,8 @@ export default {
             mkcUsedCondition:0,
             timesList:[1,2,3,4,5,10],
             request:{
+              "mkcDateType":0,
+              "mkcDateNum":0,
               "mkcUsedType":1,//使用类型： 1全店商品 0指定商品
               "mkcCampaignId":0,
               "cmisList": [],
@@ -288,6 +303,30 @@ export default {
         }
     },
     methods: {
+         lingquancheck(event , val ){
+            let el = event.currentTarget
+            if($(el).is(':checked')){
+                   if(val == 1){
+                        $("#nextbox").removeAttr("checked")
+                        $("#nextDay").hide()
+                        $("#today").show()
+                        this.request.mkcDateType = 1
+                     }else if(val == 2){
+                        $("#todaybox").removeAttr("checked")
+                        $("#nextDay").show()
+                        $("#today").hide()
+                        this.request.mkcDateType = 2
+                   }
+                   this.request.mkcDateNum = 0
+                   return
+              }
+             if( !($("#nextbox").is(':checked') || $("#todaybox").is(':checked')) ){
+                       this.request.mkcDateType = 0
+                       this.request.mkcDateNum = 0
+                        $("#nextDay").hide()
+                        $("#today").hide()
+              }
+         },
          integer(event){
             let el = event.currentTarget;
             $(el).val(Math.abs($(el).val()))
@@ -310,6 +349,20 @@ export default {
              if(this.menkan ==  0 ){
                 this.request.mkcUsedCondition = 0
             }
+            if( this.request.mkcDateType > 0  &&  this.request.mkcDateNum <= 0 ){
+                this.showMsg("请填写领券后有效天数")
+                return
+            }
+            if(new Date(this.request.mktStart).getTime() - new Date().getTime() < 60000){
+                   this.showMsg('生效时间请比现在时间大于1分钟以上')
+                   $("#createStartTime2").val("")
+                   return
+            }    
+            if(new Date(this.request.mktEnd).getTime() - new Date(this.request.mktStart).getTime() < 60000){
+                   this.showMsg('过期时间请比生效时间大于1分钟以上')
+                   $("#createEndTime2").val("")
+                   return
+            }    
             if(this.request.mkcUsedType == 0 && this.spuList.length == 0){
               this.showMsg("请先指定商品!")
               return
@@ -530,7 +583,7 @@ export default {
                     return
                    }
                     this.time = (end - start)/24/3600/1000
-                }       
+                }
           },　　　　　　　　　　
           deep:true　　　　　　　　
         },
@@ -560,6 +613,8 @@ export default {
                     this.request.mkcTotalAmount= response.data.mkcTotalAmount
                     this.request.mkcType       = response.data.mkcType
                     this.request.mkcUsedCondition= response.data.mkcUsedCondition
+                    this.request.mkcDateType = response.data.mkcDateType
+                    this.request.mkcDateNum = response.data.mkcDateNum
                    //开始时间
                     let sjtime  = new Date(response.data.mktStart)
                     this.request.mktStart = sjtime.getFullYear() 
@@ -621,6 +676,14 @@ export default {
                       this.menkan = 1
                     }
                     this.request.mktEnd = this.mktEnd
+                    //领取时间回显
+                     if( this.request.mkcDateType ==1  ){
+                        $("#todaybox").prop("checked","true")
+                        $("#today").show()
+                    }else  if( this.request.mkcDateType ==2  ){
+                        $("#nextbox").prop("checked","true")
+                        $("#nextDay").show()
+                    }
                     //可使用商品回显
                     //if( response.data.spuList.length > 0 ){
                     this.request.mkcUsedType = response.data.mkcUsedType
@@ -732,13 +795,52 @@ export default {
         }
     },
     ready() {   
-        
-         $('#createStartTime2').val('').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', language: 'zh-CN', autoclose: 'true', minView: 2 ,  weekStart: 1,
-        todayBtn:  1, todayHighlight: 1,  startView: 2, forceParse: 1, showMeridian: 1,});
-        $('#createEndTime2').val('').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', language: 'zh-CN', autoclose: 'true', minView: 2 ,  weekStart: 1,
-        todayBtn:  1, todayHighlight: 1,  startView: 2, forceParse: 1, showMeridian: 1,});
+          let dates = $("#createStartTime2,#createEndTime2");
+          dates.datetimepicker({
+          dateFormat: "yy-mm-dd",
+          timeFormat: 'HH:mm:ss',
+          showMonthAfterYear: true,
+          changeMonth: true, 
+          changeYear: true,
+          buttonImageOnly: true,
+          showSecond: true,
+          stepHour: 1,
+          stepMinute: 1,
+          stepSecond: 1,
+          closeText: '确定',
+          prevText: '&#x3c;上月',
+          nextText: '下月&#x3e;',
+          currentText: '今天',
+          monthNames: ['一月','二月','三月','四月','五月','六月',
+          '七月','八月','九月','十月','十一月','十二月'],
+          monthNamesShort: ['一','二','三','四','五','六',
+          '七','八','九','十','十一','十二'],
+          dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+          dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+          dayNamesMin: ['日','一','二','三','四','五','六'],
+          weekHeader: '周',
+          showAnim:'highlight',
+          isClear:true, //是否显示清空 
+          isRTL: false,
+          onSelect: function(selectedDate){
+           var option = this.id == "createStartTime2" ? "minDate" : "maxDate";
+           dates.not(this).datepicker("option", option, selectedDate );
+          },
+          onClose: function(data,inst){   
+             dates.removeAttr("disabled")
+          },
+          beforeShow: function(){
+             dates.attr("disabled","disabled")
+             if( $("#createStartTime2").datepicker( 'getDate' ) != null ){
+               return
+             }
+              $(this).datepicker('option', 'minDate', new Date() )
+          },
+      });
+          dates.on("click",function(){
+            $(this).attr("disabled","disabled")
+          })
         $("#submitform").on("submit",this.addItem2);  
-      
     },
     beforeDestroy() {
         this.showPainListSelect = false;
@@ -824,4 +926,5 @@ export default {
 .active{
  
 }
+
 </style>

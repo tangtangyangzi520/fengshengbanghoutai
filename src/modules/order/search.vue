@@ -247,8 +247,49 @@ export default {
         this.setOptions();
         this.onchange(this.searchOptions);
         this.oncreate(false, true);
-        $('#createStartTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('#createEndTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
+         let dates = $("#createStartTime,#createEndTime");
+          dates.datepicker({
+          dateFormat: "yy-mm-dd",
+          timeFormat: 'HH:mm',
+          showMonthAfterYear: true,
+          changeMonth: true, 
+          changeYear: true,
+          buttonImageOnly: true,
+          stepHour: 1,
+          stepMinute: 1,
+          closeText: '确定',
+          prevText: '&#x3c;上月',
+          nextText: '下月&#x3e;',
+          currentText: '今天',
+          monthNames: ['一月','二月','三月','四月','五月','六月',
+          '七月','八月','九月','十月','十一月','十二月'],
+          monthNamesShort: ['一','二','三','四','五','六',
+          '七','八','九','十','十一','十二'],
+          dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+          dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+          dayNamesMin: ['日','一','二','三','四','五','六'],
+          weekHeader: '周',
+          showAnim:'highlight',
+          isClear:true, //是否显示清空 
+          isRTL: false,
+           onSelect: function(selectedDate){
+           var option = this.id == "createStartTime" ? "minDate" : "maxDate";
+           dates.not(this).datepicker("option", option, selectedDate );
+          },
+          onClose: function(data,inst){   
+             dates.removeAttr("disabled")
+          },
+          beforeShow: function(){
+             dates.attr("disabled","disabled")
+             if( $("#createEndTime").datepicker( 'getDate' ) != null ){
+               return
+             }
+              $(this).datepicker('option', 'maxDate', new Date() )
+          },
+      });
+        dates.on("click",function(){
+            $(this).attr("disabled","disabled")
+          })
         $('.datePicker').on('change', () => {
             this.setOptions();
         })

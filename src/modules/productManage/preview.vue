@@ -363,7 +363,7 @@ export default {
                 this.isLoading = false;
             })
         },
-        pspuid() {
+        pflag() {
              client.postData(  APP_SPU_GET_ONE +"?spuId=" + this.pspuid , {}).then(data => {
                 if (data.code == 200) {
                     //alert("新增成功")
