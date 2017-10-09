@@ -36,7 +36,7 @@
                             <label class="col-sm-2 control-label">
                                 <span class="required">*</span>属性类型：
                             </label>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <select v-model="data.pcaInputType" class="form-control input-sm" style="margin-top:0px;">
                                     <option value="-1">请选择</option>
                                     <option v-for="item in inputtypesList" :value="item.key">{{item.keyValue}}</option>
