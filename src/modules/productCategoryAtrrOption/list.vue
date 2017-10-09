@@ -78,10 +78,10 @@
             </div>
         </div>
        
-        <!-- 添加销售属性页面 -->       
+        <!-- 添加/编辑销售属性页面 -->       
         <saleproductatrr-control v-if="!destroyControlDialog" :selectedid="selectTreeId" :pcaid="pcaEditId" :cat-id="selectTreeId" :show="showAddDialog" :pca-name2="listPcaName" :onhide="hideAddDialog" :pca-list="dataList"></saleproductatrr-control>
         <!-- 编辑销售属性页面 -->
-        <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :pca-item="pcaItem2" :show="showDialog" :onhide="hideAddDialog" :pca-name2="listPcaName" :pca-list="dataList"></attr-option-control>
+        <!-- <attr-option-control v-if="!destroyControlDialog" :pcaid="pcaEditId" :pca-item="pcaItem2" :show="showDialog" :onhide="hideAddDialog" :pca-name2="listPcaName" :pca-list="dataList"></attr-option-control> -->
 
         <!-- 提交确认弹出框 -->
         <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">

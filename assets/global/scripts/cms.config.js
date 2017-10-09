@@ -336,7 +336,7 @@ var PCA_REMOVE      = OMS_TEST + "/pca/removeProductCategoryAtrr";          //�
 var SALE_CREATE     = OMS_TEST + "/pca/createSaleSpuCategoryAtrr";          //添加销售属性及属性选项
 var SALE_UPDATE     = OMS_TEST + "/pca/editSaleSpuCategoryAtrr";            //修改销售属性及属性选项
 var SALE_DELETE     = OMS_TEST + "/pca/removeSaleSpuCategoryAtrr";          //删除销售属性及属性选项
-var GET_ATRR_LIST   = OMS_TEST + "/pca/getAtrrListByPcraCatId";            //根据分类ID获取属性数据(无分页)
+var GET_ATRR_LIST   = OMS_TEST + "/pca/getAtrrListByPcraCatId";             //根据分类ID获取属性数据(无分页)
 //===============================================================================================================//
 var PCA_CREATE      = OMS_TEST +"/pca/createProductCategoryAtrr";        //分类属性添加
 var PCA_GET_ID      = OMS_TEST +"/pca/getProductCategoryAtrrByPcaId";    //根据属性ID获取分类属性

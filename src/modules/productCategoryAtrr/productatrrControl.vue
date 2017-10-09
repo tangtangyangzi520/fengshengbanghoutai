@@ -51,7 +51,7 @@
                 </div>
             </div>
             <span slot="btnList">
-                <button type="button" class="btn blue" @click="submitInfo">保存</button>
+                <button type="button" class="btn blue" @click="submitInfo">确认</button>
                 <button type="button" class="btn default" data-dismiss="modal">取消</button>
             </span>
         </m-alert>

@@ -1,5 +1,5 @@
 <template>
-    <!-- 销售属性-添加页面 -->
+    <!-- 销售属性-添加/编辑页面 -->
     <div style="position:absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :idp="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
             <div slot="content">
@@ -64,7 +64,7 @@
         </m-alert>
         <!-- 删除回显的属性值确认弹出框 -->
         <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showDelExistOption" :onsure="sureDelete" :onhide="hideMsg">
-            <div slot="content">删除此数据可能会影响商品销售属性的展示,确定删除吗？</div>
+            <div slot="content">删除此数据可能会影响商品属性的展示,确定删除吗？</div>
         </m-alert>
 
         <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
@@ -203,6 +203,7 @@ export default {
                     let list = response.data;
                     //console.log(list);
                     this.data.optionList = list;
+                    this.pcaoIdNum = this.data.optionList.length;// 回显属性值数量
                 } else {
                     this.showMsg(response.msg);
                 }
@@ -281,8 +282,8 @@ export default {
             }
             let set = new Set();
             for (let item of this.data.optionList) {
-                if (item.pcaoName.replace(/(^\s*)|(\s*$)/g, "") == "") {
-                    this.showMsg('属性值不能为空');
+                if (item.pcaoName.replace(/(^\s*)|(\s*$)/g, "") == "" || item.pcaoName.length > 10) {
+                    this.showMsg('属性值不能为空,且限10个字符以内');
                     return;
                 }
                 set.add(item.pcaoName);
@@ -331,21 +332,19 @@ export default {
             this.showPage = this.show;
             this.showDialog = this.show;
             this.data.pcraCatId = this.catId;
-            this.pcaoIdNum = this.data.optionList.length;// 回显属性值数量
+            //this.pcaoIdNum = this.data.optionList.length;// 回显属性值数量
+
+            if(this.pcaid == ''){
+                // 清空数据
+                this.data = {
+                    "pcaId": "",// 属性ID
+                    "pcraCatId": 0,  // 分类主键
+                    "pcaName": "",// 属性名称
+                    "optionList": []
+                };
+            }
         },
         pcaid() {
-            //清空数据
-            // this.data = {
-            //     "pcaId": "",// 属性ID
-            //     "pcraCatId": 0,  // 分类主键
-            //     "pcaName": "",// 属性名称
-            //     "optionList": [{// 属性值list
-            //         "pcaoId": "",
-            //         "pcaoName": "",
-            //         "pcaoUseFlag" : "1"
-            //     }],
-            // };
-
             // 判断是添加还是编辑
             if(this.pcaid == ''){
                 this.title = '添加自定义属性';

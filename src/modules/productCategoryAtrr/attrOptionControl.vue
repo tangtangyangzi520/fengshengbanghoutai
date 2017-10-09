@@ -48,7 +48,7 @@
         </m-alert>
         <!-- 删除回显的属性值确认弹出框 -->
         <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showDelExistOption" :onsure="sureDelete" :onhide="hideMsg">
-            <div slot="content">删除此数据可能会影响商品销售属性的展示,确定删除吗？</div>
+            <div slot="content">删除此数据可能会影响商品属性的展示,确定删除吗？</div>
         </m-alert>
         
         <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
