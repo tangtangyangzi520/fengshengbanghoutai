@@ -142,6 +142,62 @@
                                 </textarea> 
                             </div>
                         </div>
+
+                         <hr style="height:1px;border:none;border-top:1px solid white;" />   
+                      <div class="form-group" v-for="radios in radioList">
+                            <label for="title" class="col-sm-3 control-label">
+                              <span class="required" v-if="radios.pcaRequired == 1">* </span> {{radios.pcaName}}：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                              <span v-for="radio in radios.pcaoList">
+                                <input type="radio" :name="radios.pcaName" v-model="radios.pcaCreator" :value="radio" >{{radio.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" v-for="boxs in boxList">
+                            <label for="title" class="col-sm-3 control-label">
+                              <span class="required" v-if="boxs.pcaRequired == 1">* </span> {{boxs.pcaName}}：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                              <span v-for="box in boxs.pcaoList">
+                                <input type="checkbox" :name="radios.pcaName" v-model="box.checked"  >{{box.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              </span>
+                            </div>
+                        </div>
+
+                         <div class="form-group" v-for="selects in selectList">
+                            <label for="title" class="col-sm-3 control-label">
+                              <span class="required" v-if="selects.pcaRequired == 1">* </span> {{selects.pcaName}}：
+                            </label>
+                            <div class="controls col-md-3" style="margin-top:1%">
+                                   <select  v-model="selects.pcaCreator" >
+                                     <option value="-1" >请选择</option>
+                                     <option v-for="select in selects.pcaoList" :value="select">{{select.pcaoName}}</option>
+                                   </select>
+                            </div>
+                        </div>
+
+                         <div class="form-group" v-for="inputs in inputList">
+                            <label for="title" class="col-sm-3 control-label">
+                               <span class="required" v-if="inputs.pcaRequired == 1">* </span>{{inputs.pcaName}}：
+                            </label>
+                            <div class="controls col-md-6" style="margin-top:1%">
+                                <input type="text" class="form-control input-sm" v-model="inputs.pcaCreator"  maxLength="50">
+                            </div>
+                        </div>
+
+                         <div class="form-group" v-for="text in textList">
+                            <label for="title" class="col-sm-3 control-label">
+                               <span class="required" v-if="text.pcaRequired == 1">* </span>{{text.pcaName}}：
+                            </label>
+                            <div class="controls col-md-8" style="margin-top:1%">
+                                 <textarea rows="3" cols="50" v-model="text.pcaCreator" placeholder="100字以内" maxLength="100">
+                                </textarea> 
+                            </div>
+                        </div>
+
+         <hr style="height:1px;border:none;border-top:1px solid white;" /><br>    
      
                        <h4><strong>图片上传</strong></h4>
                        <div class="" style="padding-bottom:10px;">     
@@ -344,6 +400,11 @@ export default {
     },
     data() {
         return {
+            radioList:[], //通用属性集合  单选
+            boxList:[], //通用属性集合    多选
+            selectList:[], //通用属性集合 选择
+            inputList:[], //通用属性集合  单行文本
+            textList:[], //通用属性集合   多行文本
             spuShelvesStatus:0,
             uptime:'',
             rad:1,
@@ -1223,10 +1284,59 @@ export default {
           deep:true　　　　　　　　
         },
         proflag(){
-                   client.postData( SPU_GET_BY_ID  + "?spuId="+this.spuid, {}).then(data => {  //192.168.4.249
+             client.postData( SPU_GET_BY_ID  + "?spuId="+this.spuid, {}).then(data => {  //192.168.4.249
                 this.isLoading = false;
                   if (data.code == 200) {
-
+                     //通用属性回显
+           /* client.postData( TAG_LIST_GET + "?typeId=100", {}).then(data => {
+                if (data.code == 200) {
+                    let arr = []
+                    data.data.root.children.children.forEach(item=>{
+                       item.children.forEach(er=>{
+                          er.children.forEach(san=>{
+                            if(san.id == data.data.spuCatId){
+                              arr.push(item.id)
+                              arr.push(er.id)
+                              arr.push(san.id)
+                            }
+                          })
+                       })
+                    })
+             alert(arr)
+              client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
+                if (data.code == 200) {
+                    data.data.forEach(sx =>{
+                      if(sx.pcaInputType==1){
+                        sx.pcaCreator = ""
+                        this.radioList.push(sx)
+                      }else if(sx.pcaInputType==2){
+                        sx.pcaoList.forEach(item=>{
+                          item.checked = false
+                        })
+                        this.boxList.push(sx)
+                      }else if(sx.pcaInputType==3){
+                        sx.pcaCreator = -1
+                        this.selectList.push(sx)
+                      }else if(sx.pcaInputType==4){
+                        sx.pcaCreator = ""
+                        this.inputList.push(sx)
+                      }else if(sx.pcaInputType==5){
+                        sx.pcaCreator = ""
+                        this.textList.push(sx)
+                      }
+                    })
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.showMsg("获取通用属性失败,请刷新重试");
+            })
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+              this.showMsg("获取类目失败,请刷新重试");
+            })*/
                     //消保回显
                     for(var i=0;i< data.data.piList.length;i++){
                          if(data.data.piList[i].piInsuranceId == -1){

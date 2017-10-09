@@ -150,7 +150,7 @@
                             </label>
                             <div class="controls col-md-4" style="margin-top:1%">
                               <span v-for="radio in radios.pcaoList">
-                                <input type="radio" :name="radios.pcaName" v-model="radios.pcaCreator" :value="radio.pcaoId" >{{radio.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" :name="radios.pcaName" v-model="radios.pcaCreator" :value="radio" >{{radio.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               </span>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                             <div class="controls col-md-3" style="margin-top:1%">
                                    <select  v-model="selects.pcaCreator" >
                                      <option value="-1" >请选择</option>
-                                     <option v-for="select in selects.pcaoList" :value="select.pcaoId">{{select.pcaoName}}</option>
+                                     <option v-for="select in selects.pcaoList" :value="select">{{select.pcaoName}}</option>
                                    </select>
                             </div>
                         </div>
@@ -546,6 +546,7 @@ export default {
     data() {
         return {
             request:{
+                "spuOptionList":[],
                 "spuCountryType":1,
                 "spuCarriageId":-1,//运费模板id
                 "spuType": 1,
@@ -566,7 +567,7 @@ export default {
                 "spuPlanShelvesDate":"",//上架时间
                 "resourceList": [],//图片集合
                 "tagList":[],//标签集合
-                "skuList":[]
+                "skuList":[],
             },
             createshangbanglist:[{"pcrReason": "",}],
             createinsurancelist:[{"keyValue":"","description":""}],
@@ -1310,11 +1311,78 @@ export default {
                     sxmsg += "属性("+i.pcaName+")必须填!     "
                   }
                }
-            })      
+            })
             if( sxmsg ){
               this.showMsg(sxmsg)
               return
             }
+            //通用属性值
+            this.request.spuOptionList = []
+            let spuOptionList = []      
+            this.radioList.forEach(i =>{
+                  if(i.pcaCreator){
+                    spuOptionList.push({
+                          "ppaoAtrrId": i.pcaId,
+                          "ppaoAtrrValue": i.pcaCreator.pcaoName,
+                          "ppaoOptionId": i.pcaCreator.pcaoId,
+                          "ppaoSortNo": i.pcaCreator.pcaoSortNo,
+                          //"ppaoSpuId": 0,
+                          "ppaoType": i.pcaInputType,
+                        })
+                  }
+            })
+            this.boxList.forEach(i =>{
+                  i.pcaoList.forEach(pcao=>{
+                     if(pcao.checked){
+                      spuOptionList.push({
+                          "ppaoAtrrId": i.pcaId,
+                          "ppaoAtrrValue": pcao.pcaoName,
+                          "ppaoOptionId": pcao.pcaoId,
+                          "ppaoSortNo": pcao.pcaoSortNo,
+                          //"ppaoSpuId": 0,
+                          "ppaoType": i.pcaInputType,
+                        })
+                     }
+                  })
+            })
+            this.selectList.forEach(i =>{
+                   if(i.pcaCreator != -1){
+                       spuOptionList.push({
+                          "ppaoAtrrId": i.pcaId,
+                          "ppaoAtrrValue": i.pcaCreator.pcaoName,
+                          "ppaoOptionId": i.pcaCreator.pcaoId,
+                          "ppaoSortNo": i.pcaCreator.pcaoSortNo,
+                          //"ppaoSpuId": 0,
+                          "ppaoType": i.pcaInputType,
+                        })
+               }
+            })
+            this.inputList.forEach(i =>{
+                   if(i.pcaCreator){
+                    spuOptionList.push({
+                          "ppaoAtrrId": i.pcaId,
+                          "ppaoAtrrValue": i.pcaCreator,
+                          //"ppaoOptionId": i.pcaCreator.pcaoId,
+                          "ppaoSortNo": 0,
+                          //"ppaoSpuId": 0,
+                          "ppaoType": i.pcaInputType,
+                        })
+               }
+            })
+            this.textList.forEach(i =>{
+                  if(i.pcaCreator){
+                    spuOptionList.push({
+                          "ppaoAtrrId": i.pcaId,
+                          "ppaoAtrrValue": i.pcaCreator,
+                          //"ppaoOptionId": i.pcaCreator.pcaoId,
+                          "ppaoSortNo": 0,
+                          //"ppaoSpuId": 0,
+                          "ppaoType": i.pcaInputType,
+                        })
+                  }
+            })
+            this.request.spuOptionList = spuOptionList 
+
               this.request.spuCatId = this.par[5];
               let item = $("#itemList>tr")
               let spuName  = this.request.spuName

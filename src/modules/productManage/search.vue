@@ -432,7 +432,6 @@ export default {
               this.oncreate(false, true);
            }else{
                alert("选择经营类目不完整")
-
            }
         },
         parent(val){

@@ -53,7 +53,7 @@
                     <div class="col-md-9"><span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span> &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                     <div class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
-                        <a href="javascript:;" @click="showDetail(itemSet,itemSub)">查看详情</a>--
+                        <a href="javascript:;" @click="showDetail(itemSet,itemSet.orderSubList[0])">查看详情</a>--
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])">备注</a> --
                         <a href=" " @click="setStar(itemSet.orderSubList[0])">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>

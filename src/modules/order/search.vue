@@ -25,19 +25,25 @@
                 </div>
             </div>
         </div>
-          <div class="col-md-4">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="col-md-3">订单状态:</label>
                 <div class="col-md-9">
-                    <m-select :data="stateList" :placeholder="'请选择内容'" :change-func="selectStateFunc" :class="'fixedIcon'"></m-select>
+                    <!-- <m-select :data="stateList" :placeholder="'请选择内容'" :change-func="selectStateFunc" :class="'fixedIcon'"></m-select> -->
+                    <select class="form-control" v-model="searchOptions.ordStatus">
+                        <option v-for="item in stateList" :value="item.id">{{item.name}}</option>
+                    </select>
                 </div>
             </div>
         </div>
-         <div class="col-md-4">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="col-md-3">物流方式:</label>
                 <div class="col-md-9">
-                    <m-select :data="logiTypeList" :placeholder="'请选择内容'" :change-func="selectLogiTypeFunc" :class="'fixedIcon'"></m-select>
+                    <!-- <m-select :data="logiTypeList" :placeholder="'请选择内容'" :change-func="selectLogiTypeFunc" :class="'fixedIcon'"></m-select> -->
+                     <select class="form-control" v-model="searchOptions.ordLogiType">
+                        <option v-for="item in logiTypeList" :value="item.id">{{item.name}}</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -67,7 +73,10 @@
             <div class="form-group">
                 <label class="col-md-3">订单类型:</label>
                 <div class="col-md-9">
-                    <m-select :data="orderTypeList" :placeholder="'请选择内容'" :change-func="selectOrderTypeFunc" :class="'fixedIcon'"></m-select>
+                    <!-- <m-select :data="orderTypeList" :placeholder="'请选择内容'" :change-func="selectOrderTypeFunc" :class="'fixedIcon'"></m-select> -->
+                     <select class="form-control" v-model="searchOptions.ordOrderType">
+                        <option v-for="item in orderTypeList" :value="item.id">{{item.name}}</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -137,8 +146,8 @@ export default {
     },
     methods: {
         //校验查询金额
-        checkAmount(data){
-            if(!/^[0-9]*$/.test(data) || data < 0){
+        checkAmount(data) {
+            if (!/^[0-9]*$/.test(data) || data < 0) {
                 this.$parent.showMsg("请输入不小于0的整数");
             }
         },
@@ -164,10 +173,10 @@ export default {
                 }
             };
             //修改下拉框的值
-            let list = this.stateList,listLogi=this.logiTypeList,listOrderType=this.orderTypeList;
+            let list = this.stateList, listLogi = this.logiTypeList, listOrderType = this.orderTypeList;
             this.stateList = [];
-            this.logiTypeList=[];
-            this.orderTypeList=[];
+            this.logiTypeList = [];
+            this.orderTypeList = [];
             setTimeout(() => this.stateList = list, 50)
             setTimeout(() => this.logiTypeList = listLogi, 50)
             setTimeout(() => this.orderTypeList = listOrderType, 50)
@@ -200,28 +209,23 @@ export default {
             if (createEndTime != '') {
                 options.createEndTime = createEndTime + " 23:59:59";
             }
-            // for (let item in options) {
-            //     if (options[item] === '') {
-            //         delete options[item];
-            //     }
-            // }
             this.onchange(options);
         },
-        // 选择订单状态回调
-        selectStateFunc(item) {
-            this.searchOptions.ordStatus = item.id;
-            this.setOptions();
-        },
-        // 选择物流方式回调
-        selectLogiTypeFunc(item) {
-            this.searchOptions.ordLogiType = item.id;
-            this.setOptions();
-        },
-        // 选择订单类型回调
-        selectOrderTypeFunc(item) {
-            this.searchOptions.ordOrderType = item.id;
-            this.setOptions();
-        }
+        // // 选择订单状态回调
+        // selectStateFunc(item) {
+        //     this.searchOptions.ordStatus = item.id;
+        //     this.setOptions();
+        // },
+        // // 选择物流方式回调
+        // selectLogiTypeFunc(item) {
+        //     this.searchOptions.ordLogiType = item.id;
+        //     this.setOptions();
+        // },
+        // // 选择订单类型回调
+        // selectOrderTypeFunc(item) {
+        //     this.searchOptions.ordOrderType = item.id;
+        //     this.setOptions();
+        // }
     },
     created() {
 
@@ -247,50 +251,50 @@ export default {
         this.setOptions();
         this.onchange(this.searchOptions);
         this.oncreate(false, true);
-         let dates = $("#createStartTimeOrder,#createEndTimeOrder");
-          dates.datepicker({
-          dateFormat: "yy-mm-dd",
-          timeFormat: 'HH:mm',
-          showMonthAfterYear: true,
-          changeMonth: true, 
-          changeYear: true,
-          buttonImageOnly: true,
-          stepHour: 1,
-          stepMinute: 1,
-          closeText: '确定',
-          prevText: '&#x3c;上月',
-          nextText: '下月&#x3e;',
-          currentText: '今天',
-          monthNames: ['一月','二月','三月','四月','五月','六月',
-          '七月','八月','九月','十月','十一月','十二月'],
-          monthNamesShort: ['一','二','三','四','五','六',
-          '七','八','九','十','十一','十二'],
-          dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
-          dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
-          dayNamesMin: ['日','一','二','三','四','五','六'],
-          weekHeader: '周',
-          showAnim:'highlight',
-          isClear:true, //是否显示清空 
-          isRTL: false,
-           onSelect: function(selectedDate){
-           var option = this.id == "createStartTimeOrder" ? "minDate" : "maxDate";
-           dates.not(this).datepicker("option", option, selectedDate );
-          },
-          onClose: function(data,inst){   
-             $(this).blur()  
-             dates.removeAttr("disabled")
-          },
-          beforeShow: function(){
-             dates.attr("disabled","disabled")
-             if( $("#createEndTimeOrder").datepicker( 'getDate' ) != null ){
-               return
-             }
-              $(this).datepicker('option', 'maxDate', new Date() )
-          },
-      });
-        dates.on("click",function(){
-            $(this).attr("disabled","disabled")
-          })
+        let dates = $("#createStartTimeOrder,#createEndTimeOrder");
+        dates.datepicker({
+            dateFormat: "yy-mm-dd",
+            timeFormat: 'HH:mm',
+            showMonthAfterYear: true,
+            changeMonth: true,
+            changeYear: true,
+            buttonImageOnly: true,
+            stepHour: 1,
+            stepMinute: 1,
+            closeText: '确定',
+            prevText: '&#x3c;上月',
+            nextText: '下月&#x3e;',
+            currentText: '今天',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                '七', '八', '九', '十', '十一', '十二'],
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            weekHeader: '周',
+            showAnim: 'highlight',
+            isClear: true, //是否显示清空 
+            isRTL: false,
+            onSelect: function(selectedDate) {
+                var option = this.id == "createStartTimeOrder" ? "minDate" : "maxDate";
+                dates.not(this).datepicker("option", option, selectedDate);
+            },
+            onClose: function(data, inst) {
+                $(this).blur()
+                dates.removeAttr("disabled")
+            },
+            beforeShow: function() {
+                dates.attr("disabled", "disabled")
+                if ($("#createEndTimeOrder").datepicker('getDate') != null) {
+                    return
+                }
+                $(this).datepicker('option', 'maxDate', new Date())
+            },
+        });
+        dates.on("click", function() {
+            $(this).attr("disabled", "disabled")
+        })
         dates.on("blur", this.setOptions)
     }
 }

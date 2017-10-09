@@ -35,7 +35,7 @@
                                 <p >
                                     <a  target="_blank" :href="item.pbdLogoUrl" title="查看大图">
 
-                                        <img :src="item.pbdLogoUrl" style="height:50px;width:150px" v-if="item.pbdLogoUrl != null">
+                                        <img :src="item.pbdLogoUrl" style="height:50px;width:50px" v-if="item.pbdLogoUrl != null">
                                     </a>
                                 </p>
                             </td>
