@@ -45,9 +45,9 @@
             <div class="form-group">
                 <label class="col-md-3">下单时间：</label>
                 <div class="col-md-9 time-box">
-                    <div><input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTime"></div>
+                    <div><input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTimeOrder"></div>
                     <div>至</div>
-                    <div><input type="text" class="form-control inline-block datePicker" placeholder="选择结束时间" id="createEndTime"></div>
+                    <div><input type="text" class="form-control inline-block datePicker" placeholder="选择结束时间" id="createEndTimeOrder"></div>
                     <a @click="setTime(7)">近7天</a>
                     <a @click="setTime(30)">近30天</a>
                 </div>
@@ -171,8 +171,8 @@ export default {
             setTimeout(() => this.stateList = list, 50)
             setTimeout(() => this.logiTypeList = listLogi, 50)
             setTimeout(() => this.orderTypeList = listOrderType, 50)
-            $('#createStartTime').val("");
-            $('#createEndTime').val("");
+            $('#createStartTimeOrder').val("");
+            $('#createEndTimeOrder').val("");
             this.setOptions();
         },
         //设置时间(近7天/近30天)
@@ -183,16 +183,16 @@ export default {
             newDate = new Date(timestamp - dayNumber * 24 * 3600 * 1000);
             createEndTime = [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-');
             createStartTime = [newDate.getFullYear(), newDate.getMonth() + 1, newDate.getDate()].join('-');
-            $('#createStartTime').val(createStartTime);
-            $('#createEndTime').val(createEndTime);
+            $('#createStartTimeOrder').val(createStartTime);
+            $('#createEndTimeOrder').val(createEndTime);
             this.setOptions();
         },
         // 过滤请求参数
         setOptions() {
             let options = this.searchOptions;
             options.createStartTime = options.createEndTime = '';
-            let createStartTime = $('#createStartTime').val(),
-                createEndTime = $('#createEndTime').val();
+            let createStartTime = $('#createStartTimeOrder').val(),
+                createEndTime = $('#createEndTimeOrder').val();
 
             if (createStartTime != '') {
                 options.createStartTime = createStartTime + ' 00:00:00';
@@ -247,7 +247,7 @@ export default {
         this.setOptions();
         this.onchange(this.searchOptions);
         this.oncreate(false, true);
-         let dates = $("#createStartTime,#createEndTime");
+         let dates = $("#createStartTimeOrder,#createEndTimeOrder");
           dates.datepicker({
           dateFormat: "yy-mm-dd",
           timeFormat: 'HH:mm',
@@ -273,15 +273,16 @@ export default {
           isClear:true, //是否显示清空 
           isRTL: false,
            onSelect: function(selectedDate){
-           var option = this.id == "createStartTime" ? "minDate" : "maxDate";
+           var option = this.id == "createStartTimeOrder" ? "minDate" : "maxDate";
            dates.not(this).datepicker("option", option, selectedDate );
           },
           onClose: function(data,inst){   
+             $(this).blur()  
              dates.removeAttr("disabled")
           },
           beforeShow: function(){
              dates.attr("disabled","disabled")
-             if( $("#createEndTime").datepicker( 'getDate' ) != null ){
+             if( $("#createEndTimeOrder").datepicker( 'getDate' ) != null ){
                return
              }
               $(this).datepicker('option', 'maxDate', new Date() )
@@ -290,9 +291,7 @@ export default {
         dates.on("click",function(){
             $(this).attr("disabled","disabled")
           })
-        $('.datePicker').on('change', () => {
-            this.setOptions();
-        })
+        dates.on("blur", this.setOptions)
     }
 }
 </script>

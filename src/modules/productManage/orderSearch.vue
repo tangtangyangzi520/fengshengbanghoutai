@@ -195,6 +195,7 @@ export default {
             if (createEndTime != '') {
                 options.createEndTime = createEndTime + " 23:59:59";
             }
+           // alert(options.createEndTime)
             // for (let item in options) {
             //     if (options[item] === '') {
             //         delete options[item];
@@ -271,7 +272,8 @@ export default {
            var option = this.id == "createStartTime" ? "minDate" : "maxDate";
            dates.not(this).datepicker("option", option, selectedDate );
           },
-          onClose: function(data,inst){   
+          onClose: function(data,inst){ 
+             $(this).blur()  
              dates.removeAttr("disabled")
           },
           beforeShow: function(){
@@ -285,9 +287,7 @@ export default {
         dates.on("click",function(){
             $(this).attr("disabled","disabled")
           })
-        $('.datePicker').on('change', () => {
-            this.setOptions();
-        })
+        dates.on('blur', this.setOptions)
     }
 }
 </script>

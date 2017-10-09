@@ -315,7 +315,7 @@
                                     min="0"max="2000000000" @blur="ssput($event,'.put2')"/></td>
                                    <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
                                     min="0"max="2000000000" @blur="ssput($event,'.put3')"/></td>
-                                   <td style="border:1px solid white;width:17%">  <input class=" input2" type="text"  maxLength="25" /></td>
+                                   <td style="border:1px solid white;width:17%"> <!--  <input class=" input2" type="text"  maxLength="25" /> --></td>
                                 </tr>
 
                             
@@ -1735,7 +1735,7 @@ export default {
                         "skuNew": 1,   
                         "skuOverseas": 1,              // 1
                         "skuSalePrice": $(el[2]).val(),            // 售价   
-                        //"skuStockNum": $(el[5]).val(),            //  库存 $(el[4]).val()
+                        "skuStockNum": $(el[5]).val(),            //  库存 $(el[4]).val()
                         "skuUnit": "",         //  "" 
                         "skuUrl": "",          //  ""
                         "skuWhId": "",                //   ""
@@ -1979,7 +1979,7 @@ export default {
             this.neirongList = []
             this.data.labelIds = [];
             list.forEach(item => {
-                if( item.id.length < 7 ){
+                if( item.children != "" ){
                     flag = true
                     return 
                 }
@@ -2001,16 +2001,26 @@ export default {
                 alert("标签不能超过3个")
                 return
             }*/
+             let flag = false 
             this.personList = [];
-            this.personList = list;
             this.data.labelIds = [];
             list.forEach(item => {
-                if( item.id.length < 8){
-
+              //alert(item.children )
+                 if( item.children != "" ){
+                    flag = true
+                    return 
                 }
                 this.data.labelIds.push(item.id);
             })
-            this.showperTreeSelect = !this.showperTreeSelect;
+             if(flag){
+                alert("请选择到最后一级标签。")
+               this.data.labelIds = []
+               this.tagsList = list;
+               return
+            }else{
+                this.personList = list;
+                this.showperTreeSelect = !this.showperTreeSelect;
+            }
         },
         // 选择标签回调
         selectTagFunc(list) {
@@ -2022,7 +2032,7 @@ export default {
             this.tagsList = []
             this.data.labelIds = [];
             list.forEach(item => {
-                 if( item.id.length < 10 ){
+                 if( item.children != "" ){
                     flag = true
                     return 
                 }
