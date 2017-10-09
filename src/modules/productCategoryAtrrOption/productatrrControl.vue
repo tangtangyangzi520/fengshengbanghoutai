@@ -264,8 +264,9 @@ export default {
 
             this.isLoading = true;
             data.pcraCatId=this.selectedid;
-            client.postData(url, data).then(response => {
                 console.log(data);
+return;
+            client.postData(url, data).then(response => {
                 this.isLoading = false;
                 if (response.code != 200) {
                     this.showMsg(response.msg);
@@ -322,7 +323,7 @@ export default {
                    
                     //this.getPainList();
                     data = response.data;
-                    console.log(data);
+                    //console.log(data);
                     this.data.pcraCatId =data.selectedid;
                     this.data.pcaName = data.pcaName;
                     this.data.pcaSaleProp = data.pcaSaleProp;
@@ -341,7 +342,6 @@ export default {
     },
     ready() {
        // this.typesList = client.global.componentTypes;
-       console.log(this.inputdata);
     },
     beforeDestroy() {
     }

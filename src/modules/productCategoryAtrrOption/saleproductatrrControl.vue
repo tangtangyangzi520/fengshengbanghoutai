@@ -213,7 +213,7 @@ export default {
             //清空数据
             this.data = {
                 "pcaId": "",// 属性ID
-                "pcraCatId": 0,  // 分类主键
+                "pcraCatId": this.catId,  // 分类主键
                 "pcaName": "",// 属性名称
                 "optionList": [],
             };
@@ -338,7 +338,7 @@ export default {
                 // 清空数据
                 this.data = {
                     "pcaId": "",// 属性ID
-                    "pcraCatId": 0,  // 分类主键
+                    "pcraCatId": this.catId,  // 分类主键
                     "pcaName": "",// 属性名称
                     "optionList": []
                 };

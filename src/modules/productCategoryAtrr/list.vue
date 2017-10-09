@@ -41,7 +41,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="itemobj in dataList" >
+                        <tr v-for="itemobj in dataList">
                             <td>
                                 <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="{{itemobj.pcaName}}">
                                 <!-- <p style="padding-top:5px;"> -->
@@ -69,7 +69,7 @@
                                 </p>
                             </td> 
                             <td>
-                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="{{ itemobj.pcaoList | filterPcaoList }}">
+                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" title="{{ itemobj.pcaoList | filterPcaoList }}">
                                 <!-- <p style="padding-top:5px;"> -->
                                     <span>{{ itemobj.pcaoList | filterPcaoList }}</span>
                                 <!-- </p> -->
