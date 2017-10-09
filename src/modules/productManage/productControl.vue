@@ -1909,14 +1909,7 @@ export default {
         },
         //获取品牌
         getbrandList() { 
-        client.postData(  PBD_GET_LIST , {
-             "page": {
-             "currentPage": 0,
-             "pageSize": 0,
-             "startIndex": 0,
-             "totalPage": 0,
-             "totalSize": 0
-             }}).then(data => {
+        client.postData(  PBD_GET_LISTUSED , {}).then(data => {
                 if (data.code == 200) {
                     let list = data.data;
                     for (let i = 0; i < list.length; i++) {
