@@ -9,7 +9,7 @@
             <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag"></search>
             <br>
             
-            <div class="col-md-12 right" style="display:inline-block">
+            <div class="col-md-12 right" style="display:inline-block" >
             
                 <span v-if="selectItems.length>0" class="desc">已选
                     <em>{{selectItems.length}}</em> 项 </span>
@@ -140,7 +140,7 @@
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
         <!-- 创建专家弹窗 -->
          <!--  <product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"></product-control> -->  
-         <order-list v-if="!destroyControlDialog" :show="showorderDialog"  :onhide="hideDialog3" :ospuid="oospuid" :oflag="ooflag" :title="ordertitle"></order-list> 
+         <order-list v-if="!destroyControlDialog" :show="showorderDialog"  :onhide="hideDialog3" :lspuid="oospuid" :lflag="ooflag" :title="ordertitle"></order-list> 
 
          <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showpreDialog"  :onhide="hideDialog2" :pspuid="lspuid" :pflag="lflag" :imgflag="limgflag"></preview> 
          <category-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList"></category-control> 
@@ -352,18 +352,18 @@ export default {
             },100)          
         },
         productexport() {
-             let options;
-            if (true) {
+            let options;
                 // 拿最后一次请求的参数
-                options = this.lastSearchOptions;
-            } else {
-                options = Object.assign({}, this.searchOptions);
-            }
+                //options = this.lastSearchOptions;
+            //options = Object.assign({}, this.searchOptions);
+            options = this.searchOptions
             this.isLoading = true;
             this.dataList = [];
-            this.lastSearchOptions = options;
+            /*console.log( this.searchOptions)
+            console.log(options)
+            return*/
             this.spuName =  JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,}) +""
-            $("input[name='request']").val(JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,}) +"")
+            $("input[name='request']").val(JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,"showCatIdList":options.showCatIdList}) +"")
             var url= SPU_EXPORT // 
             $("#exportForm").attr("action",url);  
             $("#exportForm").submit();  

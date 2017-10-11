@@ -342,6 +342,8 @@ export default {
               $("#sub").click()
          },
          addItem2(ev) {
+            ev.preventDefault();  
+            ev.preventDefault();  
             if(this.menkan == 1 && this.request.mkcUsedCondition <= 0 ){
                 this.showMsg("使用门槛必须大于0!")
                 return

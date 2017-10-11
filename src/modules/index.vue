@@ -13,6 +13,10 @@
             </ul>
         </div>
         <h3>工作台首页</h3>
+        <div style="text-align:center;vertical-align:middle;min-height:500px">
+        <a target="_black" href="http://192.168.4.247:7007/dist/#!/">oms系统</a><span v-for="i in 10">&nbsp;</span> 
+        <a href="http://192.168.4.249:7007/dist/#!/" target="_black">cms系统</a>
+        </div>
     </div>
 </template>
 <script>

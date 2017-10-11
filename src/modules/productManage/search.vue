@@ -428,19 +428,84 @@ export default {
     },
     watch: {
         cflag() {
+             if(this.searchOptions.showCatIdList.length>0){
+                let id = 0
+                if(this.searchOptions.showCatIdList[0] > 0 ){
+                   id = this.searchOptions.showCatIdList[0]
+               }
+               if(this.searchOptions.showCatIdList[1] > 0 ){
+                   id = this.searchOptions.showCatIdList[1]
+               }
+               if(this.searchOptions.showCatIdList[2] > 0 ){
+                   id = this.searchOptions.showCatIdList[2]
+               }
+               if(id > 0 ){
+                let object= null
+                this.leimuList.forEach(item=>{ 
+                 if(item.id == id){
+                    object = item
+                 }
+                item.children.forEach(er=>{
+                    if(er.id == id){
+                    object = er
+                 }
+                    er.children.forEach(san=>{
+                        if(san.id == id){
+                    object = san
+                 }
+                    })}) } )
+               if(object.children != ""){
+                  alert("展示类目请选择到最后一级标签。")
+                  return
+                    }
+               }
+           }
            if( (this.firstActive ==0 && this.secondActive == 0 && this.thirdActive == 0) || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
               this.oncreate(false, true);
            }else{
-               alert("选择经营类目不完整")
+               alert("经营类目请选择到最后一级标签。")
+               return
            }
         },
         parent(val){
+             if(this.searchOptions.showCatIdList.length>0){
+                let id = 0
+                if(this.searchOptions.showCatIdList[0] > 0 ){
+                   id = this.searchOptions.showCatIdList[0]
+               }
+               if(this.searchOptions.showCatIdList[1] > 0 ){
+                   id = this.searchOptions.showCatIdList[1]
+               }
+               if(this.searchOptions.showCatIdList[2] > 0 ){
+                   id = this.searchOptions.showCatIdList[2]
+               }
+               if(id > 0 ){
+                let object= null
+                this.leimuList.forEach(item=>{ 
+                 if(item.id == id){
+                    object = item
+                 }
+                item.children.forEach(er=>{
+                    if(er.id == id){
+                    object = er
+                 }
+                    er.children.forEach(san=>{
+                        if(san.id == id){
+                    object = san
+                 }
+                    })}) } )
+               if(object.children != ""){
+                  alert("展示类目请选择到最后一级标签。")
+                  return
+                    }
+               }
+           }
            this.searchOptions.saleStatus = val;
            if( (this.firstActive + this.secondActive + this.thirdActive) == 0 || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
               this.oncreate(false, true);
            }else{
-               alert("选择类目不完整")
-
+               alert("经营类目请选择到最后一级标签。")
+               return
            }
         },
         showthirdActive(val) {
@@ -537,13 +602,6 @@ export default {
         this.setOptions();
         this.onchange(this.searchOptions);
         this.oncreate(false, true);
-        $('#createStartTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('#createEndTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('#modifyedStartTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('#modifyedEndTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
-        $('.datePicker').on('change', () => {
-            this.setOptions();
-        })
     }
 }
 </script>

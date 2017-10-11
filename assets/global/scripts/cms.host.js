@@ -21,7 +21,7 @@ if (/http:\/\/t/.test(location.href)) {
         STORE_API_BASE = "http://prevideo.fshtop.com/",
         File_Upload = "http://prevideo.fshtop.com/common/";
         ///////////////////////////////////
-        OMS_TEST  =  "http://192.168.4.249:8086/eb-manager"
-        APP_TEST  =  "http://192.168.4.249:8086/eb-manager"
+        OMS_TEST  =  "http://192.168.4.247:8086/eb-manager"
+        APP_TEST  =  "http://192.168.4.247:8086/eb-manager"
         ////////////////////////////////////
 }

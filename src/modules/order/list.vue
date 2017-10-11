@@ -50,9 +50,9 @@
             </div>
             <div class="table-responsive col-md-12" v-for="itemSet in dataList" :key="itemSet.orstNo">
                 <div class="col-md-12">
-                    <div class="col-md-9"><span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span> &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="col-md-9"><span style="color:green;">订单编号: {{itemSet.orsId}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span> &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
-                    <div class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
+                    <div v-show="showflag" class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
                         <a href="javascript:;" @click="showDetail(itemSet,itemSet.orderSubList[0])">查看详情</a>--
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])">备注</a> --
                         <a href=" " @click="setStar(itemSet.orderSubList[0])">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -63,7 +63,7 @@
                         <tr v-for="(index,itemDetail) in itemSub.orderDetailList" @click="selectItem(item)" :key="index">
                             <td class="tdTitle" style="width:26%;">
                                 <p v-if="index===0 && itemSet.orderSubList.length>1">
-                                    子订单号:{{itemSub.ordOrderNo}}&nbsp;&nbsp;&nbsp;&nbsp;
+                                    子订单号:{{itemSub.ordOrderId}}&nbsp;&nbsp;&nbsp;&nbsp;
                                     <span v-if="itemSub.ordOrderType==1" style="color:blue;">跨境订单</span>
                                 </p>
                                 <p>
@@ -93,10 +93,10 @@
                                 <!-- 订单状态 -->
                                 {{itemSub.ordStatusDisplay}}
                                 <p>
-                                    <button type="button" v-show="(itemSub.ordStatus==0)" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue">取消订单</button>
+                                    <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue">取消订单</button>
                                 </p>
                                 <p>
-                                    <button type="button" v-show="(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)" @click.stop="editStatus(itemSub)" class="btn btn-xs blue">修改状态</button>
+                                    <button type="button" v-show="(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)&&showflag" @click.stop="editStatus(itemSub)" class="btn btn-xs blue">修改状态</button>
                                 </p>
                             </td>
                             <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
@@ -105,7 +105,7 @@
                                 <p>{{itemSub.ordReceiveMobile}}</p>
                             </td>
                             <td align="center" style="width:15%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
-                                <p v-if="itemSet.orderSubList.length > 1">
+                                <p v-show="showflag" v-if="itemSet.orderSubList.length > 1">
                                     <a href="javascript:;" @click="showDetail(itemSet,itemSub)">查看详情</a>--
                                     <a href="javascript:;" @click="setDemo(itemSub)">备注</a> --
                                     <a href="javascript:;" @click="setStar(itemSub)">加星</a>
@@ -113,7 +113,7 @@
                                 <p>¥ {{itemSub.ordActAmount}}</p>
                                 <p>{{ordPayChannel(itemSet.orsPayChannel)}}</p>
                                 <p>
-                                    <button type="button" v-show="(itemSub.ordStatus==0)" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue">修改价格</button>
+                                    <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue">修改价格</button>
                                 </p>
                             </td>
                         </tr>
@@ -178,6 +178,7 @@ export default {
         title: '',
         ospuid: 0,
         oflag: false,
+        ooflag: false,
         show: {
             type: Boolean,
             value: false
@@ -189,6 +190,7 @@ export default {
     },
     data() {
         return {
+            showflag:true,
             limgflag: false,
             lspuid: 0,
             lflag: false,
@@ -491,8 +493,12 @@ export default {
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
     },
     watch: {
+        ooflag() {
+            this.showflag = true
+        },
         oflag() {
             // alert(this.ospuid)
+            this.showflag = false
             this.getList(false, true)
 
         },

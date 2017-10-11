@@ -87,7 +87,7 @@
                             <table class="table table-bordered table-hover">
                                 <tr>
                                     <td width="30%">订单编号: </td>
-                                    <td width="70%">{{setData.orstNo}}</td>
+                                    <td width="70%">{{subData.ordOrderId}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%">订单类型: </td>
@@ -101,13 +101,13 @@
                                     <td width="30%">买家昵称: </td>
                                     <td width="70%">{{setData.orsMemberNickname}}</td>
                                 </tr>
-                                <tr>
+                                <tr v-if="subData.ordMemberName==''">
                                     <td width="30%">姓名: </td>
-                                    <td width="70%">{{subData.ordReceiveName}}</td>
+                                    <td width="70%">{{subData.ordMemberName}}</td>
                                 </tr>
-                                <tr>
+                                <tr v-if="subData.ordMemberIdentity==''">
                                     <td width="30%">身份证号: </td>
-                                    <td width="70%">缺少会员身份证</td>
+                                    <td width="70%">{{subData.ordMemberIdentity}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%">配送方式: </td>
@@ -125,7 +125,7 @@
                         </div>
 
                         <div class="col-md-6 myBorder">
-                             <h4>订单状态:
+                            <h4>订单状态:
                                 <span v-if="subData.ordStatus==0">&nbsp;&nbsp;商品已拍下,等待买家付款 </span>
                                 <span v-if="subData.ordStatus==1">&nbsp;&nbsp;买家已付款,等待商家发货 </span>
                                 <span v-if="subData.ordStatus==2">&nbsp;&nbsp;商家已发货,等待交易成功 </span>
@@ -139,7 +139,9 @@
                             <div v-if="subData.ordStatus==3">
                                 </br>
                             </div>
-                            <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</br></br></div>
+                            <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</br>
+                                </br>
+                            </div>
                             <div>
                                 <a @click.stop="setDemo(subData)">备注</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <a @click.stop="setStar(subData)">加星</a>
@@ -163,7 +165,7 @@
                             </tr>
                             <tr>
                                 <td width="20%">
-                                    <p>{{subData.ordOrderNo}}</p>
+                                    <p>{{subData.ordOrderId}}</p>
                                     <p>{{setData.orsPayNum}}</p>
                                     <p>{{ordPayChannel(setData.orsPayChannel)}}</p>
                                 </td>
@@ -172,7 +174,7 @@
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordActAmount}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{payStatus(setData.orsPayStatus)}}</td>
                             </tr>
-                             <tr>
+                            <tr>
                                 <td colspan="5" style="text-align:left">累计收款：&nbsp;&nbsp;{{subData.ordAmount}}元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实收款：&nbsp;&nbsp;{{subData.ordActAmount}}元</td>
                             </tr>
                         </table>
@@ -192,8 +194,8 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                <td colspan="6" style="text-align:left"><span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                {{subData.ordLogiCompany}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}</td>
+                                    <td colspan="6" style="text-align:left">
+                                        <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompany}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}</td>
                                 </tr>
                                 <tr v-for="(index,itemDetail) in subData.orderDetailList">
                                     <td class="tdTitle" style="width:26%;">
@@ -232,8 +234,8 @@
                         <div class="right">
                             订单共{{totalNum()}}件商品，总计：¥{{subData.ordActAmount}}（含运费 ￥{{subData.ordTransportAmount}}）
                             <!-- <div style="width:50px;" @mouseenter.stop="showCompaign" @mouseleave.stop="showCompaign">
-                                    <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
-                                </div> -->
+                                                    <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
+                                                </div> -->
                             <img style="" @mouseout="hidePreferentialContent($event)" @mouseover="showPreferentialContent($event)" src="u7027.jpg">
                             <table class="table table-striped table-bordered table-hover" id="PreferentialContent">
                                 <thead>
@@ -245,7 +247,7 @@
                                 <tbody>
                                     <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;">
                                         <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
-                                          {{item.ordCampaign.mkcName}} <br>  ({{item.ordCampaign.mkcRemark}}) 
+                                            {{item.ordCampaign.mkcName}} <br> ({{item.ordCampaign.mkcRemark}})
                                         </td>
                                         <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
                                             {{item.ordShareAmount}}
@@ -404,7 +406,7 @@ export default {
         },
         //商品小计
         detailActAmount(itemDetail) {
-            return itemDetail.ordOriginal * itemDetail.ordSkuNum
+            return itemDetail.ordPromotion * itemDetail.ordSkuNum
         },
         //显示支付状态
         payStatus(payStatus) {
@@ -443,10 +445,9 @@ export default {
         },
         // 显示订单类型
         orderTypeDisplay(orderType) {
-            console.log("1111111"+orderType);
             switch (orderType) {
-                case 0: return '普通订单';
-                case 1: return '跨境订单';
+                case 0: return '跨境订单';
+                case 1: return '普通订单';
                 default: ;
             }
         },

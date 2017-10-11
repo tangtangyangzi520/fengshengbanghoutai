@@ -229,6 +229,8 @@ export default {
            $("#systemSettingSubmit").click()
         },
         saveSystemSetting(ev){
+              ev.preventDefault();  
+              ev.preventDefault();  
              client.postData( SYSTEM_SETTING_EDIT , this.systemSettingList).then(data => {
                 if (data.code == 200) {
                         //this.showMsg("保存成功!")

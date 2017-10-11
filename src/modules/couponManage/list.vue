@@ -57,7 +57,7 @@
                             <!-- 全选反选 <td style="text-align:center;vertical-align:middle;">
                                 <input type="checkbox" :checked="item.checked"></input>
                             </td> -->
-                            <td class="tdTitle">
+                            <td style="vertical-align:middle" class="tdTitle">
                                 <!-- <p>
                                     <a target="_blank" :href="item.imgUrl" title="查看大图">
                                         <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">

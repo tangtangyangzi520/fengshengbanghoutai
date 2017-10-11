@@ -414,9 +414,11 @@ export default {
               $("#sub1").click()
          },
          addItem2(ev) {
+            ev.preventDefault();  
+            ev.preventDefault();  
             this.request.cmisList = []
             if(this.spuList.length == 0 ){
-                this.showMsg("请先添加商品!")
+                this.showMsg("您还未选择参加活动的商品.请至少选择一个活动商品.")
                 return
             }
             if(new Date(this.request.mktStart).getTime() - new Date().getTime() < 60000){
@@ -475,7 +477,7 @@ export default {
                       this.showMsg("新建限时折扣失败!"+data.message)
                 })
             }
-             ev.preventDefault();  
+            // ev.preventDefault();  
         },
         //点击行自动选中或不选中
         selectItem(item) {

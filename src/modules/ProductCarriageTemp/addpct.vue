@@ -182,6 +182,8 @@ export default {
               $("#sub3").click()
          },
          addItem2(ev) {
+            ev.preventDefault();  
+            ev.preventDefault();  
             let pctList = []
             let count = 0
             this.dataList.forEach( data =>{

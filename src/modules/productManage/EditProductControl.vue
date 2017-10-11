@@ -4,8 +4,14 @@
             <div slot="content">
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form">
-    
-                       <br>
+                        <div class="form-group">
+                            <label for="title" class="col-md-3 control-label">
+                                商品类目： 
+                            </label>
+                            <label for="title" class="col-sm-5 control-label">
+                                 <span style="float:left">{{leimu}}</span>  
+                            </label>
+                        </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>商品类型：
@@ -400,6 +406,7 @@ export default {
     },
     data() {
         return {
+            leimu:"",//类目信息
             radioList:[], //通用属性集合  单选
             boxList:[], //通用属性集合    多选
             selectList:[], //通用属性集合 选择
@@ -805,26 +812,26 @@ export default {
      
        this.request.tagList = []
       //类目标签
-     /* if( this.tagsList.length == 0){
+     if( this.tagsList.length == 0){
             this.showMsg("请选择展示类目标签")
             return
-      }*/
+      }
         this.tagsList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum ,"prpSpuId":this.spuid ,"prpSort":index} )
         })
       //人群标签
-      /*if( this.personList.length == 0){
+      if( this.personList.length == 0){
             this.showMsg("请选择人群标签")
             return
-      }*/
+      }
         this.personList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum,"prpSpuId":this.spuid ,"prpSort":index} )
         })
       //内容标签
-      /*if( this.neirongList.length == 0){
+      if( this.neirongList.length == 0){
             this.showMsg("请选择内容标签")
             return
-      }*/
+      }
         this.neirongList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum, "prpSpuId":this.spuid ,"prpSort":index} )
         })
@@ -1080,7 +1087,7 @@ export default {
             this.neirongList = []
             this.data.labelIds = [];
             list.forEach(item => {
-                if( item.id.length < 7 ){
+                if( item.children != "" ){
                     flag = true
                     return 
                 }
@@ -1088,11 +1095,11 @@ export default {
             })
             if(flag){
                  alert("请选择到最后一级标签。")
-                this.data.labelIds = []
-                this.neirongList = list;
+               this.data.labelIds = []
+               this.neirongList = list;
                return
             }else{
-                this.neirongList = list;
+               this.neirongList = list;
                this.showneiTreeSelect = !this.showneiTreeSelect;
             }
         },
@@ -1102,16 +1109,26 @@ export default {
                 alert("标签不能超过3个")
                 return
             }*/
+             let flag = false 
             this.personList = [];
-            this.personList = list;
             this.data.labelIds = [];
             list.forEach(item => {
-                if( item.id.length < 8){
-
+              //alert(item.children )
+                 if( item.children != "" ){
+                    flag = true
+                    return 
                 }
                 this.data.labelIds.push(item.id);
             })
-            this.showperTreeSelect = !this.showperTreeSelect;
+             if(flag){
+                alert("请选择到最后一级标签。")
+               this.data.labelIds = []
+               this.tagsList = list;
+               return
+            }else{
+                this.personList = list;
+                this.showperTreeSelect = !this.showperTreeSelect;
+            }
         },
         // 选择标签回调
         selectTagFunc(list) {
@@ -1123,7 +1140,7 @@ export default {
             this.tagsList = []
             this.data.labelIds = [];
             list.forEach(item => {
-                 if( item.id.length < 10 ){
+                 if( item.children != "" ){
                     flag = true
                     return 
                 }
@@ -1131,8 +1148,8 @@ export default {
             })
             if(flag){
                 alert("请选择到最后一级标签。")
-                this.data.labelIds = []
-                this.tagsList = list;
+               this.data.labelIds = []
+               this.tagsList = list;
                return
             }else{
                 this.tagsList = list;
@@ -1337,6 +1354,20 @@ export default {
             }, data => {
               this.showMsg("获取类目失败,请刷新重试");
             })*/
+            //类目回显
+          client.postData( TAG_LIST_GET + "?typeId=100", {}).then(data => {
+                if (data.code == 200) {
+                    let arr = []
+                    data.data.root.children.forEach(item=>{
+                       item.children.forEach(er=>{
+                          er.children.forEach(san=>{
+                            if(san.id ==  this.request.spuCatId ){
+                              this.leimu = item.text+" >"+" "+er.text+" >"+" "+san.text
+                          }
+                      })
+                  })
+                })
+            }})
                     //消保回显
                     for(var i=0;i< data.data.piList.length;i++){
                          if(data.data.piList[i].piInsuranceId == -1){
