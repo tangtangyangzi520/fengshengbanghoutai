@@ -214,7 +214,7 @@ import {  mAlert, mSelect, mMultiSelect, itemList ,selectComponentAll} from '../
 export default {
     components: { mAlert, mSelect, mMultiSelect, itemList  ,selectComponentAll,selectSpu},
     props: {
-        mkttid: 0,
+        mkttid: -1,
         coflag: false,
         
         show: {
@@ -244,7 +244,7 @@ export default {
               "mkcDateType":0,
               "mkcDateNum":0,
               "mkcUsedType":1,//使用类型： 1全店商品 0指定商品
-              "mkcCampaignId":0,
+              "mkcCampaignId":-1,
               "cmisList": [],
               "mkcJoinTimes": 0,// 每人参加次数
               "mkcName": "", // 活动名称
@@ -344,6 +344,7 @@ export default {
          addItem2(ev) {
             ev.preventDefault();  
             ev.preventDefault();  
+          if(this.mkttid <= 0 ){
             if(this.menkan == 1 && this.request.mkcUsedCondition <= 0 ){
                 this.showMsg("使用门槛必须大于0!")
                 return
@@ -364,7 +365,8 @@ export default {
                    this.showMsg('过期时间请比生效时间大于1分钟以上')
                    $("#createEndTime2").val("")
                    return
-            }    
+            }
+          }    
             if(this.request.mkcUsedType == 0 && this.spuList.length == 0){
               this.showMsg("请先指定商品!")
               return
@@ -394,6 +396,7 @@ export default {
                 this.isLoading = true
                 if (data.code == 200) {
                         this.showMsg("编辑优惠券成功!")
+                        this.mkttid = -1
                  this.isLoading = false
                     setTimeout(() => {
                         this.hideDialog()
