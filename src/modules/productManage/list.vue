@@ -213,6 +213,9 @@ export default {
             showEditspuDialog:false,  //编辑商品
             showpreDialog:false,
             showorderDialog:false,
+            exportflag:false,
+            downflag:false,
+            upflag:false,
         }
     },
     computed: {
@@ -252,13 +255,25 @@ export default {
             })
          },
          up() {
+            
             let arr = []
             this.dataList.forEach( item => {
                 if(item.checked == true ){
                      arr.push(item.spuId)
                 }
             })
-            
+            if(arr.length ==0){
+                this.showMsg("请先选中商品")
+                return
+            }
+             if(this.upflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.upflag = true
+            setTimeout(()=>{
+                this.upflag = false
+            },3000)
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 1 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("上架成功")
@@ -266,17 +281,30 @@ export default {
             }else {
                     this.showMsg(data.msg);
                 }}, data => {
+                this.upflag = false
                 this.showMsg("上架失败,请重试");
             })
          },
          down() {
+            
             let arr = []
             this.dataList.forEach( item => {
                 if(item.checked == true ){
                      arr.push(item.spuId)
                 }
             })
-              
+             if(arr.length ==0){
+                this.showMsg("请先选中商品")
+                return
+            }  
+            if(this.downflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.downflag = true
+            setTimeout(()=>{
+                this.downflag = false
+            },3000)
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 0 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("下架成功")
@@ -285,6 +313,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                this.downflag = false
                 this.showMsg("下架失败,请重试");
             })
          },
@@ -352,6 +381,14 @@ export default {
             },100)          
         },
         productexport() {
+            if(this.exportflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.exportflag = true
+            setTimeout(()=>{
+                this.exportflag = false
+            },5000)
             let options;
                 // 拿最后一次请求的参数
                 //options = this.lastSearchOptions;
