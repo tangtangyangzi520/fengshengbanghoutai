@@ -166,6 +166,7 @@ export default {
                 modifyedEndTime: '',
                 skuChannels: [],
                 submitStatus: -1,
+                temflag:false,
                 page: {
                     currentPage: 1,
                     pageSize: 10,
@@ -185,16 +186,33 @@ export default {
     },
     methods: {
         up() {
+             if(this.temflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.temflag = true
+            setTimeout(()=>{
+                this.temflag = false
+            },5000)
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": [this.getspu.id], "spuShelvesStatus": 1 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("上架成功")
             }else {
                     this.showMsg(data.msg);
                 }}, data => {
+                this.temflag = false
                 this.showMsg("上架失败,请重试");
             })
          },
          down() {
+             if(this.temflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.temflag = true
+            setTimeout(()=>{
+                this.temflag = false
+            },5000)
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": [this.getspu.id], "spuShelvesStatus": 0 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("下架成功")
@@ -202,6 +220,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                this.temflag = false
                 this.showMsg("下架失败,请重试");
             })
          },
@@ -210,6 +229,14 @@ export default {
             this.showAddDialog = true;
         },
         save() {
+             if(this.temflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.temflag = true
+            setTimeout(()=>{
+                this.temflag = false
+            },5000)
 
                    this.imgList.forEach((data,index)=>{
                    this.psrRequestList.psrList.push( {
@@ -239,6 +266,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                 this.temflag = false
                 this.showMsg("新增详情失败");
              })
         },

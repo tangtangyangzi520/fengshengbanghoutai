@@ -107,7 +107,7 @@
                                 </p> -->
                             </td>
                             
-                            <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
+                            <td style="text-align:center;vertical-align:middle;">{{item.spuCreatedTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->

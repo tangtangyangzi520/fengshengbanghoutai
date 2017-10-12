@@ -159,6 +159,7 @@ export default {
             showperTreeSelect: false,//
             showneiTreeSelect: false,
             showSpuDialog:false,
+            pctflag:false,
         }
     },
     filters: {
@@ -184,6 +185,14 @@ export default {
          addItem2(ev) {
             ev.preventDefault();  
             ev.preventDefault();  
+            if(this.pctflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.pctflag = true
+            setTimeout(()=>{
+                this.pctflag = false
+            },5000)
             let pctList = []
             let count = 0
             this.dataList.forEach( data =>{
@@ -216,6 +225,7 @@ export default {
                     this.showMsg(data.message);
                 }
             }, data => {
+                      this.pctflag = false
                       this.showMsg("编辑运费模板失败;"+data.message);
              })
 
@@ -232,6 +242,7 @@ export default {
                     this.showMsg(data.message);
                 }
             }, data => {
+                      this.pctflag = false
                       this.showMsg("新健运费模板失败;"+data.message)
                 })
             }

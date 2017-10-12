@@ -48,6 +48,15 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuShareUrl" placeholder="100字以内" maxLength="100">
                             </div>
                         </div>
+                         <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                商品简介：
+                            </label>
+                            <div class="controls col-md-7">
+                                <textarea  v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="10000" rows="3" cols="50">
+                                </textarea> 
+                            </div>
+                        </div> 
 
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
@@ -70,15 +79,6 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开" maxLength="50">
                             </div>
                         </div>
-                       <!--  <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                商品简介：
-                            </label>
-                            <div class="controls col-md-7">
-                                <textarea class="form-control input-sm" v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="50">
-                                </textarea> 
-                            </div>
-                        </div> -->
                        
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
@@ -494,6 +494,7 @@ export default {
             showTagTreeSelect: false, //显示标签选择弹窗
             showperTreeSelect: false,//
             showneiTreeSelect: false,
+            editpdflag:false,
         }
     },
     vuex: {
@@ -764,6 +765,15 @@ export default {
              $(el).parent().parent().children("td").remove()  
            },
         addItem() {
+          
+          if(this.editpdflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.editpdflag = true
+            setTimeout(()=>{
+                this.editpdflag = false
+            },5000)
 
             if( $.trim(this.request.spuName)  == '' ){
                 this.showMsg("请输入商品名称")
@@ -845,13 +855,13 @@ export default {
             this.shangb.forEach((data,index)=>{
                     let val = this.shangbanglist.find(item=>item.keyValue == data)
                     if(val != null){
-                      this.request.pcrList.push( {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
+                      this.request.pcrList.push( {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":this.spuid, }  );
                     }
                     //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
                  })
              this.createshangbanglist.forEach(data=>{
                    if( $.trim(data.pcrReason) ){
-                      this.request.pcrList.push({"pcrReason": $.trim(data.pcrReason),"pcrSortNo":-1,})
+                      this.request.pcrList.push({"pcrReason": $.trim(data.pcrReason),"pcrSortNo":-1,"pcrSpuId":this.spuid,})
                    }
               })
              if(this.request.pcrList.length > 3){
@@ -861,7 +871,20 @@ export default {
      
          //保消类型
          let arr = [];
-          
+         //消保检验
+         let insumsg = ""
+         this.createinsurancelist.forEach(data=>{
+               if( !($.trim(data.keyValue) && $.trim(data.description) )){
+                  if( $.trim(data.keyValue) || $.trim(data.description)){
+                    insumsg = "自定义消保类型里类型和描述必须填!"
+                  }
+               }
+          })
+          if(insumsg){
+            this.showMsg(insumsg)
+            return
+         }
+
          $(".insuedit input:checked").each(function(i , v){
              //let ar = {"piInsuranceId": '',"piInsurance":'',"piSort":'', }
                let ar = $(v).val().split(",")
@@ -870,7 +893,7 @@ export default {
          })
           this.createinsurancelist.forEach(data=>{
                if($.trim(data.keyValue) && $.trim(data.description) ){
-                   let av = {"piInsurance":$.trim(data.keyValue),"piDesc":$.trim(data.description), }
+                   let av = {"piInsurance":$.trim(data.keyValue),"piDesc":$.trim(data.description),  }
                    arr.push(av)
                }
           })
@@ -943,6 +966,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                this.editpdflag = false
                 this.showMsg("编辑失败,请重试");
             })
             
@@ -1086,13 +1110,13 @@ export default {
             let flag = false 
             this.neirongList = []
             this.data.labelIds = [];
-            list.forEach(item => {
+           /* list.forEach(item => {
                 if( item.children != "" ){
                     flag = true
                     return 
                 }
                 this.data.labelIds.push(item.id);
-            })
+            })*/
             if(flag){
                  alert("请选择到最后一级标签。")
                this.data.labelIds = []
@@ -1112,14 +1136,14 @@ export default {
              let flag = false 
             this.personList = [];
             this.data.labelIds = [];
-            list.forEach(item => {
+           /* list.forEach(item => {
               //alert(item.children )
                  if( item.children != "" ){
                     flag = true
                     return 
                 }
                 this.data.labelIds.push(item.id);
-            })
+            })*/
              if(flag){
                 alert("请选择到最后一级标签。")
                this.data.labelIds = []
@@ -1428,7 +1452,7 @@ export default {
                     //上榜理由回显
                     for(var i=0;i< data.data.reasonsList.length;i++){
                         if(data.data.reasonsList[i].pcrSortNo == -1){
-                              this.shangbanglist.push({"keyValue":data.data.reasonsList[i].pcrReason,"pcrSortNo":-1})
+                              this.shangbanglist.push({"keyValue":data.data.reasonsList[i].pcrReason,"sortNo":-1,})
                           }
                       }
                     for(var i=0;i< data.data.reasonsList.length;i++){
@@ -1436,7 +1460,7 @@ export default {
                     }
                     this.request.spuShareUrl = data.data.spuShareUrl
                     this.request.spuAppSummary = data.data.spuAppSummary 
-                    //this.request.spuPcSummary = data.data.spuPcSummary 
+                    this.request.spuPcSummary = data.data.spuPcSummary 
                     this.request.spuName = data.data.spuName 
                     this.request.spuCatId = data.data.spuCatId
                     this.request.spuKeyword = data.data.spuKeyword

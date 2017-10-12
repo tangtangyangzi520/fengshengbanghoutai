@@ -123,8 +123,8 @@
                <input type="hidden" name="spuCatId" v-model="spuCatId"/> 
                <input type="hidden" name="skuCode" v-model="skuCode"/>  -->
         </form>
-        <paging  :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging><br><br><br>
-        
+        <paging  :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
+        <span v-if="dataList.length==0"><br><br></span>
          <add-coupon v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :coflag="couflag" :mkttid="mktid"></add-coupon> 
         
         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">

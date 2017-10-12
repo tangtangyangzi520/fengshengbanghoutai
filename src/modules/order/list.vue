@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="page-bar min-bar">
-            <page-title-bar>
+            <page-title-bar v-show="showflag">
                 <span slot="title">订单列表{{countDesc}}</span>
             </page-title-bar>
             <search :onchange="changeSearchOptions" :oncreate="getList"></search>
@@ -50,12 +50,12 @@
             </div>
             <div class="table-responsive col-md-12" v-for="itemSet in dataList" :key="itemSet.orstNo">
                 <div class="col-md-12">
-                    <div class="col-md-9"><span style="color:green;">订单编号: {{itemSet.orsId}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span> &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="col-md-9"><span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span> &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                     <div v-show="showflag" class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
                         <a href="javascript:;" @click="showDetail(itemSet,itemSet.orderSubList[0])">查看详情</a>--
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])">备注</a> --
-                        <a href=" " @click="setStar(itemSet.orderSubList[0])">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a  @click="setStar(itemSet.orderSubList[0])">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
                 <table class="table table-striped table-bordered table-hover">
@@ -63,7 +63,7 @@
                         <tr v-for="(index,itemDetail) in itemSub.orderDetailList" @click="selectItem(item)" :key="index">
                             <td class="tdTitle" style="width:26%;">
                                 <p v-if="index===0 && itemSet.orderSubList.length>1">
-                                    子订单号:{{itemSub.ordOrderId}}&nbsp;&nbsp;&nbsp;&nbsp;
+                                    子订单号:{{itemSub.ordOrderNo}}&nbsp;&nbsp;&nbsp;&nbsp;
                                     <span v-if="itemSub.ordOrderType==1" style="color:blue;">跨境订单</span>
                                 </p>
                                 <p>
@@ -382,9 +382,9 @@ export default {
         },
         hidePaymentDialog() {
             this.showPaymentDialog = false
-            setTimeout(() => {
+           /* setTimeout(() => {
                 this.onhide('cancel');
-            }, 300)
+            }, 300)*/
         },
         hideStarDialog() {
             this.showStarDialog = false
@@ -404,13 +404,17 @@ export default {
         },
         //数据校验
         checkOptions() {
-            if (!/^[0-9]*$/.test(this.searchOptions.lowOrsOpenPay) || this.searchOptions.lowOrsOpenPay < 0) {
-                this.showMsg("实付金额请输入不小于0的整数");
+            if(this.searchOptions.lowOrsOpenPay){
+                if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(this.searchOptions.lowOrsOpenPay) || this.searchOptions.lowOrsOpenPay < 0 ) {
+                alert("实付金额请输入不小于0的整数");
                 return false;
+                }
             }
-            if (!/^[0-9]*$/.test(this.searchOptions.highOrsOpenPay) || this.searchOptions.highOrsOpenPay < 0) {
-                this.showMsg("实付金额请输入不小于0的整数");
+            if( this.searchOptions.highOrsOpenPay){
+                if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(this.searchOptions.highOrsOpenPay) || this.searchOptions.highOrsOpenPay < 0 ) {
+                alert("实付金额请输入不小于0的整数");
                 return false;
+               }
             }
             return true;
         },

@@ -49,6 +49,15 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuShareUrl" placeholder="100字以内" maxLength="100">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                商品简介：
+                            </label>
+                            <div class="controls col-md-7">
+                                <textarea  v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="10000" rows="3" cols="50">
+                                </textarea> 
+                            </div>
+                        </div> 
 
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
@@ -71,15 +80,7 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开" maxLength="50">
                             </div>
                         </div>
-                       <!--  <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                商品简介：
-                            </label>
-                            <div class="controls col-md-7">
-                                <textarea  v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="50">
-                                </textarea> 
-                            </div>
-                        </div> -->
+                        
                        
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
@@ -627,6 +628,7 @@ export default {
             showTagTreeSelect: false, //显示标签选择弹窗
             showperTreeSelect: false,//
             showneiTreeSelect: false,
+            addpdflag:false,
             zhi:[],
             yj:'',
             sj:'',
@@ -1176,6 +1178,14 @@ export default {
          },
 
          addItem() {
+           if(this.addpdflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.addpdflag = true
+            setTimeout(()=>{
+                this.addpdflag = false
+            },5000)
 
             if( $.trim(this.request.spuName) == '' ){
                 this.showMsg("请输入商品名称")
@@ -1901,6 +1911,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+              this.addpdflag = false
               this.showMsg("新增失败,请重试"+data.message);
             })
             
@@ -2039,13 +2050,13 @@ export default {
             let flag = false 
             this.neirongList = []
             this.data.labelIds = [];
-            list.forEach(item => {
+           /* list.forEach(item => {
                 if( item.children != "" ){
                     flag = true
                     return 
                 }
                 this.data.labelIds.push(item.id);
-            })
+            })*/
             if(flag){
                  alert("请选择到最后一级标签。")
                this.data.labelIds = []
@@ -2065,14 +2076,14 @@ export default {
              let flag = false 
             this.personList = [];
             this.data.labelIds = [];
-            list.forEach(item => {
+           /* list.forEach(item => {
               //alert(item.children )
                  if( item.children != "" ){
                     flag = true
                     return 
                 }
                 this.data.labelIds.push(item.id);
-            })
+            })*/
              if(flag){
                 alert("请选择到最后一级标签。")
                this.data.labelIds = []

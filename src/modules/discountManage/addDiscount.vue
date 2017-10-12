@@ -56,7 +56,7 @@
                       <span style="margin-left:26.5%">
                         批量减价 <input type="number" class="input-sm-2"   v-model="reduce" step="0.01" @keyup="integer($event)" @blur="integer($event)" min="0.00" max="9999999"/> 元  &nbsp;&nbsp;
                       <a style="text-decoration:none" @click="plreduce()">确定</a> &nbsp;&nbsp;&nbsp;
-                      <a style="text-decoration:none" @click="plcut()">取消</a>
+                      
                      </span>  
                      <br><br>
             </div>
@@ -113,8 +113,10 @@
  -->                                </tr>
                              </tbody>
                         </table>
-                   
+                   <!-- <a style="text-decoration:none" @click="plcut()">取消</a> -->
                 </div>
+                   <input type="checkbox" style="margin-left:18.3%" @click="selectAll($event)">&nbsp;全选 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <button type="button" class="btn default" @click="plcut()">批量取消</button>
                  </form>
             </div>
 
@@ -220,6 +222,7 @@ export default {
             showperTreeSelect: false,//
             showneiTreeSelect: false,
             showSpuDialog:false,
+            submitflag:false,
         }
     },
     filters: {
@@ -416,6 +419,15 @@ export default {
          addItem2(ev) {
             ev.preventDefault();  
             ev.preventDefault();  
+            
+            if(this.submitflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.submitflag = true
+            setTimeout(()=>{
+                this.submitflag = false
+            },5000)
             this.request.cmisList = []
             if(this.spuList.length == 0 ){
                 this.showMsg("您还未选择参加活动的商品.请至少选择一个活动商品.")
@@ -458,6 +470,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.submitflag = false
                       this.showMsg("编辑限时折扣失败!"+data.message);
              })
 
@@ -474,6 +487,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.submitflag = false
                       this.showMsg("新建限时折扣失败!"+data.message)
                 })
             }
@@ -497,9 +511,16 @@ export default {
             
         },
         selectAll(val) {
-            val.skuList.forEach(item => {
-                item.checked = true;
-            })
+            let el = val.currentTarget
+            if( $(el).is(":checked") ){
+                this.spuList.forEach(item => {
+                    item.checked = true;
+                })
+            }else{
+                this.spuList.forEach(item => {
+                    item.checked = false;
+                })
+            }
         },
         reverseList(val) {
             val.skuList.forEach(item => {
@@ -514,7 +535,9 @@ export default {
             this.spuList = null;
              data.forEach(spu =>{
                 spu.checked = false
-                spu.reduce = 0.00
+                if(!spu.reduce){
+                     spu.reduce = 0.00
+                }
              })
              this.spuList = data
         },

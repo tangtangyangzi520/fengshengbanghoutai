@@ -194,6 +194,7 @@ export default {
             showEditDialog:false,  //编辑商品
             showEditspuDialog:false,  //编辑商品
             showpreDialog:false,
+            ssflag:false,
         }
     },
     computed: {
@@ -231,13 +232,21 @@ export default {
         saveSystemSetting(ev){
               ev.preventDefault();  
               ev.preventDefault();  
+               if(this.ssflag){
+                alert("点击过于频繁")
+                return
+            }
+            this.ssflag = true
+            setTimeout(()=>{
+                this.ssflag = false
+            },3000)
              client.postData( SYSTEM_SETTING_EDIT , this.systemSettingList).then(data => {
                 if (data.code == 200) {
                         //this.showMsg("保存成功!")
                         alert("保存成功!")
                 } 
             }, data => {
-                    //this.showMsg("保存失败!"+data.message)
+                    this.ssflag = false
                     alert("保存失败!"+data.message)
                 })
              ev.preventDefault();  

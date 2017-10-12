@@ -87,7 +87,7 @@
                             <table class="table table-bordered table-hover">
                                 <tr>
                                     <td width="30%">订单编号: </td>
-                                    <td width="70%">{{subData.ordOrderId}}</td>
+                                    <td width="70%">{{subData.ordOrderNo}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%">订单类型: </td>
@@ -165,7 +165,7 @@
                             </tr>
                             <tr>
                                 <td width="20%">
-                                    <p>{{subData.ordOrderId}}</p>
+                                    <p>{{subData.ordOrderNo}}</p>
                                     <p>{{setData.orsPayNum}}</p>
                                     <p>{{ordPayChannel(setData.orsPayChannel)}}</p>
                                 </td>
@@ -195,7 +195,10 @@
                             <tbody>
                                 <tr>
                                     <td colspan="6" style="text-align:left">
-                                        <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompany}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}</td>
+                                        <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompany}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}
+                                        <span style="margin-left:5%">{{orderlog[0].oddTime}}&nbsp;[{{orderlog[0].oddStatus}}]&nbsp;{{orderlog[0].oddContent}}</span>
+                                        <a style="text-decoration:none;margin-left:3%" @click="showOdd()">更多</a>
+                                    </td>
                                 </tr>
                                 <tr v-for="(index,itemDetail) in subData.orderDetailList">
                                     <td class="tdTitle" style="width:26%;">
@@ -267,6 +270,7 @@
             </span>
         </m-alert>
         <!-- 优惠信息气泡 -->
+        <odd-log-detail v-if="!destroyControlDialog" :show="showOddDialog" :onhide="hideOddDialog" :orderlogdetail="orderlog"></odd-log-detail>
         <campaign-control v-if="!destroyControlDialog" :show="showCampaignStatus" :onhide="hideCampaignDialog"></campaign-control>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
@@ -286,9 +290,11 @@ import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList 
 import loading from '../common/loading';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
 import campaignControl from './campaignControl';
+import oddLogDetail from './oddLogDetail';
+
 export default {
     components: {
-        selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, campaignControl
+        selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, campaignControl,oddLogDetail
     },
     props: {
         show: {
@@ -317,6 +323,9 @@ export default {
     },
     data() {
         return {
+            showOddDialog:false,
+            destroyControlDialog: false,
+            orderlog:[],
             isLoading: false,
             showDialog: false,
             showPage: false,
@@ -352,6 +361,24 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        hideOddDialog(control){
+            this.showOddDialog = false;
+            if (control) {
+                setTimeout(() => {
+                    //移除组件
+                    this.destroyControlDialog = true;
+                }, 100)
+                setTimeout(() => {
+                    //重新加入
+                    this.destroyControlDialog = false;
+                }, 200)
+                //this.getList();
+            }
+        },
+        //弹出物流详情窗口
+        showOdd(){
+            this.showOddDialog = true
+        },
         //隐藏优惠券信息
         hidePreferentialContent(event) {
             $("#PreferentialContent").hide()
@@ -517,6 +544,18 @@ export default {
     created() {
     },
     watch: {
+        subData(val) {
+            client.postData( ODD_GET_ORDERSUBID+"?ordOrderId="+val.ordOrderId , {}).then(data => {
+                console.log(val.ordOrderId)
+                if (data.code == 200) {    
+                       data.data.forEach((log,index)=>{
+                         this.orderlog.$set(index,log) 
+                       })
+                }
+            }, data => {
+                      this.showMsg("获取物流详情失败!"+data.message);
+             })
+        },
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;

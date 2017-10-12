@@ -210,19 +210,19 @@ export default {
     methods: {
         //过滤未选择数据
         filterList(){
-            console.log(this.selectedList+"selectedList")
+            //console.log(this.selectedList+"selectedList")
             let sourceList=this.unSelectedList,targetList=this.selectedList,index,index2;
-            let arr = []
+           // let arr = []
             for (index = sourceList.length-1; index >=0; index--){
                 for (index2 = targetList.length-1; index2 >=0; index2--){
                     if(sourceList[index].spuId==targetList[index2].spuId){
                         sourceList.splice(index,1);
-                        arr.push(index2)
+                        //arr.push(index2)
                         break;
                     }
                 }
             }
-            if(arr.length < targetList.length){
+            /*if(arr.length < targetList.length){
                 for(let i = 0; i < targetList.length; i++){
                     let flag = true
                     for(let j = 0; j < arr.length; j++){
@@ -235,7 +235,7 @@ export default {
                         targetList.splice(i,1);
                     }
                 }
-            }
+            }*/
         },
         //将数据传给父类
         sendData(){

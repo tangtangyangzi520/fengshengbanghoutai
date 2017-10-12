@@ -295,6 +295,7 @@ export default {
             showperTreeSelect: false,//
             showneiTreeSelect: false,
             showSpuDialog:false,
+            couponflag:false,
         }
     },
     filters: {
@@ -344,6 +345,16 @@ export default {
          addItem2(ev) {
             ev.preventDefault();  
             ev.preventDefault();  
+
+            if(this.couponflag){
+                this.showMsg("点击过于频繁")
+                return
+            }
+            this.couponflag = true
+            setTimeout(()=>{
+                this.couponflag = false
+            },5000)
+
           if(this.mkttid <= 0 ){
             if(this.menkan == 1 && this.request.mkcUsedCondition <= 0 ){
                 this.showMsg("使用门槛必须大于0!")
@@ -405,6 +416,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.couponflag = false
                       this.showMsg("编辑优惠券失败!"+data.message);
              })
 
@@ -421,6 +433,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.couponflag = false
                       this.showMsg("新建优惠券失败!"+data.message)
                 })
             }

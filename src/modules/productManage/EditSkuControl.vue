@@ -122,6 +122,7 @@ export default {
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
+            editskuflag:false,
             title: '(SKU列表信息)',
             /*searchOptions: {
                 zt : "1",//状态
@@ -258,7 +259,14 @@ export default {
            },
 
          addItem() {
-                console.log(this.skuList)
+             if(this.editskuflag){
+                this.showMsg("点击过于频繁")
+                return
+                }
+                this.editskuflag = true
+                setTimeout(()=>{
+                    this.editskuflag = false
+                },5000)
             client.postData( SKU_EDIT_LIST , this.skuList).then(data => {
                 if (data.code == 200) {
                     alert("编辑成功")
@@ -272,6 +280,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                this.editskuflag = false
                 alert("编辑失败,请重试");
             })
            

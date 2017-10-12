@@ -3,7 +3,7 @@
         <div class="container-tree rows">
             <div class="hd">选择标签</div>
             <div class="col-md-6" style="border-right:1px solid #DDD;">
-                <div class="form-group" style="margin-top:10px;height:30px;">
+               <!--  <div class="form-group" style="margin-top:10px;height:30px;">
                     <div class="col-md-6" style="padding:0;">
                         <m-select :data="labelType" :active-items="labelTypeActive" :placeholder="'请选择内容'" :change-func="selectLabelPropFunc" :class="'fixedIcon'"></m-select>
                     </div>
@@ -15,7 +15,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> -->
                 <div class="tree-demo jstree jstree-1 jstree-default" style="overflow:auto;height:380px;margin-bottom:10px;clear:both;">
                     <ul class="jstree-container-ul jstree-children jstree-wholerow-ul jstree-no-dots">
                         <treeview v-if="selectListSearch.length==0&&searchKey==''&&typeof dataList == 'object'" :model="dataList" :select="selectItem"></treeview>

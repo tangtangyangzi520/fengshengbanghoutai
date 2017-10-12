@@ -218,7 +218,7 @@ export default {
                             arr.push(fir)
                             arr.push(sec)
                             arr.push(thi)
-                            console.log(fir.text+"->"+sec.text+"->"+thi.text)
+                            //console.log(fir.text+"->"+sec.text+"->"+thi.text)
                             this.searchResult.push(arr)
                         }
                     })
