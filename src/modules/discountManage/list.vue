@@ -88,19 +88,18 @@
                             <td style="text-align:center;vertical-align:middle;">
                                <span v-if="item.mkcStatus == 0">未开始</span>
                                <span v-if="item.mkcStatus == 2">进行中</span>
-                               <span v-if="item.mkcStatus == 1 || item.mkcStatus == 3">已结束</span>
+                               <span v-if="item.mkcStatus == 1">已结束</span>
                             </td>
                             
                           <!--   <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
                             <td style="text-align:center;vertical-align:middle;">
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
-                            <span v-if="item.mkcStatus == 3 " >已失效
-                           
-                            </span>
-                            <span v-else>
+                            <span v-if="item.mkcIsInvalid == 1 " >已失效</span>
+                            <span v-if="item.mkcIsInvalid == 0 ">
                             <button type="button" v-if="par != 1" class="btn btn-xs blue" @click.stop="editItem(item.mkcCampaignId)">编辑</button>
-                            <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showControlFunc(item.mkcCampaignId,'submit')">使失效</button>
+                            <button type="button"  class="btn btn-xs yellow-crusta" 
+                            @click.stop="showControlFunc(item.mkcCampaignId,'submit')">使失效</button>
                             <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs default">删除</button>
                             </span>
                                  <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>

@@ -46,12 +46,15 @@
                             </th>
                             <th style="width:35%;">商品信息</th>
                             <th style="width:9%;">丰盛榜售价
-                                <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderBy(false)">▼</a>
-                                <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true)">▲</a>
+                                <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderByPrice(false)">▼</a>
+                                <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderByPrice(true)">▲</a>
                             </th>
                             <th style="width:7%;">总库存</th>
                             <th style="width:10%;">总销量</th>
-                            <th style="width:10%;">创建时间</th>
+                            <th style="width:10%;">创建时间
+                                <a id="timedesc"  class="orderBy" style="text-decoration:none" @click="orderByTime(false)">▼</a>
+                                <a id="timeasc" class="orderBy" style="display:none;text-decoration:none" @click="orderByTime(true)">▲</a>
+                            </th>
                             <th style="width:10%;">更新时间</th>
                             <th style="">操作</th>
                         </tr>
@@ -317,12 +320,50 @@ export default {
                 this.showMsg("下架失败,请重试");
             })
          },
-        //根据售价升降序
-        orderBy( val ) {
+         //根据时间升降序
+        orderByTime( val ) {
             let options;
             if (true) {
                 // 拿最后一次请求的参数
-                options = this.lastSearchOptions;
+                //options = this.lastSearchOptions;
+                options = Object.assign({}, this.searchOptions);
+            } else {
+                options = Object.assign({}, this.searchOptions);
+            }
+            this.isLoading = true;
+            this.dataList = [];
+            this.lastSearchOptions = options;
+            if( !val ){
+                $("#timeasc").show()
+                $("#timedesc").hide()
+               options.orderBy = 0
+            }else{
+                $("#timedesc").show()
+                $("#timeasc").hide()
+               options.orderBy = 1
+            }
+             client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
+                this.isLoading = false;
+                if (data.code == 200) {
+                    data.data.forEach(item => {
+                        item.checked = false;
+                    })
+                    this.dataList = data.data;
+                    this.page = data.page;
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.isLoading = false;
+            })
+        },
+        //根据售价升降序
+        orderByPrice( val ) {
+            let options;
+            if (true) {
+                // 拿最后一次请求的参数
+                //options = this.lastSearchOptions;
+                options = Object.assign({}, this.searchOptions);
             } else {
                 options = Object.assign({}, this.searchOptions);
             }

@@ -554,7 +554,7 @@ export default {
                 "spuShareUrl":'',
                 "spuPic": '',
                 "spuAppSummary": "",
-                //"spuPcSummary":"",
+                "spuPcSummary":"",
                 "spuName": "",
                 "spuCatId": -1,
                 "spuKeyword":"",

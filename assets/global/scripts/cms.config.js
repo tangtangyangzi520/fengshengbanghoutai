@@ -323,7 +323,7 @@ var ORDER_CANCEL_REASON   =  OMS_TEST + "/order/getOrderCancelReasons";  //获�
 var ORDER_EDIT_REASON  =  OMS_TEST + "/order/cancelOrderSub";            //取消订单
 var ORDER_EDIT_ACT_AMOUNT =  OMS_TEST + "/order/editActAmount";          //修改订单价格
 var ORDER_EXPORT       =  OMS_TEST + "/order/exportOrder";               //订单导出
-var ORDER_ADD_STAR     =  OMS_TEST + "/order/addStar";               //订单导出
+var ORDER_ADD_STAR     =  OMS_TEST + "/order/addStar";               //订单加星
 //物流模块
 var ODD_GET_ORDERSUBID       =  OMS_TEST + "/odd/getByOrderSubId";               //根据子单获取物流信息?ordOrderId=1
 

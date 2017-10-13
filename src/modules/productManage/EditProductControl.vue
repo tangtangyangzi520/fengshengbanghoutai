@@ -427,7 +427,7 @@ export default {
                 "spuPic": '',
                 "spuId":0,
                 "spuAppSummary": "",
-                //"spuPcSummary": "",
+                "spuPcSummary": "",
                 "spuName": "",
                 "spuCatId": -1,
                 "spuKeyword":"",
