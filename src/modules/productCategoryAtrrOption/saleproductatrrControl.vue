@@ -245,7 +245,7 @@ export default {
         // 提交信息
         submitInfo() {
             // 数据校验
-            var isSubmit = true;
+            //var isSubmit = true;
             let pcaNameTempList = Object.assign([], this.pcaList);// 因为数据双向绑定,从原来的list中删除一个元素会反应到页面上,所有用一个新的实例(Object.assign())接收转换一下
             if (this.pcaid != '') {
                 //编辑操作(从list中删掉回显的属性名称)
@@ -277,21 +277,23 @@ export default {
                     }
                 }
             }
-            if(!isSubmit) {
-                return;
-            }
-            let set = new Set();
+            // if(!isSubmit) {
+            //     return;
+            // }
+            //let set = new Set();
             for (let item of this.data.optionList) {
-                if (item.pcaoName.replace(/(^\s*)|(\s*$)/g, "") == "" || item.pcaoName.length > 10) {
-                    this.showMsg('属性值不能为空,且限10个字符以内');
-                    return;
+                if(item.pcaoUseFlag == 1){// 排除禁用的
+                    if (item.pcaoName.replace(/(^\s*)|(\s*$)/g, "") == "" || item.pcaoName.length > 10) {
+                        this.showMsg('属性值不能为空,且限10个字符以内');
+                        return;
+                    }
                 }
-                set.add(item.pcaoName);
+               // set.add(item.pcaoName);
             }
-            if (set.size < this.data.optionList.length) {
-                this.showMsg('属性值重复，请输入新的属性值!');
-                return;
-            }
+            // if (set.size < this.data.optionList.length) {
+            //     this.showMsg('属性值重复，请输入新的属性值!');
+            //     return;
+            // }
             if(this.pcaoIdNum < 2 || this.pcaoIdNum > 50){
                 this.showMsg('属性值最少2个最多50个!');
                 return;

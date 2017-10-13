@@ -187,6 +187,17 @@ function getParentIdList(treeList, item){
         }
     }
 }
+// 数组拷贝
+function copyArr(arr){
+    return arr.map((e)=>{
+        if(typeof e === 'object'){
+            return Object.assign({},e);
+        }else{
+            return e;
+        }
+    });
+}
+
 const Client = {
     getData,
     postData,
@@ -202,6 +213,7 @@ const Client = {
     getParentIdList,
     findTreeItem,
     findParentItem,
+    copyArr,
 }
 
 export default Client;
