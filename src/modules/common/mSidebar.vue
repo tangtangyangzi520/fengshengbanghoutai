@@ -86,7 +86,7 @@ export default {
         }
     },
     created() {
-        client.postData(SYSTEM_USER_RESOURCE, {}).then(response => {
+        client.postData(SYSTEM_USER_RESOURCE+"?systemId=2", {}).then(response => {
             if (response.code == 200) {
                 let list = response.data.root.children;
                 let resource = {}
@@ -151,7 +151,7 @@ export default {
                 this.navList = list;
                 this.catList.forEach(cat=>{
                     this.navList.forEach(nav=>{
-                        if( nav.id >= 50 && nav.text.indexOf(cat.text) >-1 ){
+                        if( nav.text.indexOf(cat.text) >-1 ){
                             cat.children.push(nav)
                         }
                     })
