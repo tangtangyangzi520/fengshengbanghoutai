@@ -196,8 +196,8 @@
                                 <tr>
                                     <td colspan="6" style="text-align:left">
                                         <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompany}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}
-                                        <span style="margin-left:5%">{{orderlog[0].oddTime}}&nbsp;[{{orderlog[0].oddStatus}}]&nbsp;{{orderlog[0].oddContent}}</span>
-                                        <a style="text-decoration:none;margin-left:3%" @click="showOdd()">更多</a>
+                                        <span v-if="orderlog.length >0" style="margin-left:5%">{{orderlog[0].oddTime}}&nbsp;[{{orderlog[0].oddStatus}}]&nbsp;{{orderlog[0].oddContent}}</span>
+                                        <a v-if="orderlog.length >0" style="text-decoration:none;margin-left:3%" @click="showOdd()">更多</a>
                                     </td>
                                 </tr>
                                 <tr v-for="(index,itemDetail) in subData.orderDetailList">
@@ -248,7 +248,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;">
+                                    <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;" v-if="item.ordShareAmount>0">
                                         <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
                                             {{item.ordCampaign.mkcName}} <br> ({{item.ordCampaign.mkcRemark}})
                                         </td>
@@ -548,9 +548,13 @@ export default {
             client.postData( ODD_GET_ORDERSUBID+"?ordOrderId="+val.ordOrderId , {}).then(data => {
                 console.log(val.ordOrderId)
                 if (data.code == 200) {    
-                       data.data.forEach((log,index)=>{
+                       if(data.data == null){
+                         this.orderlog = []
+                       }else{
+                          data.data.forEach((log,index)=>{
                          this.orderlog.$set(index,log) 
-                       })
+                          })
+                       }
                 }
             }, data => {
                       this.showMsg("获取物流详情失败!"+data.message);

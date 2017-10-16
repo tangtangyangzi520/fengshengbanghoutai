@@ -25,8 +25,8 @@
                  <span v-else>
                  <button type="button" class="btn default" @click="down()">批量下架</button>
                  </span>
-                 <button class="btn purple" type="button" @click="deleteSpu()">删除</button>
-                 <button class="btn yellow-crusta" type="button" @click="productexport()">导出</button> 
+                 <button class="btn purple" type="button" @click="deleteSpu()" v-if="limitResource.product_delete">删除</button>
+                 <button class="btn yellow-crusta" type="button" @click="productexport()" v-if="limitResource.product_export">导出</button> 
                  <button class="btn green-meadow" @click="search()" type="button">搜索</button>
             </div>
              <a><div  id="1" class="cha"    style="float:left"    @click="changeClass(1)">出售中</div></a>  
@@ -76,7 +76,9 @@
 
                             </td>
                             <td style="width:13%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
-                                   font-style: normal;">{{"￥"+item.minSalePrice+"  ~ ￥"+item.maxSalePrice}}</td>
+                                   font-style: normal;"><span v-if="item.minSalePrice == item.maxSalePrice">{{"￥"+item.minSalePrice}}</span>
+                                   <span v-else>{{"￥"+item.minSalePrice+"  ~ ￥"+item.maxSalePrice}}</span>
+                            </td>
                             <td style="text-align:center;vertical-align:middle;">
                                  <span v-if="item.totalStockNum > 0">    
                                 {{item.totalStockNum}}
@@ -143,8 +145,7 @@
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
         <!-- 创建专家弹窗 -->
          <!--  <product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"></product-control> -->  
-         <order-list v-if="!destroyControlDialog" :show="showorderDialog"  :onhide="hideDialog3" :lspuid="oospuid" :lflag="ooflag" :title="ordertitle"></order-list> 
-
+         <order-list v-if="!destroyControlDialog" :show="showorderDialog" :onhide="hideDialog3" :lspuid="oospuid" :lflag="ooflag" :title="ordertitle"></order-list>
          <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showpreDialog"  :onhide="hideDialog2" :pspuid="lspuid" :pflag="lflag" :imgflag="limgflag"></preview> 
          <category-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList"></category-control> 
          <edit-product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :proflag="pflag"></edit-product-control> 
@@ -342,6 +343,7 @@ export default {
                 $("#timeasc").hide()
                options.orderBy = 1
             }
+            options.orderType = 2
              client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -379,6 +381,7 @@ export default {
                 $("#asc").hide()
                options.orderBy = 1
             }
+             options.orderType = 1
              client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -397,8 +400,9 @@ export default {
         //隐藏订单
         hideDialog3() {
                 this.showorderDialog = false;
+                console.log(this.$children)
                 setTimeout(() => {
-                this.onhide('cancel');
+                //this.onhide('cancel');
             }, 300)
         },
         order(val,name) {
@@ -449,6 +453,10 @@ export default {
         },
         search(){
             this.flag = ! this.flag
+            $("#timeasc").hide()
+            $("#timedesc").show()
+            $("#asc").hide()
+            $("#desc").show()
         },
         hideEditspuDialog(control) {
             this.expertEditId = '';
@@ -497,6 +505,8 @@ export default {
          } ,
         //点击改变样式
         changeClass(obj) {
+                $("#timedesc").show()
+                $("#timeasc").hide()
                 $("#desc").show()
                 $("#asc").hide()
              $("#"+obj).removeClass("select").addClass("cha");
@@ -675,6 +685,7 @@ export default {
     created() {
         vueThis = this;
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
+        console.log(JSON.parse(localStorage.getItem('limitResource')))
     },
     watch: {
     },

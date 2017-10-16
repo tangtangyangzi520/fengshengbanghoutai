@@ -202,7 +202,7 @@
 
           <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                              <button type="button" class="btn purple" @click="reset()">重置基本属性</button> 
+                              <button type="button" class="btn purple" @click="reset()">重置销售属性</button> 
                             </label>
 
                         </div>

@@ -2,9 +2,9 @@
     <div>
         <div class="page-bar min-bar">
             <page-title-bar v-show="showflag">
-                <span slot="title">订单列表{{countDesc}}</span>
+                <span slot="title">订单列表</span>
             </page-title-bar>
-            <search :onchange="changeSearchOptions" :oncreate="getList"></search>
+            <search :onchange="changeSearchOptions" :oncreate="getList" v-ref:search></search>
             </br>
             </br>
             <div class="col-md-12 left">
@@ -172,7 +172,7 @@ let vueThis = null;
 export default {
     components: {
         pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control,
-        loading, orderControl, demoControl, changeStatusControl, cancelOrderControl, changePaymentControl, selectSpu, preview, star
+        loading, orderControl, demoControl, changeStatusControl, cancelOrderControl, changePaymentControl, selectSpu, preview, star,
     },
     props: {
         title: '',
@@ -246,6 +246,10 @@ export default {
         }
     },
     methods: {
+        clearSearchOptions(){
+            this.$refs.search.clearOptions()
+            //console.log(this.$refs.search)
+        },
         //得到选择的商品
         getSelected(data) {
             this.testSelectedSpu = data;

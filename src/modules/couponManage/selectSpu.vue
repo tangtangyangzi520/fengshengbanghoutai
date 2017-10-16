@@ -315,6 +315,7 @@ export default {
         },
          // 选中一个项时触发
         selectItem(item) {
+            client.getParentIdList(this.treeList, item);
             this.searchOptions.spuCatId=item.id;
             this.getUnSelectedList(false, true);
         },

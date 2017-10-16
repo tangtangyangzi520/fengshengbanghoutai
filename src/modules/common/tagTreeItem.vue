@@ -1,9 +1,9 @@
 <template>
-    <li class="jstree-node jstree-no-dots" v-show="model.isShow" :class="{'jstree-open':model.isOpen,'jstree-closed':!model.isOpen}" @click.stop="selectItem(model)">
-        <div class="jstree-wholerow" :class="{'jstree-wholerow-clicked':model.isSelected}">
+    <li class="jstree-node jstree-no-dots" v-show="model.isShow" :class="{'jstree-open':model.isOpen,'jstree-closed':!model.isOpen}" @click.stop="selectItem(model)" >
+        <div class="jstree-wholerow" :class="{'jstree-wholerow-clicked':model.isSelected}" >
         </div>
         <i class="jstree-icon jstree-ocl" @click.stop="showItem(model)" :style="{opacity:model.children.length==0?0:1}"></i>
-        <a class="jstree-anchor" :style="{'color':model.isSelected?'#0085c4':''}">
+        <a class="jstree-anchor" :style="{'color':model.isSelected?'#0085c4':''}"  >
             <i class="jstree-icon jstree-themeicon fa fa-folder icon-state-warning icon-lg jstree-themeicon-custom"></i>{{model.text}}</a>
         <ul class="jstree-children" v-if="model.children.length!=0">
             <treeview v-for="m in model.children" :sort="sortLabel" :model="m" :select="select" :sort-up="sortUp" :sort-down="sortDown" :delete="deleteLabel" :edit="editLabel"></treeview>
@@ -24,7 +24,8 @@ export default {
     },
     data() {
         return {
-
+            tree:{},
+            tree2:{},
         }
     },
     methods: {
@@ -52,10 +53,15 @@ export default {
     },
     watch: {
         model() {
+            if(this.model.children != null && this.model.children.length == 12){
+                 this.tree = Object.assign([],this.model);
+                 console.log(this.tree)
+            }
             console.log(this.model)
         }
     },
     ready() {
+        //this.tree = this.tree2
     },
     beforeDestroy() {
     }
@@ -84,5 +90,8 @@ export default {
             color: #666;
         }
     }
+}
+.check{
+    background-color:gray
 }
 </style>

@@ -8,18 +8,33 @@
                     <span class="selected"></span>
                 </a>
             </li>
-            <li class="nav-item" v-for="item in catList" v-show="item.text!='' " :class="{active:item.active}">
+             <li class="nav-item" v-for="item in catList" v-show="item.text!=''&&item.selected" :class="{active:item.active}">
                 <a class="nav-link nav-toggle">
                     <i :class="!item.icon?'icon-wrench':item.icon"></i>
                     <span class="title"> {{item.text}} </span>
                     <span class="arrow" :class="{open:item.active}"></span>
                     <span class="selected" v-if="item.active"></span>
                 </a>
-                <ul class="sub-menu" v-if="catList.length!=0">
-                    <li v-for="subItem in item.children"  :class="{active:subItem.active}" @click="changeUrl(subItem)">  <!-- v-show="subItem.state.selected" -->
-                        <a>
-                            <i class="icon-puzzle"></i> {{subItem.text}} </span>
+                <ul class="sub-menu " v-if="item.children.length!=0">
+                    <li v-for="subItem in item.children"  :class="{active:subItem.active}" class="nav-item start"><!-- v-show="subItem.state.selected" -->
+                       <a class="nav-link nav-toggle"  v-if="subItem.children.length!=0">
+                        <i :class="!subItem.icon?'icon-wrench':subItem.icon"></i>
+                        <span class="title"> {{subItem.text}} </span>
+                        <span class="arrow" :class="{open:subItem.active}"></span>
+                        <span class="selected" v-if="subItem.active"></span>
+                    </a>
+                        <ul class="sub-menu" v-if="subItem.children.length!=0">
+                            <li v-for="san in subItem.children"  :class="{active:san.active}" @click="changeUrl(san)" > <!-- v-show="san.state.selected" -->
+                                <a>
+                                    <i class="icon-puzzle"></i> {{san.text}} <!-- </span> -->
+                                </a>
+                            </li>
+                        </ul>
+
+                        <a v-else @click="changeUrl(subItem)">
+                            <i class="icon-puzzle"></i> {{subItem.text}} <!-- </span> -->
                         </a>
+
                     </li>
                 </ul>
             </li>
@@ -40,31 +55,31 @@ export default {
             navList: [],
             isIndexPage: false,
 			catList:[
-			    {"text":"商品管理" ,"children":[
-                    {"text":"商品列表","url":"/dist/#!/productManage"},
-                    {"text":"品牌列表","url":"/dist/#!/productBrand"},
-                    {"text":"通用属性列表","url":"/dist/#!/productCategoryAtrr"},
-                    {"text":"销售属性列表","url":"/dist/#!/productCategoryAtrrOption"},
+                {"text":"商品","active":false,"selected":true,"children":[
+                    /*{"text":"商品管理","selected":true,"active":false,"children":[
+                        {"text":"商品列表","url":"/dist/#!/productManage","active":false,"selected":true},
+                    ]},
+                    {"text":"商品配置","selected":true,"active":false,"children":[
+                        {"text":"通用属性列表","url":"/dist/#!/productCategoryAtrr","active":false,"selected":true},
+                        {"text":"销售属性列表","url":"/dist/#!/productCategoryAtrrOption","active":false,"selected":true},
+                        {"text":"商品品牌管理","url":"/dist/#!/productBrand","active":false,"selected":true},
+                    ]},*/
                   ]
                 },
-                {"text":"订单管理" ,"children":[
-                    {"text":"订单列表","url":"/dist/#!/order"},
-                    {"text":"运费模板","url":"/dist/#!/ProductCarriageTemp"},
-                    /*{"text":"品牌列表","url":"/dist/#!/productBrand"},
-                    {"text":"属性列表","url":"/"},*/
+                {"text":"订单","active":false,"selected":true,"children":[
+                   /* {"text":"订单管理","selected":true,"active":false,"children":[
+                        {"text":"订单列表","url":"/dist/#!/order","active":false,"selected":true},
+                    ]},
+                    {"text":"订单设置","selected":true,"active":false,"children":[
+                        {"text":"运费模板","url":"/dist/#!/ProductCarriageTemp","active":false,"selected":true},
+                    ]},*/
                   ]
                 },
-                /*{"text":"订单设置" ,"children":[
-                    {"text":"运费模板","url":"/dist/#!/ProductCarriageTemp"},
-                    {"text":"品牌列表","url":"/dist/#!/productBrand"},
-                    {"text":"属性列表","url":"/"},
-                  ]
-                },*/
-                {"text":"营销管理" ,"children":[
-                    {"text":"限时折扣列表","url":"/dist/#!/discountManage"},
-                    {"text":"优惠券列表","url":"/dist/#!/couponManage"},
-                    /*{"text":"品牌列表","url":"/dist/#!/productBrand"},
-                    {"text":"属性列表","url":"/"},*/
+                {"text":"营销","active":false,"selected":true,"children":[
+                    /*{"text":"营销活动","selected":true,"active":false,"children":[
+                        {"text":"优惠券列表","url":"/dist/#!/couponManage","active":false,"selected":true},
+                        {"text":"限时折扣列表","url":"/dist/#!/discountManage","selected":true,"active":false},
+                    ]},*/
                   ]
                 },
 			]
@@ -74,7 +89,7 @@ export default {
         client.postData(SYSTEM_USER_RESOURCE, {}).then(response => {
             if (response.code == 200) {
                 let list = response.data.root.children;
-                let resource = {};
+                let resource = {}
                 list.forEach(litem => {
                     litem.active = false;
                     if(litem.code && litem.code.replace(/\s/g,'') != ''){
@@ -82,82 +97,37 @@ export default {
                     }
                     litem.children.forEach(item => {
                         switch (item.url) {
-                            case 'info.painVideoMgr':
-                                // 视频管理列表
-                                item.url = '/dist/#!/painVideoList';
-                                break;
-                            case 'info.videoMgr':
-                                // 视频管理列表
-                                item.url = '/dist/#!/videoList';
-                                break;
-                            case 'info.loreVideoMgr':
-                                // 痛点图文
-                                item.url = '/dist/#!/articlePainList/19';
-                                break;
-                            case 'info.perfectSolveMgr':
-                                // 360解决方案
-                                item.url = '/dist/#!/articleList/20';
-                                break;
-                            case 'info.foodArticleMgr':
-                                // 良食文章
-                                item.url = '/dist/#!/articleList/14';
-                                break;
-                            case 'info.expertArticleMgr':
-                                // 大咖说文章
-                                item.url = '/dist/#!/articleList/21';
-                                break;
-                            case 'info.goodProductActicleMgr':
-                                // 良品导购文
-                                item.url = '/dist/#!/articleList/22';
-                                break;
-                            case 'info.goodStoreArticleMgr':
-                                // 良店导购文
-                                item.url = '/dist/#!/articleList/23';
-                                break;
-                            case 'info.activityArticleMgr':
-                                // 活动文章
-                                item.url = '/dist/#!/articleList/26';
-                                break;
-                            case 'info.goodProductMgr':
-                                // 良品单品
-                                item.url = '/dist/#!/goodProductStoreIndex/13';
-                                break;
-                            case 'info.solutionMgr':
-                                // 行动食谱
-                                item.url = '/dist/#!/solutionList';
-                                break;
-                            case 'info.goodStoreMgr':
-                                // 良店单项
-                                item.url = '/dist/#!/goodProductStoreIndex/15';
-                                break;
-                            case 'info.wordsArticleMgr':
-                                // 良言
+                            case 'info.brandMgr':
+                                // 商品品牌列表
                                 item.url = '/dist/#!/productBrand';
                                 break;
-                            case 'info.expertMgr':
-                                // 专家管理
+                            case 'info.productMgr':
+                                // 商品列表
                                 item.url = '/dist/#!/productManage';
                                 break;
-                            case 'info.bannerMgr':
-                                // Banner管理
-                                item.url = '/dist/#!/bannerListIndex';
+                            case 'info.productCategoryAtrrMgr':
+                                // 商品列表
+                                item.url = '/dist/#!/productCategoryAtrr';
                                 break;
-                            case 'info.columnFenceMgr':
-                                // 栏目管理
-                                item.url = '/dist/#!/channelManage';
+                            case 'info.productCategoryAtrrOptionMgr':
+                                 // 商品列表
+                                item.url = '/dist/#!/productCategoryAtrrOption';
                                 break;
-                            case 'info.headlineMgr':
-                                // 健康头条
-                                item.url = '/dist/#!/headlines';
+                            case 'info.orderMgr':
+                                // 商品列表
+                                item.url = '/dist/#!/order';
                                 break;
-                     
-                            case 'info.tagMgr':
-                                // 标签管理
-                                item.url = '/dist/#!/labelManage';
+                            case 'info.ProductCarriageMgr':
+                                // 商品列表
+                                item.url = '/dist/#!/ProductCarriageTemp';
                                 break;
-							 case 'info.quickProductMgr':
-                                // 商品管理
-                                item.url = '/dist/#!/productManage';
+                            case 'info.couponMgr':
+                                // 商品列表
+                                item.url = '/dist/#!/couponManage';
+                                break;
+                            case 'info.discountMgr':
+                                // 商品列表
+                                item.url = '/dist/#!/discountManage';
                                 break;
                             default:
                                 break;
@@ -179,6 +149,13 @@ export default {
                 })
                 localStorage.setItem('limitResource', JSON.stringify(resource));
                 this.navList = list;
+                this.catList.forEach(cat=>{
+                    this.navList.forEach(nav=>{
+                        if( nav.id >= 50 && nav.text.indexOf(cat.text) >-1 ){
+                            cat.children.push(nav)
+                        }
+                    })
+                })
             }
         }, response => {
         })
@@ -213,6 +190,17 @@ export default {
                     }
                 })
             })
+            /* this.catList.forEach(litem => {
+                litem.active = false;
+                litem.children.forEach(item => {
+                    if (item.url == subitem.url) {
+                        console.log(item.url, subitem.url)
+                        litem.active = item.active = true;
+                    } else {
+                        item.active = false;
+                    }
+                })
+            })*/
         }
     },
     watch: {
@@ -220,6 +208,12 @@ export default {
             if(this.$route.path=='/'){
                 this.isIndexPage = true;
                 this.navList.forEach(litem => {
+                    litem.active = false;
+                    litem.children.forEach(item => {
+                        item.active = litem.active = false;
+                    })
+                })
+                this.catList.forEach(litem => {
                     litem.active = false;
                     litem.children.forEach(item => {
                         item.active = litem.active = false;
