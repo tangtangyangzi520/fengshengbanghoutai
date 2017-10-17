@@ -40,22 +40,22 @@
                 <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                     <thead>
                         <tr>
-                            <th style="width:4%">
+                            <th style="width:5%">
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
                             </th>
                             <th style="width:35%;">商品信息</th>
-                            <th style="width:9%;">丰盛榜售价
+                            <th style="width:10%;">丰盛榜售价
                                 <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderByPrice(false)">▼</a>
                                 <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderByPrice(true)">▲</a>
                             </th>
-                            <th style="width:7%;">总库存</th>
+                            <th style="width:10%;">总库存</th>
                             <th style="width:10%;">总销量</th>
-                            <th style="width:10%;">创建时间
+                            <th style="width:12%;">创建时间
                                 <a id="timedesc"  class="orderBy" style="text-decoration:none" @click="orderByTime(false)">▼</a>
                                 <a id="timeasc" class="orderBy" style="display:none;text-decoration:none" @click="orderByTime(true)">▲</a>
                             </th>
-                            <th style="width:10%;">更新时间</th>
+                            <!-- <th style="width:10%;">更新时间</th> -->
                             <th style="">操作</th>
                         </tr>
                     </thead>
@@ -112,8 +112,8 @@
                                 </p> -->
                             </td>
                             
-                            <td style="text-align:center;vertical-align:middle;">{{item.spuCreatedTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
+                           <!--  <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
                             <td style="text-align:center;vertical-align:middle;">
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
                             <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')" v-if="limitResource.productSpu_edit">编辑</button>

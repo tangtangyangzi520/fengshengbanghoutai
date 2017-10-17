@@ -35,7 +35,7 @@
                     <span class="required">* </span>活动标签：
                 </label>
                     <div class="controls col-md-4">
-                         <input type="text" class="form-control input-sm"  placeholder="限时折扣"  required="required" v-model="request.mkcLabel"> 
+                         <input type="text" class="form-control input-sm"  placeholder="限时折扣"  required="required" v-model="request.mkcLabel" minlength="2" maxlength="5"> 
                          活动期间展示于商品详情的价格旁边，2至5字。                                
                          <input id="sub1" type="submit" style="display:none" >
 
@@ -675,7 +675,8 @@ export default {
                 this.isLoading = false;
                 if (response.code == 200) {
                    this.request.mkcCampaignId =  response.data.mkcCampaignId
-                   this.request.mkcName = response.data.mkcName
+                   this.request.mkcName =  response.data.mkcName
+                   this.request.mkcLabel = response.data.mkcLabel
                     let sjtime  = new Date(response.data.mktStart)
                     this.request.mktStart = sjtime.getFullYear() 
                     if( sjtime.getMonth()+1 >= 10 ){

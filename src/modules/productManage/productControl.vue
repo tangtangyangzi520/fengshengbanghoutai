@@ -308,18 +308,16 @@
                           
                                 <tr style="text-align: center">
                                    <td style="width:42.4%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
-                                   <td style="border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
+                                   <td style="width:12%;border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
                                     @change="sput($event,'.put0')" min="0"max="99999999"/></td>
-                                   <td style="border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
+                                   <td style="width:11.6%;border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
                                     @blur="sput($event,'.put1')"  min="0"max="99999999"/></td>
                                    <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put2')" @change="ssput($event,'.put2')"
                                     min="0"max="2000000000" @blur="ssput($event,'.put2')"/></td>
-                                   <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
-                                    min="0"max="2000000000" @blur="ssput($event,'.put3')"/></td>
-                                   <td style="border:1px solid white;width:17%"> <!--  <input class=" input2" type="text"  maxLength="25" /> --></td>
+                                   <td style="border:1px solid white">  <!-- <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
+                                    min="0"max="2000000000" @blur="ssput($event,'.put3')"/> --></td>
+                                   <td style="border:1px solid white;width:24.3%"> <!--  <input class=" input2" type="text"  maxLength="25" /> --></td>
                                 </tr>
-
-                            
                         </table>
                         <table class="tab" id="table" style="display:none" border="1" cellspacing="0" cellpadding="0">  
                           <tr>

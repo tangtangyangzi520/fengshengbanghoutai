@@ -82,8 +82,9 @@
 
                             <td style="text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
                                    font-style: normal;">
-                               <span v-if="item. mktStart==null && item.mktEnd==null"> 永久有效</span>
-                               <span v-else >{{item. mktStart|filterTime}} 至<br> {{item.mktEnd|filterTime}}</span>
+                               <span v-if="item.mkcDateType==1"> 领到券当天开始{{item.mkcDateNum}}天内有效</span>
+                               <span v-if="item.mkcDateType==2"> 领到券次日开始{{item.mkcDateNum}}天内有效</span>
+                               <span v-if="item.mkcDateType==0" >{{item. mktStart|filterTime}} 至<br> {{item.mktEnd|filterTime}}</span>
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
                                 <p>{{item.totalNum}}/</p>{{item.totalNum}}

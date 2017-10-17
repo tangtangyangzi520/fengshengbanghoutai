@@ -219,12 +219,12 @@
                              <tbody id="itemList">
                                 <tr >
                                    <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
+                                <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;"> 
                                     </td>
                                      <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
+                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;"> 
                                     </td>
                                      <td  style="height:100px ; width: 25%">
                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" v-if="data.threeUrl==''" style="margin-top: 20px;"></i>
@@ -381,12 +381,13 @@
 </template>
 <script>
 import client from '../../common/utils/client';
+import itemMove from '../../components/page/itemMove';
 import tagTree from '../common/tagTree';
 import templateControl from './templateControl';
 import { selectPic, mAlert, mSelect, mMultiSelect, itemList ,selectComponentAll} from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';//上传图片插件
 export default {
-    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList ,templateControl ,selectComponentAll},
+    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList ,templateControl ,selectComponentAll,itemMove},
     props: {
         spuid: 0,
         proflag: true,
