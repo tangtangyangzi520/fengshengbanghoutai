@@ -14,16 +14,16 @@
                 <span v-if="selectItems.length>0" class="desc">已选
                     <em>{{selectItems.length}}</em> 项 </span>
                 
-                <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;">发布商品</button>
+                <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;" v-if="limitResource.product_add">发布商品</button>
                <!--  v-if="limitResource.expert_info_add" 添加按钮的权限-->
                <!--  <button class="btn blue" type="button" @click="showControlFunc(null,'publishAll')">修改模板</button>
                 <button class="btn default" type="button" @click="showControlFunc(null,'submitAll')">下架</button>
                 <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">删除</button>-->
                 <span v-if="par == 3">
-                 <button type="button" class="btn blue" @click="up()" >批量上架</button>
+                 <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves" >批量上架</button>
                  </span>
                  <span v-else>
-                 <button type="button" class="btn default" @click="down()">批量下架</button>
+                 <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves" >批量下架</button>
                  </span>
                  <button class="btn purple" type="button" @click="deleteSpu()" v-if="limitResource.product_delete">删除</button>
                  <button class="btn yellow-crusta" type="button" @click="productexport()" v-if="limitResource.product_export">导出</button> 
@@ -116,8 +116,9 @@
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
-                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')">编辑</button>
-                            <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')">查看SKU列表</button>
+                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')" v-if="limitResource.productSpu_edit">编辑</button>
+                            <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')"
+                            v-if="limitResource.productSku_edit">查看SKU列表</button>
 
                                  <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
                                     <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>

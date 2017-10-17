@@ -20,12 +20,12 @@
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>生效时间：
                 </label>
-                    <div class="controls col-md-2 ">
+                    <div class="controls col-md-3 ">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择生效时间" id="createStartTime3" v-model="request.mktStart" required="required" 
                           /> 
                     </div>
                        <div class="col-md-1" style="margin-top:0.5%;margin-left:-1.2%">至</div>
-                    <div class="controls col-md-2 nopadding" style="margin-left:-4%">
+                    <div class="controls col-md-3 nopadding" style="margin-left:-4%">
                        <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime3" v-model="mktEnd" required="required" >
                   </div>  <br> 
             </div>
@@ -35,7 +35,7 @@
                     <span class="required">* </span>活动标签：
                 </label>
                     <div class="controls col-md-4">
-                         <input type="text" class="form-control input-sm"  value="数据库暂无此字段,可不填" placeholder="限时折扣"  required="required" oninvalid="setCustomValidity('请输入活动标签!')"> 
+                         <input type="text" class="form-control input-sm"  placeholder="限时折扣"  required="required" v-model="request.mkcLabel"> 
                          活动期间展示于商品详情的价格旁边，2至5字。                                
                          <input id="sub1" type="submit" style="display:none" >
 
@@ -171,6 +171,7 @@ export default {
             mkcUsedCondition:0,
             timesList:[1,2,3,4,5,10],
             request:{
+              "mkcLabel":"",
               "mkcCampaignId":0,
               "cmisList": [],
               "mkcJoinTimes": 0,// 每人参加次数

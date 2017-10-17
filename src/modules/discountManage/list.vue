@@ -14,7 +14,8 @@
                     <hr style="height:3px;background-color:gray;width:99%;margin-left:0.4%" >
                 </p>
             <br> 
-            <button class="btn" type="button"  @click="addItem('add')" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white">新建限时折扣</button>
+            <button class="btn" type="button"  @click="addItem('add')" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white"
+            v-if="limitResource.discount_add">新建限时折扣</button>
             <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
                  <span  style="display:inline-block;"> 
                        <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag" ></search>
@@ -97,10 +98,10 @@
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
                             <span v-if="item.mkcIsInvalid == 1 " >已失效</span>
                             <span v-if="item.mkcIsInvalid == 0 ">
-                            <button type="button" v-if="par != 1" class="btn btn-xs blue" @click.stop="editItem(item.mkcCampaignId)">编辑</button>
+                            <button type="button" v-if="par != 1" class="btn btn-xs blue" @click.stop="editItem(item.mkcCampaignId)" v-if="limitResource.discount_edit">编辑</button>
                             <button type="button"  class="btn btn-xs yellow-crusta" 
-                            @click.stop="showControlFunc(item.mkcCampaignId,'submit')">使失效</button>
-                            <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs default">删除</button>
+                            @click.stop="showControlFunc(item.mkcCampaignId,'submit')" v-if="limitResource.discount_invalidate">使失效</button>
+                            <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs default" v-if="limitResource.discount_delete">删除</button>
                             </span>
                                  <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
                                     <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>

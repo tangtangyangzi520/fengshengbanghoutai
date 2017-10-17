@@ -372,7 +372,7 @@ export default {
                     this.maxSalePrice = data.data.maxSalePrice
                     this.minSalePrice = data.data.minSalePrice
                     this.totalStockNum = data.data.totalStockNum
-                    this.spuFreight = data.data.spuFreight
+                    this.spuFreight = data.data.spuCarriage
                     this.title = "预览:" + data.data.spuName 
                    
                 }

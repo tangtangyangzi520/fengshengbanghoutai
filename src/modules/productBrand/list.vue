@@ -5,7 +5,7 @@
                 <span slot="title">{{name}}列表{{countDesc}}</span>
             </page-title-bar>
             <button class="btn" type="button"  @click="addBanner()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white"
-            v-if="limitResource.brand_add">添加</button>
+            v-if="limitResource.brand_add" >添加</button> <!-- v-if="limitResource.brand_add" -->
             <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
                  <span  style="display:inline-block;"> 
                        <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag"></search>
@@ -51,11 +51,11 @@
                             </td>
                             <td>{{item.pbdSort}}</td>
                             <td style="text-align:center;vertical-align:middle;">
-                                <button type="button"  class="btn btn-xs blue" @click.stop="showControlFunc(item,'edit')" v-if="limitResource.brand_edit">编辑</button>
+                                <button type="button"  class="btn btn-xs blue" @click.stop="showControlFunc(item,'edit')" v-if="limitResource.brand_edit">编辑</button><!-- v-if="limitResource.brand_edit" -->
                                 <button type="button"  @click.stop="showControlFunc(item,'unuse')" class="btn btn-xs red"
-                                v-if="limitResource.brand_delete && item.pbdDisplay == 1">停用</button>
+                                v-if="limitResource.brand_delete && item.pbdDisplay == 1">停用</button><!--   -->
                                 <button type="button"  @click.stop="showControlFunc(item,'use')" class="btn btn-xs green"
-                                v-if="limitResource.brand_delete && item.pbdDisplay == 0">启用</button>
+                                v-if="limitResource.brand_delete && item.pbdDisplay == 0">启用</button><!--   -->
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">

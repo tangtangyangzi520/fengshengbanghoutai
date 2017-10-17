@@ -340,7 +340,7 @@
                                    <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
                                     @blur="checkfloat($event)"/></td>
                                    <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
-                                   <td>  <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
+                                   <td>  <!-- <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/> --></td>
                                    <td style="width:17%">  <input class="put4 input2" type="text" 
                                     maxLength="25" /></td>
                                 </tr>
@@ -1897,7 +1897,7 @@ export default {
          if(this.yunfei == 0){
            this.request.spuCarriageId = -1
         }else{
-          this.request.spuFreight = -1
+          this.request.spuFreight = 0
         }
         client.postData( SPU_CREATE , this.request).then(data => {
                 if (data.code == 200) {
@@ -2260,7 +2260,7 @@ export default {
             arr.push(this.par[3])
             arr.push(this.par[4])
             arr.push(this.par[5])
-            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
+            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1,}  ).then(data => {
                 if (data.code == 200) {
                     data.data.forEach(sx =>{
                       if(sx.pcaInputType==1){

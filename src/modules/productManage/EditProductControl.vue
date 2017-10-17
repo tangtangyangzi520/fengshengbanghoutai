@@ -915,7 +915,7 @@ export default {
         if(this.yunfei == 0){
            this.request.spuCarriageId = -1
         }else{
-          this.request.spuFreight = -1
+          this.request.spuFreight = 0
         }
     //上架时间
       if( this.rad == 2 ){
@@ -1044,7 +1044,7 @@ export default {
         },
         //获取品牌
         getbrandList() { 
-        client.postData(  PBD_GET_LIST  , {
+        client.postData(  PBD_GET_LISTUSED  , {
                "page": {
                "currentPage": 0,
                "pageSize": 0,
@@ -1318,7 +1318,7 @@ export default {
         "request.spuCarriageId":{　　
           　handler(curVal,oldVal){　
             if(curVal != -1){　
-                this.request.spuFreight = 0　　　　　　　　　
+                this.request.spuFreight = 0.00　　　　　　　　　
                 this.yunfei = 1　
              }　　　　　　　
           },　　　　　　　　　　
