@@ -20,10 +20,10 @@
                 <button class="btn default" type="button" @click="showControlFunc(null,'submitAll')">下架</button>
                 <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">删除</button>-->
                 <span v-if="par == 3">
-                 <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves" >批量上架</button>
+                 <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves" >上架</button>
                  </span>
                  <span v-else>
-                 <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves" >批量下架</button>
+                 <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves" >下架</button>
                  </span>
                  <button class="btn purple" type="button" @click="deleteSpu()" v-if="limitResource.product_delete">删除</button>
                  <button class="btn yellow-crusta" type="button" @click="productexport()" v-if="limitResource.product_export">导出</button> 
@@ -242,6 +242,9 @@ export default {
     },
     methods: {
          deleteSpu() {
+            if(!confirm("确定删除商品吗")){
+                return
+            }
             let arr = []
             this.dataList.forEach( item => {
                 if(item.checked == true ){
