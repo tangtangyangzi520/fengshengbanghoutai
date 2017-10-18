@@ -94,7 +94,7 @@
                         </div>
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
-                                <span class="required">* </span>适用人群：</label>
+                                <!-- <span class="required">* </span> -->适用人群：</label>
                             <div class="controls col-md-9" style="padding-top:8px;">
                                 <item-list :list="personList" :remove="removeperItem"></item-list>
                                 <a class="btn-select-label" @click="showperDialog">
@@ -278,7 +278,7 @@
                                 SKU编码：
                             </label>
                             <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="25">  
+                               <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="20">  
                             </div>
                        
                           <!--   <label for="title" class="col-sm-2 control-label">
@@ -340,7 +340,7 @@
                                    <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
                                    <td>  <!-- <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/> --></td>
                                    <td style="width:17%">  <input class="put4 input2" type="text" 
-                                    maxLength="25" /></td>
+                                    maxLength="20" /></td>
                                 </tr>
 
                              </tbody>
@@ -1226,11 +1226,11 @@ export default {
                    this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
               })
             //人群标签
-           
+           /*
             if( this.personList.length == 0){
                   this.showMsg("请选择人群标签")
                   return
-            }
+            }*/
               this.personList.forEach((per,index)=>{
                    this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
               })
@@ -1805,13 +1805,13 @@ export default {
                         "attrList": attrList,
                         "skuAtrr": $(el[1]).val() ,          // 拼接属性
                         "skuClassify": "i",     //   i
-                        "skuCode": $(el[6]).val(),        //   sku编码
+                        "skuCode": $(el[5]).val(),        //   sku编码
                         "skuMarketSalePrice": $(el[3]).val(),   //   原价
                         "skuName":  $(el[1]).val()+spuName  ,      //    拼接属性spu名字
                         "skuNew": 1,   
                         "skuOverseas": 1,              // 1
                         "skuSalePrice": $(el[2]).val(),            // 售价   
-                        "skuStockNum": $(el[5]).val(),            //  库存 $(el[4]).val()
+                        "skuStockNum": $(el[4]).val(),            //  库存 $(el[4]).val()
                         "skuUnit": "",         //  "" 
                         "skuUrl": "",          //  ""
                         "skuWhId": "",                //   ""

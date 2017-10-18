@@ -92,7 +92,7 @@
                         </div>
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
-                                <span class="required">* </span>适用人群：</label>
+                               <!--  <span class="required">* </span> -->适用人群：</label>
                             <div class="controls col-md-9" style="padding-top:8px;">
                                 <item-list :list="personList" :remove="removeperItem"></item-list>
                                 <a class="btn-select-label" @click="showperDialog">
@@ -831,10 +831,10 @@ export default {
              this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum ,"prpSpuId":this.spuid ,"prpSort":index} )
         })
       //人群标签
-      if( this.personList.length == 0){
+     /* if( this.personList.length == 0){
             this.showMsg("请选择人群标签")
             return
-      }
+      }*/
         this.personList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum,"prpSpuId":this.spuid ,"prpSort":index} )
         })
