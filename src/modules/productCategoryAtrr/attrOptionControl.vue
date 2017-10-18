@@ -171,9 +171,9 @@ export default {
             this.showSelectPic({ show: false });
         },
         // 隐藏选择组件弹窗
-        cancelSelectComponent() {
-            this.showComponent = false;
-        },
+        // cancelSelectComponent() {
+        //     this.showComponent = false;
+        // },
         hideDialog() {
             this.showDialog = false;
             setTimeout(() => {
@@ -215,14 +215,21 @@ export default {
 
             var arr =[];
             this.dataList.forEach(item=> {
-                if((item.pcaoName.length-1)==-1){
-                    this.showMsg('请输入属性值') 
-                    isSubmit = false;
-                } 
-                if ((item.pcaoName.length)>10){
-                    this.showMsg('属性值不能超过10个字');
-                    isSubmit = false;
+                if(item.pcaoUseFlag == 1){// 排除禁用的
+                    if (item.pcaoName.replace(/(^\s*)|(\s*$)/g, "") == "" || item.pcaoName.length > 10) {
+                        this.showMsg('属性值不能为空,且限10个字符以内');
+                        isSubmit = false;
+                    }
                 }
+
+                // if((item.pcaoName.length-1)==-1){
+                //     this.showMsg('请输入属性值') 
+                //     isSubmit = false;
+                // } 
+                // if ((item.pcaoName.length)>10){
+                //     this.showMsg('属性值不能超过10个字');
+                //     isSubmit = false;
+                // }
             });
             if(!isSubmit) {
                 return;
@@ -243,7 +250,14 @@ export default {
     },
     watch: {
         show() {
-            this.dataList = Object.assign([], this.optlist);// 创建新的实例,回显属性值数据
+            // 拷贝新数组,回显属性值数据
+            // let arr = [];
+            // for(let i=0;i<this.optlist.length;i++){
+            //     arr.push(Object.assign({},this.optlist[i]));
+            // }
+            // this.dataList = arr;
+
+            this.dataList = client.copyArr(this.optlist);// 拷贝新数组,回显属性值数据
             this.pcaoIdNum = this.optlist.length;// 回显属性值数量
             this.showPage = this.show;
             this.showDialog = this.show;

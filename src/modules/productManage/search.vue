@@ -202,6 +202,7 @@ export default {
             showthirdActive: 0,
             //可以在这里编辑搜索条件
             searchOptions: {
+                orderType:2,
                 orderBy:1,
                 spuCatId: 0,
                 showCatIdList: [],

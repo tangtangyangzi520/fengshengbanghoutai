@@ -171,7 +171,30 @@ function findTreeItem(list, id) {
 //获取父ID
 function getParentIdList(treeList, item){
     let parentItem,parentIds=new Array();
-    
+     item.isSelected = true
+            if(treeList.id != item.id){
+                treeList.isSelected = false
+            }
+           treeList.children.forEach(one=>{
+                    if(one.id != item.id){
+                        one.isSelected = false
+                    }
+                one.children.forEach(two=>{
+                    if(two.id != item.id){
+                        two.isSelected = false
+                    }
+                    two.children.forEach(three=>{
+                        if(three.id != item.id){
+                            three.isSelected = false
+                        }
+                        three.children.forEach(four=>{
+                            if(four.id != item.id){
+                                four.isSelected = false
+                            }
+                        })
+                    })
+                })
+            })
     console.log(treeList);
     console.log(parentIds);
     parentIds.push(item.id);
@@ -187,6 +210,17 @@ function getParentIdList(treeList, item){
         }
     }
 }
+// 数组拷贝
+function copyArr(arr){
+    return arr.map((e)=>{
+        if(typeof e === 'object'){
+            return Object.assign({},e);
+        }else{
+            return e;
+        }
+    });
+}
+
 const Client = {
     getData,
     postData,
@@ -202,6 +236,7 @@ const Client = {
     getParentIdList,
     findTreeItem,
     findParentItem,
+    copyArr,
 }
 
 export default Client;

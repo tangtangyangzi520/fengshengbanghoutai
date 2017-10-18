@@ -14,7 +14,8 @@
                     <hr style="height:3px;background-color:gray;width:99%;margin-left:0.4%" >
                 </p>
             <br> 
-            <button class="btn" type="button"  @click="add()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white">新建优惠券</button>
+            <button class="btn" type="button"  @click="add()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white"
+            v-if="limitResource.coupon_add">新建优惠券</button>
             <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
                  <span  style="display:inline-block;"> 
                        <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag" ></search>
@@ -81,7 +82,9 @@
 
                             <td style="text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
                                    font-style: normal;">
-                                {{item. mktStart|filterTime}} 至<br>  {{item.mktEnd|filterTime}}
+                               <span v-if="item.mkcDateType==1"> 领到券当天开始{{item.mkcDateNum}}天内有效</span>
+                               <span v-if="item.mkcDateType==2"> 领到券次日开始{{item.mkcDateNum}}天内有效</span>
+                               <span v-if="item.mkcDateType==0" >{{item. mktStart|filterTime}} 至<br> {{item.mktEnd|filterTime}}</span>
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
                                 <p>{{item.totalNum}}/</p>{{item.totalNum}}
@@ -94,10 +97,11 @@
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
                             <td style="text-align:center;vertical-align:middle;">
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
-                            <span v-if="item.mkcStatus == 3 " >已失效</span>
-                            <span v-else>
-                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.mkcCampaignId)">编辑</button>
-                            <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs yellow-crusta">使失效</button> 
+                            <span v-if="item.mkcIsInvalid == 1" >已失效</span>
+                            <span v-if="item.mkcIsInvalid == 0" >
+                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.mkcCampaignId)" v-if="limitResource.coupon_edit">编辑</button>
+                            <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" 
+                            class="btn btn-xs yellow-crusta" v-if="limitResource.coupon_invalidate">使失效</button> 
                             </span>
                            
                                  <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>

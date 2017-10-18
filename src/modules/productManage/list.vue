@@ -14,19 +14,19 @@
                 <span v-if="selectItems.length>0" class="desc">已选
                     <em>{{selectItems.length}}</em> 项 </span>
                 
-                <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;">发布商品</button>
+                <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;" v-if="limitResource.product_add">发布商品</button>
                <!--  v-if="limitResource.expert_info_add" 添加按钮的权限-->
                <!--  <button class="btn blue" type="button" @click="showControlFunc(null,'publishAll')">修改模板</button>
                 <button class="btn default" type="button" @click="showControlFunc(null,'submitAll')">下架</button>
                 <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">删除</button>-->
                 <span v-if="par == 3">
-                 <button type="button" class="btn blue" @click="up()" >批量上架</button>
+                 <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves" >上架</button>
                  </span>
                  <span v-else>
-                 <button type="button" class="btn default" @click="down()">批量下架</button>
+                 <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves" >下架</button>
                  </span>
-                 <button class="btn purple" type="button" @click="deleteSpu()">删除</button>
-                 <button class="btn yellow-crusta" type="button" @click="productexport()">导出</button> 
+                 <button class="btn purple" type="button" @click="deleteSpu()" v-if="limitResource.product_delete">删除</button>
+                 <button class="btn yellow-crusta" type="button" @click="productexport()" v-if="limitResource.product_export">导出</button> 
                  <button class="btn green-meadow" @click="search()" type="button">搜索</button>
             </div>
              <a><div  id="1" class="cha"    style="float:left"    @click="changeClass(1)">出售中</div></a>  
@@ -40,19 +40,22 @@
                 <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                     <thead>
                         <tr>
-                            <th style="width:4%">
+                            <th style="width:5%">
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
                             </th>
                             <th style="width:35%;">商品信息</th>
-                            <th style="width:9%;">丰盛榜售价
-                                <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderBy(false)">▼</a>
-                                <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true)">▲</a>
+                            <th style="width:10%;">丰盛榜售价
+                                <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderByPrice(false)">▼</a>
+                                <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderByPrice(true)">▲</a>
                             </th>
-                            <th style="width:7%;">总库存</th>
+                            <th style="width:10%;">总库存</th>
                             <th style="width:10%;">总销量</th>
-                            <th style="width:10%;">创建时间</th>
-                            <th style="width:10%;">更新时间</th>
+                            <th style="width:12%;">创建时间
+                                <a id="timedesc"  class="orderBy" style="text-decoration:none" @click="orderByTime(false)">▼</a>
+                                <a id="timeasc" class="orderBy" style="display:none;text-decoration:none" @click="orderByTime(true)">▲</a>
+                            </th>
+                            <!-- <th style="width:10%;">更新时间</th> -->
                             <th style="">操作</th>
                         </tr>
                     </thead>
@@ -73,7 +76,9 @@
 
                             </td>
                             <td style="width:13%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
-                                   font-style: normal;">{{"￥"+item.minSalePrice+"  ~ ￥"+item.maxSalePrice}}</td>
+                                   font-style: normal;"><span v-if="item.minSalePrice == item.maxSalePrice">{{"￥"+item.minSalePrice}}</span>
+                                   <span v-else>{{"￥"+item.minSalePrice+"  ~ ￥"+item.maxSalePrice}}</span>
+                            </td>
                             <td style="text-align:center;vertical-align:middle;">
                                  <span v-if="item.totalStockNum > 0">    
                                 {{item.totalStockNum}}
@@ -107,12 +112,13 @@
                                 </p> -->
                             </td>
                             
-                            <td style="text-align:center;vertical-align:middle;">{{item.spuCreatedTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
+                           <!--  <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
                             <td style="text-align:center;vertical-align:middle;">
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
-                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')">编辑</button>
-                            <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')">查看SKU列表</button>
+                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')" v-if="limitResource.productSpu_edit">编辑</button>
+                            <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')"
+                            v-if="limitResource.productSku_edit">查看SKU列表</button>
 
                                  <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
                                     <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>
@@ -140,8 +146,7 @@
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
         <!-- 创建专家弹窗 -->
          <!--  <product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"></product-control> -->  
-         <order-list v-if="!destroyControlDialog" :show="showorderDialog"  :onhide="hideDialog3" :lspuid="oospuid" :lflag="ooflag" :title="ordertitle"></order-list> 
-
+         <order-list v-if="!destroyControlDialog" :show="showorderDialog" :onhide="hideDialog3" :lspuid="oospuid" :lflag="ooflag" :title="ordertitle"></order-list>
          <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showpreDialog"  :onhide="hideDialog2" :pspuid="lspuid" :pflag="lflag" :imgflag="limgflag"></preview> 
          <category-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList"></category-control> 
          <edit-product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :proflag="pflag"></edit-product-control> 
@@ -237,6 +242,9 @@ export default {
     },
     methods: {
          deleteSpu() {
+            if(!confirm("确定删除商品吗")){
+                return
+            }
             let arr = []
             this.dataList.forEach( item => {
                 if(item.checked == true ){
@@ -317,12 +325,51 @@ export default {
                 this.showMsg("下架失败,请重试");
             })
          },
-        //根据售价升降序
-        orderBy( val ) {
+         //根据时间升降序
+        orderByTime( val ) {
             let options;
             if (true) {
                 // 拿最后一次请求的参数
-                options = this.lastSearchOptions;
+                //options = this.lastSearchOptions;
+                options = Object.assign({}, this.searchOptions);
+            } else {
+                options = Object.assign({}, this.searchOptions);
+            }
+            this.isLoading = true;
+            this.dataList = [];
+            this.lastSearchOptions = options;
+            if( !val ){
+                $("#timeasc").show()
+                $("#timedesc").hide()
+               options.orderBy = 0
+            }else{
+                $("#timedesc").show()
+                $("#timeasc").hide()
+               options.orderBy = 1
+            }
+            options.orderType = 2
+             client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
+                this.isLoading = false;
+                if (data.code == 200) {
+                    data.data.forEach(item => {
+                        item.checked = false;
+                    })
+                    this.dataList = data.data;
+                    this.page = data.page;
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.isLoading = false;
+            })
+        },
+        //根据售价升降序
+        orderByPrice( val ) {
+            let options;
+            if (true) {
+                // 拿最后一次请求的参数
+                //options = this.lastSearchOptions;
+                options = Object.assign({}, this.searchOptions);
             } else {
                 options = Object.assign({}, this.searchOptions);
             }
@@ -338,6 +385,7 @@ export default {
                 $("#asc").hide()
                options.orderBy = 1
             }
+             options.orderType = 1
              client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -356,8 +404,9 @@ export default {
         //隐藏订单
         hideDialog3() {
                 this.showorderDialog = false;
+                console.log(this.$children)
                 setTimeout(() => {
-                this.onhide('cancel');
+                //this.onhide('cancel');
             }, 300)
         },
         order(val,name) {
@@ -408,6 +457,10 @@ export default {
         },
         search(){
             this.flag = ! this.flag
+            $("#timeasc").hide()
+            $("#timedesc").show()
+            $("#asc").hide()
+            $("#desc").show()
         },
         hideEditspuDialog(control) {
             this.expertEditId = '';
@@ -456,6 +509,8 @@ export default {
          } ,
         //点击改变样式
         changeClass(obj) {
+                $("#timedesc").show()
+                $("#timeasc").hide()
                 $("#desc").show()
                 $("#asc").hide()
              $("#"+obj).removeClass("select").addClass("cha");
@@ -634,6 +689,7 @@ export default {
     created() {
         vueThis = this;
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
+        console.log(JSON.parse(localStorage.getItem('limitResource')))
     },
     watch: {
     },

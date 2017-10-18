@@ -92,7 +92,7 @@
                         </div>
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
-                                <span class="required">* </span>适用人群：</label>
+                               <!--  <span class="required">* </span> -->适用人群：</label>
                             <div class="controls col-md-9" style="padding-top:8px;">
                                 <item-list :list="personList" :remove="removeperItem"></item-list>
                                 <a class="btn-select-label" @click="showperDialog">
@@ -219,12 +219,12 @@
                              <tbody id="itemList">
                                 <tr >
                                    <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
+                                <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;"> 
                                     </td>
                                      <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
+                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;"> 
                                     </td>
                                      <td  style="height:100px ; width: 25%">
                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" v-if="data.threeUrl==''" style="margin-top: 20px;"></i>
@@ -381,12 +381,13 @@
 </template>
 <script>
 import client from '../../common/utils/client';
+import itemMove from '../../components/page/itemMove';
 import tagTree from '../common/tagTree';
 import templateControl from './templateControl';
 import { selectPic, mAlert, mSelect, mMultiSelect, itemList ,selectComponentAll} from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';//上传图片插件
 export default {
-    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList ,templateControl ,selectComponentAll},
+    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList ,templateControl ,selectComponentAll,itemMove},
     props: {
         spuid: 0,
         proflag: true,
@@ -427,7 +428,7 @@ export default {
                 "spuPic": '',
                 "spuId":0,
                 "spuAppSummary": "",
-                //"spuPcSummary": "",
+                "spuPcSummary": "",
                 "spuName": "",
                 "spuCatId": -1,
                 "spuKeyword":"",
@@ -830,10 +831,10 @@ export default {
              this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum ,"prpSpuId":this.spuid ,"prpSort":index} )
         })
       //人群标签
-      if( this.personList.length == 0){
+     /* if( this.personList.length == 0){
             this.showMsg("请选择人群标签")
             return
-      }
+      }*/
         this.personList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum,"prpSpuId":this.spuid ,"prpSort":index} )
         })
@@ -915,7 +916,7 @@ export default {
         if(this.yunfei == 0){
            this.request.spuCarriageId = -1
         }else{
-          this.request.spuFreight = -1
+          this.request.spuFreight = 0
         }
     //上架时间
       if( this.rad == 2 ){
@@ -923,11 +924,11 @@ export default {
             this.showMsg("请输入上架时间")
             return
            }
-           if(new Date(this.stime).getTime() - new Date().getTime() < 60000){
+           /*if(new Date(this.stime).getTime() - new Date().getTime() >= -60000){
                    this.showMsg('上架时间请比现在时间大于1分钟以上')
                    this.stime = ""
                    return
-           }    
+           }    */
            this.request.spuPlanShelvesDate = this.stime//
       } else {
            this.request.spuPlanShelvesDate = ""
@@ -1044,7 +1045,7 @@ export default {
         },
         //获取品牌
         getbrandList() { 
-        client.postData(  PBD_GET_LIST  , {
+        client.postData(  PBD_GET_LISTUSED  , {
                "page": {
                "currentPage": 0,
                "pageSize": 0,
@@ -1318,7 +1319,7 @@ export default {
         "request.spuCarriageId":{　　
           　handler(curVal,oldVal){　
             if(curVal != -1){　
-                this.request.spuFreight = 0　　　　　　　　　
+                this.request.spuFreight = 0.00　　　　　　　　　
                 this.yunfei = 1　
              }　　　　　　　
           },　　　　　　　　　　

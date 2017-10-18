@@ -4,7 +4,7 @@
      <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1100px'">
          <div slot="content" >
            
-                <list :ospuid="spuid" :oflag="flag" :ooflag="fflag"></list>
+                <list :ospuid="spuid" :oflag="flag" :ooflag="fflag"  v-ref:order></list>
            
          </div>
            <span slot="btnList" >
@@ -91,6 +91,7 @@ export default {
     },
     methods: {
         hideDialog() {
+            this.$refs.order.clearSearchOptions()
             this.fflag = !this.fflag
             this.showDialog = false;
             setTimeout(() => {
@@ -156,6 +157,7 @@ export default {
             this.showAddDialog=true;
         },
         hideAddDialog(control) {
+            
             this.expertEditId = '';
             this.showAddDialog = false;
             this.showDemoDialog=false;

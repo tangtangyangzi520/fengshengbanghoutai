@@ -94,7 +94,7 @@
                         </div>
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
-                                <span class="required">* </span>适用人群：</label>
+                                <!-- <span class="required">* </span> -->适用人群：</label>
                             <div class="controls col-md-9" style="padding-top:8px;">
                                 <item-list :list="personList" :remove="removeperItem"></item-list>
                                 <a class="btn-select-label" @click="showperDialog">
@@ -202,7 +202,7 @@
 
           <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                              <button type="button" class="btn purple" @click="reset()">重置基本属性</button> 
+                              <button type="button" class="btn purple" @click="reset()">重置销售属性</button> 
                             </label>
 
                         </div>
@@ -278,7 +278,7 @@
                                 SKU编码：
                             </label>
                             <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="25">  
+                               <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="20">  
                             </div>
                        
                           <!--   <label for="title" class="col-sm-2 control-label">
@@ -308,18 +308,16 @@
                           
                                 <tr style="text-align: center">
                                    <td style="width:42.4%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
-                                   <td style="border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
+                                   <td style="width:12%;border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
                                     @change="sput($event,'.put0')" min="0"max="99999999"/></td>
-                                   <td style="border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
+                                   <td style="width:11.6%;border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
                                     @blur="sput($event,'.put1')"  min="0"max="99999999"/></td>
                                    <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put2')" @change="ssput($event,'.put2')"
                                     min="0"max="2000000000" @blur="ssput($event,'.put2')"/></td>
-                                   <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
-                                    min="0"max="2000000000" @blur="ssput($event,'.put3')"/></td>
-                                   <td style="border:1px solid white;width:17%"> <!--  <input class=" input2" type="text"  maxLength="25" /> --></td>
+                                   <td style="border:1px solid white">  <!-- <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
+                                    min="0"max="2000000000" @blur="ssput($event,'.put3')"/> --></td>
+                                   <td style="border:1px solid white;width:24.3%"> <!--  <input class=" input2" type="text"  maxLength="25" /> --></td>
                                 </tr>
-
-                            
                         </table>
                         <table class="tab" id="table" style="display:none" border="1" cellspacing="0" cellpadding="0">  
                           <tr>
@@ -340,9 +338,9 @@
                                    <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
                                     @blur="checkfloat($event)"/></td>
                                    <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
-                                   <td>  <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
+                                   <td>  <!-- <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/> --></td>
                                    <td style="width:17%">  <input class="put4 input2" type="text" 
-                                    maxLength="25" /></td>
+                                    maxLength="20" /></td>
                                 </tr>
 
                              </tbody>
@@ -554,7 +552,7 @@ export default {
                 "spuShareUrl":'',
                 "spuPic": '',
                 "spuAppSummary": "",
-                //"spuPcSummary":"",
+                "spuPcSummary":"",
                 "spuName": "",
                 "spuCatId": -1,
                 "spuKeyword":"",
@@ -1228,11 +1226,11 @@ export default {
                    this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
               })
             //人群标签
-           
+           /*
             if( this.personList.length == 0){
                   this.showMsg("请选择人群标签")
                   return
-            }
+            }*/
               this.personList.forEach((per,index)=>{
                    this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
               })
@@ -1807,13 +1805,13 @@ export default {
                         "attrList": attrList,
                         "skuAtrr": $(el[1]).val() ,          // 拼接属性
                         "skuClassify": "i",     //   i
-                        "skuCode": $(el[6]).val(),        //   sku编码
+                        "skuCode": $(el[5]).val(),        //   sku编码
                         "skuMarketSalePrice": $(el[3]).val(),   //   原价
                         "skuName":  $(el[1]).val()+spuName  ,      //    拼接属性spu名字
                         "skuNew": 1,   
                         "skuOverseas": 1,              // 1
                         "skuSalePrice": $(el[2]).val(),            // 售价   
-                        "skuStockNum": $(el[5]).val(),            //  库存 $(el[4]).val()
+                        "skuStockNum": $(el[4]).val(),            //  库存 $(el[4]).val()
                         "skuUnit": "",         //  "" 
                         "skuUrl": "",          //  ""
                         "skuWhId": "",                //   ""
@@ -1875,11 +1873,11 @@ export default {
             this.showMsg("请输入上架时间")
             return
            }
-           if(new Date(this.time).getTime() - new Date().getTime() < 60000){
+          /* if(new Date(this.time).getTime() - new Date().getTime() < 60000){
                    this.showMsg('上架时间请比现在时间大于1分钟以上')
                    this.time = ""
                    return
-           }    
+           }   */ 
            this.request.spuPlanShelvesDate = this.time//
       } else {
            this.request.spuPlanShelvesDate = ""
@@ -1897,7 +1895,7 @@ export default {
          if(this.yunfei == 0){
            this.request.spuCarriageId = -1
         }else{
-          this.request.spuFreight = -1
+          this.request.spuFreight = 0
         }
         client.postData( SPU_CREATE , this.request).then(data => {
                 if (data.code == 200) {
@@ -2260,7 +2258,7 @@ export default {
             arr.push(this.par[3])
             arr.push(this.par[4])
             arr.push(this.par[5])
-            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
+            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1,}  ).then(data => {
                 if (data.code == 200) {
                     data.data.forEach(sx =>{
                       if(sx.pcaInputType==1){

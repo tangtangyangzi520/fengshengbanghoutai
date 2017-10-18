@@ -250,10 +250,10 @@
                                 <tbody>
                                     <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;" v-if="item.ordShareAmount>0">
                                         <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
-                                            {{item.ordCampaign.mkcName}} <br> ({{item.ordCampaign.mkcRemark}})
+                                            {{item.ordCampaign.mkcName}} <br> <span v-if="item.ordCampaign.mkcRemark">({{item.ordCampaign.mkcRemark}})</span>
                                         </td>
                                         <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
-                                            {{item.ordShareAmount}}
+                                            -{{item.ordShareAmount}}
                                         </td>
                                     </tr>
                                     <tr v-if="subData.orderDetailList.length==0">

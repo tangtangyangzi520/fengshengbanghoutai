@@ -103,33 +103,37 @@
                           <div class="col-md-8 nopadding">
 
                             <div class="col-md-3" style="margin-top:1.5%">
-                              <input type="radio"  value="不限制"  checked :class="{ 'active': isActive }" >固定日期&nbsp;&nbsp;&nbsp;&nbsp;
+                              <input type="radio"  value="0"  checked :class="{ 'active': isActive }" name="lingquan" v-model="request.mkcDateType" >
+                               &nbsp;&nbsp;固定日期&nbsp;&nbsp;&nbsp;&nbsp;
                             </div>
-                            <br> <br>
-                            <label for="title" class="col-sm-3 control-label" style="margin-left:-10%">
-                              <span class="required">* </span>生效时间：
-                            </label>
-                            <div class="controls col-md-4 ">
-                              <input type="text" class="form-control inline-block" placeholder="选择生效时间" 
-                              id="createStartTime2" v-model="request.mktStart" required="required" :class="{ 'active': isActive }" > 
-                            </div><br><br><br>
-                            <label for="title" class="col-sm-4 control-label" style="margin-left:-18.2%">
-                              <span class="required" :class="{ 'active': isActive }">* </span>过期时间：
-                            </label>
-                            <div class="controls col-md-4 ">
-                              <input type="text" class="form-control inline-block" placeholder="选择过期时间" 
-                              id="createEndTime2" v-model="mktEnd" required="required" :class="{ 'active': isActive }"> <br><br>
+                            <br> <br> <br> 
+                            <div id="fixedTime">
+                                  <label for="title" class="col-sm-3 control-label" style="margin-left:-10%">
+                                    <span class="required">* </span>生效时间：
+                                  </label>
+                                  <div class="controls col-md-4 " >
+                                    <input type="text" class="form-control inline-block" placeholder="选择生效时间" 
+                                    id="createStartTime2" v-model="request.mktStart"  :class="{ 'active': isActive }" > 
+                                  </div><br><br><br>
+                                  <label for="title" class="col-sm-4 control-label" style="margin-left:-18.2%">
+                                    <span class="required" :class="{ 'active': isActive }">* </span>过期时间：
+                                  </label>
+                                  <div class="controls col-md-4 " >
+                                    <input type="text" class="form-control inline-block" placeholder="选择过期时间" 
+                                    id="createEndTime2" v-model="request.mktEnd"  :class="{ 'active': isActive }"> <br><br>
+                                  </div>  
                             </div>
                             <div class="col-sm-8" >
-                              <input type="checkbox"  value="1" :class="{ 'active': isActive }"  
-                              @click="lingquancheck($event,1)" id="todaybox">&nbsp;&nbsp;领到券当天即刻开始
-                                 <input id="today" type="number" min="0" max="99" v-model="request.mkcDateNum" 
+                              <input type="radio"  value="1" :class="{ 'active': isActive }"  name="lingquan" v-model="request.mkcDateType">
+                                 &nbsp;&nbsp;领到券当天即刻开始<span v-html="todayHtml" ></span>
+                                <input id="today" type="number" min="0" max="99" v-model="request.mkcDateNum" v-show="!todayHtml"
                                  @keyup="integer($event)" @change="integer($event)" @blur="integer($event)"
-                                 style="display:none" class="active"/>天内有效<br><br>
-                              <input type="checkbox" value="2" :class="{ 'active': isActive }"  
-                              @click="lingquancheck($event,2)" id="nextbox">&nbsp;&nbsp;领到券次日开始 
-                                 <input id="nextDay" type="number" min="0" max="99" v-model="request.mkcDateNum" @keyup="integer($event)" @change="integer($event)" @blur="integer($event)" 
-                                 style="display:none" class="active" />天内有效
+                                 style="display:none" class="active"/> 
+                                 天内有效<br><br>
+                              <input type="radio" value="2" :class="{ 'active': isActive }"  name="lingquan" v-model="request.mkcDateType">
+                                 &nbsp;&nbsp;领到券次日开始<span v-html="nextDayHtml" ></span> 
+                                  <input v-show="!nextDayHtml" type="number" min="0" max="99" v-model="request.mkcDateNum" @keyup="integer($event)" @change="integer($event)" @blur="integer($event)" style="display:none" class="active" /> 
+                                 天内有效
                             </div>
                           </div></div>
                         <div class="form-group">
@@ -232,10 +236,11 @@ export default {
     },
     data() {
         return {
+            todayHtml:" N",
+            nextDayHtml:" N",
             isActive:true,
             menkan:0,
             a:10,
-            mktEnd:"",
             spuList:[],
             time:"",
             mkcUsedCondition:0,
@@ -304,18 +309,23 @@ export default {
         }
     },
     methods: {
-         lingquancheck(event , val ){
+         /*lingquancheck(event , val ){
             let el = event.currentTarget
+            this.request.mkcDateNum = 0
             if($(el).is(':checked')){
                    if(val == 1){
                         $("#nextbox").removeAttr("checked")
-                        $("#nextDay").hide()
+                        /*$("#nextDay").hide()
                         $("#today").show()
+                        this.nextDayHtml = ' N'
+                        this.todayHtml = '<input  type="number" min="0" max="99" v-model="request.mkcDateNum" @keyup="integer($event)" @change="integer($event)" @blur="integer($event)" class="active" />'
                         this.request.mkcDateType = 1
                      }else if(val == 2){
                         $("#todaybox").removeAttr("checked")
                         $("#nextDay").show()
                         $("#today").hide()
+                        this.todayHtml = ' N'
+                        this.nextDayHtml = '<input  type="number" min="0" max="99" v-model="request.mkcDateNum" @keyup="integer($event)" @change="integer($event)" @blur="integer($event)" class="active" />'
                         this.request.mkcDateType = 2
                    }
                    this.request.mkcDateNum = 0
@@ -324,10 +334,10 @@ export default {
              if( !($("#nextbox").is(':checked') || $("#todaybox").is(':checked')) ){
                        this.request.mkcDateType = 0
                        this.request.mkcDateNum = 0
-                        $("#nextDay").hide()
+                       /* $("#nextDay").hide()
                         $("#today").hide()
               }
-         },
+         },*/
          integer(event){
             let el = event.currentTarget;
             $(el).val(Math.abs($(el).val()))
@@ -356,27 +366,39 @@ export default {
             },5000)
 
           if(this.mkttid <= 0 ){
-            if(this.menkan == 1 && this.request.mkcUsedCondition <= 0 ){
-                this.showMsg("使用门槛必须大于0!")
-                return
-            }
-             if(this.menkan ==  0 ){
-                this.request.mkcUsedCondition = 0
-            }
-            if( this.request.mkcDateType > 0  &&  this.request.mkcDateNum <= 0 ){
-                this.showMsg("请填写领券后有效天数")
-                return
-            }
-            if(new Date(this.request.mktStart).getTime() - new Date().getTime() < 60000){
-                   this.showMsg('生效时间请比现在时间大于1分钟以上')
-                   $("#createStartTime2").val("")
-                   return
-            }    
-            if(new Date(this.request.mktEnd).getTime() - new Date(this.request.mktStart).getTime() < 60000){
-                   this.showMsg('过期时间请比生效时间大于1分钟以上')
-                   $("#createEndTime2").val("")
-                   return
-            }
+                if(this.menkan == 1 && this.request.mkcUsedCondition <= 0 ){
+                    this.showMsg("使用门槛必须大于0!")
+                    return
+                }
+                 if(this.menkan ==  0 ){
+                    this.request.mkcUsedCondition = 0
+                }
+                if( this.request.mkcDateType > 0  &&  (this.request.mkcDateNum <= 0 || $.trim(this.request.mkcDateNum) == '')) {
+                    this.showMsg("请填写领券后有效天数")
+                    return
+                }
+                if(this.request.mkcDateType == 0){
+                   this.request.mkcDateNum = 0
+                    if(!this.request.mktStart){
+                      this.showMsg('请填写生效时间')
+                      return
+                    }
+                    if(!this.request.mktEnd){
+                      this.showMsg('请填写过期时间')
+                      return
+                    }
+                }
+               /* if( this.request.mkcDateType == 0 && new Date(this.request.mktStart).getTime() - new Date().getTime() >= -60000){
+                       this.showMsg('生效时间请比现在时间大于1分钟以上')
+                       $("#createStartTime2").val("")
+                       return
+                }    */
+                if( this.request.mkcDateType == 0 && new Date(this.request.mktEnd).getTime() - new Date(this.request.mktStart).getTime() < 60000){
+                       this.showMsg('过期时间请比生效时间大于1分钟以上')
+                       $("#createEndTime2").val("")
+                       return
+                }
+                
           }    
             if(this.request.mkcUsedType == 0 && this.spuList.length == 0){
               this.showMsg("请先指定商品!")
@@ -581,6 +603,29 @@ export default {
         
     },
     watch: {
+        "request.mkcDateType":{　
+           handler(val,oldVal){　
+            this.request.mkcDateNum = 0
+            if(val > 0){
+               $("#fixedTime").hide()
+               this.request.mktStart = ''
+               this.request.mktEnd = ''
+            }
+            if(val == 0){
+               $("#fixedTime").show()
+               this.nextDayHtml = ' N'
+               this.todayHtml = ' N'
+            }else if(val == 1){
+               this.nextDayHtml = ' N'
+               this.todayHtml = ''
+            }else if(val == 2){
+               this.todayHtml = ' N'
+               this.nextDayHtml = ''
+            }
+            
+          },
+          deep:true　　　　　　　　
+        },
         "request.mktStart":{　　
           　handler(val,oldVal){　
                if( val ) {
@@ -591,9 +636,9 @@ export default {
                   return
                 }
               }
-               val = val.replace(/-/g,"/")
+                /* val = val.replace(/-/g,"/")
                 let start = new Date(val)
-                if(this.mktEnd){
+              if(this.mktEnd){
                    let end = new Date( this.mktEnd.replace(/-/g,"/") )
                    if( end < start ){
                     this.showMsg('生效时间不可以大于过期时间')
@@ -601,7 +646,7 @@ export default {
                     return
                    }
                     this.time = (end - start)/24/3600/1000
-                }
+                }*/
           },　　　　　　　　　　
           deep:true　　　　　　　　
         },
@@ -632,7 +677,9 @@ export default {
                     this.request.mkcType       = response.data.mkcType
                     this.request.mkcUsedCondition= response.data.mkcUsedCondition
                     this.request.mkcDateType = response.data.mkcDateType
-                    this.request.mkcDateNum = response.data.mkcDateNum
+                    setTimeout(()=>{
+                        this.request.mkcDateNum = response.data.mkcDateNum
+                    },200)
                    //开始时间
                     let sjtime  = new Date(response.data.mktStart)
                     this.request.mktStart = sjtime.getFullYear() 
@@ -695,13 +742,13 @@ export default {
                     }
                     this.request.mktEnd = this.mktEnd
                     //领取时间回显
-                     if( this.request.mkcDateType ==1  ){
+                    /* if( this.request.mkcDateType ==1  ){
                         $("#todaybox").prop("checked","true")
                         $("#today").show()
                     }else  if( this.request.mkcDateType ==2  ){
                         $("#nextbox").prop("checked","true")
                         $("#nextDay").show()
-                    }
+                    }*/
                     //可使用商品回显
                     //if( response.data.spuList.length > 0 ){
                     this.request.mkcUsedType = response.data.mkcUsedType
@@ -735,7 +782,7 @@ export default {
                 return
               }
             }
-    
+    /*
               val = val.replace(/-/g,"/")
                 let end = new Date(val)
            if(this.mkttid <= 0 ){
@@ -757,7 +804,7 @@ export default {
                 }
                 this.time = Math.round((end - start)/24/3600/1000)
                 this.request.mktEnd = val
-            }
+            }*/
         },
         show() {
             this.showPage = this.show;
