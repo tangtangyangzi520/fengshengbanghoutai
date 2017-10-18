@@ -924,11 +924,11 @@ export default {
             this.showMsg("请输入上架时间")
             return
            }
-           if(new Date(this.stime).getTime() - new Date().getTime() < 60000){
+           /*if(new Date(this.stime).getTime() - new Date().getTime() >= -60000){
                    this.showMsg('上架时间请比现在时间大于1分钟以上')
                    this.stime = ""
                    return
-           }    
+           }    */
            this.request.spuPlanShelvesDate = this.stime//
       } else {
            this.request.spuPlanShelvesDate = ""

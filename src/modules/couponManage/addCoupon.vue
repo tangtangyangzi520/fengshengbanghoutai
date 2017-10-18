@@ -388,11 +388,11 @@ export default {
                       return
                     }
                 }
-                if( this.request.mkcDateType == 0 && new Date(this.request.mktStart).getTime() - new Date().getTime() < 60000){
+               /* if( this.request.mkcDateType == 0 && new Date(this.request.mktStart).getTime() - new Date().getTime() >= -60000){
                        this.showMsg('生效时间请比现在时间大于1分钟以上')
                        $("#createStartTime2").val("")
                        return
-                }    
+                }    */
                 if( this.request.mkcDateType == 0 && new Date(this.request.mktEnd).getTime() - new Date(this.request.mktStart).getTime() < 60000){
                        this.showMsg('过期时间请比生效时间大于1分钟以上')
                        $("#createEndTime2").val("")
@@ -782,7 +782,7 @@ export default {
                 return
               }
             }
-    
+    /*
               val = val.replace(/-/g,"/")
                 let end = new Date(val)
            if(this.mkttid <= 0 ){
@@ -804,7 +804,7 @@ export default {
                 }
                 this.time = Math.round((end - start)/24/3600/1000)
                 this.request.mktEnd = val
-            }
+            }*/
         },
         show() {
             this.showPage = this.show;

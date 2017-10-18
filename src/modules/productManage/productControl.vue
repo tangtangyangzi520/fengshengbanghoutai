@@ -1873,11 +1873,11 @@ export default {
             this.showMsg("请输入上架时间")
             return
            }
-           if(new Date(this.time).getTime() - new Date().getTime() < 60000){
+          /* if(new Date(this.time).getTime() - new Date().getTime() < 60000){
                    this.showMsg('上架时间请比现在时间大于1分钟以上')
                    this.time = ""
                    return
-           }    
+           }   */ 
            this.request.spuPlanShelvesDate = this.time//
       } else {
            this.request.spuPlanShelvesDate = ""
