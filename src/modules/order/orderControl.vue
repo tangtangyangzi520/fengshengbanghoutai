@@ -64,7 +64,7 @@
                                 <span v-if="this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3"> {{subData.ordPayTime}}</span>
                             </div>
                             <div class="col-md-3" style="text-align:center;">
-                                <span v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">{{subData.ordModifyTime}}</span>
+                                <span v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">{{subData.ordLogiTime}}</span>
                             </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span v-if="this.subData.ordStatus==3">{{subData.completeTime}}</span>
@@ -101,11 +101,11 @@
                                     <td width="30%">买家昵称: </td>
                                     <td width="70%">{{setData.orsMemberNickname}}</td>
                                 </tr>
-                                <tr v-if="subData.ordMemberName==''">
+                                <tr v-if="subData.ordMemberName!=''">
                                     <td width="30%">姓名: </td>
                                     <td width="70%">{{subData.ordMemberName}}</td>
                                 </tr>
-                                <tr v-if="subData.ordMemberIdentity==''">
+                                <tr v-if="subData.ordMemberIdentity!=''">
                                     <td width="30%">身份证号: </td>
                                     <td width="70%">{{subData.ordMemberIdentity}}</td>
                                 </tr>
@@ -175,7 +175,7 @@
                                 <td width="20%" align="center" style="vertical-align:middle;">{{payStatus(setData.orsPayStatus)}}</td>
                             </tr>
                             <tr>
-                                <td colspan="5" style="text-align:left">累计收款：&nbsp;&nbsp;{{subData.ordAmount}}元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实收款：&nbsp;&nbsp;{{subData.ordActAmount}}元</td>
+                                <td colspan="5" style="text-align:left">累计收款：&nbsp;&nbsp;{{subData.ordActAmount}}元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实收款：&nbsp;&nbsp;{{subData.ordActAmount}}元</td>
                             </tr>
                         </table>
 
@@ -196,8 +196,8 @@
                                 <tr>
                                     <td colspan="6" style="text-align:left">
                                         <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompany}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}
-                                        <span style="margin-left:5%">{{orderlog[0].oddTime}}&nbsp;[{{orderlog[0].oddStatus}}]&nbsp;{{orderlog[0].oddContent}}</span>
-                                        <a style="text-decoration:none;margin-left:3%" @click="showOdd()">更多</a>
+                                        <span v-if="orderlog.length >0" style="margin-left:5%">{{orderlog[0].oddTime}}&nbsp;[{{orderlog[0].oddStatus}}]&nbsp;{{orderlog[0].oddContent}}</span>
+                                        <a v-if="orderlog.length >0" style="text-decoration:none;margin-left:3%" @click="showOdd()">更多</a>
                                     </td>
                                 </tr>
                                 <tr v-for="(index,itemDetail) in subData.orderDetailList">
@@ -237,8 +237,8 @@
                         <div class="right">
                             订单共{{totalNum()}}件商品，总计：¥{{subData.ordActAmount}}（含运费 ￥{{subData.ordTransportAmount}}）
                             <!-- <div style="width:50px;" @mouseenter.stop="showCompaign" @mouseleave.stop="showCompaign">
-                                                    <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
-                                                </div> -->
+                                                        <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
+                                                    </div> -->
                             <img style="" @mouseout="hidePreferentialContent($event)" @mouseover="showPreferentialContent($event)" src="u7027.jpg">
                             <table class="table table-striped table-bordered table-hover" id="PreferentialContent">
                                 <thead>
@@ -248,7 +248,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;">
+                                    <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;" v-if="item.ordShareAmount>0">
                                         <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
                                             {{item.ordCampaign.mkcName}} <br> ({{item.ordCampaign.mkcRemark}})
                                         </td>
@@ -294,7 +294,7 @@ import oddLogDetail from './oddLogDetail';
 
 export default {
     components: {
-        selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, campaignControl,oddLogDetail
+        selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, campaignControl, oddLogDetail
     },
     props: {
         show: {
@@ -323,9 +323,9 @@ export default {
     },
     data() {
         return {
-            showOddDialog:false,
+            showOddDialog: false,
             destroyControlDialog: false,
-            orderlog:[],
+            orderlog: [],
             isLoading: false,
             showDialog: false,
             showPage: false,
@@ -361,7 +361,7 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
-        hideOddDialog(control){
+        hideOddDialog(control) {
             this.showOddDialog = false;
             if (control) {
                 setTimeout(() => {
@@ -376,7 +376,7 @@ export default {
             }
         },
         //弹出物流详情窗口
-        showOdd(){
+        showOdd() {
             this.showOddDialog = true
         },
         //隐藏优惠券信息
@@ -545,16 +545,20 @@ export default {
     },
     watch: {
         subData(val) {
-            client.postData( ODD_GET_ORDERSUBID+"?ordOrderId="+val.ordOrderId , {}).then(data => {
+            client.postData(ODD_GET_ORDERSUBID + "?ordOrderId=" + val.ordOrderId, {}).then(data => {
                 console.log(val.ordOrderId)
-                if (data.code == 200) {    
-                       data.data.forEach((log,index)=>{
-                         this.orderlog.$set(index,log) 
-                       })
+                if (data.code == 200) {
+                    if (data.data == null) {
+                        this.orderlog = []
+                    } else {
+                        data.data.forEach((log, index) => {
+                            this.orderlog.$set(index, log)
+                        })
+                    }
                 }
             }, data => {
-                      this.showMsg("获取物流详情失败!"+data.message);
-             })
+                this.showMsg("获取物流详情失败!" + data.message);
+            })
         },
         show() {
             this.showPage = this.show;
