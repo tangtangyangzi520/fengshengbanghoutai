@@ -223,7 +223,7 @@
                                     </td>
                                     <td align="center" style="width:10%;vertical-align:middle;">
                                         <!-- 优惠 -->
-                                        {{itemDetail.ordShareAmount}}
+                                        {{detailCampaignAmount(itemDetail)}}
                                     </td>
                                     <td align="center" style="width:10%;vertical-align:middle;">
                                         {{detailActAmount(itemDetail)}}
@@ -430,6 +430,10 @@ export default {
                 totalNum += item.ordSkuNum;
             });
             return totalNum;
+        },
+        //商品优惠
+        detailCampaignAmount(itemDetail){
+            return itemDetail.ordShareAmount+itemDetail.ordCampaignAmount+itemDetail.ordDiscount;
         },
         //商品小计
         detailActAmount(itemDetail) {
