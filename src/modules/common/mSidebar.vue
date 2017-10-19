@@ -30,7 +30,6 @@
                                 </a>
                             </li>
                         </ul>
-
                         <a v-else @click="changeUrl(subItem)">
                             <i class="icon-puzzle"></i> {{subItem.text}} <!-- </span> -->
                         </a>

@@ -299,9 +299,8 @@
                                 </textarea> 
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label for="title" class="col-sm-5 control-label">
+                            <label for="title" class="col-sm-3 control-label">
                                 开始时间：
                             </label>
                             <span v-if="spuShelvesStatus == 1">
@@ -924,25 +923,27 @@ export default {
             this.showMsg("请输入上架时间")
             return
            }
-           /*if(new Date(this.stime).getTime() - new Date().getTime() >= -60000){
-                   this.showMsg('上架时间请比现在时间大于1分钟以上')
-                   this.stime = ""
-                   return
-           }    */
+           if(new Date(this.stime).getTime() - new Date().getTime() <= -10000){
+                   this.stime = client.formateTimeNoSecond()
+           } 
            this.request.spuPlanShelvesDate = this.stime//
       } else {
            this.request.spuPlanShelvesDate = ""
       } 
         //商品图片判空
+         let i = 0 
+         this.singleimgList.forEach(data =>{
+          //console.log(data)
+                if(data != null){
+                  this.request.resourceList.$set(i, data)
+                  data.psrSortNo = ++i
+                }
+             })
         if(this.request.resourceList.length == 0 ){
             this.showMsg("商品图片至少上传一张")
             return
          }
         //详情图片管理
-         this.singleimgList.forEach((data,index)=>{
-                this.request.resourceList.$set(index, data)
-             })
-
          this.imgList.forEach((data,index)=>{
                 this.request.detailsList.$set(index, {
                     
@@ -956,7 +957,9 @@ export default {
              })
 
             client.postData(  SPU_EDIT , this.request).then(data => {
+                this.isLoading = true
                 if (data.code == 200) {
+                    this.isLoading = false
                     this.showMsg("编辑成功")
                     this.expertEditId = '';
                     this.showAddDialog = true;
@@ -967,6 +970,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                this.isLoading = false
                 this.editpdflag = false
                 this.showMsg("编辑失败,请重试");
             })
@@ -1506,9 +1510,10 @@ export default {
                         }else {
                              this.data.oneUrl = data[i].psrResourceUrl
                         }
-                        this.request.resourceList.push( {"psrBlock": data[i].psrBlock, "psrResourceUrl": data[i].psrResourceUrl,"psrSortNo": data[i].psrSortNo, "psrType": data[i].psrType,"psrResourceId":data[i].psrResourceId } )
+                        this.singleimgList[i] =  {"psrBlock": data[i].psrBlock, "psrResourceUrl": data[i].psrResourceUrl,"psrSortNo": data[i].psrSortNo, "psrType": data[i].psrType,"psrResourceId":data[i].psrResourceId } 
                         //this.showSelectPicDialog(i+1)
                     }
+                   
                   // this.showSelectPic({ show: false })
             }, data => {
                 this.isLoading = false;

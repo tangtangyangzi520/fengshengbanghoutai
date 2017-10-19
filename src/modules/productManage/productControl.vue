@@ -1837,7 +1837,12 @@ export default {
             return
          }*/
          //商品图片判空
-       
+        for(let i = 0;i<this.request.resourceList.length;i++){
+          if(this.request.resourceList[i]==null){
+             this.request.resourceList.splice(i,1)
+             i--
+          }
+        }
         if(this.request.resourceList.length == 0 ){
             this.showMsg("商品图片至少上传一张")
             return
@@ -1873,12 +1878,10 @@ export default {
             this.showMsg("请输入上架时间")
             return
            }
-          /* if(new Date(this.time).getTime() - new Date().getTime() < 60000){
-                   this.showMsg('上架时间请比现在时间大于1分钟以上')
-                   this.time = ""
-                   return
-           }   */ 
-           this.request.spuPlanShelvesDate = this.time//
+          if(new Date(this.time).getTime() - new Date().getTime() < -10000){
+                this.time = client.formateTimeNoSecond()
+           }
+           this.request.spuPlanShelvesDate = this.time
       } else {
            this.request.spuPlanShelvesDate = ""
       } 
@@ -1898,7 +1901,9 @@ export default {
           this.request.spuFreight = 0
         }
         client.postData( SPU_CREATE , this.request).then(data => {
+                this.isLoading = true
                 if (data.code == 200) {
+                   this.isLoading = false
                     //alert("新增成功")
                     //this.showMsg("新增成功")
                     this.spu.id = data.spuId
@@ -1909,6 +1914,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+              this.isLoading = false
               this.addpdflag = false
               this.showMsg("新增失败,请重试"+data.message);
             })

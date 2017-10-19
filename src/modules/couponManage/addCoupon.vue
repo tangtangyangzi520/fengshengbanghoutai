@@ -236,6 +236,7 @@ export default {
     },
     data() {
         return {
+            mktEnd:"",
             todayHtml:" N",
             nextDayHtml:" N",
             isActive:true,
@@ -388,11 +389,9 @@ export default {
                       return
                     }
                 }
-               /* if( this.request.mkcDateType == 0 && new Date(this.request.mktStart).getTime() - new Date().getTime() >= -60000){
-                       this.showMsg('生效时间请比现在时间大于1分钟以上')
-                       $("#createStartTime2").val("")
-                       return
-                }    */
+                if( this.request.mkcDateType == 0 && new Date(this.request.mktStart).getTime() - new Date().getTime() <= -10000){
+                    this.request.mktStart = client.formateTimeStamp()
+                }    
                 if( this.request.mkcDateType == 0 && new Date(this.request.mktEnd).getTime() - new Date(this.request.mktStart).getTime() < 60000){
                        this.showMsg('过期时间请比生效时间大于1分钟以上')
                        $("#createEndTime2").val("")
@@ -438,6 +437,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.isLoading = false
                       this.couponflag = false
                       this.showMsg("编辑优惠券失败!"+data.message);
              })
@@ -455,6 +455,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.isLoading = false
                       this.couponflag = false
                       this.showMsg("新建优惠券失败!"+data.message)
                 })
@@ -777,7 +778,7 @@ export default {
               let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?$/
               if(!reg.test(val)){
                 this.showMsg('日期格式不合法!')
-                this.mktEnd = ""
+                //this.mktEnd = ""
                 this.request.mktEnd = ""
                 return
               }
@@ -896,9 +897,9 @@ export default {
           },
           beforeShow: function(){
              dates.attr("disabled","disabled")
-             if( $("#createStartTime2").datepicker( 'getDate' ) != null ){
+             /*if( $("#createStartTime2").datepicker( 'getDate' ) != null ){
                return
-             }
+             }*/
               $(this).datepicker('option', 'minDate', new Date() )
           },
       });

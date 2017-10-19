@@ -27,7 +27,10 @@
             <!-- 销售属性列表 -->
             <div class="col-md-6" id="contentList" style="width:75%;">
                 <div><h3>属性列表</h3></div>
-                <div><button class="btn green" type="button"  @click="addItem()" v-show="isLastLevel">添加自定义属性</button></div>
+                <div><button class="btn green" type="button"  @click="addItem()" 
+                    v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_add" >添加自定义属性
+                </button>
+                </div>
                 </br>
                 <table class="table table-striped table-bordered table-hover" id="category-table">
                     <thead>
@@ -63,8 +66,10 @@
                             </td>
                             <td>
                                 <p style="padding-top:5px;">
-                                    <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" v-show="isLastLevel">修改</button>                            
-                                    <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" v-show="isLastLevel">删除</button>
+                                    <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" 
+                                    v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_edit" >修改</button>                            
+                                    <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" 
+                                    v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_delete" >删除</button>
                                 </p>
                             </td>
                         </tr>
@@ -396,6 +401,7 @@ export default {
     },
     created() {
         this.getTreeList(100);// 获取树数据
+        this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
     },
     ready() {
     }

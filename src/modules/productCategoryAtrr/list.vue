@@ -23,7 +23,8 @@
                 </div> 
             </div>
             <div class="col-md-3"> 
-                <p><button class="btn green" type="button" @click="addItem()" v-show="isShowAddBtn">新增</button></p></br>
+                <p><button class="btn green" type="button" @click="addItem()" v-show="isShowAddBtn" 
+                    v-if="limitResource.ProductCategoryAtrr_add">新增</button></p></br>
             </div>
             <div class="col-md-6" id="contentList" style="width:75%;">
                 <table class="table table-striped table-bordered table-hover" id="category-table">
@@ -92,8 +93,10 @@
                             </td>
                             <td>
                                 <p style="padding-top:5px;">
-                                    <button type="button" v-show="selectTreeId==itemobj.pcraCatId"  class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')">修改</button>
-                                    <button type="button" v-show="selectTreeId==itemobj.pcraCatId" @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red">删除</button>
+                                    <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" 
+                                    v-if="selectTreeId==itemobj.pcraCatId && limitResource.ProductCategoryAtrr_edit">修改</button>
+                                    <button type="button" @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" 
+                                    v-if="selectTreeId==itemobj.pcraCatId && limitResource.ProductCategoryAtrr_delete">删除</button>
                                 </p>
                             </td>
                         </tr>
@@ -453,6 +456,8 @@ export default {
     },
     created() {
         this.getTreeList(100); // 获取树数据
+        this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
+
     },
     ready() {
     }

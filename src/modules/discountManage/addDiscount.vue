@@ -435,11 +435,9 @@ export default {
                 this.showMsg("您还未选择参加活动的商品.请至少选择一个活动商品.")
                 return
             }
-           /*if(new Date(this.request.mktStart).getTime() - new Date().getTime() >= -60000){
-                   this.showMsg('生效时间请比现在时间大于1分钟以上')
-                   $("#createStartTime3").val("")
-                   return
-            }  */  
+           if(new Date(this.request.mktStart).getTime() - new Date().getTime() <= -10000){
+                  this.request.mktStart = client.formateTimeStamp()
+            }  
             if(new Date(this.request.mktEnd).getTime() - new Date(this.request.mktStart).getTime() < 60000){
                    this.showMsg('过期时间请比生效时间大于1分钟以上')
                    $("#createEndTime3").val("")
@@ -472,6 +470,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.isLoading = false
                       this.submitflag = false
                       this.showMsg("编辑限时折扣失败!"+data.message);
              })
@@ -489,6 +488,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.isLoading = false
                       this.submitflag = false
                       this.showMsg("新建限时折扣失败!"+data.message)
                 })
@@ -662,7 +662,6 @@ export default {
         },
         dflag() {
           client.postData(  MKT_GET_ID  +"?mkcCampaignId="+this.mkcid , {}).then(response => {
-                this.isLoading = false;
                 if (response.code == 200) {
                    this.request.mkcCampaignId =  response.data.mkcCampaignId
                    this.request.mkcName =  response.data.mkcName
@@ -880,9 +879,9 @@ export default {
           },
           beforeShow: function(){
              dates.attr("disabled","disabled")
-             if( $("#createStartTime3").datepicker( 'getDate' ) != null ){
+             /*if( $("#createStartTime3").datepicker( 'getDate' ) != null ){
                return
-             }
+             }*/
               $(this).datepicker('option', 'minDate', new Date() )
           },
       });
