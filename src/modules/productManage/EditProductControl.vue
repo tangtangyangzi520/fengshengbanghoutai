@@ -3,6 +3,7 @@
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
             <div slot="content">
+              <loading :show="isLoading"></loading>
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form">
                         <div class="form-group">
@@ -208,11 +209,9 @@
      
                        <h4><strong>图片上传</strong></h4>
                        <div class="" style="padding-bottom:10px;">     
-                               
                             <div class="controls " style="text-align:center"> 
-                                <span class="required"></span>选择本地图片:        
-                                <span style="margin-left:3%">最多上传5张，800*800像素，单张大小不超过1m。仅支持 </span><br>
-                                <span style="margin-left:13%">JPG、JPEG、PNG格式。</span>
+                                <span class="required"></span>说明：        
+                                <span style="margin-left:1%">最多上传5张，单张大小不超过5M，仅支持JPG、JPEG格式。 </span>
                             </div>
                         </div>
                         <div style="text-align:center">
@@ -444,11 +443,12 @@
 import client from '../../common/utils/client';
 import itemMove from '../../components/page/itemMove';
 import tagTree from '../common/tagTree';
+import loading from '../common/loading';
 import templateControl from './templateControl';
 import { selectPic, mAlert, mSelect, mMultiSelect, itemList ,selectComponentAll} from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';//上传图片插件
 export default {
-    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList, templateControl, selectComponentAll, itemMove },
+    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList ,templateControl ,selectComponentAll,itemMove,loading},
     props: {
         spuid: 0,
         proflag: true,
@@ -1013,7 +1013,7 @@ export default {
              $(el).parent().parent().children("td").remove()  
            },
         addItem() {
-          
+          this.isLoading = true
           if(this.editpdflag){
                 this.showMsg("点击过于频繁")
                 return
@@ -1025,43 +1025,53 @@ export default {
 
             if( $.trim(this.request.spuName)  == '' ){
                 this.showMsg("请输入商品名称")
+                this.isLoading = false
                 return
             }
             if( this.request.spuName.length >= 50 ){
                 this.showMsg("商品名称不能超过50字")
+                this.isLoading = false
                 return
             }
               
             if( this.request.spuAd.length >= 50 ){
                 this.showMsg("商品广告词不能超过50字")
+                this.isLoading = false
                 return
             }
             if( this.request.spuKeyword.length >= 50 ){
                 this.showMsg("商品关键词不能超过50字")
+                this.isLoading = false
                 return
             }
             if( $.trim(this.request.spuShareUrl) == '' ){
                 this.showMsg("请输入有赞商品地址")
+                this.isLoading = false
                 return
             }
             if( this.request.spuShareUrl.length >= 100 ){
                 this.showMsg("有赞商品地址不能超过100字")
+                this.isLoading = false
                 return
             }
             if(this.request.spuBrandId < 0 ){
                 this.showMsg("请选择品牌")
+                this.isLoading = false
                 return
             }
             if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
                 this.showMsg("专家观点不能少于30字")
+                this.isLoading = false
                 return
             }
             if( this.request.spuExpertOption.length >= 100 ){
                 this.showMsg("专家观点不能超过100字")
+                this.isLoading = false
                 return
             }
             if( this. request.spuPackingList.length >= 200 ){
                 this.showMsg("包装清单不能超过200字")
+                this.isLoading = false
                 return
             }
 
@@ -1072,6 +1082,7 @@ export default {
       //类目标签
      if( this.tagsList.length == 0){
             this.showMsg("请选择展示类目标签")
+            this.isLoading = false
             return
       }
         this.tagsList.forEach((per,index)=>{
@@ -1088,6 +1099,7 @@ export default {
       //内容标签
       if( this.neirongList.length == 0){
             this.showMsg("请选择内容标签")
+            this.isLoading = false
             return
       }
         this.neirongList.forEach((per,index)=>{
@@ -1098,6 +1110,7 @@ export default {
             this.request.pcrList = []
             if(this.shangb.length > 3 ){
                 this.showMsg("最多选择3个上榜理由")
+                this.isLoading = false
                 return
              }
             this.shangb.forEach((data,index)=>{
@@ -1114,6 +1127,7 @@ export default {
               })
              if(this.request.pcrList.length > 3){
                   this.showMsg("最多选择3个上榜理由")
+                  this.isLoading = false
                   return
              }
      
@@ -1130,6 +1144,7 @@ export default {
           })
           if(insumsg){
             this.showMsg(insumsg)
+            this.isLoading = false
             return
          }
 
@@ -1147,6 +1162,7 @@ export default {
           })
            if( arr.length > 5){
               this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
+              this.isLoading = false
               return
             }
           this.request.piList = arr 
@@ -1154,10 +1170,12 @@ export default {
 
           if(this.yunfei == 0 && $.trim(this.request.spuFreight) == ''){
              this.showMsg("请设置统一邮费的价格")
+             this.isLoading = false
              return
         }
         if(this.yunfei ==1 && this.request.spuCarriageId ==-1){
              this.showMsg("请选择运费模板")
+             this.isLoading = false
              return
         }
         if(this.yunfei == 0){
@@ -1169,6 +1187,7 @@ export default {
       if( this.rad == 2 ){
            if( this.stime == ""){
             this.showMsg("请输入上架时间")
+            this.isLoading = false
             return
            }
            if(new Date(this.stime).getTime() - new Date().getTime() <= -10000){
@@ -1189,6 +1208,7 @@ export default {
              })
         if(this.request.resourceList.length == 0 ){
             this.showMsg("商品图片至少上传一张")
+            this.isLoading = false
             return
          }
         //详情图片管理
@@ -1205,7 +1225,7 @@ export default {
              })
 
             client.postData(  SPU_EDIT , this.request).then(data => {
-                this.isLoading = true
+                
                 if (data.code == 200) {
                     this.isLoading = false
                     this.showMsg("编辑成功")
@@ -1763,7 +1783,6 @@ export default {
                     }
                    
                   // this.showSelectPic({ show: false })
-                  //this.singleimgList = this.request.resourceList;
             }, data => {
                 this.isLoading = false;
                 this.showMsg("获取spu信息失败,请刷新重试");

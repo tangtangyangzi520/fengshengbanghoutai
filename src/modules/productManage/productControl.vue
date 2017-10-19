@@ -351,14 +351,10 @@
      <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
      
                        <h4><strong>图片上传</strong></h4>
-                       <div class="" style="padding-bottom:10px;">     
-                               
+                       <div class="" style="padding-bottom:10px;">  
                             <div class="controls " style="text-align:center"> 
-                                <span class="required"></span>选择本地图片:        
-                               <!--   <i class="fa fa-image pick-img" @click="showSelectPicDialog(1)" v-if="data.iconUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.iconUrl" class="cursor" @click="showSelectPicDialog(1)" height="80" v-else style="pointer:corsor;margin-bottom:-10px;"><br> -->
-                                <span style="margin-left:3%">最多上传5张，800*800像素，单张大小不超过1m。仅支持 </span><br>
-                                <span style="margin-left:13%">JPG、JPEG、PNG格式。</span>
+                                <span class="required"></span>说明：        
+                                <span style="margin-left:1%">最多上传5张，单张大小不超过5M，仅支持JPG、JPEG格式。 </span>
                             </div>
                         </div>
                         <div style="text-align:center">
