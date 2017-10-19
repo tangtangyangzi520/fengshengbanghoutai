@@ -234,13 +234,15 @@ export default {
     },
     methods: {
          integer(event){
-            var reg = /^[0-9]{1,6}([.]{1}[0-9]{1,2})?$/
-             let f = !reg.test(this.reduce+'')
-             if( f ){
-               this.reduce = 0
-               this.showMsg("请输入合法数字!")
-               return 
-             }
+            if(this.reduce){
+                var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/
+                let f = !reg.test(this.reduce+'')
+                if( f ){
+                this.reduce = 0
+                this.showMsg("请输入合法数字!")
+                return 
+                }
+            }
             /*if(this.reduce <= 0 ){
                 this.showMsg("减价不能少于0")
                 return

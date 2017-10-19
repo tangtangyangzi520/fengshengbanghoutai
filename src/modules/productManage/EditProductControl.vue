@@ -129,15 +129,15 @@
                                 </div>
                                 <br>
                             </div> 
-                             <div class="col-md-11" >
-                                    <span v-for="(index,i) in createshangbanglist">
-                                        <span v-for="ii in 58">&nbsp;</span>
-                                        <input type="text" style="display:inline-block;width:40%" v-model="i.pcrReason" @keyup="checkshangb(i)" maxLength="100"/>
-                                        <span v-if="index == createshangbanglist.length-1"><a @click="createshangbang()"  >+添加理由</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                        <a v-if="index > 0" @click="deleteshangbang(index)">-删除理由</a><br><br>
-                                    </span>
-                                    <span v-for="i in 58">&nbsp;</span><span style="color:red">注：最多可选择3个理由</span>
-                                </div>
+                            <div class="col-md-11" >
+                                <span v-for="(index,i) in createshangbanglist">
+                                    <span v-for="ii in 58">&nbsp;</span>
+                                    <input type="text" style="display:inline-block;width:40%" v-model="i.pcrReason" @keyup="checkshangb(i)" maxLength="100"/>
+                                    <span v-if="index == createshangbanglist.length-1"><a @click="createshangbang()">+添加理由</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    <a v-if="index > 0" @click="deleteshangbang(index)">-删除理由</a><br><br>
+                                </span>
+                                <span v-for="i in 58">&nbsp;</span><span style="color:red">注：最多可选择3个理由</span>
+                            </div>
                         </div>
                         
     

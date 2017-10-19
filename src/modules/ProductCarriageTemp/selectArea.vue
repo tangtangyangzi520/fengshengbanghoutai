@@ -1,9 +1,10 @@
 <template>
+<!-- 运费模板-选择配送区域页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1200px'" >
             <div slot="content">
                 <div class="col-md-12">
-                    <!-- 商品列表 -->
+                    <!-- 区域列表 -->
                     <div class="col-md-5 right" style="overflow-y: scroll;height:300px;">
                         <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                             <thead>
@@ -32,19 +33,18 @@
                         </table>
                     </div>
                     <!-- 选择按钮 -->
-                    <div class="col-md-1">
+                    <div class="col-md-1" style="margin-top:10%; margin-left:63px; margin-right:20px;">
                         <button class="btn blue" type="button" @click="selectArea()">&gt;&gt;</button>
                         </br>
                         </br>
                         <button class="btn blue" type="button" @click="unSelectArea()">&lt;&lt;</button>
                     </div>
-                    <!-- 被选中的商品列表 -->
-                    <div class="col-md-5">
+                    <!-- 被选中的区域列表 -->
+                    <div class="col-md-5" style="overflow-y: scroll;height:300px;">
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th style="width:20%">
-
                                         <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(2)">全选</button>
                                         <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(2)">反选</button>
                                     </th>
@@ -69,8 +69,10 @@
                 </div>
             </div>
             <span slot="btnList">
-                <button type="button" @click.stop="sendData" class="btn default blue">确定</button>
-                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <div style="text-align:center;">
+                    <button type="button" @click.stop="sendData" class="btn default blue">确定</button>
+                    <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                </div>
             </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
