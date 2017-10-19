@@ -13,7 +13,7 @@
                     <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>
                     <button class="btn blue" type="button" @click="exportOrder" v-if="showflag && limitResource.Order_export">批量导出</button>
                     <!--                 <button class="btn yellow-crusta" type="button" @click="selectSpu" >选择商品</button>
-                                                                                                            -->
+                                                                                                                -->
                     <!-- <button class="btn blue" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button> -->
                 </div>
             </div>
@@ -57,11 +57,11 @@
                     </div>
                     <div v-show="showflag" class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
                         <a href="javascript:;" @click="showDetail(itemSet,itemSet.orderSubList[0])" v-if="limitResource.orderSeeDetails">查看详情</a>
-                         <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
+                        <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])" v-if="limitResource.editOrderSetDemo">备注</a>
                         <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
-                        <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar" >加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                        <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
                 <table class="table table-striped table-bordered table-hover">
@@ -103,12 +103,10 @@
                                 <!-- 订单状态 -->
                                 {{itemSub.ordStatusDisplay}}
                                 <p>
-                                    <button type="button" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue" 
-                                    v-if="limitResource.cancelOrderSub && (itemSub.ordStatus==0) && showflag">取消订单</button>
+                                    <button type="button" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue" v-if="limitResource.cancelOrderSub && (itemSub.ordStatus==0) && showflag">取消订单</button>
                                 </p>
                                 <p>
-                                    <button type="button" @click.stop="editStatus(itemSub)" class="btn btn-xs blue" 
-                                    v-if="limitResource.changeOrdStatus&&(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)&&showflag">修改状态</button>
+                                    <button type="button" @click.stop="editStatus(itemSub)" class="btn btn-xs blue" v-if="limitResource.changeOrdStatus&&(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)&&showflag">修改状态</button>
                                 </p>
                             </td>
                             <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
@@ -120,15 +118,15 @@
                                 <p v-show="showflag" v-if="itemSet.orderSubList.length > 1">
                                     <a href="javascript:;" @click="showDetail(itemSet,itemSub)" v-if="limitResource.orderSeeDetails">查看详情</a>
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
-                                    <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a> 
+                                    <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a href="javascript:;" @click="setStar(itemSub)" v-if="limitResource.addStar">加星</a>
                                 </p>
                                 <p>¥ {{itemSub.ordActAmount}}</p>
                                 <p>{{ordPayChannel(itemSet.orsPayChannel)}}</p>
                                 <p>
-                                    <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue" v-if="limitResource.editActAmount" >修改价格</button>
+                                    <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue" v-if="limitResource.editActAmount">修改价格</button>
                                 </p>
                             </td>
                         </tr>
@@ -150,7 +148,7 @@
         <!-- 创建取消订单弹窗 -->
         <cancel-order-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showReasonDialog" :onhide="hideReasonDialog" :send-req="reason"></cancel-order-control>
         <!-- 创建修改订单价格弹窗 -->
-        <change-payment-control v-if="!destroyControlDialog" :sub-data="orderSubData" :show="showPaymentDialog" :onhide="hidePaymentDialog"></change-payment-control>
+        <change-payment-control v-if="!destroyPaymentDialog" :sub-data="orderSubData" :show="showPaymentDialog" :onhide="hidePaymentDialog"></change-payment-control>
         <!-- 测试选择商品弹窗 -->
         <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideAddDialog" @spu-data="getSelected"></select-spu>
         <!--加星-->
@@ -231,6 +229,7 @@ export default {
             controlType: '',  //当前操作的权限类型
             showControl: false, //显示操作弹窗
             destroyControlDialog: false, //注销良言操作弹框
+            destroyPaymentDialog: false,
             orderEditId: '',
             orderSetData: null,
             orderSubData: null,
@@ -401,9 +400,7 @@ export default {
         },
         hidePaymentDialog() {
             this.showPaymentDialog = false
-            /* setTimeout(() => {
-                 this.onhide('cancel');
-             }, 300)*/
+            // this.getList();
         },
         hideStarDialog() {
             this.showStarDialog = false
@@ -514,7 +511,6 @@ export default {
     created() {
         vueThis = this;
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
-        console.log(JSON.parse(localStorage.getItem('limitResource')) )
     },
     watch: {
         ooflag() {

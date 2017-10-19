@@ -13,7 +13,7 @@
                                 <th>单价（元）</th>
                                 <th>数量</th>
                                 <th>小计（元）</th>
-                                <th>优惠金额</th>
+                                <th>总优惠金额</th>
                                 <th>涨价或减价</th>
                                 <th>运费（元）</th>
                             </tr>
@@ -135,9 +135,12 @@ export default {
     methods: {
         //校验涨价减价
         checkChangePrice(item) {
-            if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(item.ordChangePrice) || item.ordChangePrice < 0) {
-                alert("请输入大于或等于0的2位金额");
+            if (isNaN(item.ordChangePrice)) {
+                alert("请输入不超过2位的金额");
+                item.ordChangePrice = 0;
+                return;
             }
+            item.ordChangePrice=Number(item.ordChangePrice).toFixed(2);
             if (item.ordOriginal * item.ordSkuNum + Number(item.ordChangePrice) - item.ordShareAmount < 0) {
                 this.$parent.showMsg("减价幅度不得大于需付价格");
                 item.ordChangePrice = 0;
@@ -161,11 +164,11 @@ export default {
             this.checkTransportAmount(this.editPaymentData);
             this.editPaymentData.orderDetailList.forEach(item => this.checkChangePrice(item));
             client.postData(ORDER_EDIT_ACT_AMOUNT, this.editPaymentData).then(data => {
-                this.isLoading = false; a
+                this.isLoading = false; 
                 if (data.code == 200) {
-                    this.hideDialog();
                     this.$parent.getList();
-                    this.showMsg("修改成功");
+                    this.hideDialog();
+                    this.$parent.showMsg("修改成功");
                 } else {
                     this.showMsg(data.msg);
                 }
@@ -175,14 +178,14 @@ export default {
         },
         //计算实付款
         actAmount() {
-            let changePriceSum = 0, price = 0,totalCampaignAmount=0,actAmount;
+            let changePriceSum = 0, price = 0, totalCampaignAmount = 0, actAmount;
             this.editPaymentData.orderDetailList.forEach(item => {
                 price = item.ordChangePrice == '' ? 0 : item.ordChangePrice;
                 changePriceSum = Number(changePriceSum) + Number(price);
                 this.editPaymentData.ordActAmount = Number(this.editPaymentData.ordActAmount) + Number(price);
-                totalCampaignAmount=Number(totalCampaignAmount)+Number(this.getCampaignAmount(item));
+                totalCampaignAmount = Number(totalCampaignAmount) + Number(this.getCampaignAmount(item));
             });
-            actAmount=Number(this.editPaymentData.ordAmount) - Number(totalCampaignAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
+            actAmount = Number(this.editPaymentData.ordAmount) - Number(totalCampaignAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
             return actAmount.toFixed(2);
         },
         //获取改价字符串

@@ -226,6 +226,7 @@
                                         {{detailCampaignAmount(itemDetail)}}
                                     </td>
                                     <td align="center" style="width:10%;vertical-align:middle;">
+                                        <!-- 小计 -->
                                         {{detailActAmount(itemDetail)}}
                                     </td>
                                     <td align="center" style="width:10%;vertical-align:middle;">
@@ -237,8 +238,8 @@
                         <div class="right">
                             订单共{{totalNum()}}件商品，总计：¥{{subData.ordActAmount}}（含运费 ￥{{subData.ordTransportAmount}}）
                             <!-- <div style="width:50px;" @mouseenter.stop="showCompaign" @mouseleave.stop="showCompaign">
-                                                        <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
-                                                    </div> -->
+                                                                <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
+                                                            </div> -->
                             <img style="" @mouseout="hidePreferentialContent($event)" @mouseover="showPreferentialContent($event)" src="u7027.jpg">
                             <table class="table table-striped table-bordered table-hover" id="PreferentialContent">
                                 <thead>
@@ -248,12 +249,30 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;" v-if="item.ordShareAmount>0">
+                                    <tr v-for="item in subData.orderDetailList" style="border-bottom:2px solid #D7D7D7;height:40px;" v-if="detailCampaignAmount(item)>0">
                                         <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
-                                            {{item.ordCampaign.mkcName}} <br> <span v-if="item.ordCampaign.mkcRemark">({{item.ordCampaign.mkcRemark}})</span>
+                                            {{item.ordCampaign.mkcName}} <br>
+                                            <span v-if="item.ordCampaign.mkcRemark">({{item.ordCampaign.mkcRemark}})</span>
                                         </td>
                                         <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
-                                            -{{item.ordShareAmount}}
+                                            -{{detailCampaignAmount(item)}}
+                                        </td>
+                                    </tr>
+                                    <tr v-if="subData.ordCampaignShareAmount >0">
+                                        <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
+                                            {{setData.orsCampaign.mkcName}} <br>
+                                            <span v-if="setData.orsCampaign.mkcRemark">({{setData.orsCampaign.mkcRemark}})</span>
+                                        </td>
+                                        <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
+                                            -{{subData.ordCampaignShareAmount}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
+                                            卖家改价
+                                        </td>
+                                        <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
+                                            {{changeTotal()}}
                                         </td>
                                     </tr>
                                     <tr v-if="subData.orderDetailList.length==0">
@@ -375,6 +394,14 @@ export default {
                 //this.getList();
             }
         },
+        //卖家改价
+        changeTotal() {
+            let total=0;
+            this.subData.orderDetailList.forEach(item => {
+                total = total + item.ordChangePrice;
+            });
+            return total;
+        },
         //弹出物流详情窗口
         showOdd() {
             this.showOddDialog = true
@@ -431,13 +458,13 @@ export default {
             });
             return totalNum;
         },
-        //商品优惠
-        detailCampaignAmount(itemDetail){
-            return itemDetail.ordShareAmount+itemDetail.ordCampaignAmount+itemDetail.ordDiscount;
+        //商品限时折扣优惠
+        detailCampaignAmount(itemDetail) {
+            return (itemDetail.ordDiscount / itemDetail.ordSkuNum).toFixed(2);
         },
         //商品小计
         detailActAmount(itemDetail) {
-            return itemDetail.ordPromotion * itemDetail.ordSkuNum
+            return (itemDetail.ordOriginal * itemDetail.ordSkuNum - itemDetail.ordDiscount).toFixed(2);
         },
         //显示支付状态
         payStatus(payStatus) {
