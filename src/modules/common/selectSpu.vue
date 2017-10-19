@@ -245,11 +245,11 @@ export default {
         //将一个list中选中的数据转移到另一个list中
         moveData(sourceList,targetList){
             let index;
-        if( sourceList.length > 0 ){
-            for (index = sourceList.length-1; index >=0; index--){
-                if(sourceList[index].checked==true){
-                    targetList.push(sourceList[index]);
-                    sourceList.splice(index,1);
+            if( sourceList.length > 0 ){
+                for (index = sourceList.length-1; index >=0; index--){
+                    if(sourceList[index].checked==true){
+                        targetList.push(sourceList[index]);
+                        sourceList.splice(index,1);
                     }
                 }
             }
@@ -436,7 +436,9 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
-            this.selectedList=this.spulist;
+            this.spulist.forEach(item=>{
+                this.selectedList.push(item);
+            });
             if(this.searchOptions.spuCatId > 100){
                  this.getUnSelectedList(false,true)
             }

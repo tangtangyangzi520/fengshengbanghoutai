@@ -115,7 +115,7 @@
                         </table>
                    <!-- <a style="text-decoration:none" @click="plcut()">取消</a> -->
                 </div>
-                   <input type="checkbox" style="margin-left:18.3%" @click="selectAll($event)">&nbsp;全选 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input id="fullCheck" type="checkbox" style="margin-left:18.3%" @click="selectAll($event)">&nbsp;全选 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                    <button type="button" class="btn default" @click="plcut()">批量取消</button>
                  </form>
             </div>
@@ -234,13 +234,15 @@ export default {
     },
     methods: {
          integer(event){
-            var reg = /^[0-9]{1,6}([.]{1}[0-9]{1,2})?$/
-             let f = !reg.test(this.reduce+'')
-             if( f ){
-               this.reduce = 0
-               this.showMsg("请输入合法数字!")
-               return 
-             }
+            if(this.reduce){
+                var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/
+                let f = !reg.test(this.reduce+'')
+                if( f ){
+                this.reduce = 0
+                this.showMsg("请输入合法数字!")
+                return 
+                }
+            }
             /*if(this.reduce <= 0 ){
                 this.showMsg("减价不能少于0")
                 return
@@ -531,7 +533,7 @@ export default {
         },
         hideselDialog() {
              this.showSpuDialog = false
-
+             $("#fullCheck").removeProp("checked")
         },
         getSelected( data ) {
             this.spuList = null;
@@ -542,6 +544,7 @@ export default {
                 }
              })
              this.spuList = data
+              $("#fullCheck").removeProp("checked")
         },
         showselect() {
              this.showSpuDialog = true
