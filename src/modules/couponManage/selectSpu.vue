@@ -217,7 +217,7 @@ export default {
                 for (index2 = targetList.length-1; index2 >=0; index2--){
                     if(sourceList[index].spuId==targetList[index2].spuId){
                         sourceList.splice(index,1);
-                        arr.push(index2)
+                        //arr.push(index2)
                         break;
                     }
                 }
