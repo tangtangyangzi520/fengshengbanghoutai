@@ -1,68 +1,82 @@
 <template>
- <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
+<!-- 发布商品-选择商品类目页面 -->
+    <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'800px'">
             <div slot="content" >
-   
-        <div class="form-group">        
-            <div class="" style="margin-left:30%">
-                  类目搜索： <input type="text" class="input input-sm" v-model="keyWord" placeholder="请输入关键字" maxlength="15" />
-                    <button class="btn green-meadow" @click="search()" type="button">搜索</button>
-            </div>
-        </div>
-        <div id="search" @mouseout="resulthide($event)">
-           <span  style="color:#A9A9A9;margin-left:6.3%;margin-top:5%;display:block">匹配到{{searchResult.length}}个类目</span>
-           <div id="inside">
-            <ul>
-               <li v-for="(index,item) in searchResult">
-                  <a  @click="selected(index)" v-if="item.length == 3">
-                    <span class="result">{{item[0].text}}&nbsp;&gt;&gt;&nbsp;{{item[1].text}}&nbsp;&gt;&gt;&nbsp;
-                    {{item[2].text.substring(0,item[2].text.indexOf(keyWord))}}
-                    <span style="margin:-4px;padding:-4px;color:#00CC00">{{keyWord}}</span> 
-                    {{ item[2].text.substring((item[2].text.indexOf(keyWord)+keyWord.length),
-                    (item[2].text.length)) }}</span></a>
+                <div class="form-group">        
+                    <div class="" style="margin-left:30%">
+                        类目搜索： <input type="text" class="input input-sm" v-model="keyWord" placeholder="请输入关键字" maxlength="15" />
+                            <button class="btn green-meadow" @click="search()" type="button">搜索</button>
+                    </div>
+                </div>
+                <div id="search" @mouseout="resulthide($event)">
+                    <span  style="color:#A9A9A9;margin-left:6.3%;margin-top:5%;display:block">匹配到{{searchResult.length}}个类目</span>
+                    <div id="inside">
+                        <ul>
+                            <li v-for="(index,item) in searchResult">
+                                <a  @click="selected(index)" v-if="item.length == 3">
+                                    <span class="result">{{item[0].text}}&nbsp;&gt;&gt;&nbsp;{{item[1].text}}&nbsp;&gt;&gt;&nbsp;
+                                    {{item[2].text.substring(0,item[2].text.indexOf(keyWord))}}
+                                    <span style="margin:-4px;padding:-4px;color:#00CC00">{{keyWord}}</span> 
+                                    {{ item[2].text.substring((item[2].text.indexOf(keyWord)+keyWord.length),
+                                    (item[2].text.length)) }}</span>
+                                </a>
 
-                  <a  @click="selected(index)" v-if="item.length == 2">
-                    <span class="result">{{item[0].text}}&nbsp;&gt;&gt;&nbsp;
-                    {{item[1].text.substring(0,item[1].text.indexOf(keyWord))}}
-                    <span style="margin:-4px;padding:-4px;color:#00CC00">{{keyWord}}</span> 
-                    {{ item[1].text.substring((item[1].text.indexOf(keyWord)+keyWord.length),
-                    (item[1].text.length)) }}</span>
-                  </a>
-                  <a  @click="selected(index)" v-if="item.length == 1">
-                    <span class="result">{{item[0].text.substring(0,item[0].text.indexOf(keyWord))}}
-                    <span style="margin-left:-1px;margin-right:-2px;color:#00CC00">{{keyWord}}</span> 
-                    {{ item[0].text.substring((item[0].text.indexOf(keyWord)+keyWord.length),
-                    (item[0].text.length)) }}</span></a>
-              </li> 
-           </ul>
-         </div>
-       </div>
-       <input type="text" style="margin-left: 10%;" class="input"  placeholder="">
-       <input type="text" class="input"  placeholder="">
-       <input type="text" class="input"  placeholder="">
-       <div id="firstsearch" class="boxex box" style="margin-left: 10%;">
-           <ul >
-               <li v-for="item in firstList"><a class="result" @click="secondbuild(item,$event)">{{item.text}}</a><span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:15%"> > </span> </li> 
-           </ul>
-       </div>  
-       <div class="boxex box" id="secondsearch">
-           <ul >
-               <li v-for="item in secondList"><a class="result" @click="thirdbuild(item,$event)">{{item.text}}</a><span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:15%"> > </span> </li> 
-           </ul>
-       </div>  
-       <div class="boxex box">
-           <ul >
-               <li v-for="item in thirdList"><a class="result" :id="item.id" @click="thirdSelect(item,$event)">{{item.text}}</a><span v-for="i in 4">&nbsp;</span> <span style="float:right;margin-right:6%"> > </span> </li> 
-           </ul>
-       </div> <br><br>  
-       <div style="text-align:center">           
-       <button class="btn blue"  @click="addItem()" type="button">下一步</button><br>
-       <div style="position:absolute;top:95%;left:25%;opacity:0.8">请谨慎选择类目信息，商品一旦发布，类目信息不可修改！</div>
-      </div>
-      </div>
-      </m-alert>
+                                <a  @click="selected(index)" v-if="item.length == 2">
+                                    <span class="result">{{item[0].text}}&nbsp;&gt;&gt;&nbsp;
+                                    {{item[1].text.substring(0,item[1].text.indexOf(keyWord))}}
+                                    <span style="margin:-4px;padding:-4px;color:#00CC00">{{keyWord}}</span> 
+                                    {{ item[1].text.substring((item[1].text.indexOf(keyWord)+keyWord.length),
+                                    (item[1].text.length)) }}</span>
+                                </a>
+                                <a  @click="selected(index)" v-if="item.length == 1">
+                                    <span class="result">{{item[0].text.substring(0,item[0].text.indexOf(keyWord))}}
+                                    <span style="margin-left:-1px;margin-right:-2px;color:#00CC00">{{keyWord}}</span> 
+                                    {{ item[0].text.substring((item[0].text.indexOf(keyWord)+keyWord.length),
+                                    (item[0].text.length)) }}</span>
+                                </a>
+                            </li> 
+                        </ul>
+                    </div>
+                </div>
+                <input type="text" style="margin-left: 10%;" class="input"  placeholder="">
+                <input type="text" class="input"  placeholder="">
+                <input type="text" class="input"  placeholder="">
+                <div id="firstsearch" class="boxex box" style="margin-left: 10%;">
+                    <ul >
+                    <li v-for="item in firstList">
+                        <a class="result" @click="secondbuild(item,$event)">{{item.text}}</a>
+                        <span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:15%"> > </span> 
+                        </li> 
+                    </ul>
+                </div>  
+                <div class="boxex box" id="secondsearch">
+                    <ul >
+                        <li v-for="item in secondList">
+                            <a class="result" @click="thirdbuild(item,$event)">{{item.text}}</a>
+                            <span v-for="i in 6">&nbsp;</span> <span style="float:right;margin-right:15%"> > </span> 
+                        </li> 
+                    </ul>
+                </div>  
+                <div class="boxex box">
+                    <ul >
+                        <li v-for="item in thirdList">
+                            <a class="result" :id="item.id" @click="thirdSelect(item,$event)">{{item.text}}</a>
+                                <span v-for="i in 4">&nbsp;</span> <span style="float:right;margin-right:6%"> > </span> 
+                            </li> 
+                    </ul>
+                </div> 
+                <br><br>  
+                <div style="text-align:center">           
+                    <button class="btn blue"  @click="addItem()" type="button">下一步</button>
+                    <br>
+                    <div style="position:absolute;top:95%;left:25%;opacity:0.8">请谨慎选择类目信息，商品一旦发布，类目信息不可修改！</div>
+                </div>
+            </div>
+        </m-alert>
+        <!-- 发布商品-新增页面 -->
         <product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :par="sele" :onhide="hideAddDialog" :cflag="flag"></product-control> 
-        </div>
+    </div>
 </template>
 <script>
 import client from '../../common/utils/client';

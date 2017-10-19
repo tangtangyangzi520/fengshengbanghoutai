@@ -1,5 +1,5 @@
 <template>
-<!-- 发布商品页面 -->
+<!-- 发布商品-新增页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
             <div slot="content">
