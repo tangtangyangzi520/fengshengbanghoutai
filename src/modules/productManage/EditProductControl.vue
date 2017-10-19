@@ -209,7 +209,7 @@
      
                        <h4><strong>图片上传</strong></h4>
                        <div class="" style="padding-bottom:10px;">     
-                            <div class="controls " style="text-align:center">  
+                            <div class="controls " style="text-align:center">   
                                 <span class="required"></span>说明：        
                                 <span style="margin-left:1%">最多上传5张，单张大小不超过5M，仅支持JPG、JPEG格式。 </span>
                             </div>
