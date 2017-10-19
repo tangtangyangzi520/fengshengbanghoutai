@@ -223,7 +223,7 @@
                                     <td  style="height:194px ; width: 25%">
                                         <div class="item-edit-box">
                                             <div class="buy-pic" style="bottom:0;" v-if="data.oneUrl==''">
-                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" style="margin-top: 20px;"></i>
+                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 1 )" style="margin-top: 20px; font-size:44px;"></i>
                                             </div>
                                             <item-move v-if="data.oneUrl!=''" :change-left="moveLeft.bind(this,1)" :change-right="moveRight.bind(this,1)" :remove-item="removeMoveItem.bind(this,1)" :class="'item-edit-block'" :hidden-up-down=false>
                                                 <div class="buy-pic" style="bottom:0;">
@@ -235,8 +235,8 @@
                                     <!-- 图片二 -->
                                     <td  style="height:194px ; width: 25%">
                                         <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.twoUrl==''">
-                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" style="margin-top: 20px;"></i>
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.twoUrl=='' && data.oneUrl!=''">
+                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 2 )" style="margin-top: 20px; font-size:44px;"></i>
                                             </div>
                                             <item-move v-if="data.twoUrl!=''" :change-left="moveLeft.bind(this,2)" :change-right="moveRight.bind(this,2)" :remove-item="removeMoveItem.bind(this,2)" :class="'item-edit-block'" :hidden-up-down=false>
                                                 <div class="buy-pic" style="bottom:0;">
@@ -248,8 +248,8 @@
                                     <!-- 图片三 -->
                                     <td  style="height:194px ; width: 25%">
                                         <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.threeUrl==''">
-                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" style="margin-top: 20px;"></i>
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.threeUrl=='' && data.twoUrl!=''">
+                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 3 )" style="margin-top: 20px; font-size:44px;"></i>
                                             </div>
                                             <item-move v-if="data.threeUrl!=''" :change-left="moveLeft.bind(this,3)" :change-right="moveRight.bind(this,3)" :remove-item="removeMoveItem.bind(this,3)" :class="'item-edit-block'" :hidden-up-down=false>
                                                 <div class="buy-pic" style="bottom:0;">
@@ -261,8 +261,8 @@
                                     <!-- 图片四 -->
                                     <td  style="height:194px ; width: 25%">
                                         <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.fourUrl==''">
-                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 4 )" style="margin-top: 20px;"></i>
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.fourUrl=='' && data.threeUrl!=''">
+                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 4 )" style="margin-top: 20px; font-size:44px;"></i>
                                             </div>
                                             <item-move v-if="data.fourUrl!=''" :change-left="moveLeft.bind(this,4)" :change-right="moveRight.bind(this,4)" :remove-item="removeMoveItem.bind(this,4)" :class="'item-edit-block'" :hidden-up-down=false>
                                                 <div class="buy-pic" style="bottom:0;">
@@ -274,8 +274,8 @@
                                     <!-- 图片五 -->
                                     <td  style="height:194px ; width: 25%">
                                         <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.fiveUrl==''">
-                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" style="margin-top: 20px;"></i>
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.fiveUrl=='' && data.fourUrl!=''">
+                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 5 )" style="margin-top: 20px; font-size:44px;"></i>
                                             </div>
                                             <item-move v-if="data.fiveUrl!=''" :change-left="moveLeft.bind(this,5)" :change-right="moveRight.bind(this,5)" :remove-item="removeMoveItem.bind(this,5)" :class="'item-edit-block'" :hidden-up-down=false>
                                                 <div class="buy-pic" style="bottom:0;">
@@ -286,8 +286,8 @@
                                     </td>
                                     
                                     <!-- <td  style="height:100px ; width: 25%">
-                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog( 1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
+                                <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog( 1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                     </td>
                                     <td  style="height:100px ; width: 25%">
                                     <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
@@ -976,6 +976,7 @@ export default {
                  }
             }
             this.showSelectPic({ show: false });
+            console.log(this.singleimgList);
         },
         //删除基本属性
         closeProperty(event) { 
@@ -1762,7 +1763,7 @@ export default {
                     }
                    
                   // this.showSelectPic({ show: false })
-                  this.singleimgList = this.request.resourceList;
+                  //this.singleimgList = this.request.resourceList;
             }, data => {
                 this.isLoading = false;
                 this.showMsg("获取spu信息失败,请刷新重试");
