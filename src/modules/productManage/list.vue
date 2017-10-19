@@ -14,16 +14,16 @@
                 <span v-if="selectItems.length>0" class="desc">已选
                     <em>{{selectItems.length}}</em> 项 </span>
                 
-                <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;">发布商品</button>
+                <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;" v-if="limitResource.product_add">发布商品</button>
                <!--  v-if="limitResource.expert_info_add" 添加按钮的权限-->
                <!--  <button class="btn blue" type="button" @click="showControlFunc(null,'publishAll')">修改模板</button>
                 <button class="btn default" type="button" @click="showControlFunc(null,'submitAll')">下架</button>
                 <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">删除</button>-->
                 <span v-if="par == 3">
-                 <button type="button" class="btn blue" @click="up()" >批量上架</button>
+                 <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves" >上架</button>
                  </span>
                  <span v-else>
-                 <button type="button" class="btn default" @click="down()">批量下架</button>
+                 <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves" >下架</button>
                  </span>
                  <button class="btn purple" type="button" @click="deleteSpu()" v-if="limitResource.product_delete">删除</button>
                  <button class="btn yellow-crusta" type="button" @click="productexport()" v-if="limitResource.product_export">导出</button> 
@@ -40,22 +40,22 @@
                 <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                     <thead>
                         <tr>
-                            <th style="width:4%">
+                            <th style="width:5%">
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
                             </th>
                             <th style="width:35%;">商品信息</th>
-                            <th style="width:9%;">丰盛榜售价
+                            <th style="width:10%;">丰盛榜售价
                                 <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderByPrice(false)">▼</a>
                                 <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderByPrice(true)">▲</a>
                             </th>
-                            <th style="width:7%;">总库存</th>
+                            <th style="width:10%;">总库存</th>
                             <th style="width:10%;">总销量</th>
-                            <th style="width:10%;">创建时间
+                            <th style="width:12%;">创建时间
                                 <a id="timedesc"  class="orderBy" style="text-decoration:none" @click="orderByTime(false)">▼</a>
                                 <a id="timeasc" class="orderBy" style="display:none;text-decoration:none" @click="orderByTime(true)">▲</a>
                             </th>
-                            <th style="width:10%;">更新时间</th>
+                            <!-- <th style="width:10%;">更新时间</th> -->
                             <th style="">操作</th>
                         </tr>
                     </thead>
@@ -112,12 +112,13 @@
                                 </p> -->
                             </td>
                             
-                            <td style="text-align:center;vertical-align:middle;">{{item.spuCreatedTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
+                           <!--  <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
                             <td style="text-align:center;vertical-align:middle;">
                                         <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
-                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')">编辑</button>
-                            <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')">查看SKU列表</button>
+                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')" v-if="limitResource.productSpu_edit">编辑</button>
+                            <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')"
+                            v-if="limitResource.productSku_edit">查看SKU列表</button>
 
                                  <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
                                     <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>
@@ -241,6 +242,9 @@ export default {
     },
     methods: {
          deleteSpu() {
+            if(!confirm("确定删除商品吗")){
+                return
+            }
             let arr = []
             this.dataList.forEach( item => {
                 if(item.checked == true ){

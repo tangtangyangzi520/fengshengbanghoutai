@@ -225,6 +225,7 @@ export default {
                     this.showMsg(data.message);
                 }
             }, data => {
+                      this.isLoading = false
                       this.pctflag = false
                       this.showMsg("编辑运费模板失败;"+data.message);
              })
@@ -242,6 +243,7 @@ export default {
                     this.showMsg(data.message);
                 }
             }, data => {
+                      this.isLoading = false
                       this.pctflag = false
                       this.showMsg("新健运费模板失败;"+data.message)
                 })

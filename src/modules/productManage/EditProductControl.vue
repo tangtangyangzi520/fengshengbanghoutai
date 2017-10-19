@@ -93,7 +93,7 @@
                         </div>
                         <div class="form-group" style="padding-top:10px;">
                             <label class="col-sm-3 control-label">
-                                <span class="required">* </span>适用人群：</label>
+                               <!--  <span class="required">* </span> -->适用人群：</label>
                             <div class="controls col-md-9" style="padding-top:8px;">
                                 <item-list :list="personList" :remove="removeperItem"></item-list>
                                 <a class="btn-select-label" @click="showperDialog">
@@ -366,9 +366,8 @@
                                 </textarea> 
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label for="title" class="col-sm-5 control-label">
+                            <label for="title" class="col-sm-3 control-label">
                                 开始时间：
                             </label>
                             <span v-if="spuShelvesStatus == 1">
@@ -1078,10 +1077,10 @@ export default {
              this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum ,"prpSpuId":this.spuid ,"prpSort":index} )
         })
       //人群标签
-      if( this.personList.length == 0){
+     /* if( this.personList.length == 0){
             this.showMsg("请选择人群标签")
             return
-      }
+      }*/
         this.personList.forEach((per,index)=>{
              this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum,"prpSpuId":this.spuid ,"prpSort":index} )
         })
@@ -1163,7 +1162,7 @@ export default {
         if(this.yunfei == 0){
            this.request.spuCarriageId = -1
         }else{
-          this.request.spuFreight = -1
+          this.request.spuFreight = 0
         }
     //上架时间
       if( this.rad == 2 ){
@@ -1171,25 +1170,26 @@ export default {
             this.showMsg("请输入上架时间")
             return
            }
-           if(new Date(this.stime).getTime() - new Date().getTime() < 60000){
-                   this.showMsg('上架时间请比现在时间大于1分钟以上')
-                   this.stime = ""
-                   return
-           }    
+           if(new Date(this.stime).getTime() - new Date().getTime() <= -10000){
+                   this.stime = client.formateTimeNoSecond()
+           } 
            this.request.spuPlanShelvesDate = this.stime//
       } else {
            this.request.spuPlanShelvesDate = ""
       } 
         //商品图片判空
+         let i = 0 
+         this.singleimgList.forEach(data =>{
+          //console.log(data)
+                if(data != null){
+                  this.request.resourceList.$set(i, data)
+                  data.psrSortNo = ++i
+                }
+             })
         if(this.request.resourceList.length == 0 ){
             this.showMsg("商品图片至少上传一张")
             return
          }
-         // 商品图片
-         this.singleimgList.forEach((data,index)=>{
-             this.request.resourceList.$set(index, data)
-             })
-
         //详情图片管理
          this.imgList.forEach((data,index)=>{
                 this.request.detailsList.$set(index, {
@@ -1204,7 +1204,9 @@ export default {
              })
 
             client.postData(  SPU_EDIT , this.request).then(data => {
+                this.isLoading = true
                 if (data.code == 200) {
+                    this.isLoading = false
                     this.showMsg("编辑成功")
                     this.expertEditId = '';
                     this.showAddDialog = true;
@@ -1215,6 +1217,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                this.isLoading = false
                 this.editpdflag = false
                 this.showMsg("编辑失败,请重试");
             })
@@ -1293,7 +1296,7 @@ export default {
         },
         //获取品牌
         getbrandList() { 
-        client.postData(  PBD_GET_LIST  , {
+        client.postData(  PBD_GET_LISTUSED  , {
                "page": {
                "currentPage": 0,
                "pageSize": 0,
@@ -1567,7 +1570,7 @@ export default {
         "request.spuCarriageId":{　　
           　handler(curVal,oldVal){　
             if(curVal != -1){　
-                this.request.spuFreight = 0　　　　　　　　　
+                this.request.spuFreight = 0.00　　　　　　　　　
                 this.yunfei = 1　
              }　　　　　　　
           },　　　　　　　　　　
@@ -1754,9 +1757,10 @@ export default {
                         }else {
                              this.data.oneUrl = data[i].psrResourceUrl
                         }
-                        this.request.resourceList.push( {"psrBlock": data[i].psrBlock, "psrResourceUrl": data[i].psrResourceUrl,"psrSortNo": data[i].psrSortNo, "psrType": data[i].psrType,"psrResourceId":data[i].psrResourceId } )
+                        this.singleimgList[i] =  {"psrBlock": data[i].psrBlock, "psrResourceUrl": data[i].psrResourceUrl,"psrSortNo": data[i].psrSortNo, "psrType": data[i].psrType,"psrResourceId":data[i].psrResourceId } 
                         //this.showSelectPicDialog(i+1)
                     }
+                   
                   // this.showSelectPic({ show: false })
                   this.singleimgList = this.request.resourceList;
             }, data => {

@@ -30,7 +30,6 @@
                                 </a>
                             </li>
                         </ul>
-
                         <a v-else @click="changeUrl(subItem)">
                             <i class="icon-puzzle"></i> {{subItem.text}} <!-- </span> -->
                         </a>
@@ -179,28 +178,26 @@ export default {
             } else {
                 location.href = '#';
             }
-            this.navList.forEach(litem => {
+            this.catList.forEach(litem => {
                 litem.active = false;
                 litem.children.forEach(item => {
                     if (item.url == subitem.url) {
-                        console.log(item.url, subitem.url)
+                        //console.log(item.url, subitem.url)
                         litem.active = item.active = true;
                     } else {
                         item.active = false;
                     }
+                    item.children.forEach(san => {
+                    if (san.url == subitem.url) {
+                        console.log(san.url, subitem.url)
+                        litem.active = san.active = true;
+                    } else {
+                        san.active = false;
+                    }
+                    
+                    })
                 })
             })
-            /* this.catList.forEach(litem => {
-                litem.active = false;
-                litem.children.forEach(item => {
-                    if (item.url == subitem.url) {
-                        console.log(item.url, subitem.url)
-                        litem.active = item.active = true;
-                    } else {
-                        item.active = false;
-                    }
-                })
-            })*/
         }
     },
     watch: {

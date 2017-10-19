@@ -11,10 +11,10 @@
                 <div class="col-md-4"></div>
                 <div class="col-md-6">
                     <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>
-                    <button class="btn blue" type="button" @click="exportOrder">批量导出</button>
+                    <button class="btn blue" type="button" @click="exportOrder" v-if="showflag && limitResource.Order_export">批量导出</button>
                     <!--                 <button class="btn yellow-crusta" type="button" @click="selectSpu" >选择商品</button>
-                                                                                                        -->
-                    <button class="btn blue" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button>
+                                                                                                            -->
+                    <!-- <button class="btn blue" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button> -->
                 </div>
             </div>
             <form id="exportForm" method="POST">
@@ -50,12 +50,18 @@
             </div>
             <div class="table-responsive col-md-12" v-for="itemSet in dataList" :key="itemSet.orstNo">
                 <div class="col-md-12">
-                    <div class="col-md-9"><span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span> &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="col-md-9">
+                        <span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span v-if="itemSet.orderSubList.length==1 && itemSet.orderSubList[0].ordOrderType==0" style="color:blue;">跨境订单</span>
                     </div>
                     <div v-show="showflag" class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
-                        <a href="javascript:;" @click="showDetail(itemSet,itemSet.orderSubList[0])">查看详情</a>--
-                        <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])">备注</a> --
-                        <a  @click="setStar(itemSet.orderSubList[0])">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="javascript:;" @click="showDetail(itemSet,itemSet.orderSubList[0])" v-if="limitResource.orderSeeDetails">查看详情</a>
+                         <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
+                        <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])" v-if="limitResource.editOrderSetDemo">备注</a>
+                        <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
+                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                        <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar" >加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
                 <table class="table table-striped table-bordered table-hover">
@@ -64,7 +70,7 @@
                             <td class="tdTitle" style="width:26%;">
                                 <p v-if="index===0 && itemSet.orderSubList.length>1">
                                     子订单号:{{itemSub.ordOrderNo}}&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span v-if="itemSub.ordOrderType==1" style="color:blue;">跨境订单</span>
+                                    <span v-if="itemSub.ordOrderType==0" style="color:blue;">跨境订单</span>
                                 </p>
                                 <p>
                                     <a target="_blank" :href="itemDetail.detailSpu.spuPic" title="查看大图">
@@ -74,8 +80,12 @@
                                 <h4>
                                     <a style="text-decoration:none;color:green;" title="预览商品" @click.stop="previewpro(itemDetail.detailSpu.spuId)">{{itemDetail.detailSpu.spuName}}</a>
                                 </h4>
-                                <p><span style="color:black;">{{itemDetail.detailSku.skuName}}</span></p>
-                                <p><span style="color:black;">SKU编码：{{itemDetail.detailSku.skuCode}}</span></p>
+                                <p>
+                                    <span style="color:black;">{{itemDetail.detailSku.skuName}}</span>
+                                </p>
+                                <p>
+                                    <span style="color:black;">SKU编码：{{itemDetail.detailSku.skuCode}}</span>
+                                </p>
                             </td>
                             <td align="center" style="width:7%;vertical-align:middle;">
                                 <p style="padding-top:5px;">
@@ -93,10 +103,12 @@
                                 <!-- 订单状态 -->
                                 {{itemSub.ordStatusDisplay}}
                                 <p>
-                                    <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue">取消订单</button>
+                                    <button type="button" @click.stop="cancelOrder(itemSub)" class="btn btn-xs blue" 
+                                    v-if="limitResource.cancelOrderSub && (itemSub.ordStatus==0) && showflag">取消订单</button>
                                 </p>
                                 <p>
-                                    <button type="button" v-show="(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)&&showflag" @click.stop="editStatus(itemSub)" class="btn btn-xs blue">修改状态</button>
+                                    <button type="button" @click.stop="editStatus(itemSub)" class="btn btn-xs blue" 
+                                    v-if="limitResource.changeOrdStatus&&(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)&&showflag">修改状态</button>
                                 </p>
                             </td>
                             <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
@@ -106,14 +118,17 @@
                             </td>
                             <td align="center" style="width:15%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <p v-show="showflag" v-if="itemSet.orderSubList.length > 1">
-                                    <a href="javascript:;" @click="showDetail(itemSet,itemSub)">查看详情</a>--
-                                    <a href="javascript:;" @click="setDemo(itemSub)">备注</a> --
-                                    <a href="javascript:;" @click="setStar(itemSub)">加星</a>
+                                    <a href="javascript:;" @click="showDetail(itemSet,itemSub)" v-if="limitResource.orderSeeDetails">查看详情</a>
+                                    <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
+                                    <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a> 
+                                    <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
+                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                    <a href="javascript:;" @click="setStar(itemSub)" v-if="limitResource.addStar">加星</a>
                                 </p>
                                 <p>¥ {{itemSub.ordActAmount}}</p>
                                 <p>{{ordPayChannel(itemSet.orsPayChannel)}}</p>
                                 <p>
-                                    <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue">修改价格</button>
+                                    <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue" v-if="limitResource.editActAmount" >修改价格</button>
                                 </p>
                             </td>
                         </tr>
@@ -190,7 +205,7 @@ export default {
     },
     data() {
         return {
-            showflag:true,
+            showflag: true,
             limgflag: false,
             lspuid: 0,
             lflag: false,
@@ -246,7 +261,7 @@ export default {
         }
     },
     methods: {
-        clearSearchOptions(){
+        clearSearchOptions() {
             this.$refs.search.clearOptions()
             //console.log(this.$refs.search)
         },
@@ -261,8 +276,8 @@ export default {
         //导出订单
         exportOrder() {
             $("#exportForm").attr("action", ORDER_EXPORT);
+            $("input[name='request']").val(JSON.stringify(this.searchOptions))
             $("#exportForm").submit();
-
         },
         //修改订单状态弹窗
         editStatus(itemSub) {
@@ -386,9 +401,9 @@ export default {
         },
         hidePaymentDialog() {
             this.showPaymentDialog = false
-           /* setTimeout(() => {
-                this.onhide('cancel');
-            }, 300)*/
+            /* setTimeout(() => {
+                 this.onhide('cancel');
+             }, 300)*/
         },
         hideStarDialog() {
             this.showStarDialog = false
@@ -408,24 +423,24 @@ export default {
         },
         //数据校验
         checkOptions() {
-            if(this.searchOptions.lowOrsOpenPay){
-                if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(this.searchOptions.lowOrsOpenPay) || this.searchOptions.lowOrsOpenPay < 0 ) {
-                alert("实付金额请输入不小于0的整数");
-                return false;
+            if (this.searchOptions.lowOrsOpenPay) {
+                if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(this.searchOptions.lowOrsOpenPay) || this.searchOptions.lowOrsOpenPay < 0) {
+                    alert("实付金额请输入不小于0的整数");
+                    return false;
                 }
             }
-            if( this.searchOptions.highOrsOpenPay){
-                if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(this.searchOptions.highOrsOpenPay) || this.searchOptions.highOrsOpenPay < 0 ) {
-                alert("实付金额请输入不小于0的整数");
-                return false;
-               }
+            if (this.searchOptions.highOrsOpenPay) {
+                if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(this.searchOptions.highOrsOpenPay) || this.searchOptions.highOrsOpenPay < 0) {
+                    alert("实付金额请输入不小于0的整数");
+                    return false;
+                }
             }
             return true;
         },
         getList(page, firstSearch) {
             let options, url = ORDER_GET_LIST;
             //数据校验
-            if(!this.checkOptions()) return;
+            if (!this.checkOptions()) return;
             if (!firstSearch) {
                 // 拿最后一次请求的参数
                 options = this.lastSearchOptions;
@@ -499,6 +514,7 @@ export default {
     created() {
         vueThis = this;
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
+        console.log(JSON.parse(localStorage.getItem('limitResource')) )
     },
     watch: {
         ooflag() {

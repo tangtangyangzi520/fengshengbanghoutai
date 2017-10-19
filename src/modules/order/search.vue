@@ -147,8 +147,11 @@ export default {
     methods: {
         //校验查询金额
         checkAmount(data) {
+            if(data == ''){
+                return
+            }
             if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(data) || data < 0) {
-                alert("请输入不小于0的整数");
+                alert("请输入大于或等于0的金额");
             }
         },
         //清空查询条件

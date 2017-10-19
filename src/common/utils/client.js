@@ -94,6 +94,12 @@ function formateTime(time) {
         intNum(dt.getMinutes()) + ':' + intNum(dt.getSeconds());
 }
 
+function formateTimeStamp() {
+    let dt = new Date();
+    return dt.getFullYear() + '-' + intNum(dt.getMonth() + 1) + '-' + intNum(dt.getDate()) + ' ' + intNum(dt.getHours()) + ':' +
+        intNum(dt.getMinutes()) + ':' + intNum(dt.getSeconds());
+}
+
 function intNum(num) {
     return num > 9 ? num : '0' + num;
 }
@@ -220,6 +226,11 @@ function copyArr(arr){
         }
     });
 }
+function formateTimeNoSecond() {
+    let dt = new Date();
+    return dt.getFullYear() + '-' + intNum(dt.getMonth() + 1) + '-' + intNum(dt.getDate()) + ' ' + intNum(dt.getHours()) + ':' +
+        intNum(dt.getMinutes());
+}
 
 const Client = {
     getData,
@@ -237,6 +248,8 @@ const Client = {
     findTreeItem,
     findParentItem,
     copyArr,
+    formateTimeStamp,
+    formateTimeNoSecond,
 }
 
 export default Client;

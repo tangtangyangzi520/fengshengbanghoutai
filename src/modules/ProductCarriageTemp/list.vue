@@ -14,22 +14,22 @@
          <div id="jyszContext" style="display:none" class="contentBlock"><br><br>
             <form id="systemSetting">
                 <span v-for="data in systemSettingList">
-                 <span v-if="data.settingName.indexOf('取消时间') >=0">
-                   <span v-for="i in 20">&nbsp;</span><span span style="font-weight:bold;font-size:18px">待付款订单取消时间设置</span><br><br>
-                   <span v-for="i in 20">&nbsp;</span><span style="font-size:16px">拍下未付款订单<input type="number" required="required" min = "0" max="1000" v-model="data.settingValue" @keyup="integer($event)" @change="integer($event)" @blur="integer($event)"/>分钟内未付款，自动取消订单</span><br><br>
-                 </span>
-                 <span v-if="data.settingName.indexOf('收货时间') >=0">
-                   <span v-for="i in 20">&nbsp;</span><span span style="font-weight:bold;font-size:18px">发货后自动确认收货时间设置</span><br><br>
-                   <span v-for="i in 20">&nbsp;</span><span style="font-size:16px">发货后<input type="number" required="required" min="0" max="30" v-model="data.settingValue" @keyup="integer($event)" @change="integer($event)" @blur="integer($event)"/>天，自动确认收货</span><br><br>
-                 </span>
+                   <span v-for="i in 20">&nbsp;</span><span span style="font-weight:bold;font-size:18px">{{data.settingName}}设置</span><br><br>
+                   <span v-for="i in 20">&nbsp;</span>
+                        <span style="font-size:16px">
+                            <span v-for="(index,content) in data.settingDesc.split('**')">{{content}}
+                                 <input type="number" required="required" min = "0" max="1000" v-model="data.settingValue" @keyup="integer($event)" 
+                                    @change="integer($event)" @blur="integer($event)" v-if="index == 0"/>
+                            </span><br><br>
+                        </span>
                </span>
                 <span v-for="i in 20">&nbsp;</span><span v-for="i in 40">&nbsp;</span>
                 <input type="submit" style="display:none" id="systemSettingSubmit">
-                <button type="button" class="btn blue" @click="save()">保存</button>
+                <button type="button" class="btn blue" @click="save()" v-if="limitResource.systemSetting_edit">保存</button>
             </form>
         </div>
         <span id="kdfhContext" >
-            <button class="btn" type="button"  @click="addItem('add')" style="margin-left:1.4%;float:left;margin-top:2%;background-color:#1E90FF;color:white">新增运费模板</button>
+            <button class="btn" type="button"  @click="addItem('add')" style="margin-left:1.4%;float:left;margin-top:2%;background-color:#1E90FF;color:white"  v-if="limitResource.ProductCarriage_add">新增运费模板</button>
 
             <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
                  <span  style="display:inline-block;"> 
@@ -59,7 +59,8 @@
                             <th colspan="2" style=" width:32%;text-align:left;border-right:none;border-left:none;">  
                             <span v-if="dataList.length > 0">
 <!--                              <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showControlFunc(items,'submit')">复制模板</button>  
- -->                             <button type="button"  class="btn btn-xs blue" @click.stop="editItem(items)">修改</button>
+ -->                             <button type="button"  class="btn btn-xs blue" @click.stop="editItem(items)" 
+                                    v-if="limitResource.ProductCarriage_edit">修改</button>
 <!--                              <button type="button"  class="btn btn-xs default" @click.stop="editItem(items)">删除</button>
  -->                             <a :id="'desc'+items.pcId"  class="orderBy" style="text-decoration:none" @click="orderBy(false,items.pcId)">▼</a>
                              <a :id="'asc'+items.pcId" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true,items.pcId)">▲</a>

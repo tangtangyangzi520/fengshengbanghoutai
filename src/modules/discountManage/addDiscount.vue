@@ -20,13 +20,13 @@
                 <label for="title" class="col-sm-3 control-label">
                     <span class="required">* </span>生效时间：
                 </label>
-                    <div class="controls col-md-2 ">
+                    <div class="controls col-md-3 ">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择生效时间" id="createStartTime3" v-model="request.mktStart" required="required" 
                           /> 
                     </div>
                        <div class="col-md-1" style="margin-top:0.5%;margin-left:-1.2%">至</div>
-                    <div class="controls col-md-2 nopadding" style="margin-left:-4%">
-                       <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime3" v-model="mktEnd" required="required" >
+                    <div class="controls col-md-3 nopadding" style="margin-left:-4%">
+                       <input type="text" class="form-control inline-block datePicker" placeholder="选择过期时间" id="createEndTime3" v-model="request.mktEnd" required="required" >
                   </div>  <br> 
             </div>
             <br >
@@ -35,7 +35,7 @@
                     <span class="required">* </span>活动标签：
                 </label>
                     <div class="controls col-md-4">
-                         <input type="text" class="form-control input-sm"  value="数据库暂无此字段,可不填" placeholder="限时折扣"  required="required" oninvalid="setCustomValidity('请输入活动标签!')"> 
+                         <input type="text" class="form-control input-sm"  placeholder="限时折扣"  required="required" v-model="request.mkcLabel" minlength="2" maxlength="5"> 
                          活动期间展示于商品详情的价格旁边，2至5字。                                
                          <input id="sub1" type="submit" style="display:none" >
 
@@ -164,13 +164,15 @@ export default {
     },
     data() {
         return {
-            reduce:0,
             mktEnd:"",
+            reduce:0,
             spuList:[],
             time:"",
             mkcUsedCondition:0,
             timesList:[1,2,3,4,5,10],
             request:{
+              "mkcDateType":0,
+              "mkcLabel":"",
               "mkcCampaignId":0,
               "cmisList": [],
               "mkcJoinTimes": 0,// 每人参加次数
@@ -433,11 +435,9 @@ export default {
                 this.showMsg("您还未选择参加活动的商品.请至少选择一个活动商品.")
                 return
             }
-            if(new Date(this.request.mktStart).getTime() - new Date().getTime() < 60000){
-                   this.showMsg('生效时间请比现在时间大于1分钟以上')
-                   $("#createStartTime3").val("")
-                   return
-            }    
+           if(new Date(this.request.mktStart).getTime() - new Date().getTime() <= -10000){
+                  this.request.mktStart = client.formateTimeStamp()
+            }  
             if(new Date(this.request.mktEnd).getTime() - new Date(this.request.mktStart).getTime() < 60000){
                    this.showMsg('过期时间请比生效时间大于1分钟以上')
                    $("#createEndTime3").val("")
@@ -470,6 +470,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.isLoading = false
                       this.submitflag = false
                       this.showMsg("编辑限时折扣失败!"+data.message);
              })
@@ -487,6 +488,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
+                      this.isLoading = false
                       this.submitflag = false
                       this.showMsg("新建限时折扣失败!"+data.message)
                 })
@@ -655,26 +657,15 @@ export default {
                     return
                   }
                 }　
-               val = val.replace(/-/g,"/")
-                let start = new Date(val)
-                if(this.mktEnd){
-                   let end = new Date( this.mktEnd.replace(/-/g,"/") )
-                   if( end < start ){
-                    this.showMsg('生效时间不可以大于过期时间')
-                    this.request.mktStart = ""
-                    return
-                   }
-                    this.time = (end - start)/24/3600/1000
-                }       
           },　　　　　　　　　　
           deep:true　　　　　　　　
         },
         dflag() {
           client.postData(  MKT_GET_ID  +"?mkcCampaignId="+this.mkcid , {}).then(response => {
-                this.isLoading = false;
                 if (response.code == 200) {
                    this.request.mkcCampaignId =  response.data.mkcCampaignId
-                   this.request.mkcName = response.data.mkcName
+                   this.request.mkcName =  response.data.mkcName
+                   this.request.mkcLabel = response.data.mkcLabel
                     let sjtime  = new Date(response.data.mktStart)
                     this.request.mktStart = sjtime.getFullYear() 
                     if( sjtime.getMonth()+1 >= 10 ){
@@ -774,30 +765,29 @@ export default {
               let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?$/
               if(!reg.test(val)){
                 this.showMsg('日期格式不合法')
-                this.mktEnd = ""
                 this.request.mktEnd = ""
                 return
               }
             }
-              val = val.replace(/-/g,"/")
+             /* val = val.replace(/-/g,"/")
                 let end = new Date(val)
                 if(end <= new Date()){
                   this.showMsg('过期时间不可以小于现在时间')
                   this.mktEnd = ""
                   this.request.mktEnd = ""
                   return
-                }
-            if( this.request.mktStart ){
+                }*/
+            /*if( this.request.mktStart ){
                 let start = new Date( this.request.mktStart.replace(/-/g,"/") )
                 if( end < start ){
                     this.showMsg('生效时间不可以大于过期时间')
                     this.mktEnd = ""
                     this.request.mktEnd = ""
                     return
-                }
-                this.time = Math.round((end - start)/24/3600/1000)
-                this.request.mktEnd = val
-            }
+                }*/
+                //this.time = Math.round((end - start)/24/3600/1000)
+                //this.request.mktEnd = val
+            //}
         },
         show() {
             this.showPage = this.show;
@@ -889,9 +879,9 @@ export default {
           },
           beforeShow: function(){
              dates.attr("disabled","disabled")
-             if( $("#createStartTime3").datepicker( 'getDate' ) != null ){
+             /*if( $("#createStartTime3").datepicker( 'getDate' ) != null ){
                return
-             }
+             }*/
               $(this).datepicker('option', 'minDate', new Date() )
           },
       });

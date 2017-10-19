@@ -172,6 +172,7 @@ export default {
                     }
                 }
             }
+            let msg = ''
             if(arr.length < selectList.length){
                 for(let i = 0; i < selectList.length; i++){
                     let flag = true
@@ -182,10 +183,14 @@ export default {
                         }
                     }
                     if(flag){
+                        msg = '地区信息已更改,请重新设置配送区域'
                         selectList.splice(i,1);
                         --i
                     }
                 }
+            }
+            if(msg){
+                this.showMsg(msg)
             }
         },
         //将数据传给父类

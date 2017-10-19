@@ -135,9 +135,8 @@ export default {
     methods: {
         //校验涨价减价
         checkChangePrice(item) {
-            if (!/^[0-9]*$/.test(Math.abs(Number(item.ordChangePrice)))) {
-                this.$parent.showMsg("请输入数字");
-                item.ordChangePrice = 0;
+            if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(item.ordChangePrice) || item.ordChangePrice < 0) {
+                alert("请输入大于或等于0的2位金额");
             }
             if (item.ordOriginal * item.ordSkuNum + Number(item.ordChangePrice) - item.ordShareAmount < 0) {
                 this.$parent.showMsg("减价幅度不得大于需付价格");
@@ -147,9 +146,12 @@ export default {
         },
         //校验运费
         checkTransportAmount(item) {
-            if (!/^[0-9]*$/.test(item.ordTransportAmount) || item.ordTransportAmount < 0) {
-                this.$parent.showMsg("请输入不小于0的数字");
-                item.ordTransportAmount = 0;
+            // if (!/^[0-9]*$/.test(item.ordTransportAmount) || item.ordTransportAmount < 0) {
+            //     this.$parent.showMsg("请输入不小于0的数字");
+            //     item.ordTransportAmount = 0;
+            // }
+            if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(item.ordTransportAmount) || item.ordTransportAmount < 0) {
+                alert("请输入大于或等于0的2位金额");
             }
             return;
         },
@@ -173,14 +175,15 @@ export default {
         },
         //计算实付款
         actAmount() {
-            let changePriceSum = 0, price = 0,totalCampaignAmount=0;
+            let changePriceSum = 0, price = 0,totalCampaignAmount=0,actAmount;
             this.editPaymentData.orderDetailList.forEach(item => {
                 price = item.ordChangePrice == '' ? 0 : item.ordChangePrice;
                 changePriceSum = Number(changePriceSum) + Number(price);
                 this.editPaymentData.ordActAmount = Number(this.editPaymentData.ordActAmount) + Number(price);
                 totalCampaignAmount=Number(totalCampaignAmount)+Number(this.getCampaignAmount(item));
             });
-            return Number(this.editPaymentData.ordAmount) - Number(totalCampaignAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
+            actAmount=Number(this.editPaymentData.ordAmount) - Number(totalCampaignAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
+            return actAmount.toFixed(2);
         },
         //获取改价字符串
         getChangePriceString() {
