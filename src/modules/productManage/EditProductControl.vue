@@ -1,4 +1,5 @@
 <template>
+<!-- 商品编辑页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
             <div slot="content">
@@ -218,29 +219,95 @@
                              <table   width="100%" border="1" cellpadding="0" cellspacing="0" style="table-layout: fixed;">  
                              <tbody id="itemList">
                                 <tr >
-                                   <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                    <!-- 图片一 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.oneUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.oneUrl!=''" :change-left="moveLeft.bind(this,1)" :change-right="moveRight.bind(this,1)" :remove-item="removeMoveItem.bind(this,1)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.oneUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
                                     </td>
-                                     <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                    <!-- 图片二 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.twoUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.twoUrl!=''" :change-left="moveLeft.bind(this,2)" :change-right="moveRight.bind(this,2)" :remove-item="removeMoveItem.bind(this,2)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.twoUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+                                    <!-- 图片三 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.threeUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.threeUrl!=''" :change-left="moveLeft.bind(this,3)" :change-right="moveRight.bind(this,3)" :remove-item="removeMoveItem.bind(this,3)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.threeUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+                                    <!-- 图片四 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.fourUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 4 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.fourUrl!=''" :change-left="moveLeft.bind(this,4)" :change-right="moveRight.bind(this,4)" :remove-item="removeMoveItem.bind(this,4)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.fourUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+                                    <!-- 图片五 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.fiveUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.fiveUrl!=''" :change-left="moveLeft.bind(this,5)" :change-right="moveRight.bind(this,5)" :remove-item="removeMoveItem.bind(this,5)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.fiveUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+                                    
+                                    <!-- <td  style="height:100px ; width: 25%">
+                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
+                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog( 1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                    </td>
+                                    <td  style="height:100px ; width: 25%">
+                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
+                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog( 2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                     </td>
                                      <td  style="height:100px ; width: 25%">
                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" v-if="data.threeUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.threeUrl" class="cursor" @click="showSelectPicDialog(3 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                <img :src="data.threeUrl" class="cursor" @click="showSelectPicDialog( 3 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                     </td>
                                      <td  style="height:100px ; width: 25%">
                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 4 )" v-if="data.fourUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.fourUrl" class="cursor" @click="showSelectPicDialog(4 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                <img :src="data.fourUrl" class="cursor" @click="showSelectPicDialog( 4 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                     </td>
                                      <td  style="height:100px ; width: 25%">
                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" v-if="data.fiveUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.fiveUrl" class="cursor" @click="showSelectPicDialog(5 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
-                                    </td>
+                                <img :src="data.fiveUrl" class="cursor" @click="showSelectPicDialog( 5 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                    </td> -->
                                    
                                 </tr>
-                             </tbody>
+                            </tbody>
                         </table>        
                         </div>
     <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
@@ -305,16 +372,16 @@
                                 开始时间：
                             </label>
                             <span v-if="spuShelvesStatus == 1">
-                             <div class="controls col-md-6"><h4>{{uptime|filterTime}}</h4></div>
-                             </span>
+                                <div class="controls col-md-6"><h4>{{uptime|filterTime}}</h4></div>
+                            </span>
                             <span v-else>
-                            <div class="controls col-md-4 ">
-                                <span class="radios">
-                                <input type="radio" name="startTime" v-model="rad" value="1" checked>立刻                                                              
-                                <br>
-                                <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
-                                </span>
-                       <div class="col-md-9 time-box" id="selecttime1" style="display:none">
+                                <div class="controls col-md-4 ">
+                                    <span class="radios">
+                                        <input type="radio" name="startTime" v-model="rad" value="1" checked>立刻                                                              
+                                        <br>
+                                        <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
+                            </span>
+                            <div class="col-md-9 time-box" id="selecttime1" style="display:none">
                         <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTime1" v-model="stime"/>
                                <!--  <select  v-model="hour" style="width:90px; height:27px">
                                     <option value="-1">选择小时</option>
@@ -330,21 +397,16 @@
                 </div>                                                    
                 <h4><strong>商品详情图片上传</strong></h4>             
                     <div class="col-md-4" style="padding-bottom:10px;">
-                            <!-- <label class="col-sm-4 control-label">
-                                <span class="required">* </span>点击编辑图片广告</label> -->
-                            <div class="controls col-md-6">
-                                <!-- <i class="fa fa-image pick-img" @click="showPicDialog(6)" v-if="data.iconUrl==''" style="margin-top: 20px;"></i> -->
-                               <!--  <img :src="img" class="" @click="showPicDialog(6)" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">  -->
-                                 <input type="button" sytle="width=100px;height=100px" @click="showPicDialog(6)" height="80" value="点击编辑图片广告" />
-                            </div>
+                        <div class="controls col-md-6">
+                            <input type="button" sytle="width=100px;height=100px" @click="showPicDialog(6)" height="80" value="点击编辑图片广告" />
                         </div>
-                        <br><br>
-                        <br>
-                <div   id="img" style="text-align:center" v-for=" a in imgList "> 
-                 
-                 <img class="images" :src="a.url "    style=" width: 400px ; height:300px"/><br>
-                 
-            </div>
+                    </div>
+                    <br><br><br>
+                    <div id="img" style="text-align:center; margin-left:30%;" v-for=" (index,a) in imgList ">
+                        <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right=false>
+                            <img class="images" :src="a.url" style="height:300px; width:400px;">
+                        </item-move><br>
+                    </div>
                     </form>
                 </div>
             </div>
@@ -364,7 +426,7 @@
             </div>
         </div>
 
-         <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
+        <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
             <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
         </div>
         <div style="position:fixed;z-index:11111;" v-show="showComponent">
@@ -372,8 +434,8 @@
         </div>
         <!-- <loading :show="isLoading"></loading> -->
         <!-- 标签选择弹窗 -->
-         <tag-tree v-if="showTagTreeSelect" :list="tagsList" :onselect="selectTagFunc" :oncancel="showTagDialog"   :type="0"></tag-tree>
-         <tag-tree v-if="showperTreeSelect" :list="personList" :onselect="selectPerFunc" :oncancel="showperDialog" :type="3"></tag-tree>
+        <tag-tree v-if="showTagTreeSelect" :list="tagsList" :onselect="selectTagFunc" :oncancel="showTagDialog"   :type="0"></tag-tree>
+        <tag-tree v-if="showperTreeSelect" :list="personList" :onselect="selectPerFunc" :oncancel="showperDialog" :type="3"></tag-tree>
         <tag-tree v-if="showneiTreeSelect" :list="neirongList" :onselect="selectNeiFunc" :oncancel="showneiDialog" :type="1"></tag-tree>
         
         </div>
@@ -381,12 +443,13 @@
 </template>
 <script>
 import client from '../../common/utils/client';
+import itemMove from '../../components/page/itemMove';
 import tagTree from '../common/tagTree';
 import templateControl from './templateControl';
 import { selectPic, mAlert, mSelect, mMultiSelect, itemList ,selectComponentAll} from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';//上传图片插件
 export default {
-    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList ,templateControl ,selectComponentAll},
+    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList, templateControl, selectComponentAll, itemMove },
     props: {
         spuid: 0,
         proflag: true,
@@ -510,6 +573,193 @@ export default {
         }
     },
     methods: {
+        // 详情图片上移
+        detailMoveUp(index){
+            if(this.imgList.length > 1){
+                // 图片向上移动一位,即点中移动的图片和前一张图片交换位置
+                let temp = {};
+                if(index != 0){
+                    temp = this.imgList[index];
+                    this.imgList.$set(index,this.imgList[index-1]);
+                    this.imgList.$set(index-1,temp);
+                }else{
+                    // 如果点击的是第一张图片,则与最后一张交换
+                    temp = this.imgList[index];
+                    this.imgList.$set(index,this.imgList[this.imgList.length-1]);
+                    this.imgList.$set(this.imgList.length-1,temp);
+                }
+            }
+        },
+        // 详情图片下移
+        detailMoveDown(index){
+            if(this.imgList.length > 1){
+                // 图片向下移动一位,即点中移动的图片和后一张图片交换位置
+                let temp = {};
+                if(index != (this.imgList.length-1)){
+                    temp = this.imgList[index];
+                    this.imgList.$set(index,this.imgList[index+1]);
+                    this.imgList.$set(index+1,temp);
+                }else{
+                    // 如果点击的是最后一张图片,则与第一张交换
+                    temp = this.imgList[index];
+                    this.imgList.$set(index,this.imgList[0]);
+                    this.imgList.$set(0,temp);
+                }
+            }
+        },
+        // 详情图片删除
+        detailRemove(index){
+            this.imgList.splice(index,1);
+        },
+        // 图片左移
+        moveLeft(index){
+            if(this.singleimgList.length > 1){
+                for(let i=0; i<this.singleimgList.length; i++){
+                    if(index == (i+1)){
+                        // 图片向左移动一位,即点中移动的图片和前一张图片交换位置,并需改变psrSortNo的值
+                        let temp = {};
+                        if(index != 1){
+                            this.singleimgList[i].psrSortNo -= 1;
+                            temp = this.singleimgList[i];
+                            this.singleimgList[i-1].psrSortNo += 1;
+                            this.singleimgList[i] = this.singleimgList[i-1];
+                            this.singleimgList[i-1] = temp;
+
+                            // 根据移动后的singleimgList改变img标签中的src
+                            if(index == 2){
+                                this.data.oneUrl=this.singleimgList[i-1].psrResourceUrl;
+                                this.data.twoUrl=this.singleimgList[i].psrResourceUrl;
+                            }else if(index == 3){
+                                this.data.twoUrl=this.singleimgList[i-1].psrResourceUrl;
+                                this.data.threeUrl=this.singleimgList[i].psrResourceUrl;
+                            }else if(index == 4){
+                                this.data.threeUrl=this.singleimgList[i-1].psrResourceUrl;
+                                this.data.fourUrl=this.singleimgList[i].psrResourceUrl;
+                            }else if(index == 5){
+                                this.data.fourUrl=this.singleimgList[i-1].psrResourceUrl;
+                                this.data.fiveUrl=this.singleimgList[i].psrResourceUrl;
+                            }
+                        }else{
+                            // 如果点击的是第一张图片,则与最后一张交换
+                            this.singleimgList[this.singleimgList.length-1].psrSortNo = 1;
+                            temp = this.singleimgList[this.singleimgList.length-1];
+                            this.singleimgList[0].psrSortNo = this.singleimgList.length+1;
+                            this.singleimgList[this.singleimgList.length-1] = this.singleimgList[0];
+                            this.singleimgList[0] = temp;
+
+                            // 判断总图片数量,根据移动后的singleimgList改变img标签中的src
+                            if(this.singleimgList.length == 2){
+                                this.data.oneUrl=this.singleimgList[0].psrResourceUrl;
+                                this.data.twoUrl=this.singleimgList[this.singleimgList.length-1].psrResourceUrl;
+                            }else if(this.singleimgList.length == 3){
+                                this.data.oneUrl=this.singleimgList[0].psrResourceUrl;
+                                this.data.threeUrl=this.singleimgList[this.singleimgList.length-1].psrResourceUrl;
+                            }else if(this.singleimgList.length == 4){
+                                this.data.oneUrl=this.singleimgList[0].psrResourceUrl;
+                                this.data.fourUrl=this.singleimgList[this.singleimgList.length-1].psrResourceUrl;
+                            }else if(this.singleimgList.length == 5){
+                                this.data.oneUrl=this.singleimgList[0].psrResourceUrl;
+                                this.data.fiveUrl=this.singleimgList[this.singleimgList.length-1].psrResourceUrl;
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        // 图片右移
+        moveRight(index){
+            if(this.singleimgList.length > 1){
+                for(let i=0; i<this.singleimgList.length; i++){
+                    if(index == (i+1)){
+                        // 图片向右移动一位,即点中移动的图片和后一张图片交换位置,并需改变psrSortNo的值
+                        let temp = {};
+                        if(index != this.singleimgList.length){
+                            this.singleimgList[i].psrSortNo += 1;
+                            temp = this.singleimgList[i];
+                            this.singleimgList[i+1].psrSortNo -= 1;
+                            this.singleimgList[i] = this.singleimgList[i+1];
+                            this.singleimgList[i+1] = temp;
+
+                            // 根据移动后的singleimgList改变img标签中的src
+                            if(index == 1){
+                                this.data.oneUrl=this.singleimgList[i].psrResourceUrl;
+                                this.data.twoUrl=this.singleimgList[i+1].psrResourceUrl;
+                            }else if(index == 2){
+                                this.data.twoUrl=this.singleimgList[i].psrResourceUrl;
+                                this.data.threeUrl=this.singleimgList[i+1].psrResourceUrl;
+                            }else if(index == 3){
+                                this.data.threeUrl=this.singleimgList[i].psrResourceUrl;
+                                this.data.fourUrl=this.singleimgList[i+1].psrResourceUrl;
+                            }else if(index == 4){
+                                this.data.fourUrl=this.singleimgList[i].psrResourceUrl;
+                                this.data.fiveUrl=this.singleimgList[i+1].psrResourceUrl;
+                            }
+                        }else{
+                            // 如果点击的是最后一张,则与第一张交换
+                            this.singleimgList[index-1].psrSortNo = 1;
+                            temp = this.singleimgList[index-1];
+                            this.singleimgList[0].psrSortNo = index;
+                            this.singleimgList[index-1] = this.singleimgList[0];
+                            this.singleimgList[0] = temp;
+
+                            // 根据移动后的singleimgList改变img标签中的src
+                            if(index == 2){
+                                this.data.oneUrl=this.singleimgList[0].psrResourceUrl;
+                                this.data.twoUrl=this.singleimgList[i].psrResourceUrl;
+                            }else if(index == 3){
+                                this.data.oneUrl=this.singleimgList[0].psrResourceUrl;
+                                this.data.threeUrl=this.singleimgList[i].psrResourceUrl;
+                            }else if(index == 4){
+                                this.data.oneUrl=this.singleimgList[0].psrResourceUrl;
+                                this.data.fourUrl=this.singleimgList[i].psrResourceUrl;
+                            }else if(index == 5){
+                                this.data.oneUrl=this.singleimgList[0].psrResourceUrl;
+                                this.data.fiveUrl=this.singleimgList[i].psrResourceUrl;
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        // 删除图片
+        removeMoveItem(index){
+            // 如果删除的是最后一张图片,则直接删除
+            if(index == this.singleimgList.length){
+                this.singleimgList.splice(index-1, 1);
+                if(index == 1){
+                    this.data.oneUrl="";
+                }else if(index == 2){
+                    this.data.twoUrl="";
+                }else if(index == 3){
+                    this.data.threeUrl="";
+                }else if(index == 4){
+                    this.data.fourUrl="";
+                }else if(index == 5){
+                    this.data.fiveUrl="";
+                }
+            }else{
+                // 如果删除的不是最后一张图片,则删除后将之后的图片往前移动一位
+                this.singleimgList.splice(index-1, 1); 
+                let m = index-1;// 删除的索引
+                for(let j=m; j<this.singleimgList.length; j++){
+                    // 将此索引包括之后的元素的psrSortNo-1,并将psrResourceUrl赋值给对应的img标签
+                    this.singleimgList[j].psrSortNo -= 1;
+                    if(this.singleimgList[j].psrSortNo == 1){
+                        this.data.oneUrl=this.singleimgList[j].psrResourceUrl;
+                        this.data.twoUrl="";
+                    }else if(this.singleimgList[j].psrSortNo == 2){
+                        this.data.twoUrl=this.singleimgList[j].psrResourceUrl;
+                        this.data.threeUrl="";
+                    }else if(this.singleimgList[j].psrSortNo == 3){
+                        this.data.threeUrl=this.singleimgList[j].psrResourceUrl;
+                        this.data.fourUrl="";
+                    }else if(this.singleimgList[j].psrSortNo == 4){
+                        this.data.fourUrl=this.singleimgList[j].psrResourceUrl;
+                        this.data.fiveUrl="";
+                    }
+                }
+            }
+        },
       //整数校验
          check(event){
                let el = event.currentTarget;
@@ -704,10 +954,7 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            // alert(0);
-            console.log(list);
-           // alert(this.singleimgList.length)
-            //alert(0);
+            //console.log(list);
             if (this.selectPicType == 2) {
                 this.singleimgList[1] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 2, "psrType": 1,"psrResourceId":list[0].id } 
                 this.data.twoUrl = list[0].url;
@@ -725,8 +972,9 @@ export default {
                  this.data.oneUrl = list[0].url;
                   this.request.spuPic = list[0].url
             }else if (this.selectPicType == 6)  {
-                 this.imgList = []
-                 this.imgList = list
+                 for(let i=0; i<list.length; i++){
+                     this.imgList.push(list[i]);
+                 }
             }
             this.showSelectPic({ show: false });
         },
@@ -937,11 +1185,12 @@ export default {
             this.showMsg("商品图片至少上传一张")
             return
          }
-        //详情图片管理
+         // 商品图片
          this.singleimgList.forEach((data,index)=>{
-                this.request.resourceList.$set(index, data)
+             this.request.resourceList.$set(index, data)
              })
 
+        //详情图片管理
          this.imgList.forEach((data,index)=>{
                 this.request.detailsList.$set(index, {
                     
@@ -1509,6 +1758,7 @@ export default {
                         //this.showSelectPicDialog(i+1)
                     }
                   // this.showSelectPic({ show: false })
+                  this.singleimgList = this.request.resourceList;
             }, data => {
                 this.isLoading = false;
                 this.showMsg("获取spu信息失败,请刷新重试");
@@ -1710,5 +1960,4 @@ export default {
 .dele:hover{
     color:red
 }
-
 </style>

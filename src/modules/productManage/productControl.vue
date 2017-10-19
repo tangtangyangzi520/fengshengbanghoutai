@@ -1,4 +1,5 @@
 <template>
+<!-- 发布商品页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
             <div slot="content">
@@ -366,7 +367,73 @@
                              <table   width="100%" border="1" cellpadding="0" cellspacing="0" style="table-layout: fixed;">  
                              <tbody id="itemList">
                                 <tr >
-                                   <td  style="height:100px ; width: 25%">
+                                    <!-- 图片一 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.oneUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.oneUrl!=''" :change-left="moveLeft.bind(this,1)" :change-right="moveRight.bind(this,1)" :remove-item="removeMoveItem.bind(this,1)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.oneUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+                                    <!-- 图片二 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.twoUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.twoUrl!=''" :change-left="moveLeft.bind(this,2)" :change-right="moveRight.bind(this,2)" :remove-item="removeMoveItem.bind(this,2)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.twoUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+                                    <!-- 图片三 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.threeUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.threeUrl!=''" :change-left="moveLeft.bind(this,3)" :change-right="moveRight.bind(this,3)" :remove-item="removeMoveItem.bind(this,3)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.threeUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+                                    <!-- 图片四 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.fourUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 4 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.fourUrl!=''" :change-left="moveLeft.bind(this,4)" :change-right="moveRight.bind(this,4)" :remove-item="removeMoveItem.bind(this,4)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.fourUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+                                    <!-- 图片五 -->
+                                    <td  style="height:194px ; width: 25%">
+                                        <div class="item-edit-box">
+                                            <div class="buy-pic" style="bottom:0;" v-if="data.fiveUrl==''">
+                                                <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" style="margin-top: 20px;"></i>
+                                            </div>
+                                            <item-move v-if="data.fiveUrl!=''" :change-left="moveLeft.bind(this,5)" :change-right="moveRight.bind(this,5)" :remove-item="removeMoveItem.bind(this,5)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <div class="buy-pic" style="bottom:0;">
+                                                    <img :src="data.fiveUrl" style="height:194px; width:194px;">
+                                                </div>
+                                            </item-move>
+                                        </div>
+                                    </td>
+
+                                   <!-- <td  style="height:100px ; width: 25%">
                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
                                 <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                     </td>
@@ -385,7 +452,7 @@
                                      <td  style="height:100px ; width: 25%">
                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" v-if="data.fiveUrl==''" style="margin-top: 20px;"></i>
                                 <img :src="data.fiveUrl" class="cursor" @click="showSelectPicDialog(5 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
-                                    </td>
+                                    </td> -->
                                    
                                 </tr>
                              </tbody>
@@ -519,12 +586,13 @@
 </template>
 <script>
 import client from '../../common/utils/client';
+import itemMove from '../../components/page/itemMove';
 import tagTree from '../common/tagTree';
 import templateControl from './templateControl';
 import { selectPic, mAlert, mSelect, mMultiSelect, itemList } from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';//上传图片插件
 export default {
-    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList ,templateControl },
+    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList, templateControl, itemMove },
     props: {
         cflag: false,
         par:{      
@@ -650,6 +718,155 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        // 图片左移
+        moveLeft(index){
+            if(this.request.resourceList.length > 1){
+                for(let i=0; i<this.request.resourceList.length; i++){
+                    if(index == (i+1)){
+                        // 图片向左移动一位,即点中移动的图片和前一张图片交换位置,并需改变psrSortNo的值
+                        let temp = {};
+                        if(index != 1){
+                            this.request.resourceList[i].psrSortNo -= 1;
+                            temp = this.request.resourceList[i];
+                            this.request.resourceList[i-1].psrSortNo += 1;
+                            this.request.resourceList[i] = this.request.resourceList[i-1];
+                            this.request.resourceList[i-1] = temp;
+
+                            // 根据移动后的singleimgList改变img标签中的src
+                            if(index == 2){
+                                this.data.oneUrl=this.request.resourceList[i-1].psrResourceUrl;
+                                this.data.twoUrl=this.request.resourceList[i].psrResourceUrl;
+                            }else if(index == 3){
+                                this.data.twoUrl=this.request.resourceList[i-1].psrResourceUrl;
+                                this.data.threeUrl=this.request.resourceList[i].psrResourceUrl;
+                            }else if(index == 4){
+                                this.data.threeUrl=this.request.resourceList[i-1].psrResourceUrl;
+                                this.data.fourUrl=this.request.resourceList[i].psrResourceUrl;
+                            }else if(index == 5){
+                                this.data.fourUrl=this.request.resourceList[i-1].psrResourceUrl;
+                                this.data.fiveUrl=this.request.resourceList[i].psrResourceUrl;
+                            }
+                        }else{
+                            // 如果点击的是第一张图片,则与最后一张交换
+                            this.request.resourceList[this.request.resourceList.length-1].psrSortNo = 1;
+                            temp = this.request.resourceList[this.request.resourceList.length-1];
+                            this.request.resourceList[0].psrSortNo = this.request.resourceList.length+1;
+                            this.request.resourceList[this.request.resourceList.length-1] = this.request.resourceList[0];
+                            this.request.resourceList[0] = temp;
+
+                            // 判断总图片数量,根据移动后的singleimgList改变img标签中的src
+                            if(this.request.resourceList.length == 2){
+                                this.data.oneUrl=this.request.resourceList[0].psrResourceUrl;
+                                this.data.twoUrl=this.request.resourceList[this.request.resourceList.length-1].psrResourceUrl;
+                            }else if(this.request.resourceList.length == 3){
+                                this.data.oneUrl=this.request.resourceList[0].psrResourceUrl;
+                                this.data.threeUrl=this.request.resourceList[this.request.resourceList.length-1].psrResourceUrl;
+                            }else if(this.request.resourceList.length == 4){
+                                this.data.oneUrl=this.request.resourceList[0].psrResourceUrl;
+                                this.data.fourUrl=this.request.resourceList[this.request.resourceList.length-1].psrResourceUrl;
+                            }else if(this.request.resourceList.length == 5){
+                                this.data.oneUrl=this.request.resourceList[0].psrResourceUrl;
+                                this.data.fiveUrl=this.request.resourceList[this.request.resourceList.length-1].psrResourceUrl;
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        // 图片右移
+        moveRight(index){
+            if(this.request.resourceList.length > 1){
+                for(let i=0; i<this.request.resourceList.length; i++){
+                    if(index == (i+1)){
+                        // 图片向右移动一位,即点中移动的图片和后一张图片交换位置,并需改变psrSortNo的值
+                        let temp = {};
+                        if(index != this.request.resourceList.length){
+                            this.request.resourceList[i].psrSortNo += 1;
+                            temp = this.request.resourceList[i];
+                            this.request.resourceList[i+1].psrSortNo -= 1;
+                            this.request.resourceList[i] = this.request.resourceList[i+1];
+                            this.request.resourceList[i+1] = temp;
+
+                            // 根据移动后的singleimgList改变img标签中的src
+                            if(index == 1){
+                                this.data.oneUrl=this.request.resourceList[i].psrResourceUrl;
+                                this.data.twoUrl=this.request.resourceList[i+1].psrResourceUrl;
+                            }else if(index == 2){
+                                this.data.twoUrl=this.request.resourceList[i].psrResourceUrl;
+                                this.data.threeUrl=this.request.resourceList[i+1].psrResourceUrl;
+                            }else if(index == 3){
+                                this.data.threeUrl=this.request.resourceList[i].psrResourceUrl;
+                                this.data.fourUrl=this.request.resourceList[i+1].psrResourceUrl;
+                            }else if(index == 4){
+                                this.data.fourUrl=this.request.resourceList[i].psrResourceUrl;
+                                this.data.fiveUrl=this.request.resourceList[i+1].psrResourceUrl;
+                            }
+                        }else{
+                            // 如果点击的是最后一张,则与第一张交换
+                            this.request.resourceList[index-1].psrSortNo = 1;
+                            temp = this.request.resourceList[index-1];
+                            this.request.resourceList[0].psrSortNo = index;
+                            this.request.resourceList[index-1] = this.request.resourceList[0];
+                            this.request.resourceList[0] = temp;
+
+                            // 根据移动后的singleimgList改变img标签中的src
+                            if(index == 2){
+                                this.data.oneUrl=this.request.resourceList[0].psrResourceUrl;
+                                this.data.twoUrl=this.request.resourceList[i].psrResourceUrl;
+                            }else if(index == 3){
+                                this.data.oneUrl=this.request.resourceList[0].psrResourceUrl;
+                                this.data.threeUrl=this.request.resourceList[i].psrResourceUrl;
+                            }else if(index == 4){
+                                this.data.oneUrl=this.request.resourceList[0].psrResourceUrl;
+                                this.data.fourUrl=this.request.resourceList[i].psrResourceUrl;
+                            }else if(index == 5){
+                                this.data.oneUrl=this.request.resourceList[0].psrResourceUrl;
+                                this.data.fiveUrl=this.request.resourceList[i].psrResourceUrl;
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        // 删除图片
+        removeMoveItem(index){
+            // 如果删除的是最后一张图片,则直接删除
+            if(index == this.request.resourceList.length){
+                this.request.resourceList.splice(index-1, 1);
+                if(index == 1){
+                    this.data.oneUrl="";
+                }else if(index == 2){
+                    this.data.twoUrl="";
+                }else if(index == 3){
+                    this.data.threeUrl="";
+                }else if(index == 4){
+                    this.data.fourUrl="";
+                }else if(index == 5){
+                    this.data.fiveUrl="";
+                }
+            }else{
+                // 如果删除的不是最后一张图片,则删除后将之后的图片往前移动一位
+                this.request.resourceList.splice(index-1, 1); 
+                let m = index-1;// 删除的索引
+                for(let j=m; j<this.request.resourceList.length; j++){
+                    // 将此索引包括之后的元素的psrSortNo-1,并将psrResourceUrl赋值给对应的img标签
+                    this.request.resourceList[j].psrSortNo -= 1;
+                    if(this.request.resourceList[j].psrSortNo == 1){
+                        this.data.oneUrl=this.request.resourceList[j].psrResourceUrl;
+                        this.data.twoUrl="";
+                    }else if(this.request.resourceList[j].psrSortNo == 2){
+                        this.data.twoUrl=this.request.resourceList[j].psrResourceUrl;
+                        this.data.threeUrl="";
+                    }else if(this.request.resourceList[j].psrSortNo == 3){
+                        this.data.threeUrl=this.request.resourceList[j].psrResourceUrl;
+                        this.data.fourUrl="";
+                    }else if(this.request.resourceList[j].psrSortNo == 4){
+                        this.data.fourUrl=this.request.resourceList[j].psrResourceUrl;
+                        this.data.fiveUrl="";
+                    }
+                }
+            }
+        },
         //填写消保类型校验
         checkinsurance(val,num){
             let count = 0;

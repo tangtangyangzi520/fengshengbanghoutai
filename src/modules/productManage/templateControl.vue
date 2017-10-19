@@ -1,4 +1,5 @@
 <template>
+<!-- 商品详情图片上传页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'">
             <div slot="content">
@@ -18,24 +19,20 @@
                         </div> -->
 
             <h1><font style="color:red">{{getspu.msg}}</font></h1>
-                    <h4><strong>商品详情图片上传</strong></h4> 
-                   <div class="col-md-4" style="padding-bottom:10px;">
-                            <!-- <label class="col-sm-4 control-label">
-                                <span class="required">* </span>点击编辑图片广告</label>
-                            <div class="controls col-md-6">
-                                <i class="fa fa-image pick-img" @click="showSelectPicDialog(1)" v-if="data.iconUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="img" class="" @click="showSelectPicDialog(1)" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
-                            </div> -->
+                <h4><strong>商品详情图片上传</strong></h4> 
+                    <div class="col-md-4" style="padding-bottom:10px;">
                              <input type="button" sytle="width=100px;height=100px" @click="showSelectPicDialog(1)" height="80" value="点击编辑图片广告" />
                         </div>
-                        <br><br>
-                        <br>
-                <div   id="img" style="text-align:center" v-for=" a in imgList "> 
-                 
-                 <img class="images" :src="a.url"    style=" width: 400px ; height:300px"/><br>
-                 
-            </div>
+                        <br><br><br>
+                        <div id="img" style="text-align:center; margin-left:30%;" v-for=" (index,a) in imgList ">
+                        <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right=false>
+                            <img class="images" :src="a.url" style="height:300px; width:400px;">
+                        </item-move><br>
+                    </div>
 
+                    <!-- <div   id="img" style="text-align:center" v-for=" a in imgList "> 
+                        <img class="images" :src="a.url"    style=" width: 400px ; height:300px"/><br>
+                    </div> -->
 
                     </form>
                 </div>
@@ -79,12 +76,13 @@
 <script>
 import preview from './preview';
 import client from '../../common/utils/client';
+import itemMove from '../../components/page/itemMove';
 import tagTree from '../common/tagTree';
 import { selectPic, mAlert, mSelect, mMultiSelect, itemList } from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';//上传图片插件
 
 export default {
-    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList , preview },
+    components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList, preview, itemMove },
     props: {
         getspu:{
                 "msg":"",
@@ -185,6 +183,44 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        // 详情图片上移
+        detailMoveUp(index){
+            if(this.imgList.length > 1){
+                // 图片向上移动一位,即点中移动的图片和前一张图片交换位置
+                let temp = {};
+                if(index != 0){
+                    temp = this.imgList[index];
+                    this.imgList.$set(index,this.imgList[index-1]);
+                    this.imgList.$set(index-1,temp);
+                }else{
+                    // 如果点击的是第一张图片,则与最后一张交换
+                    temp = this.imgList[index];
+                    this.imgList.$set(index,this.imgList[this.imgList.length-1]);
+                    this.imgList.$set(this.imgList.length-1,temp);
+                }
+            }
+        },
+        // 详情图片下移
+        detailMoveDown(index){
+            if(this.imgList.length > 1){
+                // 图片向下移动一位,即点中移动的图片和后一张图片交换位置
+                let temp = {};
+                if(index != (this.imgList.length-1)){
+                    temp = this.imgList[index];
+                    this.imgList.$set(index,this.imgList[index+1]);
+                    this.imgList.$set(index+1,temp);
+                }else{
+                    // 如果点击的是最后一张图片,则与第一张交换
+                    temp = this.imgList[index];
+                    this.imgList.$set(index,this.imgList[0]);
+                    this.imgList.$set(0,temp);
+                }
+            }
+        },
+        // 详情图片删除
+        detailRemove(index){
+            this.imgList.splice(index,1);
+        },
         up() {
              if(this.temflag){
                 this.showMsg("点击过于频繁")
