@@ -5,16 +5,16 @@
             <div slot="content">
                 <form class="form-horizontal" name="addForm" role="form">
                     <!-- 属性名称输入框 -->
-                    <div class="row">
+                    <div class="form-group">
                         <label for="title" class="col-sm-3 control-label">
-                            <span class="required">* </span>属性名称:
+                            <span class="required">* </span>属性名称：
                         </label>
                         <div class="controls col-md-8">
                             <input type="text" class="form-control input-sm" v-model="data.pcaName" placeholder="请输入属性名称,限20个字符以内">
                         </div>
                     </div>
                     <!-- 编辑属性值 -->
-                    <div class="row">
+                    <div class="form-group">
                         <p>
                             <h4>编辑属性值</h4>
                         </p>

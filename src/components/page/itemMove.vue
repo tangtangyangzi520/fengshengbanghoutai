@@ -4,13 +4,24 @@
         <div class="bottom buying">
             <div class="inner">
                 <a @click.stop="removeItemFunc">
+                    <!-- 删除图标 -->
                     <i class="fa fa-trash-o"></i>
                 </a>
-                <a @click="changeDown" v-show="!hideChangePos">
+                <a @click="changeRight" v-show="hiddenLeftRight">
+                    <!-- 向右图标 -->
                     <i class="fa fa-arrow-right"></i>
                 </a>
-                <a @click="changeUp" v-show="!hideChangePos">
+                <a @click="changeLeft" v-show="hiddenLeftRight">
+                    <!-- 向左图标 -->
                     <i class="fa fa-arrow-left"></i>
+                </a>
+                <a @click="changeDown" v-show="hiddenUpDown">
+                    <!-- 向下图标 -->
+                    <i class="fa fa-arrow-down"></i>
+                </a>
+                <a @click="changeUp" v-show="hiddenUpDown">
+                    <!-- 向上图标 -->
+                    <i class="fa fa-arrow-up"></i>
                 </a>
                 <div class="confirm" v-if="showRemove">
                     <a class="btn red btn-sure" @click="removeItem">确定</a>
@@ -23,6 +34,14 @@
 <script>
 export default {
     props: {
+        changeLeft: {
+            type: Function,
+            default() { }
+        },
+        changeRight: {
+            type: Function,
+            default() { }
+        },
         changeUp: {
             type: Function,
             default() { }
@@ -43,9 +62,13 @@ export default {
             type: String,
             default: ''
         },
-        hideChangePos: {
+        hiddenLeftRight: {
             type: Boolean,
-            default: false
+            default: true
+        },
+        hiddenUpDown: {
+            type: Boolean,
+            default: true
         }
     },
     components: {},
