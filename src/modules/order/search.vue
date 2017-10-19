@@ -3,7 +3,7 @@
 
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3 sea" >订单编号:</label>
+                <label class="col-md-3 sea" >订单编号：</label>
                 <div class="col-md-9" >
                     <input type="text" class="form-control" v-model="searchOptions.ordOrderNo">
                 </div>
@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3 sea">买家昵称:</label>
+                <label class="col-md-3 sea">买家昵称：</label>
                 <div class="col-md-9">
                     <input type="text" class="form-control" v-model="searchOptions.orsMemberNickname">
                 </div>
@@ -19,7 +19,7 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3" style=" width:21.8%">收货人手机:</label>
+                <label class="col-md-3" style=" width:21.8%">收货人手机：</label>
                 <div class="col-md-9">
                     <input type="text" class="form-control" v-model="searchOptions.ordReceiveMobile">
                 </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3 sea">订单状态:</label>
+                <label class="col-md-3 sea">订单状态：</label>
                 <div class="col-md-9">
                     <!-- <m-select :data="stateList" :placeholder="'请选择内容'" :change-func="selectStateFunc" :class="'fixedIcon'"></m-select> -->
                     <select class="form-control" v-model="searchOptions.ordStatus">
@@ -38,7 +38,7 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3 sea">物流方式:</label>
+                <label class="col-md-3 sea">物流方式：</label>
                 <div class="col-md-9">
                     <!-- <m-select :data="logiTypeList" :placeholder="'请选择内容'" :change-func="selectLogiTypeFunc" :class="'fixedIcon'"></m-select> -->
                      <select class="form-control" v-model="searchOptions.ordLogiType">
@@ -61,7 +61,7 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3 sea">实付金额:</label>
+                <label class="col-md-3 sea">实付金额：</label>
                 <div class="col-md-9 time-box">
                     <div><input type="text" class="form-control inline-block" :placeholder="'输入最低金额'" v-model="searchOptions.lowOrsOpenPay" @blur="checkAmount(searchOptions.lowOrsOpenPay)"></div>
                     <div>~</div>
@@ -71,7 +71,7 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label class="col-md-3 sea">订单类型:</label>
+                <label class="col-md-3 sea">订单类型：</label>
                 <div class="col-md-9">
                     <!-- <m-select :data="orderTypeList" :placeholder="'请选择内容'" :change-func="selectOrderTypeFunc" :class="'fixedIcon'"></m-select> -->
                      <select class="form-control" v-model="searchOptions.ordOrderType">

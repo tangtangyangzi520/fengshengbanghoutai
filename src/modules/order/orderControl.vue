@@ -171,11 +171,11 @@
                                 </td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{setData.orsMemberNickname}}:{{setData.buyerMessage}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordPayTime}}</td>
-                                <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordActAmount}}</td>
+                                <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordActAmount.toFixed(2)}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{payStatus(setData.orsPayStatus)}}</td>
                             </tr>
                             <tr>
-                                <td colspan="5" style="text-align:left">累计收款：&nbsp;&nbsp;{{subData.ordActAmount}}元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实收款：&nbsp;&nbsp;{{subData.ordActAmount}}元</td>
+                                <td colspan="5" style="text-align:left">累计收款：&nbsp;&nbsp;{{subData.ordActAmount.toFixed(2)}}元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实收款：&nbsp;&nbsp;{{subData.ordActAmount.toFixed(2)}}元</td>
                             </tr>
                         </table>
 
@@ -216,7 +216,7 @@
                                         <p>规格: {{itemDetail.detailSku.skuName}}</p>
                                     </td>
                                     <td align="center" style="width:7%;vertical-align:middle;">
-                                        {{itemDetail.ordOriginal}}
+                                        {{itemDetail.ordOriginal.toFixed(2)}}
                                     </td>
                                     <td align="center" style="width:7%;vertical-align:middle;">
                                         {{itemDetail.ordSkuNum}}

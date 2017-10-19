@@ -13,7 +13,7 @@
                     <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>
                     <button class="btn blue" type="button" @click="exportOrder" v-if="showflag && limitResource.Order_export">批量导出</button>
                     <!--                 <button class="btn yellow-crusta" type="button" @click="selectSpu" >选择商品</button>
-                                                                                                                -->
+                                                                                                                    -->
                     <!-- <button class="btn blue" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button> -->
                 </div>
             </div>
@@ -52,7 +52,7 @@
                 <div class="col-md-12">
                     <div class="col-md-9">
                         <span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span>
-                        &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay}}元 &nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay.toFixed(2)}}元 &nbsp;&nbsp;&nbsp;&nbsp;
                         <span v-if="itemSet.orderSubList.length==1 && itemSet.orderSubList[0].ordOrderType==0" style="color:blue;">跨境订单</span>
                     </div>
                     <div v-show="showflag" class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
@@ -60,7 +60,7 @@
                         <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])" v-if="limitResource.editOrderSetDemo">备注</a>
                         <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                         <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                             </td>
                             <td align="center" style="width:7%;vertical-align:middle;">
                                 <p style="padding-top:5px;">
-                                    <span class=""> ¥ {{itemDetail.ordOriginal}}</span>
+                                    <span class=""> ¥ {{itemDetail.ordOriginal.toFixed(2)}}</span>
                                 </p>
                                 <p style="padding-top:5px;">
                                     <span class="">（{{itemDetail.ordSkuNum}}{{itemDetail.ordUnit}}）</span>
@@ -120,17 +120,28 @@
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a href="javascript:;" @click="setStar(itemSub)" v-if="limitResource.addStar">加星</a>
                                 </p>
-                                <p>¥ {{itemSub.ordActAmount}}</p>
+                                <p>¥ {{itemSub.ordActAmount.toFixed(2)}}</p>
                                 <p>{{ordPayChannel(itemSet.orsPayChannel)}}</p>
                                 <p>
                                     <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue" v-if="limitResource.editActAmount">修改价格</button>
                                 </p>
                             </td>
                         </tr>
+                        <tr v-if="itemSub.ordDemo.length>0">
+                            <td colspan="6" style="text-align:left;background-color:rgba(255, 204, 102, 1)">
+                                卖家备注:{{itemSub.ordDemo}}
+                            </td>
+                        </tr>
                     </tbody>
+                    <tbody v-if="itemSet.buyerMessage.length>0">
+                        <tr>
+                            <td colspan="6" style="text-align:left;background-color:rgba(255, 204, 255, 1)">
+                                买家备注:{{itemSet.buyerMessage}}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
