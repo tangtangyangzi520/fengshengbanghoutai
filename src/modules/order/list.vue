@@ -126,7 +126,7 @@
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
                                                            (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
-                                    <a href=" " @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
+                                    <a @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
                                     <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                         <span style="font-size:12px;color:#FF2D2D;position:relative;bottom:5px;">×{{itemSub.ordStar}}</span>

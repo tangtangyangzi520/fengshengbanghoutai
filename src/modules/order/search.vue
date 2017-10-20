@@ -54,8 +54,8 @@
                     <div><input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTimeOrder"></div>
                     <div>至</div>
                     <div><input type="text" class="form-control inline-block datePicker" placeholder="选择结束时间" id="createEndTimeOrder"></div>
-                    <a @click="setTime(7)">近7天</a>
-                    <a @click="setTime(30)">近30天</a>
+                    <a style="position:relative;bottom:-15px;" @click="setTime(7)">近7天</a> 
+                    <a style="position:relative;bottom:-15px;" @click="setTime(30)">近30天</a>
                 </div>
             </div>
         </div>
