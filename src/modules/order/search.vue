@@ -82,6 +82,16 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
+                <label class="col-md-3" style=" width:21.8%">付款时间：</label>
+                <div class="col-md-9 time-box">
+                    <div><input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="payStartTimeOrder"></div>
+                    <div>至</div>
+                    <div><input type="text" class="form-control inline-block datePicker" placeholder="选择结束时间" id="payEndTimeOrder"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
                 <button class="btn blue" type="button" @click="clearOptions()">清空查询条件</button>
             </div>
         </div>
@@ -131,6 +141,8 @@ export default {
                 ordLogiType: -1,
                 createStartTime: '',
                 createEndTime: '',
+                payStartTime: '',
+                payEndTime: '',
                 lowOrsOpenPay: '',
                 highOrsOpenPay: '',
                 ordOrderType: -1,
@@ -164,6 +176,8 @@ export default {
                 ordLogiType: -1,
                 createStartTime: '',
                 createEndTime: '',
+                payStartTime: '',
+                payEndTime: '',
                 lowOrsOpenPay: '',
                 highOrsOpenPay: '',
                 ordOrderType: -1,
@@ -185,6 +199,8 @@ export default {
             setTimeout(() => this.orderTypeList = listOrderType, 50)
             $('#createStartTimeOrder').val("");
             $('#createEndTimeOrder').val("");
+            $('#payStartTimeOrder').val("");
+            $('#payEndTimeOrder').val("");
             this.setOptions();
         },
         //设置时间(近7天/近30天)
@@ -211,6 +227,16 @@ export default {
             }
             if (createEndTime != '') {
                 options.createEndTime = createEndTime + " 23:59:59";
+            }
+             options.payStartTime = options.payEndTime = '';
+            let payStartTime = $('#payStartTimeOrder').val(),
+                payEndTime = $('#payEndTimeOrder').val();
+
+            if (payStartTime != '') {
+                options.payStartTime = payStartTime + ' 00:00:00';
+            }
+            if (payEndTime != '') {
+                options.payEndTime = payEndTime + " 23:59:59";
             }
             this.onchange(options);
         },
@@ -299,6 +325,52 @@ export default {
             $(this).attr("disabled", "disabled")
         })
         dates.on("blur", this.setOptions)
+
+          let datess = $("#payStartTimeOrder,#payEndTimeOrder");
+        datess.datepicker({
+            dateFormat: "yy-mm-dd",
+            timeFormat: 'HH:mm',
+            showMonthAfterYear: true,
+            changeMonth: true,
+            changeYear: true,
+            buttonImageOnly: true,
+            stepHour: 1,
+            stepMinute: 1,
+            closeText: '确定',
+            prevText: '&#x3c;上月',
+            nextText: '下月&#x3e;',
+            currentText: '今天',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                '七', '八', '九', '十', '十一', '十二'],
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            weekHeader: '周',
+            showAnim: 'highlight',
+            isClear: true, //是否显示清空 
+            isRTL: false,
+            onSelect: function(selectedDate) {
+                var option = this.id == "payStartTimeOrder" ? "minDate" : "maxDate";
+                datess.not(this).datepicker("option", option, selectedDate);
+            },
+            onClose: function(data, inst) {
+                $(this).blur()
+                datess.removeAttr("disabled")
+            },
+            beforeShow: function() {
+                datess.attr("disabled", "disabled")
+                if ($("#payEndTimeOrder").datepicker('getDate') != null) {
+                    return
+                }
+                $(this).datepicker('option', 'maxDate', new Date())
+            },
+        });
+        datess.on("click", function() {
+            $(this).attr("disabled", "disabled")
+        })
+        datess.on("blur", this.setOptions)
     }
 }
 </script>
