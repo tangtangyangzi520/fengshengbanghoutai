@@ -293,7 +293,7 @@ export default {
         },
         //导出订单
         exportOrder() {
-            this.searchOptions.ordSpuId = this.ospuid
+            this.searchOptions.ordSpuId = this.ospuid;
             $("#exportForm").attr("action", ORDER_EXPORT);
             $("input[name='request']").val(JSON.stringify(this.searchOptions))
             $("#exportForm").submit();
