@@ -214,7 +214,7 @@ export default {
                 this.pc.pcName = this.pctName
                 this.pc.pctSet = pctList
                 client.postData( PCT_EDIT , this.pc ).then(data => {
-                this.isLoading = true
+                this.isLoading = false
                 if (data.code == 200) {
                         this.showMsg("编辑运费模板成功")
                  this.isLoading = false
@@ -232,7 +232,7 @@ export default {
 
             }else{
                 client.postData( PCT_CREATE ,{"pctSet":pctList,"pcName":this.pctName,}).then(data => {
-                this.isLoading = true
+                this.isLoading = false
                 if (data.code == 200) {
                         this.showMsg("新健运费模板成功")
                  this.isLoading = false

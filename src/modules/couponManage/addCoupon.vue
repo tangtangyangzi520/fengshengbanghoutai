@@ -425,7 +425,7 @@ export default {
 
              if( this.request.mkcCampaignId > 0 ){
                 client.postData( MKT_EDIT , this.request).then(data => {
-                this.isLoading = true
+                this.isLoading = false
                 if (data.code == 200) {
                         this.showMsg("编辑优惠券成功!")
                         this.mkttid = -1
@@ -444,7 +444,7 @@ export default {
 
             }else{
                 client.postData( MKT_CREATE , this.request).then(data => {
-                this.isLoading = true
+                this.isLoading = false
                 if (data.code == 200) {
                         this.showMsg("新建优惠券成功!")
                  this.isLoading = false

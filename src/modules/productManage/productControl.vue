@@ -2088,7 +2088,7 @@ export default {
           this.request.spuFreight = 0
         }
         client.postData( SPU_CREATE , this.request).then(data => {
-                this.isLoading = true
+                this.isLoading = false
                 if (data.code == 200) {
                    this.isLoading = false
                     //alert("新增成功")
