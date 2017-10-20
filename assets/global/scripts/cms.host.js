@@ -20,8 +20,7 @@ if (/http:\/\/t/.test(location.href)) {
         MEMBER_API_BASE = "http://tapi.fshtop.com/member-api/",
         STORE_API_BASE = "http://prevideo.fshtop.com/",
         File_Upload = "http://prevideo.fshtop.com/common/";
-        ///////////////////////////////////
-        OMS_TEST  =  "http://192.168.4.252:8086/eb-manager"
-        APP_TEST  =  "http://192.168.4.252:8086/eb-manager"
-        ////////////////////////////////////
+        
+        OMS_TEST  =  "http://192.168.4.248:8086/eb-manager"
+        APP_TEST  =  "http://192.168.4.248:8086/eb-manager"
 }

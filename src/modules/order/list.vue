@@ -11,7 +11,7 @@
                 <div class="col-md-4"></div>
                 <div class="col-md-6">
                     <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>
-                    <button class="btn blue" type="button" @click="exportOrder" v-if="showflag && limitResource.Order_export">批量导出</button>
+                    <button class="btn blue" type="button" @click="exportOrder" v-if="limitResource.Order_export">批量导出</button>
                     <!--                 <button class="btn yellow-crusta" type="button" @click="selectSpu" >选择商品</button>
                                                                                                                                 -->
                     <!-- <button class="btn blue" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button> -->
