@@ -13,7 +13,7 @@
                     <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>
                     <button class="btn blue" type="button" @click="exportOrder" v-if="showflag && limitResource.Order_export">批量导出</button>
                     <!--                 <button class="btn yellow-crusta" type="button" @click="selectSpu" >选择商品</button>
-                                                                                                                    -->
+                                                                                                                                -->
                     <!-- <button class="btn blue" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button> -->
                 </div>
             </div>
@@ -60,8 +60,13 @@
                         <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])" v-if="limitResource.editOrderSetDemo">备注</a>
                         <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
-                        <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar">加星</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                        <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar && itemSet.orderSubList[0].ordStar<=0">加星</a>
+                        <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSet.orderSubList[0].ordStar>0" @click="setStar(itemSet.orderSubList[0])">
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                            <span style="font-size:12px;color:#FF2D2D;position:relative;bottom:5px;">×{{itemSet.orderSubList[0].ordStar}}</span>
+                        </a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
                 <table class="table table-striped table-bordered table-hover">
@@ -120,8 +125,12 @@
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
-                                    <a href="javascript:;" @click="setStar(itemSub)" v-if="limitResource.addStar">加星</a>
+                                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                    <a href=" " @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
+                                    <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
+                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                        <span style="font-size:12px;color:#FF2D2D;position:relative;bottom:5px;">×{{itemSub.ordStar}}</span>
+                                    </a>
                                 </p>
                                 <p>¥ {{itemSub.ordActAmount.toFixed(2)}}</p>
                                 <p>{{ordPayChannel(itemSet.orsPayChannel)}}</p>
