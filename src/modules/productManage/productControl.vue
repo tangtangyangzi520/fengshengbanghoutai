@@ -5,17 +5,16 @@
             <div slot="content">
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form">
-                           <br>
+                        <br>
                         <div class="form-group">
                             <label for="title" class="col-md-3 control-label">
-                                <span class="required">* </span>商品类目： 
-                                      
+                                <span class="required">* </span>商品类目：   
                             </label>
                             <label for="title" class="col-sm-5 control-label">
-                                 <span style="float:left">{{par[0]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[1]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[2]}}</span>  
+                                <span style="float:left">{{par[0]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[1]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[2]}}</span>  
                             </label>
                         </div>
-                         <div class="form-group">
+                        <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>商品类型：
                             </label>
@@ -32,7 +31,6 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuName" placeholder="50字以内" maxLength="50">
                             </div>
                         </div>
-    
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 商品广告词：
@@ -41,8 +39,7 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuAd" placeholder="50字以内" maxLength="50">
                             </div>
                         </div>
-                         
-                         <div class="form-group">
+                        <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span> 有赞商品地址：
                             </label>
@@ -55,25 +52,22 @@
                                 商品简介：
                             </label>
                             <div class="controls col-md-7">
-                                <textarea  v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="10000" rows="3" cols="50">
-                                </textarea> 
+                                <textarea  v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="10000" rows="3" cols="50"></textarea> 
                             </div>
                         </div> 
-
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>品牌：
                             </label>
                             <div class="col-md-3">
                                 <select class="form-control" v-model="request.spuBrandId">
-                                     <option value="-1">请选择</option>
-                                     <option v-for="item in brandList" :value="item.pbdBrandId">{{item.pbdName}}</option>
+                                    <option value="-1">请选择</option>
+                                    <option v-for="item in brandList" :value="item.pbdBrandId">{{item.pbdName}}</option>
                                  </select>
                                 <!-- <m-select :data="brandList" :placeholder="'请选择内容'" :change-func="selectTagStatusFunc" :class="'fixedIcon'"></m-select> -->
                             </div>
                         </div>
-
-                         <div class="form-group">
+                        <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 商品关键词：
                             </label>
@@ -81,11 +75,8 @@
                                 <input type="text" class="form-control input-sm" v-model="request.spuKeyword" placeholder="关键词之间用空格隔开" maxLength="50">
                             </div>
                         </div>
-                        
-                       
                         <div class="form-group" style="padding-top:10px;">
-                            <label class="col-sm-3 control-label">
-                                <span class="required">* </span>展示类目：</label>
+                            <label class="col-sm-3 control-label"><span class="required">* </span>展示类目：</label>
                             <div class="controls col-md-9" style="padding-top:8px;">
                                 <item-list :list="tagsList" :remove="removeTagItem"></item-list>
                                 <a class="btn-select-label" @click="showTagDialog">
@@ -94,8 +85,7 @@
                             </div>
                         </div>
                         <div class="form-group" style="padding-top:10px;">
-                            <label class="col-sm-3 control-label">
-                                <!-- <span class="required">* </span> -->适用人群：</label>
+                            <label class="col-sm-3 control-label">适用人群：</label>
                             <div class="controls col-md-9" style="padding-top:8px;">
                                 <item-list :list="personList" :remove="removeperItem"></item-list>
                                 <a class="btn-select-label" @click="showperDialog">
@@ -104,8 +94,7 @@
                             </div>
                         </div>
                         <div class="form-group" style="padding-top:10px;">
-                            <label class="col-sm-3 control-label">
-                                <span class="required">* </span>内容标签：</label>
+                            <label class="col-sm-3 control-label"><span class="required">* </span>内容标签：</label>
                             <div class="controls col-md-9" style="padding-top:8px;">
                                 <item-list :list="neirongList" :remove="removeneiItem"></item-list>
                                 <a class="btn-select-label" @click="showneiDialog">
@@ -113,74 +102,69 @@
                                 </a>
                             </div>
                         </div>
-                        
                         <div class="form-group">
-                          <label for="title" class="col-sm-3 control-label">
-                            上榜理由：
-                          </label>
-                          <div class="col-md-4" style="background-color:white;width:600px" >
-                               
-                                   <div  style="display:inline-block;width:280px;margin-top:2.5%" v-for="(index,item) in shangbanglist">
+                            <label for="title" class="col-sm-3 control-label">
+                                上榜理由：
+                            </label>
+                            <div class="col-md-4" style="background-color:white;width:600px" >
+                                <div  style="display:inline-block;width:280px;margin-top:2.5%" v-for="(index,item) in shangbanglist">
                                     <input type="checkbox" name="shangbang" v-model="shangb" :value="item.keyValue" @click="shangbang($event)"/>{{item.keyValue}}
                                     <br v-if="(index+1) % 2 == 0">
-                                  </div>
-                                  <br><br>
-                                </div> 
-                                <div class="col-md-11" >
-                                    <span v-for="(index,i) in createshangbanglist">
-                                        <span v-for="ii in 58">&nbsp;</span>
-                                        <input type="text" style="display:inline-block;width:40%" v-model="i.pcrReason" @keyup="checkshangb(i)" maxLength="100">
-                                        <span v-if="index == createshangbanglist.length-1"><a @click="createshangbang()"  >+添加理由</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                        <a v-if="index > 0" @click="deleteshangbang(index)">-删除理由</a><br><br>
-                                    </span>
-                                    <span v-for="i in 58">&nbsp;</span><span style="color:red">注：最多可选择3个理由</span>
                                 </div>
-                              </div>
-                          <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                专家观点：
-                            </label>
+                                <br><br>
+                            </div> 
+                            <div class="col-md-11" >
+                                <span v-for="(index,i) in createshangbanglist">
+                                    <span v-for="ii in 58">&nbsp;</span>
+                                    <input type="text" style="display:inline-block;width:40%" v-model="i.pcrReason" @keyup="checkshangb(i)" maxLength="100">
+                                    <span v-if="index == createshangbanglist.length-1"><a @click="createshangbang()"  >+添加理由</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    <a v-if="index > 0" @click="deleteshangbang(index)">-删除理由</a><br><br>
+                                </span>
+                                <span v-for="i in 58">&nbsp;</span><span style="color:red">注：最多可选择3个理由</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">专家观点：</label>
                             <div class="controls col-md-8">
                                 <textarea class="form-control input-sm" v-model="request.spuExpertOption" placeholder="30-100个字以内" maxLength="100">
                                 </textarea> 
                             </div>
-                        </div>   
-         <hr style="height:1px;border:none;border-top:1px solid white;" />   
-                      <div class="form-group" v-for="radios in radioList">
-                            <label for="title" class="col-sm-3 control-label">
-                              <span class="required" v-if="radios.pcaRequired == 1">* </span> {{radios.pcaName}}：
-                            </label>
-                            <div class="controls col-md-4" style="margin-top:1%">
-                              <span v-for="radio in radios.pcaoList">
-                                <input type="radio" :name="radios.pcaName" v-model="radios.pcaCreator" :value="radio" >{{radio.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                              </span>
-                            </div>
                         </div>
 
+                        <hr style="height:1px;border:none;border-top:1px solid white;" /> 
+
+                        <div class="form-group" v-for="radios in radioList">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required" v-if="radios.pcaRequired == 1">* </span> {{radios.pcaName}}：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                                <span v-for="radio in radios.pcaoList">
+                                    <input type="radio" :name="radios.pcaName" v-model="radios.pcaCreator" :value="radio" >{{radio.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </span>
+                            </div>
+                        </div>
                         <div class="form-group" v-for="boxs in boxList">
                             <label for="title" class="col-sm-3 control-label">
-                              <span class="required" v-if="boxs.pcaRequired == 1">* </span> {{boxs.pcaName}}：
+                                <span class="required" v-if="boxs.pcaRequired == 1">* </span> {{boxs.pcaName}}：
                             </label>
                             <div class="controls col-md-4" style="margin-top:1%">
-                              <span v-for="box in boxs.pcaoList">
-                                <input type="checkbox" :name="radios.pcaName" v-model="box.checked"  >{{box.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                              </span>
+                                <span v-for="box in boxs.pcaoList">
+                                    <input type="checkbox" :name="radios.pcaName" v-model="box.checked"  >{{box.pcaoName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </span>
                             </div>
                         </div>
-
-                         <div class="form-group" v-for="selects in selectList">
+                        <div class="form-group" v-for="selects in selectList">
                             <label for="title" class="col-sm-3 control-label">
-                              <span class="required" v-if="selects.pcaRequired == 1">* </span> {{selects.pcaName}}：
+                                <span class="required" v-if="selects.pcaRequired == 1">* </span> {{selects.pcaName}}：
                             </label>
                             <div class="controls col-md-3" style="margin-top:1%">
-                                   <select  v-model="selects.pcaCreator" >
-                                     <option value="-1" >请选择</option>
-                                     <option v-for="select in selects.pcaoList" :value="select">{{select.pcaoName}}</option>
-                                   </select>
+                                <select  v-model="selects.pcaCreator" >
+                                    <option value="-1" >请选择</option>
+                                    <option v-for="select in selects.pcaoList" :value="select">{{select.pcaoName}}</option>
+                                </select>
                             </div>
                         </div>
-
-                         <div class="form-group" v-for="inputs in inputList">
+                        <div class="form-group" v-for="inputs in inputList">
                             <label for="title" class="col-sm-3 control-label">
                                <span class="required" v-if="inputs.pcaRequired == 1">* </span>{{inputs.pcaName}}：
                             </label>
@@ -188,370 +172,361 @@
                                 <input type="text" class="form-control input-sm" v-model="inputs.pcaCreator"  maxLength="50">
                             </div>
                         </div>
-
-                         <div class="form-group" v-for="text in textList">
+                        <div class="form-group" v-for="text in textList">
                             <label for="title" class="col-sm-3 control-label">
-                               <span class="required" v-if="text.pcaRequired == 1">* </span>{{text.pcaName}}：
+                                <span class="required" v-if="text.pcaRequired == 1">* </span>{{text.pcaName}}：
                             </label>
                             <div class="controls col-md-8" style="margin-top:1%">
-                                 <textarea rows="3" cols="50" v-model="text.pcaCreator" placeholder="100字以内" maxLength="100">
-                                </textarea> 
+                                <textarea rows="3" cols="50" v-model="text.pcaCreator" placeholder="100字以内" maxLength="100"></textarea> 
                             </div>
                         </div>
 
-         <hr style="height:1px;border:none;border-top:1px solid white;" /><br>    
+                        <hr style="height:1px;border:none;border-top:1px solid white;" /><br>    
 
-          <div class="form-group">
+                        <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                              <button type="button" class="btn purple" @click="reset()">重置销售属性</button> 
+                                <button type="button" class="btn purple" @click="reset()">重置销售属性</button> 
                             </label>
-
                         </div>
-<!-- <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">请先移除不需要的属性,再生成SKU组合</font> -->
-                     <div   v-for="(v,i) in sxlist"  style ="width: 100%; background-color:white;
-                             border:1px solid #F0F0F0;" > 
-                        <div class="baseSx"> 
-<!--                          <a class="delete2" @click="closeProperty($event)" >×</a>                       
- -->                         <span class="pca" style="margin-left:5%;display:-moz-inline-box;display:inline-block;width:75px;">{{i.pcaName}}：
-                                  <input :value="i.pcaName" type="hidden" />
-                                  <input :value="i.pcaId" type="hidden" />
-                                  <input :value="i.pcaSortNo" type="hidden" />
-                                  <input :value="i.pcraCatId" type="hidden" />
-                                  <input :value="i.pcaMemo" type="hidden" />
-                                  <input :value="i.pcaInputType" type="hidden" />
-                                  <input :value="i.pcaSaleProp" type="hidden" />
-                                  <input :value="i.pcaRequired" type="hidden" />
-                         </span> 
-                         <span v-for="(ind,s) in i.pcaoList" class="pcao">                      
-                                  <input type="checkbox" class="input" :value="s.pcaoName" style="width:16px;height:16px;margin-right:3px"> {{s.pcaoName}}
-                                  <input :value="s.pcaoId" type="hidden" />
-                                  <input :value="s.pcaoName" type="hidden" />
-                                  <input :value="s.pcaoSortNo" type="hidden" />
-                                  <input :value="s.pcaoValue" type="hidden" />
-                                  <!-- 6个换一行 -->
-                                   <a v-if="(ind+1)%8 == 0"><br> <span  style="margin-left:13.8%;color:white">{{i.pcaName}}</span></a>
-                         </span>
+                    <!-- <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">请先移除不需要的属性,再生成SKU组合</font> -->
+                        <div v-for="(v,i) in sxlist"  style ="width: 100%; background-color:white;border:1px solid #F0F0F0;" > 
+                            <div class="baseSx"> 
+                            <!-- <a class="delete2" @click="closeProperty($event)" >×</a> -->                         
+                                <span class="pca" style="margin-left:5%;display:-moz-inline-box;display:inline-block;width:75px;">{{i.pcaName}}：
+                                    <input :value="i.pcaName" type="hidden" />
+                                    <input :value="i.pcaId" type="hidden" />
+                                    <input :value="i.pcaSortNo" type="hidden" />
+                                    <input :value="i.pcraCatId" type="hidden" />
+                                    <input :value="i.pcaMemo" type="hidden" />
+                                    <input :value="i.pcaInputType" type="hidden" />
+                                    <input :value="i.pcaSaleProp" type="hidden" />
+                                    <input :value="i.pcaRequired" type="hidden" />
+                                </span> 
+                                <span v-for="(ind,s) in i.pcaoList" class="pcao">                      
+                                    <input type="checkbox" class="input" :value="s.pcaoName" style="width:16px;height:16px;margin-right:3px"> {{s.pcaoName}}
+                                    <input :value="s.pcaoId" type="hidden" />
+                                    <input :value="s.pcaoName" type="hidden" />
+                                    <input :value="s.pcaoSortNo" type="hidden" />
+                                    <input :value="s.pcaoValue" type="hidden" />
+                                    <!-- 6个换一行 -->
+                                    <a v-if="(ind+1)%8 == 0"><br> <span style="margin-left:13.8%;color:white">{{i.pcaName}}</span></a>
+                                </span>
                            
-                            <!-- <span v-for="a in 0">&nbsp;</span> -->
-                         <span class="addsxxx" >
-                            <input type="checkbox" class="input tianjia" value="1" style="width:16px;height:16px;margin-right:3px"> <input type="text" style ="width: 5%; height:100%"  placeholder=""  @keyup="getcheck($event)" maxLength="20">
-                            <a class="" style="text-decoration:none" @click="addsxxx($event)" >添加&nbsp;&nbsp;&nbsp;&nbsp;</a>  
-                        </span>
-                            
+                                <!-- <span v-for="a in 0">&nbsp;</span> -->
+                                <span class="addsxxx" >
+                                    <input type="checkbox" class="input tianjia" value="1" style="width:16px;height:16px;margin-right:3px"> 
+                                    <input type="text" style ="width: 5%; height:100%"  placeholder=""  @keyup="getcheck($event)" maxLength="20">
+                                    <a class="" style="text-decoration:none" @click="addsxxx($event)" >添加&nbsp;&nbsp;&nbsp;&nbsp;</a>  
+                                </span>
+                            </div>
                         </div>
-                    </div>
- <br><span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">销售属性总数最多4组，SKU组合不能超过600组。</font>
+                        <br>
+                        <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">销售属性总数最多4组，SKU组合不能超过600组。</font>
                         <div class="form-group" id="addsx">
                             <label for="title" class="col-sm-3 control-label">
-                              <button type="button" class="btn yellow" @click="addProperty()">添加销售属性</button> 
+                                <button type="button" class="btn yellow" @click="addProperty()">添加销售属性</button> 
                             </label>
-
                         </div>
                              
-             <hr style="height:1px;border:none;border-top:1px solid white;" /><br>  
-                     <div id="div1" class="box">
-     <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">只有一个SKU的情况：如需添加销售属性请先生成SKU组合</font>
-                        <div class="form-group" >
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>丰盛榜售价：
-                            </label>
-                            <div class="controls col-md-2">
-                               <input type="number" class="form-control input-sm" v-model="sj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"
-                               max="99999999" @blur="checkfloat($event)"/>
-                        </div>
-                            <label for="title" class="col-sm-2 control-label">
-                                原价：
-                            </label>
-                            <div class="controls col-md-2">
-                               <input type="number" class="form-control input-sm" v-model="yj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"max="99999999"
-                               @blur="checkfloat($event)"/>
+                        <hr style="height:1px;border:none;border-top:1px solid white;" /><br>  
+
+                        <div id="div1" class="box">
+                            <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">只有一个SKU的情况：如需添加销售属性请先生成SKU组合</font>
+                            <div class="form-group" >
+                                <label for="title" class="col-sm-3 control-label">
+                                    <span class="required">* </span>丰盛榜售价：
+                                </label>
+                                <div class="controls col-md-2">
+                                    <input type="number" class="form-control input-sm" v-model="sj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0" max="99999999" @blur="checkfloat($event)"/>
+                                </div>
+                                <label for="title" class="col-sm-2 control-label">
+                                    原价：
+                                </label>
+                                <div class="controls col-md-2">
+                                    <input type="number" class="form-control input-sm" v-model="yj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"max="99999999" @blur="checkfloat($event)"/>
+                                </div>
                             </div>
-                    </div>
-                         <div class="form-group">  
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>展示库存（件）：
-                            </label>
-                            <div class="controls col-md-2">
-                               <input type="number" class="form-control input-sm" v-model="kc" placeholder="" @keyup="check($event)" @change="check($event)" min="0" @blur="check($event)"
-                               max="2000000000"/>
-                            </div>
-                             <label for="title" class="col-sm-2 control-label">
-                                SKU编码：
-                            </label>
-                            <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="20">  
-                            </div>
-                       
-                          <!--   <label for="title" class="col-sm-2 control-label">
-                                <span class="required">* </span>ERP库存（件）：
-                            </label>
-                            <div class="controls col-md-2">
-                               <input type="text" class="form-control input-sm" v-model="erpkc" placeholder="" @keyup="check($event)">
-                            </div> -->
+                            <div class="form-group">  
+                                <label for="title" class="col-sm-3 control-label">
+                                    <span class="required">* </span>展示库存（件）：
+                                </label>
+                                <div class="controls col-md-2">
+                                    <input type="number" class="form-control input-sm" v-model="kc" placeholder="" @keyup="check($event)" @change="check($event)" min="0" @blur="check($event)" max="2000000000"/>
+                                </div>
+                                <label for="title" class="col-sm-2 control-label">
+                                    SKU编码：
+                                </label>
+                                <div class="controls col-md-2">
+                                <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="20">  
+                                </div>
                         
-                     </div> </div>
-                                  
-                   <div id="base">
-                        <div id="0" class="box2" style="display:none">
-                            <a class="delete"  >×</a>   
-                            <input type="text" class="col-md-2 input" placeholder="销售属性名称" maxlength="60"/>
-                            <br><br>                           
-                            <input type="text" class="col-md-2 input" v-for="i in 10 " placeholder="" maxlength="20"/>
+                                <!--   
+                                <label for="title" class="col-sm-2 control-label">
+                                    <span class="required">* </span>ERP库存（件）：
+                                </label>
+                                <div class="controls col-md-2">
+                                <input type="text" class="form-control input-sm" v-model="erpkc" placeholder="" @keyup="check($event)">
+                                </div> 
+                                -->
+                            </div> 
+                        </div>     
+                        <div id="base">
+                            <div id="0" class="box2" style="display:none">
+                                <a class="delete"  >×</a>   
+                                <input type="text" class="col-md-2 input" placeholder="销售属性名称" maxlength="60"/>
+                                <br><br>                           
+                                <input type="text" class="col-md-2 input" v-for="i in 10 " placeholder="" maxlength="20"/>
+                            </div>
                         </div>
-                    </div>
-                    <div id="dkej" class="form-group"> 
-                        <label for="title" class="col-sm-3 control-label">                         
-                             <button type="button" class="btn green" v-on:click="dkej()">生成SKU组合</button>
-                        </label>
-                    </div>
-                    <div >
-                        <table id="pltab" border="1" cellspacing="0" cellpadding="0" style="display:none">  
-                          
+                        <div id="dkej" class="form-group"> 
+                            <label for="title" class="col-sm-3 control-label">                         
+                                <button type="button" class="btn green" v-on:click="dkej()">生成SKU组合</button>
+                            </label>
+                        </div>
+                        <div >
+                            <table id="pltab" border="1" cellspacing="0" cellpadding="0" style="display:none">  
                                 <tr style="text-align: center">
-                                   <td style="width:42.4%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
-                                   <td style="width:12%;border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
-                                    @change="sput($event,'.put0')" min="0"max="99999999"/></td>
-                                   <td style="width:11.6%;border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
-                                    @blur="sput($event,'.put1')"  min="0"max="99999999"/></td>
-                                   <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put2')" @change="ssput($event,'.put2')"
-                                    min="0"max="2000000000" @blur="ssput($event,'.put2')"/></td>
-                                   <td style="border:1px solid white">  <!-- <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
-                                    min="0"max="2000000000" @blur="ssput($event,'.put3')"/> --></td>
-                                   <td style="border:1px solid white;width:24.3%"> <!--  <input class=" input2" type="text"  maxLength="25" /> --></td>
+                                    <td style="width:42.4%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
+                                    <td style="width:12%;border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
+                                        @change="sput($event,'.put0')" min="0"max="99999999"/></td>
+                                    <td style="width:11.6%;border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
+                                        @blur="sput($event,'.put1')"  min="0"max="99999999"/></td>
+                                    <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put2')" @change="ssput($event,'.put2')"
+                                        min="0"max="2000000000" @blur="ssput($event,'.put2')"/></td>
+                                    <td style="border:1px solid white">  <!-- <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
+                                        min="0"max="2000000000" @blur="ssput($event,'.put3')"/> --></td>
+                                    <td style="border:1px solid white;width:24.3%"> <!--  <input class=" input2" type="text"  maxLength="25" /> --></td>
                                 </tr>
-                        </table>
-                        <table class="tab" id="table" style="display:none" border="1" cellspacing="0" cellpadding="0">  
-                          <tr>
-                             <th>序号</th>
-                             <th>SKU组合</th>
-                             <th><span style="color:red">*</span>丰盛榜售价</th>
-                             <th>原价</th>
-                             <th><span style="color:red">*</span>展示库存（件）</th>
-                             <th>ERP实际库存</th>
-                             <th>SKU编码</th>
-                          </tr>
-                             <tbody id="itemList" >
-                                <tr v-for="(index,group) in xssxList">
-                                   <td>{{index+1}}<input class="input2" type="hidden" :value="index+1"/></td>
-                                   <td style="width:40%;;line-height:30px"> <a class="dele" @click="close($event,index)" >×</a> {{ group }} <input class="input2" type="hidden" :value="group"/></td>
-                                   <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
-                                    @blur="checkfloat($event)"/></td>
-                                   <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
-                                    @blur="checkfloat($event)"/></td>
-                                   <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
-                                   <td>  <!-- <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/> --></td>
-                                   <td style="width:17%">  <input class="put4 input2" type="text" 
-                                    maxLength="20" /></td>
+                            </table>
+                            <table class="tab" id="table" style="display:none" border="1" cellspacing="0" cellpadding="0">  
+                                <tr>
+                                    <th>序号</th>
+                                    <th>SKU组合</th>
+                                    <th><span style="color:red">*</span>丰盛榜售价</th>
+                                    <th>原价</th>
+                                    <th><span style="color:red">*</span>展示库存（件）</th>
+                                    <th>ERP实际库存</th>
+                                    <th>SKU编码</th>
                                 </tr>
+                                <tbody id="itemList" >
+                                    <tr v-for="(index,group) in xssxList">
+                                    <td>{{index+1}}<input class="input2" type="hidden" :value="index+1"/></td>
+                                    <td style="width:40%;;line-height:30px"> <a class="dele" @click="close($event,index)" >×</a> {{ group }} <input class="input2" type="hidden" :value="group"/></td>
+                                    <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
+                                        @blur="checkfloat($event)"/></td>
+                                    <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
+                                        @blur="checkfloat($event)"/></td>
+                                    <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
+                                    <td>  <!-- <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/> --></td>
+                                    <td style="width:17%">  <input class="put4 input2" type="text" 
+                                        maxLength="20" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                             </tbody>
-                        </table>
-                    </div>
-
-     <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
-     
-                       <h4><strong>图片上传</strong></h4>
-                       <div class="" style="padding-bottom:10px;">  
+                        <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
+        
+                        <h4><strong>图片上传</strong></h4>
+                        <div class="" style="padding-bottom:10px;">  
                             <div class="controls " style="text-align:center"> 
                                 <span class="required"></span>说明：        
                                 <span style="margin-left:1%">最多上传5张，单张大小不超过5M，仅支持JPG、JPEG格式。 </span>
                             </div>
                         </div>
                         <div style="text-align:center">
-                             <table   width="100%" border="1" cellpadding="0" cellspacing="0" style="table-layout: fixed;">  
-                             <tbody id="itemList">
-                                <tr >
-                                    <!-- 图片一 -->
-                                    <td  style="height:194px ; width: 25%">
-                                        <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.oneUrl==''">
-                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 1 )" style="margin-top: 20px; font-size:44px;"></i>
-                                            </div>
-                                            <item-move v-if="data.oneUrl!=''" :change-left="moveLeft.bind(this,1)" :change-right="moveRight.bind(this,1)" :remove-item="removeMoveItem.bind(this,1)" :class="'item-edit-block'" :hidden-up-down=false>
-                                                <div class="buy-pic" style="bottom:0;">
-                                                    <img :src="data.oneUrl" style="height:194px; width:194px;">
+                            <table   width="100%" border="1" cellpadding="0" cellspacing="0" style="table-layout: fixed;">  
+                                <tbody id="itemList">
+                                    <tr >
+                                        <!-- 图片一 -->
+                                        <td  style="height:194px ; width: 25%">
+                                            <div class="item-edit-box">
+                                                <div class="buy-pic" style="bottom:0;" v-if="data.oneUrl==''">
+                                                    <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 1 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                            </item-move>
-                                        </div>
-                                    </td>
-                                    <!-- 图片二 -->
-                                    <td  style="height:194px ; width: 25%">
-                                        <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.twoUrl=='' && data.oneUrl!=''">
-                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 2 )" style="margin-top: 20px; font-size:44px;"></i>
+                                                <item-move v-if="data.oneUrl!=''" :change-left="moveLeft.bind(this,1)" :change-right="moveRight.bind(this,1)" :remove-item="removeMoveItem.bind(this,1)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                    <div class="buy-pic" style="bottom:0;">
+                                                        <img :src="data.oneUrl" style="height:194px; width:194px;">
+                                                    </div>
+                                                </item-move>
                                             </div>
-                                            <item-move v-if="data.twoUrl!=''" :change-left="moveLeft.bind(this,2)" :change-right="moveRight.bind(this,2)" :remove-item="removeMoveItem.bind(this,2)" :class="'item-edit-block'" :hidden-up-down=false>
-                                                <div class="buy-pic" style="bottom:0;">
-                                                    <img :src="data.twoUrl" style="height:194px; width:194px;">
+                                        </td>
+                                        <!-- 图片二 -->
+                                        <td  style="height:194px ; width: 25%">
+                                            <div class="item-edit-box">
+                                                <div class="buy-pic" style="bottom:0;" v-if="data.twoUrl=='' && data.oneUrl!=''">
+                                                    <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 2 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                            </item-move>
-                                        </div>
-                                    </td>
-                                    <!-- 图片三 -->
-                                    <td  style="height:194px ; width: 25%">
-                                        <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.threeUrl=='' && data.twoUrl!=''">
-                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 3 )" style="margin-top: 20px; font-size:44px;"></i>
+                                                <item-move v-if="data.twoUrl!=''" :change-left="moveLeft.bind(this,2)" :change-right="moveRight.bind(this,2)" :remove-item="removeMoveItem.bind(this,2)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                    <div class="buy-pic" style="bottom:0;">
+                                                        <img :src="data.twoUrl" style="height:194px; width:194px;">
+                                                    </div>
+                                                </item-move>
                                             </div>
-                                            <item-move v-if="data.threeUrl!=''" :change-left="moveLeft.bind(this,3)" :change-right="moveRight.bind(this,3)" :remove-item="removeMoveItem.bind(this,3)" :class="'item-edit-block'" :hidden-up-down=false>
-                                                <div class="buy-pic" style="bottom:0;">
-                                                    <img :src="data.threeUrl" style="height:194px; width:194px;">
+                                        </td>
+                                        <!-- 图片三 -->
+                                        <td  style="height:194px ; width: 25%">
+                                            <div class="item-edit-box">
+                                                <div class="buy-pic" style="bottom:0;" v-if="data.threeUrl=='' && data.twoUrl!=''">
+                                                    <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 3 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                            </item-move>
-                                        </div>
-                                    </td>
-                                    <!-- 图片四 -->
-                                    <td  style="height:194px ; width: 25%">
-                                        <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.fourUrl=='' && data.threeUrl!=''">
-                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 4 )" style="margin-top: 20px; font-size:44px;"></i>
+                                                <item-move v-if="data.threeUrl!=''" :change-left="moveLeft.bind(this,3)" :change-right="moveRight.bind(this,3)" :remove-item="removeMoveItem.bind(this,3)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                    <div class="buy-pic" style="bottom:0;">
+                                                        <img :src="data.threeUrl" style="height:194px; width:194px;">
+                                                    </div>
+                                                </item-move>
                                             </div>
-                                            <item-move v-if="data.fourUrl!=''" :change-left="moveLeft.bind(this,4)" :change-right="moveRight.bind(this,4)" :remove-item="removeMoveItem.bind(this,4)" :class="'item-edit-block'" :hidden-up-down=false>
-                                                <div class="buy-pic" style="bottom:0;">
-                                                    <img :src="data.fourUrl" style="height:194px; width:194px;">
+                                        </td>
+                                        <!-- 图片四 -->
+                                        <td  style="height:194px ; width: 25%">
+                                            <div class="item-edit-box">
+                                                <div class="buy-pic" style="bottom:0;" v-if="data.fourUrl=='' && data.threeUrl!=''">
+                                                    <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 4 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                            </item-move>
-                                        </div>
-                                    </td>
-                                    <!-- 图片五 -->
-                                    <td  style="height:194px ; width: 25%">
-                                        <div class="item-edit-box">
-                                            <div class="buy-pic" style="bottom:0;" v-if="data.fiveUrl=='' && data.fourUrl!=''">
-                                                <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 5 )" style="margin-top: 20px; font-size:44px;"></i>
+                                                <item-move v-if="data.fourUrl!=''" :change-left="moveLeft.bind(this,4)" :change-right="moveRight.bind(this,4)" :remove-item="removeMoveItem.bind(this,4)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                    <div class="buy-pic" style="bottom:0;">
+                                                        <img :src="data.fourUrl" style="height:194px; width:194px;">
+                                                    </div>
+                                                </item-move>
                                             </div>
-                                            <item-move v-if="data.fiveUrl!=''" :change-left="moveLeft.bind(this,5)" :change-right="moveRight.bind(this,5)" :remove-item="removeMoveItem.bind(this,5)" :class="'item-edit-block'" :hidden-up-down=false>
-                                                <div class="buy-pic" style="bottom:0;">
-                                                    <img :src="data.fiveUrl" style="height:194px; width:194px;">
+                                        </td>
+                                        <!-- 图片五 -->
+                                        <td  style="height:194px ; width: 25%">
+                                            <div class="item-edit-box">
+                                                <div class="buy-pic" style="bottom:0;" v-if="data.fiveUrl=='' && data.fourUrl!=''">
+                                                    <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 5 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                            </item-move>
-                                        </div>
-                                    </td>
+                                                <item-move v-if="data.fiveUrl!=''" :change-left="moveLeft.bind(this,5)" :change-right="moveRight.bind(this,5)" :remove-item="removeMoveItem.bind(this,5)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                    <div class="buy-pic" style="bottom:0;">
+                                                        <img :src="data.fiveUrl" style="height:194px; width:194px;">
+                                                    </div>
+                                                </item-move>
+                                            </div>
+                                        </td>
 
-                                   <!-- <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
-                                    </td>
-                                     <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
-                                    </td>
-                                     <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" v-if="data.threeUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.threeUrl" class="cursor" @click="showSelectPicDialog(3 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
-                                    </td>
-                                     <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 4 )" v-if="data.fourUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.fourUrl" class="cursor" @click="showSelectPicDialog(4 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
-                                    </td>
-                                     <td  style="height:100px ; width: 25%">
-                                   <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" v-if="data.fiveUrl==''" style="margin-top: 20px;"></i>
-                                <img :src="data.fiveUrl" class="cursor" @click="showSelectPicDialog(5 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
-                                    </td> -->
-                                   
-                                </tr>
-                             </tbody>
-                        </table>        
+                                    <!-- 
+                                        <td  style="height:100px ; width: 25%">
+                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
+                                    <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                        </td>
+                                        <td  style="height:100px ; width: 25%">
+                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
+                                    <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                        </td>
+                                        <td  style="height:100px ; width: 25%">
+                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" v-if="data.threeUrl==''" style="margin-top: 20px;"></i>
+                                    <img :src="data.threeUrl" class="cursor" @click="showSelectPicDialog(3 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                        </td>
+                                        <td  style="height:100px ; width: 25%">
+                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 4 )" v-if="data.fourUrl==''" style="margin-top: 20px;"></i>
+                                    <img :src="data.fourUrl" class="cursor" @click="showSelectPicDialog(4 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                        </td>
+                                        <td  style="height:100px ; width: 25%">
+                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" v-if="data.fiveUrl==''" style="margin-top: 20px;"></i>
+                                    <img :src="data.fiveUrl" class="cursor" @click="showSelectPicDialog(5 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                        </td> 
+                                        -->
+                                    
+                                    </tr>
+                                </tbody>
+                            </table>        
                         </div>
-    <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
+
+                        <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
 
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>运费设置：
                             </label>
-                         <div class="controls col-md-5">
-                              <div class="col-md-4" style="margin-top:2%">
+                            <div class="controls col-md-5">
+                                <div class="col-md-4" style="margin-top:2%">
                                 <input type="radio" name="yunfei" v-model="yunfei" value="0" checked >统一邮费
-                              </div>
-                              <h4 class="col-md-1">￥</h4>
-                              <div class="col-sm-5" >
-                                  <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"
-                                  @keyup="check($event)" @change="check($event)"/></div>
-                              <br><br><br>
-                              <div class="col-md-4" >
-                                 <input type="radio" name="yunfei" v-model="yunfei" value="1">运费模板</div>
-                                 <div class="col-md-6">
-                                 <select class="form-control" v-model="request.spuCarriageId">
-                                     <option value="-1">请选择</option>
-                                     <option v-for="item in carriageList" :value="item.pcId">{{item.pcName}}</option>
-                                 </select>
-                                 </div>
-                          </div>
-                        </div>
-
-                        <!--  <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>每人限购：
-                            </label>
-                            <div class="controls col-md-4">
-                                <input type="text" class="form-control input-sm" v-model="data.subtitle" placeholder="请输入良言文案">
-                            </div>
-                        </div> -->
-
-                         <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                参与消保类型：
-                            </label>
-                            <div class="controls col-md-4" >
-                               <span  class="insu" v-for="(index,data) in insurancelist">
-                                <span v-if="index < 3">
-                                <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" checked style="width:16px;height:16px;margin-right:3px">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
-                                <span v-else  >
-                                 <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" style="width:16px;height:16px;margin-right:3px" @click="insurance($event)">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
-                                </span>
-                                <div style="background-color:white;border: 1px solid black;width:340px"><br>
-                                  <span v-for="(index,i) in createinsurancelist">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;类型<input type="text" style="display:inline-block" v-model="i.keyValue"    @keyup="checkinsurance(i,1)" 
-                                    maxLength="50"/> <br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;描述<input type="text" style="display:inline-block" v-model="i.description" @keyup="checkinsurance(i,2)"
-                                    maxLength="100"/>
-                                    <span v-if="index == createinsurancelist.length-1"><a @click="createinsurance()"  >+添加</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    <a v-if="index > 0" @click="deleteinsurance(index)">-删除</a><br><br>
-                                  </span>
+                                </div>
+                                <h4 class="col-md-1">￥</h4>
+                                <div class="col-sm-5" >
+                                    <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"
+                                    @keyup="check($event)" @change="check($event)"/></div>
+                                <br><br><br>
+                                <div class="col-md-4" >
+                                    <input type="radio" name="yunfei" v-model="yunfei" value="1">运费模板</div>
+                                    <div class="col-md-6">
+                                        <select class="form-control" v-model="request.spuCarriageId">
+                                            <option value="-1">请选择</option>
+                                            <option v-for="item in carriageList" :value="item.pcId">{{item.pcName}}</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                包装清单：<br><font color="#A8A8A8">200字以内</font>
-                            </label>
-                            <div class="controls col-md-7">
-                                <textarea rows="3" cols="50" v-model="request.spuPackingList" placeholder="200字以内" maxLength="200">
-                                </textarea> 
+                            <!--  <div class="form-group">
+                                <label for="title" class="col-sm-3 control-label">
+                                    <span class="required">* </span>每人限购：
+                                </label>
+                                <div class="controls col-md-4">
+                                    <input type="text" class="form-control input-sm" v-model="data.subtitle" placeholder="请输入良言文案">
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="title" class="col-sm-3 control-label">参与消保类型：</label>
+                                <div class="controls col-md-4" >
+                                    <span  class="insu" v-for="(index,data) in insurancelist">
+                                    <span v-if="index < 3">
+                                    <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" checked style="width:16px;height:16px;margin-right:3px">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
+                                    <span v-else  >
+                                        <input type="checkbox" :value="data.keyValue+','+data.dictionnaryId+','+data.sortNo+','+data.description" style="width:16px;height:16px;margin-right:3px" @click="insurance($event)">&nbsp;&nbsp;{{ data.keyValue }}<br></span>
+                                    </span>
+                                    <div style="background-color:white;border: 1px solid black;width:340px"><br>
+                                        <span v-for="(index,i) in createinsurancelist">&nbsp;&nbsp;&nbsp;&nbsp;类型
+                                            <input type="text" style="display:inline-block" v-model="i.keyValue"    @keyup="checkinsurance(i,1)" maxLength="50"/>
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;描述
+                                            <input type="text" style="display:inline-block" v-model="i.description" @keyup="checkinsurance(i,2)" maxLength="100"/>
+                                            <span v-if="index == createinsurancelist.length-1"><a @click="createinsurance()">+添加</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            <a v-if="index > 0" @click="deleteinsurance(index)">-删除</a>
+                                            <br><br>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-3 control-label">
+                                    包装清单：<br><font color="#A8A8A8">200字以内</font>
+                                </label>
+                                <div class="controls col-md-7">
+                                    <textarea rows="3" cols="50" v-model="request.spuPackingList" placeholder="200字以内" maxLength="200"></textarea> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" class="col-sm-3 control-label">
+                                    开始时间：
+                                </label>
+                                <div class="controls col-md-4 ">
+                                    <span class="radios">
+                                        <input type="radio" name="startTime" v-model="rad" value="1" checked>立刻                                                              
+                                        <br>
+                                        <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
+                                    </span>
+                                    <div class="col-md-8 time-box" id="selecttime" style="display:none">
+                                        <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" v-model="time" id="createStartTime0"/>
+                                        <!-- <select  v-model="hour" style="width:90px; height:27px">
+                                            <option value="-1">选择小时</option>
+                                            <option v-for="item in 24" :value="item">{{item}}时</option>
+                                        </select>&nbsp;&nbsp;
+                                        <select v-model="minutes" style="width:90px; height:27px">
+                                            <option value="-1">选择分钟</option>
+                                            <option v-for="item in 60" :value="item">{{item}}分</option>
+                                        </select> -->
+                                    </div>  
+                                </div>
+                            </div>                                                      
                         </div>
-
-                        <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                开始时间：
-                            </label>
-                            <div class="controls col-md-4 ">
-                                <span class="radios">
-                                <input type="radio" name="startTime" v-model="rad" value="1" checked>立刻                                                              
-                                <br>
-                                <input type="radio"  name="startTime"  v-model="rad" value="2">设定<br>  
-                                </span>
-                       <div class="col-md-8 time-box" id="selecttime" style="display:none">
-                        <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" v-model="time" id="createStartTime0"/>
-                                <!-- <select  v-model="hour" style="width:90px; height:27px">
-                                    <option value="-1">选择小时</option>
-                                    <option v-for="item in 24" :value="item">{{item}}时</option>
-                                </select>&nbsp;&nbsp;
-                                <select v-model="minutes" style="width:90px; height:27px">
-                                    <option value="-1">选择分钟</option>
-                                    <option v-for="item in 60" :value="item">{{item}}分</option>
-                                </select> -->
-                        </div>  
-                    </div>
-                </div>                                                      
-              </div>
-           </form>
-        </div>
-            <span slot="btnList">
-                <button type="button" class="btn blue" @click="addItem()">保存并下一步</button>
-                <button type="button" class="btn default" @click="hideDialog()" >取消</button>
-            </span>
+                    </form>
+                </div>
+                <span slot="btnList">
+                    <button type="button" class="btn blue" @click="addItem()">保存并下一步</button>
+                    <button type="button" class="btn default" @click="hideDialog()" >取消</button>
+                </span>
+            </div>
         </m-alert>
+
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
@@ -562,8 +537,7 @@
                 <div class="bounce3"></div>
             </div>
         </div>
-
-         <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
+        <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
             <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
         </div>
         <div style="position:fixed;z-index:11111;" v-show="showComponent">
@@ -571,13 +545,13 @@
         </div>
         <!-- <loading :show="isLoading"></loading> -->
         <!-- 标签选择弹窗 -->
-         <tag-tree v-if="showTagTreeSelect" :list="tagsList" :onselect="selectTagFunc" :oncancel="showTagDialog"   :type="0"></tag-tree>
-         <tag-tree v-if="showperTreeSelect" :list="personList" :onselect="selectPerFunc" :oncancel="showperDialog" :type="3"></tag-tree>
+        <tag-tree v-if="showTagTreeSelect" :list="tagsList" :onselect="selectTagFunc" :oncancel="showTagDialog"   :type="0"></tag-tree>
+        <tag-tree v-if="showperTreeSelect" :list="personList" :onselect="selectPerFunc" :oncancel="showperDialog" :type="3"></tag-tree>
         <tag-tree v-if="showneiTreeSelect" :list="neirongList" :onselect="selectNeiFunc" :oncancel="showneiDialog" :type="1"></tag-tree>
         <template-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" v-bind:par="sele" :onhide="hideAddDialog" :getspu="spu"  :closeparent="hideDialog"></template-control> 
-        </div>
     </div>
 </template>
+
 <script>
 import client from '../../common/utils/client';
 import itemMove from '../../components/page/itemMove';
