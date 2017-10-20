@@ -420,7 +420,7 @@ export default {
         },
         hidePaymentDialog() {
             this.showPaymentDialog = false
-            // this.getList();
+            this.getList();
         },
         hideStarDialog() {
             this.showStarDialog = false

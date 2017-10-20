@@ -178,15 +178,14 @@ export default {
         },
         //计算实付款
         actAmount() {
-            let changePriceSum = 0, price = 0, totalCampaignAmount = 0, actAmount;
+            let changePriceSum = 0, totalCampaignAmount = 0, subActAmount;
             this.editPaymentData.orderDetailList.forEach(item => {
-                price = item.ordChangePrice == '' ? 0 : item.ordChangePrice;
+                let price = item.ordChangePrice == '' ? 0 : item.ordChangePrice;
                 changePriceSum = Number(changePriceSum) + Number(price);
-                this.editPaymentData.ordActAmount = Number(this.editPaymentData.ordActAmount) + Number(price);
                 totalCampaignAmount = Number(totalCampaignAmount) + Number(this.getCampaignAmount(item));
             });
-            actAmount = Number(this.editPaymentData.ordAmount) - Number(totalCampaignAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
-            return actAmount.toFixed(2);
+            subActAmount = Number(this.editPaymentData.ordAmount) - Number(totalCampaignAmount) + Number(this.editPaymentData.ordTransportAmount) + Number(changePriceSum);
+            return subActAmount.toFixed(2);
         },
         //获取改价字符串
         getChangePriceString() {
@@ -214,7 +213,7 @@ export default {
             return Number(item.ordShareAmount) + Number(item.ordCampaignAmount) + Number(item.ordDiscount);
         },
         //计算买家实付算式
-        calculateActAmount(num) {
+        calculateActAmount() {
             let amount = '', changePriceString = this.getChangePriceString(), ordCampaignShareAmount = this.getTotalCampaignAmount();
             amount = this.editPaymentData.ordAmount + "-(" + this.getTotalCampaignAmount() + ")+" + (this.editPaymentData.ordTransportAmount == '' ? 0 : this.editPaymentData.ordTransportAmount) +
                 "+(" + changePriceString + ")=";
