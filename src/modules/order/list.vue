@@ -96,7 +96,6 @@
                                 </p>
                             </td>
                             <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
-
                                 {{itemSub.ordCreatedTime}}
                             </td>
                             <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">

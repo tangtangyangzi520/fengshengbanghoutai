@@ -3,7 +3,7 @@
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'800px'">
             <div slot="content" >
-                <div class="form-group">        
+                <div class="form-group">       
                     <div class="" style="margin-left:30%">
                         类目搜索： <input type="text" class="input input-sm" v-model="keyWord" placeholder="请输入关键字" maxlength="15" />
                             <button class="btn green-meadow" @click="search()" type="button">搜索</button>
@@ -21,7 +21,6 @@
                                     {{ item[2].text.substring((item[2].text.indexOf(keyWord)+keyWord.length),
                                     (item[2].text.length)) }}</span>
                                 </a>
-
                                 <a  @click="selected(index)" v-if="item.length == 2">
                                     <span class="result">{{item[0].text}}&nbsp;&gt;&gt;&nbsp;
                                     {{item[1].text.substring(0,item[1].text.indexOf(keyWord))}}
@@ -70,7 +69,7 @@
                 <div style="text-align:center">           
                     <button class="btn blue"  @click="addItem()" type="button">下一步</button>
                     <br>
-                    <div style="position:absolute;top:95%;left:25%;opacity:0.8">请谨慎选择类目信息，商品一旦发布，类目信息不可修改！</div>
+                    <div style="position:absolute;top:95%;left:25%;opacity:0.8;color:red;">请谨慎选择类目信息，商品一旦发布，类目信息不可修改!</div>
                 </div>
             </div>
         </m-alert>

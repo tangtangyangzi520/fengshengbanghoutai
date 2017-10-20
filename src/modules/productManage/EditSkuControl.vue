@@ -1,4 +1,5 @@
 <template>
+<!-- 商品列表-编辑SKU信息 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
             <div slot="content" style="background-color:#F0F0F0">

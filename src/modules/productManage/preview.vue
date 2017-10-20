@@ -1,4 +1,5 @@
 <template>
+<!-- 商品-预览商品页面 -->
     <div style="position: absolute;top:0;left:0;width:95%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'300px'">
             <div slot="content" >

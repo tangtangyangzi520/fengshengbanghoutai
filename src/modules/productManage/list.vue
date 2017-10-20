@@ -5,37 +5,37 @@
             <page-title-bar>
                 <span slot="title">商品列表</span>
             </page-title-bar>
-           
+
+            <!-- 条件搜索 -->
             <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag"></search>
             <br>
             
-            <div class="col-md-12 right" style="display:inline-block" >
-            
+            <!-- 按钮/链接 -->
+            <!--  说明:配置按钮的权限方法:添加v-if="limitResource.product_add"(按钮名称(product_add)在数据库中配置) -->
+            <div class="col-md-12 right" style="display:inline-block">
                 <span v-if="selectItems.length>0" class="desc">已选
                     <em>{{selectItems.length}}</em> 项 
                 </span>
-                
+
                 <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;" v-if="limitResource.product_add">发布商品</button>
-                <!--  v-if="limitResource.expert_info_add" 添加按钮的权限-->
-                <!--  <button class="btn blue" type="button" @click="showControlFunc(null,'publishAll')">修改模板</button>
-                <button class="btn default" type="button" @click="showControlFunc(null,'submitAll')">下架</button>
-                <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">删除</button>-->
                 <span v-if="par == 3">
-                    <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves" >上架</button>
+                    <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves">上架</button>
                     </span>
                 <span v-else>
-                    <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves" >下架</button>
+                    <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves">下架</button>
                 </span>
-                <button class="btn purple" type="button" @click="deleteSpu()" v-if="limitResource.product_delete">删除</button>
-                <button class="btn yellow-crusta" type="button" @click="productexport()" v-if="limitResource.product_export">导出</button> 
-                <button class="btn green-meadow" @click="search()" type="button">搜索</button>
+                <button class="btn purple"        type="button"  @click="deleteSpu()"     v-if="limitResource.product_delete">删除</button>
+                <button class="btn yellow-crusta" type="button"  @click="productexport()" v-if="limitResource.product_export">导出</button> 
+                <button class="btn green-meadow"  type="button"  @click="search()" >搜索</button>
             </div>
-            <a><div  id="1" class="cha"    style="float:left"    @click="changeClass(1)">出售中</div></a>  
-            <a> <div id="2" class="select"  style="float:left"   @click="changeClass(2)">已售罄</div></a>   
-            <a><div  id="3" class="select"  style="float:left"  @click="changeClass(3)">仓库中</div></a>
+
+            <a><div id="1" class="cha"     style="float:left"  @click="changeClass(1)">出售中</div></a>  
+            <a><div id="2" class="select"  style="float:left"  @click="changeClass(2)">已售罄</div></a>   
+            <a><div id="3" class="select"  style="float:left"  @click="changeClass(3)">仓库中</div></a>
             <div style="height:5px;clear:both;"></div>
         </div>
 
+        <!-- 列表数据 -->
         <div class="contentBlock" id="contentList">
             <div class="table-responsive col-md-12">
                 <table class="table table-striped table-bordered table-hover" id="sku-content-table">
@@ -74,32 +74,26 @@
                             <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
                                 <h4 class="tt"><p style="color:#6699CC">商品编码:{{item.spuCode}}</p>{{item.spuName}}</h4>
                             </a>
-
                             </td>
                             <td style="width:13%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
                                    font-style: normal;"><span v-if="item.minSalePrice == item.maxSalePrice">{{"￥"+item.minSalePrice}}</span>
                                    <span v-else>{{"￥"+item.minSalePrice+"  ~ ￥"+item.maxSalePrice}}</span>
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
-                                 <span v-if="item.totalStockNum > 0">    
-                                {{item.totalStockNum}}
-                                </span>
-                                <span v-else>
-                                    库存不足
-                                </span>
+                                <span v-if="item.totalStockNum > 0">{{item.totalStockNum}}</span>
+                                <span v-else>库存不足</span>
                                 <p style="padding-top:5px;">
                                     <span class="label label-default" v-if="item.spuShelvesStatus!=1">下架</span>
                                     <span class="label label-success" v-else>上架</span>
                                 </p>
                             </td>
-
                             <td style="text-align:center;vertical-align:middle;">
                                 <a  style="text-decoration:none;" title="订单列表"  @click.stop="order(item.spuId,item.spuName)"> 
                                    {{item.totalSaleNum}}
                                 </a>
                                
-                                 <!--  商品状态 -->
-                              <!--       <span class="label label-default" v-if="item.deployStatus==4">{{item.spuCatId|filterStatus}}</span>
+                                <!-- 商品状态 -->
+                                <!-- <span class="label label-default" v-if="item.deployStatus==4">{{item.spuCatId|filterStatus}}</span>
                                 <template v-else>
                                     <span class="label label-success" v-if="item.deployStatus==2">{{item.spuReferLayout|filterStatus}}</span>
                                     <span class="label label-info" v-else>{{item.spuReferLayout|filterStatus}}</span>
@@ -112,23 +106,22 @@
                                     <span class="label label-warning" v-if="item.spuReferLayout>0">{{item.spuReferLayout+'个标签'}}</span>
                                 </p> -->
                             </td>
-                            
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
-                           <!--  <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
+                            <!--  <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
                             <td style="text-align:center;vertical-align:middle;">
-                                        <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
-                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')" v-if="limitResource.productSpu_edit">编辑</button>
-                            <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')"
-                            v-if="limitResource.productSku_edit">查看SKU列表</button>
+                                <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
+                                <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')" v-if="limitResource.productSpu_edit">编辑</button>
+                                <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')"v-if="limitResource.productSku_edit">查看SKU列表</button>
 
-                                 <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
+                                <!-- 
+                                    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
                                     <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>
                                     <button type="button" v-show="(item.deployStatus==5)" @click.stop="showControlFunc(item,'reject')" v-if="limitResource.expert_info_reject" class="btn btn-xs default">拒绝</button>
                                     <button type="button" v-show="(item.submitStatus!=1)" @click.stop="showControlFunc(item,'putaway')" v-if="limitResource.expert_info_putaway" class="btn btn-xs default">上架</button>
                                     <button type="button" v-show="item.submitStatus==1" @click.stop="showControlFunc(item,'soldOut')" v-if="limitResource.expert_info_soldOut" class="btn btn-xs default">下架</button>
                                     <button type="button" v-show="(item.deployStatus==2)" @click.stop="showControlFunc(item,'withdraw')" v-if="limitResource.expert_info_withdraw" class="btn btn-xs default">撤回</button>
-                                    <button type="button" v-if="limitResource.expert_info_delete" @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button> -->
-                                  
+                                    <button type="button" v-if="limitResource.expert_info_delete" @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button>
+                                -->
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">
@@ -139,20 +132,28 @@
             </div>
         </div>
         <form action="" id="exportForm" method="post"> 
-               <input type="hidden" name="request" :value="spuName"/> 
-             <!--   <input type="hidden" name="skuCode" v-model="skuCode"/> 
-               <input type="hidden" name="spuCatId" v-model="spuCatId"/> 
-               <input type="hidden" name="skuCode" v-model="skuCode"/>  -->
+            <input type="hidden" name="request" :value="spuName"/> 
+            <!--   
+                <input type="hidden" name="skuCode" v-model="skuCode"/> 
+                <input type="hidden" name="spuCatId" v-model="spuCatId"/> 
+                <input type="hidden" name="skuCode" v-model="skuCode"/>  
+            -->
         </form>
-        <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
-        <!-- 创建专家弹窗 -->
-         <!--  <product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"></product-control> -->  
-         <order-list v-if="!destroyControlDialog" :show="showorderDialog" :onhide="hideDialog3" :lspuid="oospuid" :lflag="ooflag" :title="ordertitle"></order-list>
-         <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showpreDialog"  :onhide="hideDialog2" :pspuid="lspuid" :pflag="lflag" :imgflag="limgflag"></preview> 
-         <category-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList"></category-control> 
-         <edit-product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :proflag="pflag"></edit-product-control> 
-         <edit-sku-control v-if="!destroyControlDialog" :id="expertEditId" :show="showEditspuDialog" :spuid2="spu" :onhide="hideEditspuDialog" :skuflag="kflag" :spuname="spuname"></edit-sku-control> 
-       <!--  <manage-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"></manage-control>   -->
+        
+        <!-- 分页条 -->
+        <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> 
+        <!-- 订单列表弹框 -->
+        <order-list v-if="!destroyControlDialog" :show="showorderDialog" :onhide="hideDialog3" :lspuid="oospuid" :lflag="ooflag" :title="ordertitle"></order-list>
+        <!--  -->
+        <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showpreDialog"  :onhide="hideDialog2" :pspuid="lspuid" :pflag="lflag" :imgflag="limgflag"></preview> 
+        <!-- 选择商品类目弹框 -->
+        <category-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList"></category-control> 
+        <!-- 编辑商品弹框 -->
+        <edit-product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :proflag="pflag"></edit-product-control> 
+        <!-- 编辑SKU信息弹框 -->
+        <edit-sku-control v-if="!destroyControlDialog" :id="expertEditId" :show="showEditspuDialog" :spuid2="spu" :onhide="hideEditspuDialog" :skuflag="kflag" :spuname="spuname"></edit-sku-control> 
+        <!--  <manage-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"></manage-control>   -->
+        
         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert>
@@ -163,6 +164,7 @@
         <loading :show="isLoading"></loading>
     </div>
 </template>
+
 <script>
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect } from '../../components';
@@ -180,8 +182,7 @@ import EditSkuControl from './EditSkuControl';
 let vueThis = null;
 
 export default {
-    
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, manageControl,productControl,categoryControl,EditProductControl,EditSkuControl,preview ,orderList },
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, manageControl, productControl, categoryControl, EditProductControl, EditSkuControl, preview, orderList },
     data() {
         return {
             ordertitle:'',
@@ -244,19 +245,19 @@ export default {
     methods: {
          deleteSpu() {
             if(!confirm("确定删除商品吗")){
-                return
+                return;
             }
             let arr = []
             this.dataList.forEach( item => {
                 if(item.checked == true ){
-                     arr.push(item.spuId)
+                     arr.push(item.spuId);
                 }
             })
             
             client.postData( SPU_DELETE ,  arr ).then(data => {
                 if (data.code == 200) {
-                    this.showMsg("删除成功")
-                    this.getList()
+                    this.showMsg("删除成功");
+                    this.getList();
             }else {
                     this.showMsg(data.msg);
                 }}, data => {
@@ -265,66 +266,66 @@ export default {
          },
          up() {
             
-            let arr = []
+            let arr = [];
             this.dataList.forEach( item => {
                 if(item.checked == true ){
-                     arr.push(item.spuId)
+                     arr.push(item.spuId);
                 }
             })
             if(arr.length ==0){
-                this.showMsg("请先选中商品")
-                return
+                this.showMsg("请先选中商品");
+                return;
             }
              if(this.upflag){
-                this.showMsg("点击过于频繁")
-                return
+                this.showMsg("点击过于频繁");
+                return;
             }
-            this.upflag = true
+            this.upflag = true;
             setTimeout(()=>{
-                this.upflag = false
+                this.upflag = false;
             },3000)
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 1 }).then(data => {
                 if (data.code == 200) {
-                    this.showMsg("上架成功")
-                    this.getList()
-            }else {
+                    this.showMsg("上架成功");
+                    this.getList();
+                }else {
                     this.showMsg(data.msg);
-                }}, data => {
-                this.upflag = false
+                }
+            }, data => {
+                this.upflag = false;
                 this.showMsg("上架失败,请重试");
-            })
+            });
          },
          down() {
-            
-            let arr = []
+            let arr = [];
             this.dataList.forEach( item => {
                 if(item.checked == true ){
-                     arr.push(item.spuId)
+                     arr.push(item.spuId);
                 }
             })
              if(arr.length ==0){
-                this.showMsg("请先选中商品")
-                return
+                this.showMsg("请先选中商品");
+                return;
             }  
             if(this.downflag){
-                this.showMsg("点击过于频繁")
-                return
+                this.showMsg("点击过于频繁");
+                return;
             }
-            this.downflag = true
+            this.downflag = true;
             setTimeout(()=>{
-                this.downflag = false
-            },3000)
+                this.downflag = false;
+            },3000);
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 0 }).then(data => {
                 if (data.code == 200) {
-                    this.showMsg("下架成功")
-                    this.getList()
+                    this.showMsg("下架成功");
+                    this.getList();
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                this.downflag = false
+                this.downflag = false;
                 this.showMsg("下架失败,请重试");
-            })
+            });
          },
          //根据时间升降序
         orderByTime( val ) {
@@ -340,21 +341,21 @@ export default {
             this.dataList = [];
             this.lastSearchOptions = options;
             if( !val ){
-                $("#timeasc").show()
-                $("#timedesc").hide()
-               options.orderBy = 0
+                $("#timeasc").show();
+                $("#timedesc").hide();
+                options.orderBy = 0;
             }else{
-                $("#timedesc").show()
-                $("#timeasc").hide()
-               options.orderBy = 1
+                $("#timedesc").show();
+                $("#timeasc").hide();
+                options.orderBy = 1;
             }
-            options.orderType = 2
-             client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
+            options.orderType = 2;
+            client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.forEach(item => {
                         item.checked = false;
-                    })
+                    });
                     this.dataList = data.data;
                     this.page = data.page;
                 } else {
@@ -362,7 +363,7 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
-            })
+            });
         },
         //根据售价升降序
         orderByPrice( val ) {
@@ -378,21 +379,21 @@ export default {
             this.dataList = [];
             this.lastSearchOptions = options;
             if( !val ){
-                 $("#asc").show()
-                $("#desc").hide()
-               options.orderBy = 0
+                $("#asc").show();
+                $("#desc").hide();
+                options.orderBy = 0;
             }else{
-                $("#desc").show()
-                $("#asc").hide()
-               options.orderBy = 1
+                $("#desc").show();
+                $("#asc").hide();
+                options.orderBy = 1;
             }
-             options.orderType = 1
-             client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
+            options.orderType = 1;
+            client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.forEach(item => {
                         item.checked = false;
-                    })
+                    });
                     this.dataList = data.data;
                     this.page = data.page;
                 } else {
@@ -400,50 +401,50 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
-            })
+            });
         },
         //隐藏订单
         hideDialog3() {
-                this.showorderDialog = false;
-                console.log(this.$children)
-                setTimeout(() => {
+            this.showorderDialog = false;
+            console.log(this.$children);
+            setTimeout(() => {
                 //this.onhide('cancel');
-            }, 300)
+            }, 300);
         },
         order(val,name) {
-            this.oospuid = val
-            this.ordertitle = name+"---订单列表"
-            this.ooflag = !this.ooflag
-            this.showorderDialog = true
+            this.oospuid = val;
+            this.ordertitle = name+"---订单列表";
+            this.ooflag = !this.ooflag;
+            this.showorderDialog = true;
         },
         hideDialog2() {
-                this.showpreDialog = false
-                setTimeout(() => {
+            this.showpreDialog = false;
+            setTimeout(() => {
                 this.onhide('cancel');
-            }, 300)
+            }, 300);
         },
         previewpro(val) {
             setTimeout(()=>{
-                this.lspuid = val
-                this.limgflag = !this.limgflag
-                this.lflag = !this.lflag
+                this.lspuid = val;
+                this.limgflag = !this.limgflag;
+                this.lflag = !this.lflag;
                 this.showpreDialog = true;
-            },100)          
+            },100); 
         },
         productexport() {
             if(this.exportflag){
-                this.showMsg("点击过于频繁")
-                return
+                this.showMsg("点击过于频繁");
+                return;
             }
-            this.exportflag = true
+            this.exportflag = true;
             setTimeout(()=>{
-                this.exportflag = false
-            },5000)
+                this.exportflag = false;
+            },5000);
             let options;
-                // 拿最后一次请求的参数
-                //options = this.lastSearchOptions;
+            // 拿最后一次请求的参数
+            //options = this.lastSearchOptions;
             //options = Object.assign({}, this.searchOptions);
-            options = this.searchOptions
+            options = this.searchOptions;
             this.isLoading = true;
             this.dataList = [];
             /*console.log( this.searchOptions)
@@ -451,17 +452,17 @@ export default {
             return*/
             this.spuName =  JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,}) +""
             $("input[name='request']").val(JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,"showCatIdList":options.showCatIdList}) +"")
-            var url= SPU_EXPORT // 
+            var url= SPU_EXPORT; // 
             $("#exportForm").attr("action",url);  
             $("#exportForm").submit();  
-            this.getList()
+            this.getList();
         },
         search(){
-            this.flag = ! this.flag
-            $("#timeasc").hide()
-            $("#timedesc").show()
-            $("#asc").hide()
-            $("#desc").show()
+            this.flag = !this.flag;
+            $("#timeasc").hide();
+            $("#timedesc").show();
+            $("#asc").hide();
+            $("#desc").show();
         },
         hideEditspuDialog(control) {
             this.expertEditId = '';
@@ -476,17 +477,17 @@ export default {
                 setTimeout(() => {
                     //移除组件
                     this.destroyControlDialog = true;
-                }, 100)
+                }, 100);
                 setTimeout(() => {
                     //重新加入
                     this.destroyControlDialog = false;
-                }, 200)
+                }, 200);
                 this.getList();
             }
 
          } ,
         //编辑商品
-         hideEditDialog(control) {
+        hideEditDialog(control) {
             this.expertEditId = '';
             this.showEditDialog = false;
             if (control && control == 'create') {
@@ -499,57 +500,52 @@ export default {
                 setTimeout(() => {
                     //移除组件
                     this.destroyControlDialog = true;
-                }, 100)
+                }, 100);
                 setTimeout(() => {
                     //重新加入
                     this.destroyControlDialog = false;
-                }, 200)
+                }, 200);
                 this.getList();
             }
-
          } ,
         //点击改变样式
         changeClass(obj) {
-                $("#timedesc").show()
-                $("#timeasc").hide()
-                $("#desc").show()
-                $("#asc").hide()
-             $("#"+obj).removeClass("select").addClass("cha");
+            $("#timedesc").show();
+            $("#timeasc").hide();
+            $("#desc").show();
+            $("#asc").hide();
+            $("#"+obj).removeClass("select").addClass("cha");
             if(obj == "1"){
-              $("#2,#3").removeClass("cha").addClass("select");
-                this.par = 1
+                $("#2,#3").removeClass("cha").addClass("select");
+                this.par = 1;
             }else if(obj == "2"){
                 $("#1,#3").removeClass("cha").addClass("select");
-                this.par = 2
+                this.par = 2;
             }else{
                 $("#2,#1").removeClass("cha").addClass("select");
-                this.par = 3
+                this.par = 3;
             }
              //this.getList(false,true);
-             
         },
         showEditspu(item, name , type) {
-            this.kflag = !this.kflag
+            this.kflag = !this.kflag;
             this.controlType = type;
-            this.spu = item
-            this.spuname = name
-            console.log(1)
-            console.log(this.spu)
+            this.spu = item;
+            this.spuname = name;
+            //console.log(this.spu);
             this.showEditspuDialog = true;  
         },
         //打开编辑页面
         showEdit(item, type) {
-            this.pflag = !this.pflag
+            this.pflag = !this.pflag;
             this.controlType = type;
-            this.spu = 0
-            this.spu = item
-            console.log(this.spu)
-            this.show()
-            
+            this.spu = 0;
+            this.spu = item;
+            //console.log(this.spu);
+            this.show();
         },
         show(){
-             
-             this.showEditDialog = true;
+            this.showEditDialog = true;
         },
         //添加良言
         addItem() {
@@ -570,11 +566,11 @@ export default {
                 setTimeout(() => {
                     //移除组件
                     this.destroyControlDialog = true;
-                }, 100)
+                }, 100);
                 setTimeout(() => {
                     //重新加入
                     this.destroyControlDialog = false;
-                }, 200)
+                }, 200);
                 this.getList();
             }
         },
@@ -584,7 +580,7 @@ export default {
         },
         showControlFunc(item, type) {
             this.controlType = type;
-             //this.showEditDialog = true;
+            //this.showEditDialog = true;
             //console.log(item);
             if (!item) {
                 if (this.selectItems.length != 0) {
@@ -632,7 +628,7 @@ export default {
                 if (data.code == 200) {
                     data.data.forEach(item => {
                         item.checked = false;
-                    })
+                    });
                     this.dataList = data.data;
                     this.page = data.page;
                 } else {
@@ -640,7 +636,7 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
-            })
+            });
         },
         //查询行头统计数据
         /*getCount(options) {
@@ -653,20 +649,16 @@ export default {
                 }
             }, data => {
             })
-        },
-
-
-
-        */
+        },*/
         selectAll() {
             this.dataList.forEach(item => {
                 item.checked = true;
-            })
+            });
         },
         reverseList() {
             this.dataList.forEach(item => {
                 item.checked = !item.checked;
-            })
+            });
         },
         selectItem(item) {
             item.checked = !item.checked;
@@ -682,15 +674,15 @@ export default {
         },
         hideMsg() {
             this.showAlert = false;
-            this.showEditDialog = false
-            this.showAddDialog = false
-            this.showEditspuDialog = false
+            this.showEditDialog = false;
+            this.showAddDialog = false;
+            this.showEditspuDialog = false;
         }
     },
     created() {
         vueThis = this;
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
-        console.log(JSON.parse(localStorage.getItem('limitResource')))
+        //console.log(JSON.parse(localStorage.getItem('limitResource')));
     },
     watch: {
     },
