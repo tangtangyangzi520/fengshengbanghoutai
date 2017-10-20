@@ -1,5 +1,5 @@
 <template>
-
+<!-- 商品列表页面 -->
     <div>
         <div class="page-bar min-bar">
             <page-title-bar>
@@ -12,24 +12,25 @@
             <div class="col-md-12 right" style="display:inline-block" >
             
                 <span v-if="selectItems.length>0" class="desc">已选
-                    <em>{{selectItems.length}}</em> 项 </span>
+                    <em>{{selectItems.length}}</em> 项 
+                </span>
                 
                 <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;" v-if="limitResource.product_add">发布商品</button>
-               <!--  v-if="limitResource.expert_info_add" 添加按钮的权限-->
-               <!--  <button class="btn blue" type="button" @click="showControlFunc(null,'publishAll')">修改模板</button>
+                <!--  v-if="limitResource.expert_info_add" 添加按钮的权限-->
+                <!--  <button class="btn blue" type="button" @click="showControlFunc(null,'publishAll')">修改模板</button>
                 <button class="btn default" type="button" @click="showControlFunc(null,'submitAll')">下架</button>
                 <button class="btn purple" type="button" @click="showControlFunc(null,'rejectAll')">删除</button>-->
                 <span v-if="par == 3">
-                 <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves" >上架</button>
-                 </span>
-                 <span v-else>
-                 <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves" >下架</button>
-                 </span>
-                 <button class="btn purple" type="button" @click="deleteSpu()" v-if="limitResource.product_delete">删除</button>
-                 <button class="btn yellow-crusta" type="button" @click="productexport()" v-if="limitResource.product_export">导出</button> 
-                 <button class="btn green-meadow" @click="search()" type="button">搜索</button>
+                    <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves" >上架</button>
+                    </span>
+                <span v-else>
+                    <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves" >下架</button>
+                </span>
+                <button class="btn purple" type="button" @click="deleteSpu()" v-if="limitResource.product_delete">删除</button>
+                <button class="btn yellow-crusta" type="button" @click="productexport()" v-if="limitResource.product_export">导出</button> 
+                <button class="btn green-meadow" @click="search()" type="button">搜索</button>
             </div>
-             <a><div  id="1" class="cha"    style="float:left"    @click="changeClass(1)">出售中</div></a>  
+            <a><div  id="1" class="cha"    style="float:left"    @click="changeClass(1)">出售中</div></a>  
             <a> <div id="2" class="select"  style="float:left"   @click="changeClass(2)">已售罄</div></a>   
             <a><div  id="3" class="select"  style="float:left"  @click="changeClass(3)">仓库中</div></a>
             <div style="height:5px;clear:both;"></div>
