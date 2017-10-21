@@ -446,7 +446,7 @@ export default {
                    return
             }    
             this.spuList.forEach(spu => {
-                console.log(spu)
+                //console.log(spu)
                     //if( sku.skuSalePrice != '' ){
                        this.request.cmisList.push( {
                           "enableStatus": 1,//0-无效，1-有效
@@ -461,7 +461,7 @@ export default {
             })
             if( this.request.mkcCampaignId > 0 ){
                 client.postData( MKT_EDIT , this.request).then(data => {
-                this.isLoading = true
+                this.isLoading = false
                 if (data.code == 200) {
                         this.showMsg("编辑限时折扣成功!")
                  this.isLoading = false
@@ -479,7 +479,7 @@ export default {
 
             }else{
                 client.postData( MKT_CREATE , this.request).then(data => {
-                this.isLoading = true
+                this.isLoading = false
                 if (data.code == 200) {
                         this.showMsg("新建限时折扣成功!")
                  this.isLoading = false
