@@ -20,7 +20,7 @@
                             <tbody>
                                 <tr v-for="item in unSelectedList" @click="selectOne(item)">
                                     <td style="text-align:center;vertical-align:middle;">
-                                        <input type="checkbox" :checked="item.checked"></input>{{item.checked}}
+                                        <input type="checkbox" :checked="item.checked"></input>
                                     </td>
                                     <td class="tdTitle">
                                         {{item.name}}

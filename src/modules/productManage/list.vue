@@ -268,19 +268,19 @@ export default {
                 }}, data => {
                 this.showMsg("删除失败,请重试");
             });
-         },
-         up() {
+        },
+        up() {
             let arr = [];
             this.dataList.forEach( item => {
                 if(item.checked == true ){
-                     arr.push(item.spuId);
+                    arr.push(item.spuId);
                 }
             });
             if(arr.length ==0){
                 this.showMsg("请先选中商品");
                 return;
             }
-             if(this.upflag){
+            if(this.upflag){
                 this.showMsg("点击过于频繁");
                 return;
             }
@@ -299,15 +299,15 @@ export default {
                 this.upflag = false;
                 this.showMsg("上架失败,请重试");
             });
-         },
-         down() {
+        },
+        down() {
             let arr = [];
             this.dataList.forEach( item => {
                 if(item.checked == true ){
-                     arr.push(item.spuId);
+                    arr.push(item.spuId);
                 }
             })
-             if(arr.length ==0){
+            if(arr.length ==0){
                 this.showMsg("请先选中商品");
                 return;
             }  
@@ -410,7 +410,7 @@ export default {
         //隐藏订单
         hideDialog3() {
             this.showorderDialog = false;
-            console.log(this.$children);
+            //console.log(this.$children);
             setTimeout(() => {
                 //this.onhide('cancel');
             }, 300);
