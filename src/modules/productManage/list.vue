@@ -243,26 +243,31 @@ export default {
         }
     },
     methods: {
-         deleteSpu() {
+        // 删除商品
+        deleteSpu() {
+            let arr = [];
+            this.dataList.forEach( item => {
+                if(item.checked == true ){
+                    arr.push(item.spuId);
+                }
+            });
+            if(arr.length == 0){
+                this.showMsg("请选择需要删除的数据");
+                return;
+            }
             if(!confirm("确定删除商品吗")){
                 return;
             }
-            let arr = []
-            this.dataList.forEach( item => {
-                if(item.checked == true ){
-                     arr.push(item.spuId);
-                }
-            })
-            
+            // 发送删除商品请求
             client.postData( SPU_DELETE ,  arr ).then(data => {
                 if (data.code == 200) {
                     this.showMsg("删除成功");
                     this.getList();
-            }else {
+                }else {
                     this.showMsg(data.msg);
                 }}, data => {
                 this.showMsg("删除失败,请重试");
-            })
+            });
          },
          up() {
             let arr = [];
@@ -270,7 +275,7 @@ export default {
                 if(item.checked == true ){
                      arr.push(item.spuId);
                 }
-            })
+            });
             if(arr.length ==0){
                 this.showMsg("请先选中商品");
                 return;
