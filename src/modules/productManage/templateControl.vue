@@ -335,9 +335,7 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            
             //console.log(list);
-            //alert(0);
             if (this.selectPicType == 2) {
                 this.data.halfFigure = list[0].url;
             } else if (this.selectPicType == 3) {
@@ -346,12 +344,9 @@ export default {
                 this.data.iconUrl = list[0].url;
             }
             this.showSelectPic({ show: false });
-            this.imgList = []
-            this.imgList = list
-            //alert(this.imgList.length)
-           /* this.imgList.forEach((item,index)=>{
-                alert(item.url)
-             })*/
+            for(let i=0; i<list.length; i++){
+                this.imgList.push(list[i]);
+            }
         },
         //品牌回调
         selectTagStatusFunc(item) {

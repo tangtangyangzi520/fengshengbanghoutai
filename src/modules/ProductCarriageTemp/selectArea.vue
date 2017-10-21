@@ -20,7 +20,7 @@
                             <tbody>
                                 <tr v-for="item in unSelectedList" @click="selectOne(item)">
                                     <td style="text-align:center;vertical-align:middle;">
-                                        <input type="checkbox" :checked="item.checked"></input>
+                                        <input type="checkbox" :checked="item.checked"></input>{{item.checked}}
                                     </td>
                                     <td class="tdTitle">
                                         {{item.name}}
@@ -258,6 +258,7 @@ export default {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.unSelectedList = data.data;
+                    //console.log(this.unSelectedList);
                     this.unSelectedList.forEach(item => {
                         item.checked = false;
                     })

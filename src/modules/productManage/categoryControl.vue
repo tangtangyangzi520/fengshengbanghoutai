@@ -10,7 +10,7 @@
                             <button class="btn green-meadow" @click="search()" type="button">搜索</button>
                     </div>
                 </div>
-                <!-- 点击搜索结果弹框 -->
+                <!-- 点击搜索按钮弹框 -->
                 <div id="search" @mouseout="resulthide($event)">
                     <span  style="color:#A9A9A9;margin-left:6.3%;margin-top:5%;display:block">匹配到{{searchResult.length}}个类目</span>
                     <div id="inside">

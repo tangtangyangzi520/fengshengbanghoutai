@@ -265,7 +265,6 @@ export default {
             })
          },
          up() {
-            
             let arr = [];
             this.dataList.forEach( item => {
                 if(item.checked == true ){
@@ -283,7 +282,7 @@ export default {
             this.upflag = true;
             setTimeout(()=>{
                 this.upflag = false;
-            },3000)
+            },3000);
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 1 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("上架成功");

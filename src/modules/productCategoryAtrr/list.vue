@@ -30,15 +30,15 @@
                 <table class="table table-striped table-bordered table-hover" id="category-table">
                     <thead>
                         <tr>
-                        <th >属性名称</th>
-                        <th >属性类型</th>
-                        <th >是否必填</th>
-                        <th >是否默认展示</th>
-                        <th >属性值列表</th>
-                        <th >所属类目</th>
-                        <th >创建时间</th>
-                        <th >排序号</th>
-                        <th >操作</th>
+                            <th>属性名称</th>
+                            <th>属性类型</th>
+                            <th>是否必填</th>
+                            <th>是否默认展示</th>
+                            <th>属性值列表</th>
+                            <th>所属类目</th>
+                            <th>创建时间</th>
+                            <th>排序号</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
