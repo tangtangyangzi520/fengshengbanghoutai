@@ -85,7 +85,7 @@
             </div>
         </m-alert>
         <!-- 发布商品-新增页面 -->
-        <product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :par="sele" :onhide="hideAddDialog" :cflag="flag"></product-control> 
+        <product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :par="sele" :onhide="hideAddDialog" :cflag="flag" :closeparentpage="hideDialog"></product-control> 
     </div>
 </template>
 

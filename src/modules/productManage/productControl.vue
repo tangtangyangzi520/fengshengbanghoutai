@@ -578,6 +578,10 @@ export default {
         id: {
             type: String,
             value: 0
+        },
+        closeparentpage: {
+            type: Function,
+            default: () => { }
         }
     },
     data() {
@@ -2312,7 +2316,8 @@ export default {
             }
         },
         hideDialog() {
-            this.par = []
+            this.closeparentpage();
+            this.par = [];
             this.showDialog = false;
             setTimeout(() => {
                 this.showPage = false;
