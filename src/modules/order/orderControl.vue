@@ -101,11 +101,11 @@
                                     <td width="30%">买家昵称: </td>
                                     <td width="70%">{{setData.orsMemberNickname}}</td>
                                 </tr>
-                                <tr v-if="subData.ordMemberName!=''">
+                                <tr v-if="subData.ordMemberName.length >0">
                                     <td width="30%">姓名: </td>
                                     <td width="70%">{{subData.ordMemberName}}</td>
                                 </tr>
-                                <tr v-if="subData.ordMemberIdentity!=''">
+                                <tr v-if="subData.ordMemberIdentity.length >0">
                                     <td width="30%">身份证号: </td>
                                     <td width="70%">{{subData.ordMemberIdentity}}</td>
                                 </tr>
