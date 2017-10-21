@@ -258,13 +258,13 @@
                                             -{{detailCampaignAmount(item)}}
                                         </td>
                                     </tr>
-                                    <tr v-if="subData.ordCampaignShareAmount >0">
+                                    <tr v-if="subData.ordCampaignAmount >0">
                                         <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
                                             {{setData.orsCampaign.mkcName}} <br>
                                             <span v-if="setData.orsCampaign.mkcRemark">({{setData.orsCampaign.mkcRemark}})</span>
                                         </td>
                                         <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
-                                            -{{subData.ordCampaignShareAmount}}
+                                            -{{subData.ordCampaignAmount}}
                                         </td>
                                     </tr>
                                     <tr>
