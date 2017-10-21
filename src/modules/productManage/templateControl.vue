@@ -5,48 +5,47 @@
             <div slot="content">
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form">
-
-                   <!--   <div class="form-group">
+                        <!--   
+                        <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>品牌：
                             </label>
                             <div class="col-md-4">    
-                        <select class="form-control" v-model="firstActive">
-                            <option value="0">请选择一级类目</option>
-                            <option v-for="item in authorList" :value="item.id">{{item.text}}</option>
-                        </select><a>刷新</a> | <a>+新建</a>
-                    </div>
-                        </div> -->
+                                <select class="form-control" v-model="firstActive">
+                                    <option value="0">请选择一级类目</option>
+                                    <option v-for="item in authorList" :value="item.id">{{item.text}}</option>
+                                </select><a>刷新</a> | <a>+新建</a>
+                            </div>
+                        </div> 
+                        -->
+                        <h1><font style="color:red">{{getspu.msg}}</font></h1>
 
-            <h1><font style="color:red">{{getspu.msg}}</font></h1>
-                <h4><strong>商品详情图片上传</strong></h4> 
-                    <div class="col-md-4" style="padding-bottom:10px;">
-                             <input type="button" sytle="width=100px;height=100px" @click="showSelectPicDialog(1)" height="80" value="点击编辑图片广告" />
+                        <h4><strong>商品详情图片上传</strong></h4> 
+                        <div class="col-md-4" style="padding-bottom:10px;">
+                            <input type="button" sytle="width=100px;height=100px" @click="showSelectPicDialog(1)" height="80" value="点击编辑图片广告" />
                         </div>
                         <br><br><br>
                         <div id="img" style="text-align:center; margin-left:30%;" v-for=" (index,a) in imgList ">
-                        <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right=false>
-                            <img class="images" :src="a.url" style="height:300px; width:400px;">
-                        </item-move><br>
-                    </div>
+                            <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right=false>
+                                <img class="images" :src="a.url" style="height:300px; width:400px;">
+                            </item-move><br>
+                        </div>
 
-                    <!-- <div   id="img" style="text-align:center" v-for=" a in imgList "> 
-                        <img class="images" :src="a.url"    style=" width: 400px ; height:300px"/><br>
-                    </div> -->
-
+                        <!-- <div   id="img" style="text-align:center" v-for=" a in imgList "> 
+                            <img class="images" :src="a.url"    style=" width: 400px ; height:300px"/><br>
+                        </div> -->
                     </form>
                 </div>
             </div>
-
             <span slot="btnList">
-               <!--  <button type="button" class="btn default" data-dismiss="modal">上一步</button> -->
-               <!--  <button type="button" class="btn yellow-crusta" data-dismiss="modal">上架</button>
+                <!--  <button type="button" class="btn default" data-dismiss="modal">上一步</button> -->
+                <!--  <button type="button" class="btn yellow-crusta" data-dismiss="modal">上架</button>
                 <button type="button" class="btn green-meadow" @click="submitInfo">下架</button>  -->
                 <!--  <button type="button" class="btn purple" @click="submitInfo">预览</button>  -->
-                  <button type="button" class="btn blue" @click="save">保存</button> 
-                  <button type="button" class="btn green" @click="up()" >上架</button>
-                  <button type="button" class="btn default" @click="down()" >下架</button>
-                  <button type="button" class="btn yellow-crusta" @click="preview()">预览</button> 
+                    <button type="button" class="btn blue" @click="save">保存</button> 
+                    <button type="button" class="btn green" @click="up()" >上架</button>
+                    <button type="button" class="btn default" @click="down()" >下架</button>
+                    <button type="button" class="btn yellow-crusta" @click="preview()">预览</button> 
             </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
@@ -59,8 +58,7 @@
                 <div class="bounce3"></div>
             </div>
         </div>
-
-         <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
+        <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
             <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
         </div>
         <div style="position:fixed;z-index:11111;" v-show="showComponent">
@@ -68,8 +66,7 @@
         </div>
         <!-- 标签选择弹窗 -->
         <tag-tree v-if="showTagTreeSelect" :list="tagsList" :onselect="selectTagFunc" :oncancel="showTagDialog"></tag-tree>
-         <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog"  :onhide="hideDialog2"   
-         :imgs="imgList"  :pspuid="getspu.id" :pflag="tflag"></preview> 
+        <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog"  :onhide="hideDialog2" :imgs="imgList"  :pspuid="getspu.id" :pflag="tflag"></preview> 
     </div>
 </template>
 
@@ -85,9 +82,9 @@ export default {
     components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList, preview, itemMove },
     props: {
         getspu:{
-                "msg":"",
-                "id":0,
-            },
+            "msg":"",
+            "id":0,
+        },
         par:{      
             type: Array,
             default: function () {
@@ -105,7 +102,7 @@ export default {
             type: String,
             value: 0
         },
-         closeparent: {
+        closeparent: {
             type: Function,
             default: () => { }
         }
@@ -222,79 +219,76 @@ export default {
             this.imgList.splice(index,1);
         },
         up() {
-             if(this.temflag){
-                this.showMsg("点击过于频繁")
-                return
+            if(this.temflag){
+                this.showMsg("点击过于频繁");
+                return;
             }
-            this.temflag = true
+            this.temflag = true;
             setTimeout(()=>{
-                this.temflag = false
-            },5000)
+                this.temflag = false;
+            },5000);
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": [this.getspu.id], "spuShelvesStatus": 1 }).then(data => {
                 if (data.code == 200) {
-                    this.showMsg("上架成功")
-            }else {
+                    this.showMsg("上架成功");
+                }else {
                     this.showMsg(data.msg);
                 }}, data => {
-                this.temflag = false
+                this.temflag = false;
                 this.showMsg("上架失败,请重试");
-            })
-         },
-         down() {
-             if(this.temflag){
-                this.showMsg("点击过于频繁")
-                return
+            });
+        },
+        down() {
+            if(this.temflag){
+                this.showMsg("点击过于频繁");
+                return;
             }
-            this.temflag = true
+            this.temflag = true;
             setTimeout(()=>{
-                this.temflag = false
-            },5000)
+                this.temflag = false;
+            },5000);
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": [this.getspu.id], "spuShelvesStatus": 0 }).then(data => {
                 if (data.code == 200) {
-                    this.showMsg("下架成功")
+                    this.showMsg("下架成功");
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                this.temflag = false
+                this.temflag = false;
                 this.showMsg("下架失败,请重试");
-            })
-         },
+            });
+        },
         preview() {
-            this.tflag = !this.tflag
+            this.tflag = !this.tflag;
             this.showAddDialog = true;
         },
         save() {
-             if(this.temflag){
-                this.showMsg("点击过于频繁")
-                return
+            if(this.temflag){
+                this.showMsg("点击过于频繁");
+                return;
             }
-            this.temflag = true
+            this.temflag = true;
             setTimeout(()=>{
-                this.temflag = false
-            },5000)
+                this.temflag = false;
+            },5000);
+            this.imgList.forEach((data,index)=>{
+                this.psrRequestList.psrList.push( {
+                        "psrBlock": 4,
+                        "psrResourceId": data.id,
+                        "psrResourceUrl": data.url,
+                        "psrSortNo": index,
+                        "psrSpuId": this.getspu.id,
+                        "psrType": 3
+                    } 
+                )
+            });
+            this.psrRequestList.spuId = this.getspu.id;
 
-                   this.imgList.forEach((data,index)=>{
-                   this.psrRequestList.psrList.push( {
-                          "psrBlock": 4,
-                          "psrResourceId": data.id,
-                          "psrResourceUrl": data.url,
-                          "psrSortNo": index,
-                          "psrSpuId": this.getspu.id,
-                          "psrType": 3
-                     } 
-                   )
-             })
-            this.psrRequestList.spuId = this.getspu.id
-                  
-
-        client.postData(  PSR_CREATE , this.psrRequestList).then(data => {
+            client.postData(  PSR_CREATE , this.psrRequestList).then(data => {
                 if (data.code == 200) {
                     //alert("新增成功")
-                    this.showMsg("新增详情成功")
-                   
+                    this.showMsg("新增详情成功");
                     setTimeout(() => {
-                        this.hideDialog()
+                        this.hideDialog();
                     }, 1500)
                     //this.expertEditId = '';
                     //this.showAddDialog = true;
@@ -302,11 +296,11 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                 this.temflag = false
+                 this.temflag = false;
                 this.showMsg("新增详情失败");
-             })
+             });
         },
-         // 隐藏选择资源弹窗
+        // 隐藏选择资源弹窗
         cancelSelect() {
             this.showSelectPic({ show: false });
         },
@@ -335,9 +329,7 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            
             //console.log(list);
-            //alert(0);
             if (this.selectPicType == 2) {
                 this.data.halfFigure = list[0].url;
             } else if (this.selectPicType == 3) {
@@ -346,12 +338,9 @@ export default {
                 this.data.iconUrl = list[0].url;
             }
             this.showSelectPic({ show: false });
-            this.imgList = []
-            this.imgList = list
-            //alert(this.imgList.length)
-           /* this.imgList.forEach((item,index)=>{
-                alert(item.url)
-             })*/
+            for(let i=0; i<list.length; i++){
+                this.imgList.push(list[i]);
+            }
         },
         //品牌回调
         selectTagStatusFunc(item) {
@@ -387,13 +376,12 @@ export default {
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
-            }, 300)
+            }, 300);
         },
         hideDialog2() {
             //this.showDialog = false;
             //this.showPage = false;
            this.showAddDialog = false;
-
         },
         selectPainFunc(list) {
             let arr = [];
@@ -403,7 +391,6 @@ export default {
             this.painIdsSelect = arr;
             this.data.painIds = arr;
         },
-        
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;
@@ -424,7 +411,6 @@ export default {
                 "title": ""
             }
             this.painIdsSelect = [];
-           
         },
         // 提交信息
         submitInfo() {
@@ -469,17 +455,16 @@ export default {
             })
         }
     },
-   
     created() {
         /*this.getPainList();*/
-         //this.getbrandList();
+        //this.getbrandList();
     },
     watch: {
         imgList( val ) {
             if( val == [] ){
-               return
+               return;
             }
-             $("#img").show()
+            $("#img").show();
          },
         show() {
             this.showPage = this.show;
@@ -496,7 +481,6 @@ export default {
             this.painIdsSelect = [];
             if (this.id == '') {
                 this.title = '编辑基本信息';
-               
                 this.tagsList = [];
                 setTimeout(() => {
                     this.typesList = client.global.componentTypes;
@@ -506,6 +490,7 @@ export default {
             this.title = '编辑基本信息';
             this.isLoading = true;
             this.painList = [];
+
             client.postData(COMPONENT_GETWITHPAINS + '?componentId=' + this.id, {}).then(response => {
                 this.isLoading = false;
                 if (response.code == 200) {
@@ -513,15 +498,14 @@ export default {
                     if (data.painIds) {
                         data.painIds.forEach(item => {
                             this.painIdsSelect.push({ id: item, name: '' })
-                        })
+                        });
                         this.data.painIds = data.painIds;
                     }
                     data.tags.forEach(item => {
                         item.id = item.tagId;
                         item.text = item.tagName;
-                    })
+                    });
                     this.tagsList = data.tags;
-                    
                     this.data.title = data.title;
                     this.data.subtitle = data.subtitle;
                 } else {
@@ -530,13 +514,12 @@ export default {
             }, data => {
                 this.isLoading = false;
                 this.showMsg('网络连接错误');
-            })
+            });
         }
     },
     ready() {
         this.typesList = client.global.componentTypes;
         this.showPainListSelect = true;
-
     },
     beforeDestroy() {
         this.showPainListSelect = false;

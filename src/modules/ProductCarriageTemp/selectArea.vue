@@ -258,6 +258,7 @@ export default {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.unSelectedList = data.data;
+                    //console.log(this.unSelectedList);
                     this.unSelectedList.forEach(item => {
                         item.checked = false;
                     })

@@ -243,47 +243,51 @@ export default {
         }
     },
     methods: {
-         deleteSpu() {
+        // 删除商品
+        deleteSpu() {
+            let arr = [];
+            this.dataList.forEach( item => {
+                if(item.checked == true ){
+                    arr.push(item.spuId);
+                }
+            });
+            if(arr.length == 0){
+                this.showMsg("请选择需要删除的数据");
+                return;
+            }
             if(!confirm("确定删除商品吗")){
                 return;
             }
-            let arr = []
-            this.dataList.forEach( item => {
-                if(item.checked == true ){
-                     arr.push(item.spuId);
-                }
-            })
-            
+            // 发送删除商品请求
             client.postData( SPU_DELETE ,  arr ).then(data => {
                 if (data.code == 200) {
                     this.showMsg("删除成功");
                     this.getList();
-            }else {
+                }else {
                     this.showMsg(data.msg);
                 }}, data => {
                 this.showMsg("删除失败,请重试");
-            })
-         },
-         up() {
-            
+            });
+        },
+        up() {
             let arr = [];
             this.dataList.forEach( item => {
                 if(item.checked == true ){
-                     arr.push(item.spuId);
+                    arr.push(item.spuId);
                 }
-            })
+            });
             if(arr.length ==0){
                 this.showMsg("请先选中商品");
                 return;
             }
-             if(this.upflag){
+            if(this.upflag){
                 this.showMsg("点击过于频繁");
                 return;
             }
             this.upflag = true;
             setTimeout(()=>{
                 this.upflag = false;
-            },3000)
+            },3000);
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 1 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("上架成功");
@@ -295,15 +299,15 @@ export default {
                 this.upflag = false;
                 this.showMsg("上架失败,请重试");
             });
-         },
-         down() {
+        },
+        down() {
             let arr = [];
             this.dataList.forEach( item => {
                 if(item.checked == true ){
-                     arr.push(item.spuId);
+                    arr.push(item.spuId);
                 }
             })
-             if(arr.length ==0){
+            if(arr.length ==0){
                 this.showMsg("请先选中商品");
                 return;
             }  
@@ -406,7 +410,7 @@ export default {
         //隐藏订单
         hideDialog3() {
             this.showorderDialog = false;
-            console.log(this.$children);
+            //console.log(this.$children);
             setTimeout(() => {
                 //this.onhide('cancel');
             }, 300);
