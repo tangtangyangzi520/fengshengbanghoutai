@@ -1,50 +1,57 @@
 <template>
-
     <div style="background-color:white">
         <div class="page-bar min-bar">
             <page-title-bar>
                 <span slot="title">优惠券列表{{countDesc}}</span>
             </page-title-bar>
-            <a><div  id="-1" class="cha2"    style="float:left"    @click="changeClass(-1)">所有优惠券</div></a>  
-            <a> <div id="0" class="select2"  style="float:left"   @click="changeClass(0)">未开始</div></a>   
-            <a><div  id="2" class="select2"  style="float:left"  @click="changeClass(2)">进行中</div></a>
-            <a><div  id="1" class="select2"  style="float:left"  @click="changeClass(1)">已结束</div></a>
+            <a>
+                <div id="-1" class="cha2" style="float:left" @click="changeClass(-1)">所有优惠券</div>
+            </a>
+            <a>
+                <div id="0" class="select2" style="float:left" @click="changeClass(0)">未开始</div>
+            </a>
+            <a>
+                <div id="2" class="select2" style="float:left" @click="changeClass(2)">进行中</div>
+            </a>
+            <a>
+                <div id="1" class="select2" style="float:left" @click="changeClass(1)">已结束</div>
+            </a>
             <br>
-                <p style="text-align:center">
-                    <hr style="height:3px;background-color:gray;width:99%;margin-left:0.4%" >
-                </p>
-            <br> 
-            <button class="btn" type="button"  @click="add()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white"
-            v-if="limitResource.coupon_add">新建优惠券</button>
+            <p style="text-align:center">
+                <hr style="height:3px;background-color:gray;width:99%;margin-left:0.4%">
+            </p>
+            <br>
+            <button class="btn" type="button" @click="add()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white" v-if="limitResource.coupon_add">新建优惠券</button>
+            <button class="btn" type="button" @click="exportList()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white">导出列表</button>
+            <button class="btn" type="button" @click="exportDetails()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white">导出明细</button>
             <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
-                 <span  style="display:inline-block;"> 
-                       <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag" ></search>
-                 </span>
+                <span style="display:inline-block;">
+                    <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag"></search>
+                </span>
                 <!--  <button class="btn green-meadow" @click="search()" type="button" style="background-color:#66CC33">搜索</button> -->
-            </span> 
+            </span>
             <br>
-           <!--  <div class="col-md-12 right" style="display:inline-block">
-                <span v-if="selectItems.length>0" class="desc">已选
-                    <em>{{selectItems.length}}</em> 项 </span>
-                
-            </div> -->
-           
+            <!--  <div class="col-md-12 right" style="display:inline-block">
+                            <span v-if="selectItems.length>0" class="desc">已选
+                                <em>{{selectItems.length}}</em> 项 </span>
+                            
+                        </div> -->
         </div>
- <br>
+        <br>
         <div class="contentBlock" id="contentList">
             <div class="table-responsive col-md-12">
-                <table class="table table-striped table-bordered table-hover " id="discount" >
+                <table class="table table-striped table-bordered table-hover " id="discount">
                     <thead>
                         <tr style="background-color:#D7D7D7;height:45px">
-                           <!--  <th style="width:4%">
+                            <th style="width:4%">
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
-                            </th> -->
+                            </th>
                             <th style="width:25%;">优惠券名称</th>
-                             <th style="width:15%;">价值</th>
+                            <th style="width:15%;">价值</th>
                             <th style="width:10%;">领取限制
-                               <!--  <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderBy(false)">▼</a>
-                                <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true)">▲</a> -->
+                                <!--  <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderBy(false)">▼</a>
+                                            <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true)">▲</a> -->
                             </th>
                             <th style="width:20%;">有效期</th>
                             <th style="width:10%;">领取人/次</th>
@@ -54,37 +61,28 @@
                     </thead>
                     <tbody>
                         <tr v-for="item in dataList" @click="selectItem(item)">
-
-                            <!-- 全选反选 <td style="text-align:center;vertical-align:middle;">
+                            <td style="text-align:center;vertical-align:middle;">
                                 <input type="checkbox" :checked="item.checked"></input>
-                            </td> -->
+                            </td>
                             <td style="vertical-align:middle" class="tdTitle">
-                                <!-- <p>
-                                    <a target="_blank" :href="item.imgUrl" title="查看大图">
-                                        <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
-                                    </a>
-                                </p> -->
-                            <!-- <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
-                                <h4 class="tt"><p style="color:#6699CC">商品编码:{{item.spuCode}}</p>{{item.spuName}}</h4>
-                            </a> -->  {{item.mkcName}}
-
+                                {{item.mkcName}}
                             </td>
                             <td style="width:13%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
-                                   font-style: normal;">
-                                   {{item.mkcPrice}}<br>
-                                   <span v-if="item.mkcUsedCondition > 0 ">最低消费：￥{{item.mkcUsedCondition}}</span>
+                                               font-style: normal;">
+                                {{item.mkcPrice}}<br>
+                                <span v-if="item.mkcUsedCondition > 0 ">最低消费：￥{{item.mkcUsedCondition}}</span>
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
-                                   <span v-if="item.mkcJoinTimes == 0 ">不限张数<br></span>
-                                   <span v-else>限{{item.mkcJoinTimes}}张<br></span>
-                                   {{ "库存："+ item.mkcTotalAmount}}
+                                <span v-if="item.mkcJoinTimes == 0 ">不限张数<br></span>
+                                <span v-else>限{{item.mkcJoinTimes}}张<br></span>
+                                {{ "库存："+ item.mkcTotalAmount}}
                             </td>
 
                             <td style="text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;
-                                   font-style: normal;">
-                               <span v-if="item.mkcDateType==1"> 领到券当天开始{{item.mkcDateNum}}天内有效</span>
-                               <span v-if="item.mkcDateType==2"> 领到券次日开始{{item.mkcDateNum}}天内有效</span>
-                               <span v-if="item.mkcDateType==0" >{{item. mktStart|filterTime}} 至<br> {{item.mktEnd|filterTime}}</span>
+                                               font-style: normal;">
+                                <span v-if="item.mkcDateType==1"> 领到券当天开始{{item.mkcDateNum}}天内有效</span>
+                                <span v-if="item.mkcDateType==2"> 领到券次日开始{{item.mkcDateNum}}天内有效</span>
+                                <span v-if="item.mkcDateType==0">{{item. mktStart|filterTime}} 至<br> {{item.mktEnd|filterTime}}</span>
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
                                 <p>{{item.totalNum}}/</p>{{item.totalNum}}
@@ -92,26 +90,16 @@
                             <td style="text-align:center;vertical-align:middle;">
                                 {{item.useNum}}
                             </td>
-                            
-                          <!--   <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
-                            <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
+
+                            <!--   <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
+                                        <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
                             <td style="text-align:center;vertical-align:middle;">
-                                        <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
-                            <span v-if="item.mkcIsInvalid == 1" >已失效</span>
-                            <span v-if="item.mkcIsInvalid == 0" >
-                            <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.mkcCampaignId)" v-if="limitResource.coupon_edit">编辑</button>
-                            <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" 
-                            class="btn btn-xs yellow-crusta" v-if="limitResource.coupon_invalidate">使失效</button> 
-                            </span>
-                           
-                                 <!--    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
-                                    <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>
-                                    <button type="button" v-show="(item.deployStatus==5)" @click.stop="showControlFunc(item,'reject')" v-if="limitResource.expert_info_reject" class="btn btn-xs default">拒绝</button>
-                                    <button type="button" v-show="(item.submitStatus!=1)" @click.stop="showControlFunc(item,'putaway')" v-if="limitResource.expert_info_putaway" class="btn btn-xs default">上架</button>
-                                    <button type="button" v-show="item.submitStatus==1" @click.stop="showControlFunc(item,'soldOut')" v-if="limitResource.expert_info_soldOut" class="btn btn-xs default">下架</button>
-                                    <button type="button" v-show="(item.deployStatus==2)" @click.stop="showControlFunc(item,'withdraw')" v-if="limitResource.expert_info_withdraw" class="btn btn-xs default">撤回</button>
-                                    <button type="button" v-if="limitResource.expert_info_delete" @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button> -->
-                                  
+                                <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
+                                <span v-if="item.mkcIsInvalid == 1">已失效</span>
+                                <span v-if="item.mkcIsInvalid == 0">
+                                    <button type="button" class="btn btn-xs blue" @click.stop="showEdit(item.mkcCampaignId)" v-if="limitResource.coupon_edit">编辑</button>
+                                    <button type="button" @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs yellow-crusta" v-if="limitResource.coupon_invalidate">使失效</button>
+                                </span>
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">
@@ -121,16 +109,16 @@
                 </table>
             </div>
         </div>
-        <form action="" id="exportForm" method="post"> 
-               <input type="hidden" name="request" :value="spuName"/> 
-             <!--   <input type="hidden" name="skuCode" v-model="skuCode"/> 
-               <input type="hidden" name="spuCatId" v-model="spuCatId"/> 
-               <input type="hidden" name="skuCode" v-model="skuCode"/>  -->
+        <form action="" id="exportListForm" method="post">
+            <input type="hidden" name="listRequest" />
         </form>
-        <paging  :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
+        <form action="" id="exportDetailForm" method="post">
+            <input type="hidden" name="detailRequest" />
+        </form>
+        <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
         <span v-if="dataList.length==0"><br><br></span>
-         <add-coupon v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :coflag="couflag" :mkttid="mktid"></add-coupon> 
-        
+        <add-coupon v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :coflag="couflag" :mkttid="mktid"></add-coupon>
+
         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert>
@@ -152,29 +140,29 @@ import addCoupon from './addCoupon';
 let vueThis = null;
 
 export default {
-    
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading,addCoupon,},
+
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, addCoupon, },
     data() {
         return {
-            mktid:0,
-            couflag:false,
-            ordertitle:'',
-            oospuid:0,
-            ooflag:false,
-            limgflag:false,
-            lspuid:0,
-            lflag:false,
-            spuname:'',
-            skuCode:'',
-            spuCatId:'',
-            skuCode:'',
-            spuName:'',
-            pflag:true,
-            kflag:true,
-            flag:true,
-            spu:0,
-            img:"http://img1.fshtop.com/1502701860183.jpg",
-            par : -100,
+            mktid: 0,
+            couflag: false,
+            ordertitle: '',
+            oospuid: 0,
+            ooflag: false,
+            limgflag: false,
+            lspuid: 0,
+            lflag: false,
+            spuname: '',
+            skuCode: '',
+            spuCatId: '',
+            skuCode: '',
+            spuName: '',
+            pflag: true,
+            kflag: true,
+            flag: true,
+            spu: 0,
+            img: "http://img1.fshtop.com/1502701860183.jpg",
+            par: -100,
             isLoading: false,
             countDesc: '',  //数据统计
             dataList: [],
@@ -189,10 +177,10 @@ export default {
             showControl: false, //显示操作弹窗
             destroyControlDialog: false, //注销良言操作弹框
             expertEditId: '',
-            showEditDialog:false,  //编辑商品
-            showEditspuDialog:false,  //编辑商品
-            showpreDialog:false,
-            showorderDialog:false,
+            showEditDialog: false,  //编辑商品
+            showEditspuDialog: false,  //编辑商品
+            showpreDialog: false,
+            showorderDialog: false,
         }
     },
     computed: {
@@ -206,19 +194,42 @@ export default {
     },
     filters: {
         filterStatus(id) {
-           // return client.global.componentStatus.find(item => item.id == id).name;
+            // return client.global.componentStatus.find(item => item.id == id).name;
         },
         filterTime(time) {
             return client.formateTime(time);
         }
     },
     methods: {
-         //打开编辑页面
+        //导出优惠券列表
+        exportList() {
+            $("#exportListForm").attr("action", MKT_EXPORT_LIST);
+            $("input[name='listRequest']").val(this.par);
+            $("#exportListForm").submit();
+        },
+        //导出使用明细
+        exportDetails() {
+            let detailRequest, list=[];
+            this.dataList.forEach(item => {
+                if (item.checked == true) {
+                    list.push(item.mkcCampaignId);
+                }
+            });
+            if(list.length==0){
+                this.showMsg("请选择需要导出使用明细的优惠券");
+                return;
+            }
+            detailRequest = list.join(",");
+            $("#exportDetailForm").attr("action", MKT_EXPORT_DETAIL);
+            $("input[name='detailRequest']").val(detailRequest);
+            $("#exportDetailForm").submit();
+        },
+        //打开编辑页面
         add() {
             this.mktid = -100
-            setTimeout(()=>{
-                 this.showEditDialog = true;
-            },100)
+            setTimeout(() => {
+                this.showEditDialog = true;
+            }, 100)
         },
         showEdit(id) {
             this.mktid = id
@@ -226,7 +237,7 @@ export default {
             this.showEditDialog = true;
         },
         //根据售价升降序
-        orderBy( val ) {
+        orderBy(val) {
             let options;
             if (true) {
                 // 拿最后一次请求的参数
@@ -237,16 +248,16 @@ export default {
             this.isLoading = true;
             this.dataList = [];
             this.lastSearchOptions = options;
-            if( !val ){
-                 $("#asc").show()
+            if (!val) {
+                $("#asc").show()
                 $("#desc").hide()
-               options.orderBy = 0
-            }else{
+                options.orderBy = 0
+            } else {
                 $("#desc").show()
                 $("#asc").hide()
-               options.orderBy = 1
+                options.orderBy = 1
             }
-             client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
+            client.postData(SPU_GET_LIST, options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.forEach(item => {
@@ -261,8 +272,8 @@ export default {
                 this.isLoading = false;
             })
         },
-        search(){
-            this.flag = ! this.flag
+        search() {
+            this.flag = !this.flag
         },
         hideEditspuDialog(control) {
             this.expertEditId = '';
@@ -282,12 +293,12 @@ export default {
                     //重新加入
                     this.destroyControlDialog = false;
                 }, 200)
-                this.getList(false,true);
+                this.getList(false, true);
             }
 
-         } ,
+        },
         //编辑商品
-         hideEditDialog(control) {
+        hideEditDialog(control) {
             this.expertEditId = '';
             this.showEditDialog = false;
             if (control && control == 'create') {
@@ -305,36 +316,36 @@ export default {
                     //重新加入
                     this.destroyControlDialog = false;
                 }, 200)
-                this.getList(false,true);
+                this.getList(false, true);
             }
 
-         } ,
+        },
         //点击改变样式
-         changeClass(obj) {
-                $("#desc").show()
-                $("#asc").hide()
-             $("#"+obj).removeClass("select2").addClass("cha2");
-            if(obj == "-1"){
-              $("#0,#2,#1").removeClass("cha2").addClass("select2");
+        changeClass(obj) {
+            $("#desc").show()
+            $("#asc").hide()
+            $("#" + obj).removeClass("select2").addClass("cha2");
+            if (obj == "-1") {
+                $("#0,#2,#1").removeClass("cha2").addClass("select2");
                 this.par = -1
-            }else if(obj == "0"){
+            } else if (obj == "0") {
                 $("#-1,#2,#1").removeClass("cha2").addClass("select2");
                 this.par = 0
-            }else  if(obj == "2"){
+            } else if (obj == "2") {
                 $("#-1,#0,#1").removeClass("cha2").addClass("select2");
                 this.par = 2
-            }else{
+            } else {
                 $("#0,#2,#-1").removeClass("cha2").addClass("select2");
                 this.par = 1
             }
-             //this.getList(false,true);
-             
+            //this.getList(false,true);
+
         },
-        show(){
-             
-             this.showEditDialog = true;
+        show() {
+
+            this.showEditDialog = true;
         },
-        
+
         addItem() {
             //document.location = '/dist/#!/categoryControl';
             this.expertEditId = '';
@@ -368,7 +379,7 @@ export default {
         showControlFunc(item, type) {
             this.clickItems = [];
             this.controlType = type;
-             //this.showEditDialog = true;
+            //this.showEditDialog = true;
             //console.log(item);
             if (!item) {
                 if (this.selectItems.length != 0) {
@@ -406,7 +417,7 @@ export default {
             this.isLoading = true;
             this.dataList = [];
             this.lastSearchOptions = options;
-            client.postData( MKT_LIST , options).then(data => {  //192.168.4.249
+            client.postData(MKT_LIST, options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.forEach(item => {
@@ -483,47 +494,56 @@ export default {
 <style lang="less">
 @import "../../common/css/common.less";
 @import "../../common/css/list.less";
-.select2{
+.select2 {
     margin-left: 3px;
-    border:10px solid gray;
-    border-bottom:0px solid white;
-    border-width:1px;
+    border: 10px solid gray;
+    border-bottom: 0px solid white;
+    border-width: 1px;
     height: 30px;
     width: 100px;
-    display:inline-block;
-    text-align:center;
+    display: inline-block;
+    text-align: center;
     line-height: 30px;
-    font-weight:bold;
-};
-.cha2{
+    font-weight: bold;
+}
+
+;
+.cha2 {
     margin-left: 6px;
-    color:white;
-    border-width:1px;
+    color: white;
+    border-width: 1px;
     height: 30px;
     width: 100px;
-    display:inline-block;
-    text-align:center;
+    display: inline-block;
+    text-align: center;
     line-height: 30px;
     background-color: #66CC33
-    
-};
-td{
+}
+
+;
+td {
     text-align: center;
     vertical-align: middle
-};
- .tt:hover {
-   color:#6699CC
-};
-.orderBy:hover{
-    color:red;
-    text-decoration:none
 }
-#discount td{
-     border-right:none; 
-    border-left:none;
+
+;
+.tt:hover {
+    color: #6699CC
 }
-#discount th{
-     border-right:none; 
-     border-left:none;
+
+;
+.orderBy:hover {
+    color: red;
+    text-decoration: none
+}
+
+#discount td {
+    border-right: none;
+    border-left: none;
+}
+
+#discount th {
+    border-right: none;
+    border-left: none;
 }
 </style>

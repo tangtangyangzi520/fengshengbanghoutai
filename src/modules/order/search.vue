@@ -181,6 +181,8 @@ export default {
                 lowOrsOpenPay: '',
                 highOrsOpenPay: '',
                 ordOrderType: -1,
+                payStartTimeOrder:'',
+                payEndTimeOrder:'',
                 page: {
                     currentPage: 1,
                     pageSize: 10,

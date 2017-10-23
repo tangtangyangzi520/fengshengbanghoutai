@@ -359,6 +359,8 @@ var MKT_EDIT   =  OMS_TEST+ "/mkt/editMktCampaign";                   //编辑�
 var MKT_GET_ID   =  OMS_TEST+ "/mkt/getMktCampaignRespById";          //根据id获取优惠券/活动
 var MKT_INVALIDATE   =  OMS_TEST+ "/mkt/invalidateMktCampaign";       //优惠券/活动失效
 var MKT_DELETE  =  OMS_TEST+ "/mkt/deleteMktCampaign";                //优惠券/活动删除
+var MKT_EXPORT_LIST  =  OMS_TEST+ "/mkt/exportCoupon";                //优惠券列表导出
+var MKT_EXPORT_DETAIL  =  OMS_TEST+ "/order/exportByCampaignIds";     //优惠券明细导出
 
 //运费模板模块  
 var PCT_EDIT   =  OMS_TEST+ "/pc/editProductCarriage";                //新增运费模板
