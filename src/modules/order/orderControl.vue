@@ -154,7 +154,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 myBorder">
+                    <div class="col-md-12 myBorder" v-if="subData.ordStatus!=0 && subData.ordStatus!=4">
                         <table class="table table-bordered table-hover">
                             <tr>
                                 <th style="width:30%;">订单号 | 交易单号 | 支付方式</th>
@@ -169,7 +169,7 @@
                                     <p>{{setData.orsPayNum}}</p>
                                     <p>{{ordPayChannel(setData.orsPayChannel)}}</p>
                                 </td>
-                                <td width="20%" align="center" style="vertical-align:middle;">{{setData.orsMemberNickname}}:{{setData.buyerMessage}}</td>
+                                <td width="20%" align="center" style="vertical-align:middle;">{{setData.orsMemberNickname}}:{{setData.buyerMessage.length>0?setData.buyerMessage:'无'}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordPayTime}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{subData.ordActAmount.toFixed(2)}}</td>
                                 <td width="20%" align="center" style="vertical-align:middle;">{{payStatus(setData.orsPayStatus)}}</td>
@@ -178,7 +178,6 @@
                                 <td colspan="5" style="text-align:left">累计收款：&nbsp;&nbsp;{{subData.ordActAmount.toFixed(2)}}元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 实收款：&nbsp;&nbsp;{{subData.ordActAmount.toFixed(2)}}元</td>
                             </tr>
                         </table>
-
                     </div>
                     <div class="col-md-12">
                         <table class="table table-bordered table-hover">
@@ -238,8 +237,8 @@
                         <div class="right">
                             订单共{{totalNum()}}件商品，总计：¥{{subData.ordActAmount}}（含运费 ￥{{subData.ordTransportAmount}}）
                             <!-- <div style="width:50px;" @mouseenter.stop="showCompaign" @mouseleave.stop="showCompaign">
-                                                                <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
-                                                            </div> -->
+                                                                            <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
+                                                                        </div> -->
                             <img style="" @mouseout="hidePreferentialContent($event)" @mouseover="showPreferentialContent($event)" src="u7027.jpg">
                             <table class="table table-striped table-bordered table-hover" id="PreferentialContent">
                                 <thead>
@@ -396,7 +395,7 @@ export default {
         },
         //卖家改价
         changeTotal() {
-            let total=0;
+            let total = 0;
             this.subData.orderDetailList.forEach(item => {
                 total = total + item.ordChangePrice;
             });
