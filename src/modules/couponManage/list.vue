@@ -22,8 +22,8 @@
             </p>
             <br>
             <button class="btn" type="button" @click="add()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white" v-if="limitResource.coupon_add">新建优惠券</button>
-            <button class="btn" type="button" @click="exportList()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white">导出列表</button>
-            <button class="btn" type="button" @click="exportDetails()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white">导出明细</button>
+            <button class="btn" type="button" @click="exportList()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white" v-if="limitResource.coupon_export_list">导出列表</button>
+            <button class="btn" type="button" @click="exportDetails()" style="margin-left:6px;float:left;margin-top:10px;background-color: #66CC33;color:white" v-if="limitResource.coupon_export_detail">导出明细</button>
             <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
                 <span style="display:inline-block;">
                     <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag"></search>

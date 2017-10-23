@@ -5,8 +5,6 @@
                 <span slot="title">订单列表</span>
             </page-title-bar>
             <search :onchange="changeSearchOptions" :oncreate="getList" v-ref:search></search>
-            </br>
-            </br>
             <div class="col-md-12 left">
                 <div class="col-md-4"></div>
                 <div class="col-md-6">
@@ -58,7 +56,7 @@
                         <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])" v-if="limitResource.editOrderSetDemo">备注</a>
                         <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                         <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar && itemSet.orderSubList[0].ordStar<=0">加星</a>
                         <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSet.orderSubList[0].ordStar>0" @click="setStar(itemSet.orderSubList[0])">
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -122,7 +120,7 @@
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
                                     <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
