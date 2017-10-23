@@ -151,7 +151,7 @@ export default {
             }
             let arr = str.split("、"),arr2=[];
             arr.forEach(item => {
-                arr2.push({ "name": item });
+                arr2.push({ "name": item,"checked":true });
             });
             return arr2;
         },
@@ -191,7 +191,7 @@ export default {
                     }
                 }
             }
-            if(msg){
+            if(msg && this.show){
                 this.showMsg(msg)
             }
         },
@@ -262,7 +262,7 @@ export default {
                     this.unSelectedList.forEach(item => {
                         item.checked = false;
                     })
-                    console.log(this.filterList);
+                    //console.log(this.filterList);
                     this.filterList();
                 } else {
                     this.showMsg(data.msg);
@@ -342,6 +342,7 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
+            if(!this.show)return;
             this.selectedList=this.getSelectedList(this.areaStr);
             this.filtedList=this.getSelectedList(this.allSelectedArea);
             this.getUnSelectedList();

@@ -68,7 +68,7 @@
                                 <input type="radio" name="menkan" v-model="menkan" value="1"  :class="{ 'active': isActive }">满&nbsp;&nbsp;&nbsp;&nbsp; 
                                 </div>
                                 <div class="col-md-3" style="margin-left:-10%;margin-top:0.4%">  
-                                  <input type="number" class="form-control input-sm" v-model="request.mkcUsedCondition" placeholder="" max="999999" required="required" min="0" @keyup="integer($event)" @change="integer($event)" :class="{ 'active': isActive }"/></div>
+                                  <input type="number" class="form-control input-sm" v-model="request.mkcUsedCondition" placeholder="" max="999999" required="required" min="0" step="0.01" @keyup="checkFloat($event)" @change="checkFloat($event)" :class="{ 'active': isActive }"/></div>
                                
                                <label  class="col-sm-0 control-label" style="margin-left:-0.6%;margin-top:0.5%">
                                元可使用
@@ -339,11 +339,21 @@ export default {
                         $("#today").hide()
               }
          },*/
+         checkFloat(event){
+            let el = event.currentTarget;
+            $(el).val(Math.abs($(el).val()))
+            var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/
+            let s = $(el).val()+""
+            let f = !reg.test(s)
+            if (  f ) {
+                    $(el).val("")
+               }
+         },
          integer(event){
             let el = event.currentTarget;
             $(el).val(Math.abs($(el).val()))
             $(el).val(Math.round($(el).val()))
-            var reg = /^\d{0,10}$/
+            var reg = /^\d{0,7}$/
             let s = $(el).val()+""
             let f = !reg.test(s)
             if (  f ) {

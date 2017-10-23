@@ -453,6 +453,7 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
+            if(!this.show)return;
             this.selectedList=this.spulist;
             if(this.searchOptions.spuCatId > 100){
                 this.getUnSelectedList(false,true)

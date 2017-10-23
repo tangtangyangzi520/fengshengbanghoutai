@@ -2,7 +2,7 @@
 <!-- 商品列表-对应商品订单列表页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
 
-     <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1500px'">
+     <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1600px'">
          <div slot="content" >
                 <!-- 引入订单列表页面 -->
                 <list :ospuid="spuid" :oflag="flag" :ooflag="fflag"  v-ref:order></list>

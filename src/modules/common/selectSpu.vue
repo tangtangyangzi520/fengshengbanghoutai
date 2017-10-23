@@ -436,6 +436,8 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
+            if(!this.show)return;
+            this.selectedList = [];
             this.spulist.forEach(item=>{
                 this.selectedList.push(item);
             });

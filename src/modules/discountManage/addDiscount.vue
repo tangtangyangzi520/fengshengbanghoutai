@@ -278,7 +278,7 @@ export default {
                    arra.push(spu)
                 }
              })
-             this.spuList = []
+             this.spuList = [];
              arra.forEach((spu,index) =>{
               this.spuList.$set(index,spu)
              })

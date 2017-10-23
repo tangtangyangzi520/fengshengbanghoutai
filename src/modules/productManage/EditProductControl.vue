@@ -122,7 +122,7 @@
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">专家观点：</label>
                             <div class="controls col-md-8">
-                                <textarea  v-model="request.spuExpertOption" placeholder="30-100个字以内" maxLength="100" cols="50" rows="3">
+                                <textarea  v-model="request.spuExpertOption" placeholder="100个字以内" maxLength="100" cols="50" rows="3">
                                 </textarea> 
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                         <div class="" style="padding-bottom:10px;">     
                             <div class="controls " style="text-align:center">   
                                 <span class="required"></span>说明：        
-                                <span style="margin-left:1%">最多上传5张，单张大小不超过5M，仅支持JPG、JPEG格式。</span>
+                                <span style="margin-left:1%">最多上传5张，单张大小小于5M，仅支持JPG、JPEG格式。</span>
                             </div>
                         </div>
                         <div style="text-align:center">
@@ -1019,11 +1019,11 @@ export default {
                 this.isLoading = false;
                 return;
             }
-            if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
-                this.showMsg("专家观点不能少于30字");
-                this.isLoading = false;
-                return;
-            }
+            //if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
+                //this.showMsg("专家观点不能少于30字");
+                //this.isLoading = false;
+                //return;
+            //}
             if( this.request.spuExpertOption.length >= 100 ){
                 this.showMsg("专家观点不能超过100字");
                 this.isLoading = false;
