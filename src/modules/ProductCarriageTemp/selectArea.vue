@@ -159,11 +159,11 @@ export default {
         filterList() {
             let sourceList = this.unSelectedList, targetList = this.filtedList, index, index2,index3
             let selectList = this.selectedList;
-            let arr = []
+            let arr = [];
             for (index = sourceList.length - 1; index >= 0; index--) {
                 for (index3 = selectList.length - 1; index3 >= 0; index3--) {
                     if (sourceList[index].name == selectList[index3].name) {
-                        arr.push(selectList[index3].name)
+                        arr.push(selectList[index3].name);
                         break;
                     }
                 }
@@ -174,25 +174,25 @@ export default {
                     }
                 }
             }
-            let msg = ''
+            let msg = '';
             if(arr.length < selectList.length){
                 for(let i = 0; i < selectList.length; i++){
-                    let flag = true
+                    let flag = true;
                     for(let j = 0; j < arr.length; j++){
                         if(arr[j] == selectList[i].name){
-                            flag = false
-                            break
+                            flag = false;
+                            break;
                         }
                     }
                     if(flag){
-                        msg = '地区信息已更改,请重新设置配送区域'
+                        msg = '地区信息已更改,请重新设置配送区域';
                         selectList.splice(i,1);
-                        --i
+                        --i;
                     }
                 }
             }
             if(msg && this.show){
-                this.showMsg(msg)
+                this.showMsg(msg);
             }
         },
         //将数据传给父类
@@ -202,7 +202,7 @@ export default {
                 arr.push(item.name);
             });
             let str = arr.join("、");
-            this.$emit('area-data', str);
+            this.$emit('area-data', str);// 子传父
             this.hideDialog();
         },
         //将一个list中选中的数据转移到另一个list中
@@ -215,13 +215,16 @@ export default {
                 }
             }
         },
+        // 右移
         selectArea() {
             this.moveData(this.unSelectedList, this.selectedList);
         },
+        // 左移
         unSelectArea() {
             this.moveData(this.selectedList, this.unSelectedList);
         },
-        selectAll(type) {//全选
+        // 全选
+        selectAll(type) {
             let arr = [], list;
             list = type == 1 ? this.unSelectedList : this.selectedList;
             list.forEach(item => {
@@ -234,7 +237,8 @@ export default {
                 this.selectedList = arr;
             }
         },
-        reverseList(type) {//反选
+        // 反选
+        reverseList(type) {
             let arr = [], list;
             list = type == 1 ? this.unSelectedList : this.selectedList;
             list.forEach(item => {
@@ -247,10 +251,12 @@ export default {
                 this.selectedList = arr;
             }
         },
-        selectOne(item) {//单选
+        // 单选
+        selectOne(item) {
             item.checked = !item.checked;
+            this.unSelectedList = client.copyArr(this.unSelectedList);// 拷贝一个list重新赋值给unSelectedList
         },
-        //获取未选商品数据
+        //获取未选区域数据
         getUnSelectedList() {
             this.isLoading = true;
             this.unSelectedList = [];
@@ -258,18 +264,18 @@ export default {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.unSelectedList = data.data;
-                    //console.log(this.unSelectedList);
                     this.unSelectedList.forEach(item => {
                         item.checked = false;
-                    })
+                    });
                     //console.log(this.filterList);
                     this.filterList();
+                    //console.log(this.unSelectedList);
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.isLoading = false;
-            })
+            });
         },
         // 选择组件回调
         selectComponentFunc(list) {
