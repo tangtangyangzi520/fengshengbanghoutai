@@ -201,8 +201,8 @@ function getParentIdList(treeList, item){
                     })
                 })
             })
-    console.log(treeList);
-    console.log(parentIds);
+    //console.log(treeList);
+    //console.log(parentIds);
     parentIds.push(item.id);
     if(item.parentId!=null){
         deepLoop(item);

@@ -194,6 +194,7 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
+        <!-- 优惠券-选择商品弹框 -->
         <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideselDialog" @spu-data="getSelected" :spulist="spuList"></select-spu>
         <div class="loading" style="position:fixed;z-index:11111;" v-if="isLoading">
             <div class="page-spinner-bar">
@@ -406,6 +407,8 @@ export default {
                 this.showMsg("请先指定商品!");
                 return;
             }
+
+            this.isLoading = true;
             this.request.cmisList = [];
             this.spuList.forEach(item => {
                 //item.skuList.forEach(sku => {

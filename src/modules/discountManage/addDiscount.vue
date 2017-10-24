@@ -151,7 +151,7 @@
 <script>
 import selectSpu from '../common/selectSpu';
 import client from '../../common/utils/client';
-import {  mAlert, mSelect, mMultiSelect, itemList ,selectComponentAll} from '../../components';
+import {  mAlert, mSelect, mMultiSelect, itemList, selectComponentAll } from '../../components';
 
 export default {
     components: { mAlert, mSelect, mMultiSelect, itemList, selectComponentAll, selectSpu },
@@ -450,7 +450,9 @@ export default {
                 this.showMsg('过期时间请比生效时间大于1分钟以上');
                 $("#createEndTime3").val("");
                 return;
-            }    
+            } 
+            this.isLoading = true;
+
             this.spuList.forEach(spu => {
                 //console.log(spu)
                 //if( sku.skuSalePrice != '' ){

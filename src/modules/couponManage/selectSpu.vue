@@ -67,9 +67,7 @@
                                                 <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
                                             </a>
                                         </p>
-                                        <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
-                                            <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
-                                        </a>
+                                        <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
                                     </td>
                                     <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
                                 </tr>
@@ -79,8 +77,8 @@
                             </tbody>
                         </table>
                         <!-- 分页条 -->
-                        <!--  <paging v-if="unSelectedList.length>0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> -->
-                        <h4 v-if="unSelectedList.length>0" style="text-align:center" >共 {{unSelectedList.length}}条数据</h4>
+                        <paging v-if="unSelectedList.length>0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getUnSelectedList"></paging>
+                        <!-- <h4 v-if="unSelectedList.length>0" style="text-align:center" >共 {{unSelectedList.length}}条数据</h4> -->
                     </div>
                     <!-- 选择按钮 -->
                     <div class="col-md-1">
@@ -113,9 +111,7 @@
                                                 <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
                                             </a>
                                         </p>
-                                        <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
-                                            <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
-                                        </a>
+                                        <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
                                     </td>
                                     <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
                                 </tr>
@@ -149,7 +145,8 @@
 
 <script>
 import client from '../../common/utils/client';
-import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, paging } from '../../components';
+import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
+import paging from './paging';
 import loading from '../common/loading';
 import treeview from '../common/tagTreeItem';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
@@ -189,11 +186,11 @@ export default {
                 "orderBy":-1,
                 "showCatIdList":[],
                 "page": {
-                    "currentPage": 0,
-                    "pageSize": 0,
-                    "startIndex": 0,
-                    "totalPage": 0,
-                    "totalSize": 0
+                    // "currentPage": 0,
+                    // "pageSize": 0,
+                    // "startIndex": 0,
+                    // "totalPage": 0,
+                    // "totalSize": 0
                 },
             },
             showAlert: false,
@@ -266,6 +263,15 @@ export default {
             }
         },
         selectSpu(){
+            let ret=0;
+            this.unSelectedList.forEach(item=>{
+                if(item.checked){
+                    ret++;
+                }
+            })
+            if(ret==0){
+                return;
+            }
             if(this.selectedList.length > 0){
                 this.selectedList[0].checked = false;
                 this.unSelectedList.push(this.selectedList[0]);
@@ -281,7 +287,7 @@ export default {
             this.selectedList = [];
             this.moveData(this.selectedList,this.unSelectedList);
         },
-         //拿到树形数据
+        //拿到树形数据
         getTreeList(typeId) {
             this.isLoading = true;
             client.postData(TAG_LIST_GET + '?typeId=' + typeId, {}).then(data => {

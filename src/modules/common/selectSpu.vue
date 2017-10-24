@@ -14,9 +14,6 @@
                         <input type="text" class="form-control" placeholder="请输入" v-model="searchWord">
                     </div>
                     <div class="col-md-1 right">
-                        <!-- <span  style="display:inline-block;"> 
-                            <search :onchange="changeSearchOptions" :oncreate="getUnSelectedList(false,true)"></search>
-                        </span> -->
                         <button class="btn blue" type="button" @click="getUnSelectedList(false,true)">搜索</button>
                     </div>  
                     <div class="col-md-4 right"></div> 
@@ -70,9 +67,7 @@
                                                 <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
                                             </a>
                                         </p>
-                                        <a style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
-                                            <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
-                                        </a>
+                                        <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
                                     </td>
                                     <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
                                 </tr>
@@ -82,8 +77,8 @@
                             </tbody>
                         </table>
                         <!-- 分页条 -->
-                        <!-- <paging v-if="unSelectedList.length>0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> -->
-                        <h4 v-if="unSelectedList.length>0" style="text-align:center" >共 {{unSelectedList.length}}条数据</h4>
+                        <paging v-if="unSelectedList.length>0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getUnSelectedList"></paging>
+                        <!-- <h4 v-if="unSelectedList.length>0" style="text-align:center" >共 {{unSelectedList.length}}条数据</h4> -->
                     </div>
                     <!-- 选择按钮 -->
                     <div class="col-md-1">
@@ -116,9 +111,7 @@
                                                 <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
                                             </a>
                                         </p>
-                                        <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
-                                            <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
-                                        </a>
+                                        <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
                                     </td>
                                     <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
                                 </tr>
@@ -153,14 +146,13 @@
 <script>
 import client from '../../common/utils/client';
 import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
-import search from '../discountManage/search';
 import paging from '../discountManage/paging';
 import loading from './loading';
 import treeview from './tagTreeItem';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
 
 export default {
-    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, treeview, paging, search },
+    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, treeview, paging },
     props: {
         spulist:[],
         show: {
@@ -194,11 +186,11 @@ export default {
                 "orderBy":-1,
                 "showCatIdList":[],
                 "page": {
-                    "currentPage": 0,
-                    "pageSize": 0,
-                    "startIndex": 0,
-                    "totalPage": 0,
-                    "totalSize": 0
+                    // "currentPage": 0,
+                    // "pageSize": 0,
+                    // "startIndex": 0,
+                    // "totalPage": 0,
+                    // "totalSize": 0
                 },
             },
             showAlert: false,

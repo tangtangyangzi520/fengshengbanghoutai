@@ -55,9 +55,9 @@ export default {
         model() {
             if(this.model.children != null && this.model.children.length == 12){
                  this.tree = Object.assign([],this.model);
-                 console.log(this.tree)
+                 //console.log(this.tree)
             }
-            console.log(this.model)
+            //console.log(this.model)
         }
     },
     ready() {
