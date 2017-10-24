@@ -183,8 +183,8 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th style="width:26%;">商品信息</th>
-                                    <th style="width:7%;">单价(元)</th>
+                                    <th style="width:26%;">商品</th>
+                                    <th style="width:7%;">价格(元)</th>
                                     <th style="width:7%;">数量</th>
                                     <th style="width:10%;">优惠(元)</th>
                                     <th style="width:10%;">小计(元)</th>
@@ -210,8 +210,6 @@
                                         <h4>
                                             <a style="text-decoration:none;" title="预览商品" @click.stop="previewpro(itemDetail.detailSpu.spuId)">{{itemDetail.detailSpu.spuName}}</a>
                                         </h4>
-
-                                        <p>发货地: 需要提供发货地</p>
                                         <p>规格: {{itemDetail.detailSku.skuName}}</p>
                                     </td>
                                     <td align="center" style="width:7%;vertical-align:middle;">
