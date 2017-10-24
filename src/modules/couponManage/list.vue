@@ -34,7 +34,6 @@
             <!--  <div class="col-md-12 right" style="display:inline-block">
                             <span v-if="selectItems.length>0" class="desc">已选
                                 <em>{{selectItems.length}}</em> 项 </span>
-                            
                         </div> -->
         </div>
         <br>
@@ -43,12 +42,12 @@
                 <table class="table table-striped table-bordered table-hover " id="discount">
                     <thead>
                         <tr style="background-color:#D7D7D7;height:45px">
-                            <th style="width:4%">
+                            <th style="width:4%" v-if="limitResource.coupon_export_detail">
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
                                 <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
                             </th>
                             <th style="width:25%;">优惠券名称</th>
-                            <th style="width:15%;">价值</th>
+                            <th style="width:10%;">价值</th>
                             <th style="width:10%;">领取限制
                                 <!--  <a id="desc"  class="orderBy" style="text-decoration:none" @click="orderBy(false)">▼</a>
                                             <a id="asc" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true)">▲</a> -->
@@ -61,7 +60,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="item in dataList" @click="selectItem(item)">
-                            <td style="text-align:center;vertical-align:middle;">
+                            <td style="text-align:center;vertical-align:middle;" v-if="limitResource.coupon_export_detail">
                                 <input type="checkbox" :checked="item.checked"></input>
                             </td>
                             <td style="vertical-align:middle" class="tdTitle">
