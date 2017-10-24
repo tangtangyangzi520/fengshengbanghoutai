@@ -91,7 +91,7 @@
                                 <span v-if="item.mkcIsInvalid == 0 ">
                                     <button type="button" class="btn btn-xs blue" @click.stop="editItem(item.mkcCampaignId)" v-if="limitResource.discount_edit && par != 1">编辑</button>
                                     <button type="button"  class="btn btn-xs yellow-crusta"  @click.stop="showControlFunc(item.mkcCampaignId,'submit')" v-if="limitResource.discount_invalidate">使失效</button>
-                                    <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs default" v-if="limitResource.discount_delete">删除</button>
+                                    <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs red" v-if="limitResource.discount_delete">删除</button>
                                 </span>
                                 <!-- <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
                                     <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>
