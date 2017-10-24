@@ -463,6 +463,7 @@ export default {
     created() {
         vueThis = this;
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
+        //console.log(this.limitResource);
     },
     watch: {
     },
