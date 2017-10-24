@@ -18,7 +18,7 @@
             </form>
             </br>
             </br>
-            <div class="col-md-12">
+            <div class="col-md-12 contentOrderleft">
                 <button class="btn default" :class="{'blue':checkedList[0]}" type="button" @click="getListByState(-1)">全部</button>
                 <button class="btn default" :class="{'blue':checkedList[1]}" type="button" @click="getListByState(0)">待付款</button>
                 <button class="btn default" :class="{'blue':checkedList[2]}" type="button" @click="getListByState(1)">待发货</button>
@@ -27,13 +27,12 @@
                 <button class="btn default" :class="{'blue':checkedList[5]}" type="button" @click="getListByState(4)">已关闭</button>
                 <button class="btn default" :class="{'blue':checkedList[6]}" type="button" @click="getListByState(5)">售后线下处理</button>
             </div>
-            <div style="height:5px;clear:both;"></div>
         </div>
-        <div class="contentBlock" id="contentList">
+        <div class="contentOrderBlock" id="contentList">
             <div class="table-responsive col-md-12">
-                <table class="table table-striped table-bordered table-hover">
+                <table class="table orderTable table-striped table-bordered table-hover">
                     <thead>
-                        <tr>
+                        <tr style="background-color:rgba(215, 215, 215, 1);">
                             <th style="width:26%;">商品信息</th>
                             <th style="width:7%;">单价/数量</th>
                             <th style="width:7%;">下单时间</th>
@@ -45,7 +44,7 @@
                 </table>
             </div>
             <div class="table-responsive col-md-12" v-for="itemSet in dataList" :key="itemSet.orstNo">
-                <div class="col-md-12">
+                <div class="col-md-12" style="background-color:rgba(228, 228, 228, 1);height:30px;padding:7px 0;">
                     <div class="col-md-9">
                         <span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span>
                         &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay.toFixed(2)}}元 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -56,7 +55,7 @@
                         <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])" v-if="limitResource.editOrderSetDemo">备注</a>
                         <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                                                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                         <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar && itemSet.orderSubList[0].ordStar<=0">加星</a>
                         <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSet.orderSubList[0].ordStar>0" @click="setStar(itemSet.orderSubList[0])">
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -65,7 +64,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </div>
-                <table class="table table-striped table-bordered table-hover">
+                <table class="table orderTable table-striped table-bordered table-hover">
                     <tbody v-for="itemSub in itemSet.orderSubList" :key="itemSub.ordOrderNo">
                         <tr v-for="(index,itemDetail) in itemSub.orderDetailList" @click="selectItem(item)" :key="index">
                             <td class="tdTitle" style="width:26%;">
@@ -120,7 +119,7 @@
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                                                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
                                     <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -179,7 +178,6 @@
         </m-alert>
         <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
         <loading :show="isLoading"></loading>
-
     </div>
 </template>
 <script>
@@ -557,4 +555,21 @@ export default {
 <style lang="less">
 @import "../../common/css/common.less";
 @import "../../common/css/list.less";
+.contentOrderBlock {
+    overflow: auto;
+    border: none;
+    margin-top: 0px;
+}
+
+.contentOrderleft {
+    position: relative;
+    min-height: 1px;
+    padding-left: 6px;
+    padding-right: 15px;
+}
+
+.orderTable {
+    width: 100%;
+    margin-bottom: 8px;
+}
 </style>
