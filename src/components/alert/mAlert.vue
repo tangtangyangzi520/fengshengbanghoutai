@@ -1,5 +1,5 @@
 <template>
-    <div class="modal alertModal" :class="{'fade':effect}" :id="id" :role="basic" aria-hidden="true" style="height:2000px;">
+    <div class="modal alertModal" :class="{'fade':effect}" :id="id" :role="basic" aria-hidden="true" style="height:2000px;" :data-backdrop="backdrop">
         <div class="modal-dialog" :style="{width:width}">
             <div class="modal-content">
                 <div class="modal-header" style="text-align:left;">
@@ -62,10 +62,10 @@ export default {
             type: String,
             default: '500px'
         },
-        /*'maxheight': {
-            type: String,
-            default: '400px'
-        }*/
+        backdrop: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
