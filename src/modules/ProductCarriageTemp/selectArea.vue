@@ -254,7 +254,7 @@ export default {
         // 单选
         selectOne(item) {
             item.checked = !item.checked;
-            this.unSelectedList = client.copyArr(this.unSelectedList);// 拷贝一个list重新赋值给unSelectedList
+            this.unSelectedList = client.copyArr(this.unSelectedList);// (深)拷贝一个list重新赋值给unSelectedList
         },
         //获取未选区域数据
         getUnSelectedList() {

@@ -1,5 +1,5 @@
 <template>
-
+<!-- 运费模板-列表页面 -->
     <div style="background-color:white">
         <div class="page-bar min-bar">
             <page-title-bar>
@@ -8,137 +8,136 @@
             <a><div  id="kdfh" class="select3"    style="float:left;margin-left:1.4%;"    @click="changeClass(1)">快递发货</div></a>  
             <a><div  id="jysz" class="cha3"    style="float:left"    @click="changeClass(2)">交易设置</div></a>  
             <br>
-                <p style="text-align:center">
-                    <hr style="height:3px;background-color:white;width:99%;margin-left:0.4%" >
-                </p>
-         <div id="jyszContext" style="display:none" class="contentBlock"><br><br>
-            <form id="systemSetting">
-                <span v-for="data in systemSettingList">
-                   <span v-for="i in 20">&nbsp;</span><span span style="font-weight:bold;font-size:18px">{{data.settingName}}设置</span><br><br>
-                   <span v-for="i in 20">&nbsp;</span>
+            <p style="text-align:center">
+                <hr style="height:3px;background-color:white;width:99%;margin-left:0.4%" >
+            </p>
+            <div id="jyszContext" style="display:none" class="contentBlock">
+                <br><br>
+                <form id="systemSetting">
+                    <span v-for="data in systemSettingList">
+                        <span v-for="i in 20">&nbsp;</span>
+                        <span span style="font-weight:bold;font-size:18px">{{data.settingName}}设置</span>
+                        <br><br>
+                        <span v-for="i in 20">&nbsp;</span>
                         <span style="font-size:16px">
                             <span v-for="(index,content) in data.settingDesc.split('**')">{{content}}
-                                 <input type="number" required="required" min = "0" max="1000" v-model="data.settingValue" @keyup="integer($event)" 
+                                <input type="number" required="required" min = "0" max="1000" v-model="data.settingValue" @keyup="integer($event)" 
                                     @change="integer($event)" @blur="integer($event)" v-if="index == 0"/>
-                            </span><br><br>
+                            </span>
+                            <br><br>
                         </span>
-               </span>
-                <span v-for="i in 20">&nbsp;</span><span v-for="i in 40">&nbsp;</span>
-                <input type="submit" style="display:none" id="systemSettingSubmit">
-                <button type="button" class="btn blue" @click="save()" v-if="limitResource.systemSetting_edit">保存</button>
-            </form>
-        </div>
-        <span id="kdfhContext" >
-            <button class="btn" type="button"  @click="addItem('add')" style="margin-left:1.4%;float:left;margin-top:2%;background-color:#1E90FF;color:white"  v-if="limitResource.ProductCarriage_add">新增运费模板</button>
-
-            <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
-                 <span  style="display:inline-block;"> 
-                       <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag" ></search>
-                 </span>
-                 <!-- <button class="btn green-meadow" @click="search()" type="button" style="background-color:#66CC33">搜索</button> -->
-            </span>
-            <br><br>
-            <!-- <div class="col-md-12 right" style="display:inline-block">
-                <span v-if="selectItems.length>0" class="desc">已选
-                    <em>{{selectItems.length}}</em> 项 </span>
-                
-            </div> -->
-        <br> <h4 style="text-align:center" v-if="dataList.length==0"> 暂无数据,请先新增运费模板 </h4><br>
-        <div class="contentBlock" style="overflow:auto;">
-            <div class="table-responsive col-md-12" v-for="items in dataList" >
-                <table class="table table-striped table-bordered table-hover discount " >
-                    <thead>
-                        <tr style="background-color:#F2F2F2;height:55px;">
-                           <!--  <th style="width:4%">
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
-                            </th> -->
-                            <th style="width:35%;text-align:left;border-right:none;border-left:none; ">&nbsp;&nbsp;{{items.pcName}}</th>
-                            <th colspan="2" style="width:33%;text-align:left;border-right:none;border-left:none;">
-                                <h5>最后编辑时间<span v-if="items.pcModifyTime > 0">{{items.pcModifyTime|filterTime}}</span></h5></th>                       
-                            <th colspan="2" style=" width:32%;text-align:left;border-right:none;border-left:none;">  
-                            <span v-if="dataList.length > 0">
-<!--                              <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showControlFunc(items,'submit')">复制模板</button>  
- -->                             <button type="button"  class="btn btn-xs blue" @click.stop="editItem(items)" 
-                                    v-if="limitResource.ProductCarriage_edit">修改</button>
-<!--                              <button type="button"  class="btn btn-xs default" @click.stop="editItem(items)">删除</button>
- -->                             <a :id="'desc'+items.pcId"  class="orderBy" style="text-decoration:none" @click="orderBy(false,items.pcId)">▼</a>
-                             <a :id="'asc'+items.pcId" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true,items.pcId)">▲</a>
-                         </span>
-                         </th>
-                     </tr>
-                       
-                    </thead>
-                    <tbody  :id="'tab'+items.pcId" >
-                         <tr style="background-color:#white;height:40px;border-bottom:4px solid #D7D7D7;">
-                           <!--  <th style="width:4%">
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
-                            </th> -->
-                            <th style="width:52%;text-align:left; border-right:none;border-left:none;">可配送区域</th>
-                             <th style="width:12%; border-right:none; border-left:none;">首件（个）</th>
-                            <th style="width:12%; border-right:none;border-left:none;">运费（元）
-                               
-                            </th>
-                            <th style="width:12%; border-right:none;border-left:none;">续件（个）</th>
-                           
-                            <th style="width:12%; border-right:none;border-left:none;">续费（元）</th>
-                        </tr>
-                        <tr  @click="selectItem(items)" v-for="item in items.pctSet" style="border-bottom:2px solid #D7D7D7;">
-
-                            <!-- 全选反选 <td style="text-align:center;vertical-align:middle;">
-                                <input type="checkbox" :checked="item.checked"></input>
-                            </td> -->
-                            <td style="width:52%;text-align:left;vertical-align:middle;border-right:none;border-left:none;">
-                                <!-- <p>
-                                    <a target="_blank" :href="item.imgUrl" title="查看大图">
-                                        <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
-                                    </a>
-                                </p> -->
-                            <!-- <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
-                                <h4 class="tt"><p style="color:#6699CC">商品编码:{{item.spuCode}}</p>{{item.spuName}}</h4>
-                            </a> --> {{item.pctArea}}
-
-                            </td>
-                            <td style="width:12%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;font-style: normal;border-right:none;border-left:none;text-align:left;">
-                                     &nbsp;&nbsp; {{item.pctFirstNum}}
-                            </td>
-                            <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
-                               <!--  商品状态 -->
-                                <!--  <span class="label label-default" v-if="item.deployStatus==4">{{item.spuCatId|filterStatus}}</span>
-                                <template v-else>
-                                    <span class="label label-success" v-if="item.deployStatus==2">{{item.spuReferLayout|filterStatus}}</span>
-                                    <span class="label label-info" v-else>{{item.spuReferLayout|filterStatus}}</span>
-                                </template> -->
-                              &nbsp;&nbsp; {{item.pctFirstPrice}}
-                            </td>
-
-                            <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
-                               &nbsp;&nbsp; {{item.pctOtherNum}}
-                            </td>
-                            
-                          <!--   <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
-                            <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
-                            <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
-                                  &nbsp;&nbsp; {{item.pctOtherPrice}}
-                            </td>
-                        </tr>
-                        <tr v-if="dataList.length==0">
-                            <td colspan="9" >暂无数据</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    </span>
+                    <span v-for="i in 20">&nbsp;</span><span v-for="i in 40">&nbsp;</span>
+                    <input type="submit" style="display:none" id="systemSettingSubmit"/>
+                    <button type="button" class="btn blue" @click="save()" v-if="limitResource.systemSetting_edit">保存</button>
+                </form>
             </div>
-           </span>
-           
+            <span id="kdfhContext" >
+                <button class="btn" type="button"  @click="addItem('add')" style="margin-left:1.4%;float:left;margin-top:2%;background-color:#1E90FF;color:white"  v-if="limitResource.ProductCarriage_add">新增运费模板</button>
+                <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
+                    <span  style="display:inline-block;"> 
+                        <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag" ></search>
+                    </span>
+                    <!-- <button class="btn green-meadow" @click="search()" type="button" style="background-color:#66CC33">搜索</button> -->
+                </span>
+                <br><br>
+                <!-- <div class="col-md-12 right" style="display:inline-block">
+                    <span v-if="selectItems.length>0" class="desc">已选
+                        <em>{{selectItems.length}}</em> 项 </span>
+                    
+                </div> -->
+                <br><h4 style="text-align:center" v-if="dataList.length==0"> 暂无数据,请先新增运费模板 </h4><br>
+                <div class="contentBlock" style="overflow:auto;">
+                    <div class="table-responsive col-md-12" v-for="items in dataList" >
+                        <table class="table table-striped table-bordered table-hover discount " >
+                            <thead>
+                                <tr style="background-color:#F2F2F2;height:55px;">
+                                    <!--  
+                                    <th style="width:4%">
+                                        <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
+                                        <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
+                                    </th> 
+                                    -->
+                                    <th style="width:35%;text-align:left;border-right:none;border-left:none; ">&nbsp;&nbsp;{{items.pcName}}</th>
+                                    <th colspan="2" style="width:33%;text-align:left;border-right:none;border-left:none;">
+                                        <h5>最后编辑时间<span v-if="items.pcModifyTime > 0">{{items.pcModifyTime|filterTime}}</span></h5></th>                       
+                                    <th colspan="2" style=" width:32%;text-align:left;border-right:none;border-left:none;">  
+                                        <span v-if="dataList.length > 0">
+                                            <!-- <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showControlFunc(items,'submit')">复制模板</button>  -->                             
+                                            <button type="button"  class="btn btn-xs blue" @click.stop="editItem(items)" v-if="limitResource.ProductCarriage_edit">修改</button>
+                                            <!-- <button type="button"  class="btn btn-xs default" @click.stop="editItem(items)">删除</button> -->                          
+                                            <a :id="'desc'+items.pcId"  class="orderBy" style="text-decoration:none" @click="orderBy(false,items.pcId)">▼</a>
+                                            <a :id="'asc'+items.pcId" class="orderBy" style="display:none;text-decoration:none" @click="orderBy(true,items.pcId)">▲</a>
+                                        </span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody  :id="'tab'+items.pcId" >
+                                <tr style="background-color:#white;height:40px;border-bottom:4px solid #D7D7D7;">
+                                    <!--  
+                                    <th style="width:4%">
+                                        <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
+                                        <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
+                                    </th> 
+                                    -->
+                                    <th style="width:52%;text-align:left; border-right:none;border-left:none;">可配送区域</th>
+                                    <th style="width:12%; border-right:none; border-left:none;">首件（个）</th>
+                                    <th style="width:12%; border-right:none;border-left:none;">运费（元）</th>
+                                    <th style="width:12%; border-right:none;border-left:none;">续件（个）</th>
+                                    <th style="width:12%; border-right:none;border-left:none;">续费（元）</th>
+                                </tr>
+                                <tr  @click="selectItem(items)" v-for="item in items.pctSet" style="border-bottom:2px solid #D7D7D7;">
+                                    <!-- 全选反选 <td style="text-align:center;vertical-align:middle;">
+                                        <input type="checkbox" :checked="item.checked"></input>
+                                    </td> -->
+                                    <td style="width:52%;text-align:left;vertical-align:middle;border-right:none;border-left:none;">
+                                        <!-- <p>
+                                            <a target="_blank" :href="item.imgUrl" title="查看大图">
+                                                <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
+                                            </a>
+                                        </p> -->
+                                        <!-- <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
+                                            <h4 class="tt"><p style="color:#6699CC">商品编码:{{item.spuCode}}</p>{{item.spuName}}</h4>
+                                        </a> --> 
+                                        {{item.pctArea}}
+                                    </td>
+                                    <td style="width:12%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;font-style: normal;border-right:none;border-left:none;text-align:left;">
+                                            &nbsp;&nbsp; {{item.pctFirstNum}}
+                                    </td>
+                                    <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                                        <!--  商品状态 -->
+                                        <!--  <span class="label label-default" v-if="item.deployStatus==4">{{item.spuCatId|filterStatus}}</span>
+                                        <template v-else>
+                                            <span class="label label-success" v-if="item.deployStatus==2">{{item.spuReferLayout|filterStatus}}</span>
+                                            <span class="label label-info" v-else>{{item.spuReferLayout|filterStatus}}</span>
+                                        </template> -->
+                                        &nbsp;&nbsp; {{item.pctFirstPrice}}
+                                    </td>
+                                    <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                                        &nbsp;&nbsp; {{item.pctOtherNum}}
+                                    </td>
+                                    <!--   <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
+                                    <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
+                                    <td style="width:12%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                                        &nbsp;&nbsp; {{item.pctOtherPrice}}
+                                    </td>
+                                </tr>
+                                <tr v-if="dataList.length==0">
+                                    <td colspan="9" >暂无数据</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </span>
         </div>
         <form action="" id="exportForm" method="post"> 
-               <input type="hidden" name="request" /> 
-             <!--   <input type="hidden" name="skuCode" v-model="skuCode"/> 
-               <input type="hidden" name="spuCatId" v-model="spuCatId"/> 
-               <input type="hidden" name="skuCode" v-model="skuCode"/>  -->
+            <input type="hidden" name="request" /> 
+            <!--   <input type="hidden" name="skuCode" v-model="skuCode"/> 
+            <input type="hidden" name="spuCatId" v-model="spuCatId"/> 
+            <input type="hidden" name="skuCode" v-model="skuCode"/>  -->
         </form>
-       <!--  <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> -->
+        <!-- <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> -->
         <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
         <addpct v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList" :dflag="disflag" :pct-arrs="pctArr"></addpct> 
         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
@@ -147,10 +146,10 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
-        
         <loading :show="isLoading"></loading>
     </div>
 </template>
+
 <script>
 import client from '../../common/utils/client';
 import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect } from '../../components';
@@ -168,7 +167,6 @@ import EditSkuControl from './EditSkuControl';*/
 let vueThis = null;
 
 export default {
-    
     components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control,addpct, loading,/* manageControl,productControl,categoryControl,EditProductControl,EditSkuControl,preview ,orderList*/ },
     data() {
         return {
@@ -203,7 +201,7 @@ export default {
             let list = [];
             this.dataList.forEach(item => {
                 item.checked && list.push(item);
-            })
+            });
             return list;
         }
     },
@@ -218,66 +216,66 @@ export default {
     methods: {
         integer(event){
             let el = event.currentTarget;
-            $(el).val(Math.abs($(el).val()))
-            $(el).val(Math.round($(el).val()))
-            var reg = /^\d{0,4}$/
-            let s = $(el).val()+""
-            let f = !reg.test(s)
+            $(el).val(Math.abs($(el).val()));
+            $(el).val(Math.round($(el).val()));
+            var reg = /^\d{0,4}$/;
+            let s = $(el).val()+"";
+            let f = !reg.test(s);
             if (  f ) {
-                    $(el).val("")
-               }
-         },
+                $(el).val("");
+            }
+        },
         save(){
-           $("#systemSettingSubmit").click()
+           $("#systemSettingSubmit").click();
         },
         saveSystemSetting(ev){
-              ev.preventDefault();  
-              ev.preventDefault();  
-               if(this.ssflag){
-                alert("点击过于频繁")
-                return
+            ev.preventDefault();  
+            ev.preventDefault();  
+            if(this.ssflag){
+                alert("点击过于频繁");
+                return;
             }
-            this.ssflag = true
+            this.ssflag = true;
             setTimeout(()=>{
-                this.ssflag = false
-            },3000)
-             client.postData( SYSTEM_SETTING_EDIT , this.systemSettingList).then(data => {
+                this.ssflag = false;
+            },3000);
+            //
+            client.postData( SYSTEM_SETTING_EDIT , this.systemSettingList).then(data => {
                 if (data.code == 200) {
-                        //this.showMsg("保存成功!")
-                        alert("保存成功!")
+                    //this.showMsg("保存成功!");
+                    alert("保存成功!");
                 } 
             }, data => {
-                    this.ssflag = false
-                    alert("保存失败!"+data.message)
-                })
-             ev.preventDefault();  
+                this.ssflag = false;
+                alert("保存失败!"+data.message);
+            });
+            ev.preventDefault();  
         },
         editItem(arr) {
             this.pctArr = Object.assign({},arr);
-            this.disflag = !this.disflag
+            this.disflag = !this.disflag;
             this.showAddDialog = true;
         },
        //sku展开 或 收起
-         orderBy( val ,id) {
+        orderBy( val ,id) {
             if( val ){
-                $("#desc"+id).show()
-                $("#asc"+id).hide()
-                $("#tab"+id).show()
+                $("#desc"+id).show();
+                $("#asc"+id).hide();
+                $("#tab"+id).show();
             }else{
-                $("#asc"+id).show()
-                $("#desc"+id).hide()
-                $("#tab"+id).hide()
+                $("#asc"+id).show();
+                $("#desc"+id).hide();
+                $("#tab"+id).hide();
             }
-            
         },
         hideDialog2() {
-                this.showpreDialog = false
-                setTimeout(() => {
+            this.showpreDialog = false;
+            setTimeout(() => {
                 this.onhide('cancel');
-            }, 300)
+            }, 300);
         },
         search(){
-            this.flag = ! this.flag
+            this.flag = ! this.flag;
         },
         hideEditspuDialog(control) {
             this.expertEditId = '';
@@ -299,34 +297,33 @@ export default {
                 }, 200)
                 this.getList(false,true);
             }
-
          } ,
         //点击改变样式
         changeClass(obj) {
             if(obj == 1){
-                $("#kdfhContext").show()
-                $("#jyszContext").hide()
+                $("#kdfhContext").show();
+                $("#jyszContext").hide();
                 $("#jysz").removeClass("select3").addClass("cha3");
                 $("#kdfh").removeClass("cha3").addClass("select3");
-                this.getList()
+                this.getList();
             }else{
-                $("#kdfhContext").hide()
-                $("#jyszContext").show()
+                $("#kdfhContext").hide();
+                $("#jyszContext").show();
                 $("#kdfh").removeClass("select3").addClass("cha3");
                 $("#jysz").removeClass("cha3").addClass("select3");
             }
         },
         //打开编辑页面
         showEdit(item, type) {
-            this.pflag = !this.pflag
-            this.controlType = type
-            this.spu = 0
-            this.spu = item
-            console.log(this.spu)
-            this.show()
+            this.pflag = !this.pflag;
+            this.controlType = type;
+            this.spu = 0;
+            this.spu = item;
+            //console.log(this.spu);
+            this.show();
         },
         show(){
-             this.showEditDialog = true;
+            this.showEditDialog = true;
         },
         //添加良言
         addItem(val) {
@@ -346,7 +343,7 @@ export default {
                 setTimeout(() => {
                     //移除组件
                     this.destroyControlDialog = true;
-                }, 100)
+                }, 100);
                 setTimeout(() => {
                     //重新加入
                     this.destroyControlDialog = false;
@@ -359,9 +356,8 @@ export default {
             this.searchOptions = options;
         },
         showControlFunc(item, type) {
-
             this.controlType = type;this.showControl = true;
-             //this.showEditDialog = true;
+            //this.showEditDialog = true;
             //console.log(item);
             if (!item) {
                 if (this.selectItems.length != 0) {
@@ -399,10 +395,11 @@ export default {
             this.isLoading = true;
             this.dataList = [];
             this.lastSearchOptions = options;
+            //
             client.postData( PCT_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
-                    this.dataList = data.data
+                    this.dataList = data.data;
                     //alert(total.length)
                     this.page = data.page;
                 } else {
@@ -410,30 +407,30 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
-            })
-
+            });
+            //
             client.postData( SYSTEM_SETTING_LIST , {}).then(data => {  //192.168.4.249
                 if (data.code == 200) {
-                    this.systemSettingList = data.data
+                    this.systemSettingList = data.data;
                     this.systemSettingList.forEach(data=>{
                         if(data.settingName.indexOf("收货时间")>=0){
-                            data.settingValue = data.settingValue/60/24
+                            data.settingValue = data.settingValue/60/24;
                         }
-                    })
+                    });
                 } 
             }, data => {
                 this.showMsg("获取系统配置失败!"+data.msg);
-            })
+            });
         },
         selectAll() {
             this.dataList.forEach(item => {
                 item.checked = true;
-            })
+            });
         },
         reverseList() {
             this.dataList.forEach(item => {
                 item.checked = !item.checked;
-            })
+            });
         },
         selectItem(item) {
             item.checked = !item.checked;
@@ -449,9 +446,9 @@ export default {
         },
         hideMsg() {
             this.showAlert = false;
-            this.showEditDialog = false
-            this.showAddDialog = false
-            this.showEditspuDialog = false
+            this.showEditDialog = false;
+            this.showAddDialog = false;
+            this.showEditspuDialog = false;
         }
     },
     created() {
@@ -468,7 +465,7 @@ export default {
     },
     ready() {
         client.resetListHeight();
-         $("#systemSetting").on("submit",this.saveSystemSetting)
+        $("#systemSetting").on("submit",this.saveSystemSetting);
     }
 };
 </script>
@@ -506,14 +503,14 @@ td{
     vertical-align: middle
 };
  .tt:hover {
-   color:#6699CC
+    color:#6699CC
 };
 .orderBy:hover{
     color:red;
     text-decoration:none
 }
 .discount td{
-     border-right:none; 
+    border-right:none; 
     border-left:none;
 }
  th{

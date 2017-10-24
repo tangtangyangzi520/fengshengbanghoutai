@@ -25,7 +25,7 @@
 
     <script>
         var MetronicApp = angular.module("MetronicApp", ["ngCookies"]);
-        MetronicApp.controller("LoginController", function($scope, $log, $http,
+        MetronicApp.controller("LoginController", function($scope, $log, $http,$cookies,
             $cookieStore) {
             $scope.loginResult = false;
             $scope.request = {};
@@ -47,8 +47,9 @@
                 }).success(function(data, status, headers, config) {
                     if (loginResult(data)) {
                         $scope.loginResult = true;
-                        $cookieStore.put("user", data.data);
-                        document.location = '/dist/#!/';
+                         $cookies.putObject("user", data.data,{"domain": GetCookieDomain()});
+                       // document.cookie = "user=" + encodeURIComponent(JSON.stringify(data.data))+ "; domain=fshtop.com; path=/";{domain: '.fshtop.com'}
+                         document.location = '/dist/#!/';
                     }
                     $scope.request = {};
                 }).error(function(data, status) {
@@ -63,6 +64,21 @@
                 return true;
             }
         });
+        function GetCookieDomain() {
+            let host = location.hostname;
+            let ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+            if (ip.test(host) === true || host === 'localhost') return host;
+            let regex = /([^]*).*/;
+            let match = host.match(regex);
+            if (typeof match !== "undefined" && null !== match) host = match[1];
+            if (typeof host !== "undefined" && null !== host) {
+                let strAry = host.split(".");
+                if (strAry.length > 1) {
+                    host = strAry[strAry.length - 2] + "." + strAry[strAry.length - 1];
+                }
+            }
+            return '.' + host;
+        }
     </script>
 </head>
 <!-- END HEAD -->
@@ -71,7 +87,7 @@
     <div class="logo">
         <a href="index.html">
             <h3>
-                CMS管理后台
+                电商管理后台
                 </h5>
         </a>
     </div>
@@ -105,7 +121,7 @@
         </form>
 
     </div>
-    <div class="copyright">丰盛CMS管理后台</div>
+    <div class="copyright">丰盛电商管理后台</div>
 
 
 </body>

@@ -1,19 +1,18 @@
 <template>
     <form class="row search-form" style="margin: 5px 0 0 0">
-            
-            <input type="hidden" class="form-control"  v-model="searchOptions.saleStatus">
-            
-                        <input type="text" class="form-control" v-model="searchOptions.mkcName" maxLength="50"/>
-                    
-          
+        <input type="hidden" class="form-control"  v-model="searchOptions.saleStatus">
+        <input type="text" class="form-control" v-model="searchOptions.mkcName" maxLength="50"/>
     </form>
 </template>
+
 <script>
 import client from '../../common/utils/client';
 import { getComponentList, getComponentChannelList } from '../../vuex/actions/actions.component';
 import { getPainTree } from '../../vuex/actions/actions.pain';
 import { mMultiSelect, mAlert, mSelect } from '../../components';
+
 export default {
+    components: { mMultiSelect, mSelect, mAlert },
     props: {
         cflag:true,
         parent: {
@@ -38,7 +37,6 @@ export default {
             getComponentChannelList, getPainTree
         }
     },
-    components: { mMultiSelect, mSelect, mAlert },
     data() {
         return {  
             oneList:[],
@@ -102,9 +100,9 @@ export default {
             let options = this.searchOptions;
             options.createStartTime = options.createEndTime = options.modifyedStartTime = options.modifyedEndTime = '';
             let createStartTime = $('#createStartTime').val(),
-                createEndTime = $('#createEndTime').val(),
-                modifyedStartTime = $('#modifyedStartTime').val(),
-                modifyedEndTime = $('#modifyedEndTime').val();
+            createEndTime = $('#createEndTime').val(),
+            modifyedStartTime = $('#modifyedStartTime').val(),
+            modifyedEndTime = $('#modifyedEndTime').val();
             if (createStartTime != '') {
                 options.createStartTime = createStartTime + ' 00:00:00';
             }
@@ -141,11 +139,10 @@ export default {
         },
         // 获取类目列表
         getLEIMUList() {
+            //
             client.postData(  TAG_LIST_GET + "?typeId=100", {}).then(data => {
                 if (data.code == 200) {
-
                     this.leimuList = data.data.root.children;
-                   
                     let list = data.data.root.children;
                     for (let i = 0; i < list.length; i++) {
                         list[i].name = list[i].text;
@@ -191,61 +188,54 @@ export default {
             this.searchOptions.skuChannels = [];
             this.channelIdActive.forEach(item => {
                 this.searchOptions.skuChannels.push(item.id);
-            })
+            });
             this.setOptions();
         },
         // 选择痛点回调
         selectPainFunc(list) {
-
-              if( list.length !=0 ){
-                  console.log(list[0].name)
-                  console.log(list[0].id)
-                 let select = this.leimuList 
-                 let pain = []
-                 for (let i = 0; i < select.length; i++) {
-
-                      for (let j = 0; j < select[i].children.length; j++) {
-
-                         if( list[0].id == select[i].children[j].id ){
-                             
-                             for (let z = 0; z < select[i].children[j].children.length; z++) {
-
-                          pain = select[i].children[j].children
-                          console.log(select[i].children[j].children.length)
-                          pain[z].name = select[i].children[j].children[z].text
-                          pain[z].id = select[i].children[j].children[z].id
+            if( list.length !=0 ){
+                //console.log(list[0].name)
+                //console.log(list[0].id)
+                let select = this.leimuList;
+                let pain = [];
+                for (let i = 0; i < select.length; i++) {
+                    for (let j = 0; j < select[i].children.length; j++) {
+                        if( list[0].id == select[i].children[j].id ){
+                            for (let z = 0; z < select[i].children[j].children.length; z++) {
+                                pain = select[i].children[j].children;
+                                //console.log(select[i].children[j].children.length);
+                                pain[z].name = select[i].children[j].children[z].text;
+                                pain[z].id = select[i].children[j].children[z].id;
                             }
                         }
                     }
                 } 
-                     this.chanelList = pain         
+                his.chanelList = pain;         
             } 
-            
         },
         // 选择创建者回调
         selectAuthorFunc(list) {
-            
             if( list.length !=0 ){
-                  console.log(list[0].name)
-                  console.log(list[0].id)
-                 let select = this.leimuList 
-                 let pain = []
-                 for (let i = 0; i < select.length; i++) {
-                     if( list[0].id == select[i].id ){
-                        pain = select[i].children
+                //console.log(list[0].name)
+                //console.log(list[0].id)
+                let select = this.leimuList; 
+                let pain = [];
+                for (let i = 0; i < select.length; i++) {
+                    if( list[0].id == select[i].id ){
+                        pain = select[i].children;
                         for (let j = 0; j < select[i].children.length; j++) {
-                           console.log(select[i].children.length)
-                        pain[j].name = select[i].children[j].text;
-                        pain[j].id = select[i].children[j].id;
-                    } 
-                 }                                      
+                            //console.log(select[i].children.length);
+                            pain[j].name = select[i].children[j].text;
+                            pain[j].id = select[i].children[j].id;
+                        } 
+                    }                                      
+                }
+                this.painList = pain
             }
-            this.painList = pain
-        }
             let creators = [];
             list.forEach((item) => {
                 creators.push(item.id);
-            })
+            });
             this.authorListSelect = creators;
             if (this.authorListSelect.length != 0) {
                 this.searchOptions.creators = this.authorListSelect;
@@ -285,78 +275,72 @@ export default {
     },
     watch: {
         cflag() {
-           if( (this.firstActive ==0 && this.secondActive == 0 && this.thirdActive == 0) || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
-              this.oncreate(false, true);
-           }else{
-               alert("选择经营类目不完整")
-
-           }
+            if( (this.firstActive ==0 && this.secondActive == 0 && this.thirdActive == 0) || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
+                this.oncreate(false, true);
+            }else{
+                alert("选择经营类目不完整");
+            }
         },
         parent(val){
-           this.searchOptions.mkcStatus = val;
-           if( (this.firstActive + this.secondActive + this.thirdActive) == 0 || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
-              this.oncreate(false, true);
-           }else{
-               alert("选择类目不完整")
-
-           }
+            this.searchOptions.mkcStatus = val;
+            if( (this.firstActive + this.secondActive + this.thirdActive) == 0 || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
+                this.oncreate(false, true);
+            }else{
+                alert("选择类目不完整");
+            }
         },
         showthirdActive(val) {
-            this.searchOptions.showCatIdList[2] = val
-
+            this.searchOptions.showCatIdList[2] = val;
         },
         showfirstActive(val){
             //if( val == 0){
-                this.searchOptions.showCatIdList[2] = 0
-                this.searchOptions.showCatIdList[1] = 0
-                this.searchOptions.showCatIdList[0] = val
-                this.showsecondActive = 0
-                this.showthirdActive = 0
-                this.threeList =[]
-                this.twoList = []
+                this.searchOptions.showCatIdList[2] = 0;
+                this.searchOptions.showCatIdList[1] = 0;
+                this.searchOptions.showCatIdList[0] = val;
+                this.showsecondActive = 0;
+                this.showthirdActive = 0;
+                this.threeList =[];
+                this.twoList = [];
            // }else{
-             if( this.leimuList.find(item=>item.id==val) != null){
-                this.twoList = this.leimuList.find(item=>item.id==val).children
+            if( this.leimuList.find(item=>item.id==val) != null){
+                this.twoList = this.leimuList.find(item=>item.id==val).children;
             }
         },
         showsecondActive(val){
-                this.searchOptions.showCatIdList[2] = 0
-                this.searchOptions.showCatIdList[1] = val
+                this.searchOptions.showCatIdList[2] = 0;
+                this.searchOptions.showCatIdList[1] = val;
             //if( val == 0){
-                this.showthirdActive = 0
-                this.threeList =[]
+                this.showthirdActive = 0;
+                this.threeList =[];
             //}else{
             if( this.twoList.find(item=>item.id==val) != null){
                 this.threeList = this.twoList.find(item=>item.id==val).children;
             }
         },
         thirdActive(val) {
-            this.searchOptions.spuCatId = val
-
+            this.searchOptions.spuCatId = val;
         },
         firstActive(val){
             //if( val == 0){
-                this.secondActive = 0
-                this.thirdActive = 0
-                this.chanelList =[]
-                this.painList = []
-           // }else{
+                this.secondActive = 0;
+                this.thirdActive = 0;
+                this.chanelList =[];
+                this.painList = [];
+            // }else{
             if(this.leimuList.find(item=>item.id==val) != null){
-
-                this.painList = this.leimuList.find(item=>item.id==val).children
+                this.painList = this.leimuList.find(item=>item.id==val).children;
             }
-           // }
+            // }
         },
         secondActive(val){
             //if( val == 0){
-                this.thirdActive = 0
-                this.chanelList =[]
-           // }else{
+                this.thirdActive = 0;
+                this.chanelList =[];
+            // }else{
             if(this.painList.find(item=>item.id==val) != null){
-
                 this.chanelList = this.painList.find(item=>item.id==val).children;
             }
-           // }
+            // }
         },
         title(val) {
             this.searchOptions.title = val;
@@ -401,10 +385,11 @@ export default {
         $('#modifyedEndTime').val('').datetimepicker({ format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: 'true', minView: 2 });
         $('.datePicker').on('change', () => {
             this.setOptions();
-        })
+        });
     }
 }
 </script>
+
 <style lang="less" scope>
 .search-form .col-md-4{
     padding-left:0;

@@ -1,11 +1,12 @@
 <template>
+<!-- 限时折扣-选择商品页面(多选) -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1200px'" >
-             <div slot="content">
+            <div slot="content">
                 <div class="col-md-12 right">
+                    <div class="col-md-1 right"></div>
                     <div class="col-md-2 right">
-                        <!-- <m-select :data="searchList" :placeholder="'商品编码'" :change-func="selectSearchFunc" :class="'fixedIcon'" v-model="searchType"></m-select> -->
-                        <select v-model="searchType" class="type">
+                        <select v-model="searchType" class="type form-control">
                             <option v-for="item in searchList" :value="item.id">{{item.name}}</option>
                         </select>
                     </div>
@@ -13,16 +14,27 @@
                         <input type="text" class="form-control" placeholder="请输入" v-model="searchWord">
                     </div>
                     <div class="col-md-1 right">
+                        <!-- <span  style="display:inline-block;"> 
+                            <search :onchange="changeSearchOptions" :oncreate="getUnSelectedList(false,true)"></search>
+                        </span> -->
                         <button class="btn blue" type="button" @click="getUnSelectedList(false,true)">搜索</button>
-                    </div>   
-                    <div class="col-md-5 right">
-                    </div>
+                    </div>  
+                    <div class="col-md-4 right"></div> 
                 </div>
                 </br>
                 </br>
                 </br>
-                </br>
-                <div class="col-md-12" >
+                <div class="col-md-3 left">
+                    <label for="title" class="control-label" style="margin-left:7%;">商品分类</label>
+                </div>
+                <div class="col-md-4 left">
+                    <label for="title" class="control-label" style="margin-left:2%;">未选择</label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-4 left">
+                    <label for="title" class="control-label" style="margin-left:-2%;">已选择</label>
+                </div>
+                <div class="col-md-12">
                     <!-- 商品类目树 -->
                     <div class="col-md-3 left" style="height:400px;overflow:auto;">
                         <div class="tree-demo jstree jstree-1 jstree-default">
@@ -34,17 +46,16 @@
                             </ul>
                         </div> 
                     </div>
-                    <!-- 商品列表 -->
-                    <div class="col-md-4 right">
+                    <!-- 未选择的商品列表 -->
+                    <div class="col-md-4">
                         <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                             <thead>
                                 <tr>
-                                    <th style="width:20%">
-                                       
+                                    <th style="width:10%">
                                         <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(this.unSelectedList)">全选</button>
                                         <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(this.unSelectedList)">反选</button>
                                     </th>
-                                    <th style="width:60%;">商品信息</th>
+                                    <th style="width:70%;">商品信息</th>
                                     <th style="width:20%;">库存</th>
                                 </tr>
                             </thead>
@@ -53,17 +64,17 @@
                                     <td style="text-align:center;vertical-align:middle;">
                                         <input type="checkbox" :checked="item.checked"></input>
                                     </td>
-                                    <td class="tdTitle">
+                                    <td class="tdTitle" style="text-align:center;vertical-align:middle;">
                                         <p>
                                             <a target="_blank" :href="item.imgUrl" title="查看大图">
                                                 <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
                                             </a>
                                         </p>
-                                        <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
+                                        <a style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
                                             <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
                                         </a>
                                     </td>
-                                    <td>{{item.totalStockNum}}</td>
+                                    <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
                                 </tr>
                                 <tr v-if="unSelectedList.length==0">
                                     <td colspan="9" class="center">暂无数据</td>
@@ -71,19 +82,18 @@
                             </tbody>
                         </table>
                         <!-- 分页条 -->
-                       <!--  <paging v-if="unSelectedList.length>0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> -->
-                       <h4 v-if="unSelectedList.length>0" style="text-align:center" >
-                       共 {{unSelectedList.length}}条数据</h4>
+                        <!-- <paging v-if="unSelectedList.length>0" :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> -->
+                        <h4 v-if="unSelectedList.length>0" style="text-align:center" >共 {{unSelectedList.length}}条数据</h4>
                     </div>
                     <!-- 选择按钮 -->
-                    <div class="col-md-1 right">
-                        <button class="btn blue" type="button" @click="selectSpu()">&gt;&gt;</button>
+                    <div class="col-md-1">
+                        <button class="btn blue" type="button" style="margin-left:25%;" @click="selectSpu()">&gt;&gt;</button>
                         </br>
                         </br>
-                        <button class="btn blue" type="button" @click="unSelectSpu()">&lt;&lt;</button>
+                        <button class="btn blue" type="button" style="margin-left:25%;" @click="unSelectSpu()">&lt;&lt;</button>
                     </div>
-                    <!-- 被选中的商品列表 -->
-                    <div class="col-md-4 right">
+                    <!-- 已选择的商品列表 -->
+                    <div class="col-md-4">
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -91,8 +101,8 @@
                                         <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll(this.selectedList)">全选</button>
                                         <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList(this.selectedList)">反选</button>
                                     </th>
-                                    <th style="width:80%;">商品信息</th>
-                                    <th style="width:10%;">库存</th>
+                                    <th style="width:70%;">商品信息</th>
+                                    <th style="width:20%;">库存</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,10 +117,10 @@
                                             </a>
                                         </p>
                                         <a  style="text-decoration:none;" title="预览商品"  @click.stop="previewpro(item.spuId)"> 
-                                            <h4 class="tt"><p style="color:#6699CC">商品编码:{{item.spuCode}}</p>{{item.spuName}}</h4>
+                                            <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
                                         </a>
                                     </td>
-                                    <td>{{item.pbdName}}</td>
+                                    <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
                                 </tr>
                                 <tr v-if="selectedList.length==0">
                                     <td colspan="9" class="center">暂无数据</td>
@@ -121,8 +131,10 @@
                 </div>
              </div>
             <span slot="btnList">
-                <button type="button" @click.stop="sendData" class="btn default blue">确定使用</button>
-                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <div style="text-align:center;">
+                    <button type="button" @click.stop="sendData" class="btn default blue">确定</button>
+                    <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                </div>
             </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
@@ -137,14 +149,18 @@
         <loading :show="isLoading"></loading>
     </div>
 </template>
+
 <script>
 import client from '../../common/utils/client';
-import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList,paging } from '../../components';
+import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
+import search from '../discountManage/search';
+import paging from '../discountManage/paging';
 import loading from './loading';
 import treeview from './tagTreeItem';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
+
 export default {
-    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading,treeview,paging },
+    components: { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, treeview, paging, search },
     props: {
         spulist:[],
         show: {
@@ -212,7 +228,7 @@ export default {
         filterList(){
             //console.log(this.selectedList+"selectedList")
             let sourceList=this.unSelectedList,targetList=this.selectedList,index,index2;
-           // let arr = []
+            // let arr = []
             for (index = sourceList.length-1; index >=0; index--){
                 for (index2 = targetList.length-1; index2 >=0; index2--){
                     if(sourceList[index].spuId==targetList[index2].spuId){
@@ -263,24 +279,25 @@ export default {
          //拿到树形数据
         getTreeList(typeId) {
             this.isLoading = true;
+            //
             client.postData(TAG_LIST_GET + '?typeId=' + typeId, {}).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.root.children.forEach(item => {
                         this.filterData(item);
-                    })
+                    });
                     data.data.root.isOpen = true;
                     data.data.root.isSelected = false;
                     data.data.root.isShow = true;
                     this.treeList = data.data.root; 
-                    console.log(this.treeList);
+                    //console.log(this.treeList);
                     // this.selectList = Array.from(this.selectListSet);
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.isLoading = false;
-            })
+            });
         },
         // 处理树形数据
         filterData(item) {
@@ -294,13 +311,13 @@ export default {
                 this.selectListSet = new Set();
                 this.selectList.forEach(o => {
                     this.selectListSet.add(o);
-                })
+                });
             }
             item.isShow = true;
             if (item.children.length != 0) {
                 item.children.forEach(subitem => {
                     this.filterData(subitem);
-                })
+                });
             }
         },
          // 选中一个项时触发
@@ -309,27 +326,30 @@ export default {
             this.searchOptions.spuCatId=item.id;
             this.getUnSelectedList(false, true);
         },
-        selectAll(list) {//全选
+        // 全选
+        selectAll(list) {
             list.forEach(item => {
                 item.checked = true;
-            })
+            });
         },
-         reverseList(list) {//反选
+        // 反选
+        reverseList(list) {
             list.forEach(item => {
                 item.checked = !item.checked;
-            })
+            });
         },
-        selectOne(item){//单选
+        // 单选
+        selectOne(item){
             item.checked = !item.checked;
         },
         //获取未选商品数据
         getUnSelectedList(page, firstSearch){
             let options;
             //判断查询条件
-            if(this.searchType==2){ 
+            if(this.searchType==2){// 按商品名称搜索
                 this.searchOptions.spuCode ='';
                 this.searchOptions.spuName =this.searchWord;
-            }else{
+            }else{// 按商品编码搜索
                 this.searchOptions.spuName ='';
                 this.searchOptions.spuCode =this.searchWord;
             }
@@ -345,16 +365,18 @@ export default {
             this.isLoading = true;
             this.unSelectedList = [];
             this.lastSearchOptions = options;
+            //
             client.postData( SPU_GET_LIST_SKU , options).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
+                    //console.log(data);
                     data.data.forEach(item => {
-                        item.checked = false
+                        item.checked = false;
                         item.skuList.forEach(sku => {
-                            sku.checked = false
-                            sku.skureduce = ''
-                        })
-                    })
+                            sku.checked = false;
+                            sku.skureduce = '';
+                        });
+                    });
                     this.unSelectedList = data.data;
                     this.filterList();
                     this.page = data.page;
@@ -363,7 +385,7 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
-            })
+            });
         },
         // 选择组件回调
         selectComponentFunc(list) {
@@ -384,7 +406,7 @@ export default {
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide('cancel');
-            }, 300)
+            }, 300);
         },
         showMsg(msg, title) {
             if (title) {
@@ -411,7 +433,7 @@ export default {
             if (item.children.length != 0) {
                 item.children.forEach(subitem => {
                     this.handlerSearch(subitem);
-                })
+                });
             }
         },
         selectLabelPropFunc(item) {
@@ -424,7 +446,6 @@ export default {
             this.searchKey = '';
             this.getTreeList(this.labelTypeActive.id);
         },
-       
     },
     computed(){
         
@@ -442,10 +463,9 @@ export default {
                 this.selectedList.push(item);
             });
             if(this.searchOptions.spuCatId > 100){
-                 this.getUnSelectedList(false,true)
+                 this.getUnSelectedList(false,true);
             }
         },
-
     },
     ready() {
         this.typesList = client.global.componentTypes;

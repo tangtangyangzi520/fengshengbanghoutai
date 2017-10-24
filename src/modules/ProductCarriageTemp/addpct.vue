@@ -1,80 +1,81 @@
 <template>
+<!-- 运费模板-新增/编辑页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1200px'" >
             <div slot="content">
-             <form  id='submitform3'>
-            <br>
-            <div class="form-group">
-                <label for="title" class="col-sm-3 control-label">
-                    模板名称：
-                </label>
-                    <div class="controls col-md-4">
-                         <input type="text" class="form-control input-sm" v-model="pctName" placeholder="" required="required" maxLength="49" > 
-                         <input type="submit" style="display:none" id="sub3">
+                <form  id='submitform3'>
+                    <br>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-3 control-label">
+                            模板名称：
+                        </label>
+                        <div class="controls col-md-4">
+                            <input type="text" class="form-control input-sm" v-model="pctName" placeholder="" required="required" maxLength="49" > 
+                            <input type="submit" style="display:none" id="sub3">
+                        </div>
                     </div>
-            </div>
-            <br><br>
-            <div class="form-group">
-                <label for="title" class="col-sm-3 control-label">
-                    计费方式：
-                </label>
-                    <div class="controls col-md-2 ">
-                        <input type="radio" name="menkan" v-model="" value="0" checked >按件数&nbsp;&nbsp;&nbsp;&nbsp;
-                  </div>  <br> 
-            </div><br>
-             <div class="form-group">
-                <label for="title" class="col-sm-3 control-label" >
-                    配送区域：
-                </label>
+                    <br><br>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-3 control-label">
+                            计费方式：
+                        </label>
+                        <div class="controls col-md-2 ">
+                            <input type="radio" name="menkan" v-model="" value="0" checked >按件数&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div><br> 
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-3 control-label" >
+                            配送区域：
+                        </label>
                         <div class="controls col-md-9" >
-                <table class="table table-striped table-hover discount " >
-                    <thead>
-                          <tr style="background-color:#F2F2F2;height:50px;">
-                           <!--  <th style="width:4%">
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
-                            </th> -->
-                            <th style="width:56%;text-align:left; border-right:none;border-left:none;">可配送区域</th>
-                             <th style="width:11%; border-right:none; border-left:none;">首件（个）</th>
-                            <th style="width:11%; border-right:none;border-left:none;">运费（元）
-                               
-                            </th>
-                            <th style="width:11%; border-right:none;border-left:none;">续件（个）</th>
-                           
-                            <th style="width:11%; border-right:none;border-left:none;">续费（元）</th>
-                        </tr>                
-                    </thead>
-                    <tbody >
-                        <tr  @click="selectItem(g)" v-for="(index,g) in dataList" style="border-bottom:2px solid #D7D7D7"  >
-                            <!-- 全选反选 <td style="text-align:center;vertical-align:middle;">
-                                <input type="checkbox" :checked="item.checked"></input>
-                            </td> -->
-                            <td style="width:56%;text-align:left;vertical-align:middle;border-right:none;border-left:none;">
-                               {{g.pctArea}}<br>
-                               <button class="btn yellow-crusta" type="button" @click="showselect('tr'+count,index,g.pctArea)" >指定可配送区域和运费</button>
-                            </td>
-                            <td style="width:11%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;font-style: normal;border-right:none;border-left:none;text-align:left"> &nbsp; &nbsp;{{g.pctFirstNum}}
-                            </td>
-                            <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
-                                <input type="number" class="input-sm" v-model="g.pctFirstPrice"  min="0" max="999999" required="required"  @keyup="integer($event)" @change="integer($event)"
-                                @blur="integer($event)" /> 
-                            </td>
+                            <table class="table table-striped table-hover discount " >
+                                <thead>
+                                    <tr style="background-color:#F2F2F2;height:50px;">
+                                        <!--  <th style="width:4%">
+                                            <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
+                                            <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
+                                        </th> -->
+                                        <th style="width:56%;text-align:left; border-right:none;border-left:none;">可配送区域</th>
+                                            <th style="width:11%; border-right:none; border-left:none;">首件（个）</th>
+                                        <th style="width:11%; border-right:none;border-left:none;">运费（元）
+                                            
+                                        </th>
+                                        <th style="width:11%; border-right:none;border-left:none;">续件（个）</th>
+                                        
+                                        <th style="width:11%; border-right:none;border-left:none;">续费（元）</th>
+                                    </tr>                
+                                </thead>
+                                <tbody >
+                                    <tr  @click="selectItem(g)" v-for="(index,g) in dataList" style="border-bottom:2px solid #D7D7D7"  >
+                                        <!-- 全选反选 <td style="text-align:center;vertical-align:middle;">
+                                            <input type="checkbox" :checked="item.checked"></input>
+                                        </td> -->
+                                        <td style="width:56%;text-align:left;vertical-align:middle;border-right:none;border-left:none;">
+                                            {{g.pctArea}}<br>
+                                            <button class="btn yellow-crusta" type="button" @click="showselect('tr'+count,index,g.pctArea)" >指定可配送区域和运费</button>
+                                        </td>
+                                        <td style="width:11%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 400;font-style: normal;border-right:none;border-left:none;text-align:left"> &nbsp; &nbsp;{{g.pctFirstNum}}
+                                        </td>
+                                        <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                                            <input type="number" class="input-sm" v-model="g.pctFirstPrice"  min="0" max="999999" required="required"  @keyup="integer($event)" @change="integer($event)"
+                                            @blur="integer($event)" /> 
+                                        </td>
 
-                            <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
-                                                       &nbsp;&nbsp;{{g.pctOtherNum}}
-                            </td>
-                            <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
-                                 <input type="number" class="input-sm" v-model="g.pctOtherPrice"  min="0" max="999999" required="required"  @keyup="integer($event)" @change="integer($event)"
-                                 @blur="integer($event)"/> 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                   
-                </div>  </div>
-                 </form>
+                                        <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                                                                    &nbsp;&nbsp;{{g.pctOtherNum}}
+                                        </td>
+                                        <td style="width:11%;text-align:center;vertical-align:middle;border-right:none;border-left:none;text-align:left">
+                                                <input type="number" class="input-sm" v-model="g.pctOtherPrice"  min="0" max="999999" required="required"  @keyup="integer($event)" @change="integer($event)"
+                                                @blur="integer($event)"/> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>  
+                    </div>
+                </form>
             </div>
-
             <span slot="btnList">
                 <button type="button" class="btn blue" @click="addItem()">保存</button>
                 <button type="button" class="btn default" @click="hideDialog()" >取消</button>
@@ -83,6 +84,7 @@
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
+        <!-- 选择区域弹框 -->
         <select-area v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideselDialog" @area-data="getSelected" :area-str="areaString" :all-selected-area="allSelected" ></select-area>
         <div class="loading" style="position:fixed;z-index:11111;" v-if="isLoading">
             <div class="page-spinner-bar">
@@ -91,12 +93,14 @@
                 <div class="bounce3"></div>
             </div>
         </div>
-</div>
+    </div>
 </template>
+
 <script>
 import selectArea from './selectArea';
 import client from '../../common/utils/client';
 import {  mAlert, mSelect, mMultiSelect, itemList ,selectComponentAll} from '../../components';
+
 export default {
     components: { mAlert, mSelect, mMultiSelect, itemList  ,selectComponentAll,selectArea},
     props: {
@@ -131,10 +135,10 @@ export default {
                 "pctName": "",
                 "pctOtherNum": 1,
                 "pctOtherPrice": 0
-              }],
+            }],
             destroyControlDialog: false, //注销良言操作弹框
-             expertEditId: '',
-             showAddDialog: false,
+            expertEditId: '',
+            showAddDialog: false,
             isLoading: false,
             showDialog: false,
             showPage: false,
@@ -168,95 +172,95 @@ export default {
         }
     },
     methods: {
-         integer(event){
+        integer(event){
             let el = event.currentTarget;
-            $(el).val(Math.abs($(el).val()))
-            $(el).val(Math.round($(el).val()))
-            var reg = /^\d{0,2}$/
-            let s = $(el).val()+""
-            let f = !reg.test(s)
+            $(el).val(Math.abs($(el).val()));
+            $(el).val(Math.round($(el).val()));
+            var reg = /^\d{0,2}$/;
+            let s = $(el).val()+"";
+            let f = !reg.test(s);
             if (  f ) {
-                    $(el).val("")
-               }
-         },
-         addItem(){
-              $("#sub3").click()
-         },
-         addItem2(ev) {
+                $(el).val("");
+            }
+        },
+        addItem(){
+            $("#sub3").click();
+        },
+        addItem2(ev) {
             ev.preventDefault();  
             ev.preventDefault();  
             if(this.pctflag){
-                this.showMsg("点击过于频繁")
-                return
+                this.showMsg("点击过于频繁");
+                return;
             }
-            this.pctflag = true
+            this.pctflag = true;
             setTimeout(()=>{
-                this.pctflag = false
+                this.pctflag = false;
             },5000)
-            let pctList = []
-            let count = 0
+            let pctList = [];
+            let count = 0;
             this.dataList.forEach( data =>{
-                 if( data.pctArea != "" ){
-                     data.pctName = this.pctName
-                     pctList.push( data )
-                     count += data.pctArea.split("、").length
-                 }
-            })
-             if( pctList.length == 0){
-              this.showMsg("请先选择可配送区域再保存")
-              return
+                if( data.pctArea != "" ){
+                    data.pctName = this.pctName;
+                    pctList.push( data );
+                    count += data.pctArea.split("、").length;
+                }
+            });
+            if( pctList.length == 0 ){
+                this.showMsg("请先选择可配送区域再保存");
+                return;
             }
-            if(  this.shengNum > count ){
-                 this.showMsg("运费模板必须包含所有省份")
-                 return
+            if( this.shengNum > count ){
+                this.showMsg("运费模板必须包含所有省份");
+                return;
             }
             if( pctList[0].pctId > 0 ){
-                this.pc.pcName = this.pctName
-                this.pc.pctSet = pctList
-                client.postData( PCT_EDIT , this.pc ).then(data => {
-                this.isLoading = false
-                if (data.code == 200) {
-                        this.showMsg("编辑运费模板成功")
-                 this.isLoading = false
-                    setTimeout(() => {
-                        this.hideDialog()
-                    }, 1000)
-                } else {
-                    this.showMsg(data.message);
-                }
-            }, data => {
-                      this.isLoading = false
-                      this.pctflag = false
-                      this.showMsg("编辑运费模板失败;"+data.message);
-             })
+                this.pc.pcName = this.pctName;
+                this.pc.pctSet = pctList;
 
+                client.postData( PCT_EDIT , this.pc ).then(data => {
+                    this.isLoading = false;
+                    if (data.code == 200) {
+                        this.showMsg("编辑运费模板成功");
+                        this.isLoading = false;
+                        setTimeout(() => {
+                            this.hideDialog();
+                        }, 1000);
+                    } else {
+                        this.showMsg(data.message);
+                    }
+                }, data => {
+                    this.isLoading = false;
+                    this.pctflag = false;
+                    this.showMsg("编辑运费模板失败;"+data.message);
+                });
             }else{
                 client.postData( PCT_CREATE ,{"pctSet":pctList,"pcName":this.pctName,}).then(data => {
-                this.isLoading = false
-                if (data.code == 200) {
-                        this.showMsg("新健运费模板成功")
-                 this.isLoading = false
-                    setTimeout(() => {
-                        this.hideDialog()
-                    }, 1000)
-                } else {
-                    this.showMsg(data.message);
-                }
-            }, data => {
-                      this.isLoading = false
-                      this.pctflag = false
-                      this.showMsg("新健运费模板失败;"+data.message)
-                })
+                    this.isLoading = false;
+                    if (data.code == 200) {
+                            this.showMsg("新健运费模板成功");
+                    this.isLoading = false;
+                        setTimeout(() => {
+                            this.hideDialog();
+                        }, 1000);
+                    } else {
+                        this.showMsg(data.message);
+                    }
+                }, data => {
+                    this.isLoading = false;
+                    this.pctflag = false;
+                    this.showMsg("新健运费模板失败;"+data.message);
+                });
             }
-             ev.preventDefault();  
+            ev.preventDefault();  
         },
         //点击行自动选中或不选中
-       selectItem(item) {
+        selectItem(item) {
             item.checked = !item.checked;
         },
-        //获取省份
+        //获取省份数据
         getshengList() { 
-            console.log('获取省份信息')
+            console.log('获取省份信息');
             client.postData( AREA_GET_LIST , {}).then(data => {
                 if (data.code == 200) {
                     this.shengNum = data.data.length;
@@ -265,40 +269,38 @@ export default {
                 }
             }, data => {
                 this.showMsg("获取省份信息失败,请刷新重试");
-            })
+            });
         },
         //展开 或 收起
-         orderBy( val ,id) {
+        orderBy( val ,id) {
             if( val ){
-                $("#desc"+id).show()
-                $("#asc"+id).hide()
-                $("#tab"+id).show()
+                $("#desc"+id).show();
+                $("#asc"+id).hide();
+                $("#tab"+id).show();
             }else{
-                $("#asc"+id).show()
-                $("#desc"+id).hide()
-                $("#tab"+id).hide()
+                $("#asc"+id).show();
+                $("#desc"+id).hide();
+                $("#tab"+id).hide();
             }
-            
         },
         selectAll(val) {
             val.skuList.forEach(item => {
                 item.checked = true;
-            })
+            });
         },
         reverseList(val) {
             val.skuList.forEach(item => {
                 item.checked = !item.checked;
-            })
+            });
         },
         hideselDialog() {
-             this.showSpuDialog = false
-
+             this.showSpuDialog = false;
         },
         getSelected( data ) {
-          if( data != ""){
-               this.dataList[this.index].pctArea = data
-               if( this.dataList.length == this.index+1){
-                     this.dataList.push({
+            if( data != ""){
+                this.dataList[this.index].pctArea = data;
+                if( this.dataList.length == this.index+1){
+                    this.dataList.push({
                         "pctArea": "",
                         "pctFirstNum": 1,
                         "pctFirstPrice": 0,
@@ -306,27 +308,27 @@ export default {
                         "pctName": "",
                         "pctOtherNum": 1,
                         "pctOtherPrice": 0
-                    })
-                  }
-          }else{
-            this.dataList[this.index].pctArea = data
-          }
+                    });
+                }
+            }else{
+                this.dataList[this.index].pctArea = data;
+            }
         },
         showselect(val,ind,str) {
-             this.allSelected = ''
-             this.dataList.forEach( (data,index )=>{
-              if( data.pctArea != ''){
-                  if( index == 0){
-                      this.allSelected = data.pctArea
-                  }else{
-                      this.allSelected += ("、"+data.pctArea)
-                  }
-               }     
-             })
-             this.areaString = str
-             this.index = ind
-             this.trId = val
-             this.showSpuDialog = true
+            this.allSelected = '';
+            this.dataList.forEach( (data,index )=>{
+                if( data.pctArea != ''){
+                    if( index == 0){
+                        this.allSelected = data.pctArea;
+                    }else{
+                        this.allSelected += ("、"+data.pctArea);
+                    }
+                }     
+            });
+            this.areaString = str;
+            this.index = ind;
+            this.trId = val;
+            this.showSpuDialog = true;
         },
         hideAddDialog(control) {   
             this.expertEditId = '';
@@ -341,11 +343,11 @@ export default {
                 setTimeout(() => {
                     //移除组件
                     this.destroyControlDialog = true;
-                }, 100)
+                }, 100);
                 setTimeout(() => {
                     //重新加入
                     this.destroyControlDialog = false;
-                }, 200)
+                }, 200);
                 //this.getList();
             }
         },
@@ -355,7 +357,7 @@ export default {
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide('cancel');
-            }, 300)
+            }, 300);
         },
         showMsg(msg, title) {
             if (title) {
@@ -404,6 +406,7 @@ export default {
                 data.componentId = this.id;
             }
             this.isLoading = true;
+            //
             client.postData(url, data).then(response => {
                 this.isLoading = false;
                 if (response.code != 200) {
@@ -419,7 +422,7 @@ export default {
             }, response => {
                 this.isLoading = false;
                 this.showMsg('网络连接错误');
-            })
+            });
         }
     },
     created() {
@@ -427,28 +430,28 @@ export default {
     },
     watch: {
         dflag() {
-            this.dataList = []
+            this.dataList = [];
             this.title = '编辑运费模板';
-            this.pctName =  this.pctArrs.pcName
-            this.pc = this.pctArrs
-            this.dataList = this.pctArrs.pctSet
+            this.pctName =  this.pctArrs.pcName;
+            this.pc = this.pctArrs;
+            this.dataList = this.pctArrs.pctSet;
             this.dataList.push({
-                        "pctArea": "",
-                        "pctFirstNum": 1,
-                        "pctFirstPrice": 0,
-                        "pctId": 0,
-                        "pctName": "",
-                        "pctOtherNum": 1,
-                        "pctOtherPrice": 0
-                    })
-            this.pctArrs = []
+                "pctArea": "",
+                "pctFirstNum": 1,
+                "pctFirstPrice": 0,
+                "pctId": 0,
+                "pctName": "",
+                "pctOtherNum": 1,
+                "pctOtherPrice": 0
+            });
+            this.pctArrs = [];
         },
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
         },
         id() {
-            console.log(this.id)
+            //console.log(this.id)
             this.data = {
                 "componentType": 16,
                 "painIds": [],
@@ -463,26 +466,27 @@ export default {
                 this.tagsList = [];
                 setTimeout(() => {
                     this.typesList = client.global.componentTypes;
-                }, 30)
+                }, 30);
                 return;
             }
             this.title = '编辑运费模板';
             this.isLoading = true;
             this.painList = [];
+            //
             client.postData(COMPONENT_GETWITHPAINS + '?componentId=' + this.id, {}).then(response => {
                 this.isLoading = false;
                 if (response.code == 200) {
                     let data = response.data;
                     if (data.painIds) {
                         data.painIds.forEach(item => {
-                            this.painIdsSelect.push({ id: item, name: '' })
-                        })
+                            this.painIdsSelect.push({ id: item, name: '' });
+                        });
                         this.data.painIds = data.painIds;
                     }
                     data.tags.forEach(item => {
                         item.id = item.tagId;
                         item.text = item.tagName;
-                    })
+                    });
                     this.tagsList = data.tags;
                     this.getPainList();
                     this.data.title = data.title;
@@ -493,18 +497,19 @@ export default {
             }, data => {
                 this.isLoading = false;
                 this.showMsg(response.message);
-            })
+            });
         }
     },
     ready() {   
         $("#submitform3").on("submit",this.addItem2) 
-         this.getshengList()     
+         this.getshengList();    
     },
     beforeDestroy() {
         this.showPainListSelect = false;
     }
 };
 </script>
+
 <style lang="less" scoped>
     .input{
         margin-left: 2%;
@@ -516,16 +521,15 @@ export default {
         height: 100%;
         width: 80%
     }
-  .tab{
+    .tab{
         text-align: center;
         border-collapse: collapse;
     }
-  table,table tr th, table tr td { 
-       text-align: center; 
-       border:1px solid #eaeaea; 
+    table,table tr th, table tr td { 
+        text-align: center; 
+        border:1px solid #eaeaea; 
     }
-  td input{
-    width:100%
-   }
-
+    td input{
+        width:100%
+    }
 </style>
