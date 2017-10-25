@@ -1,7 +1,7 @@
 <template>
 <!-- 商品编辑页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" :backdrop="true">
             <div slot="content">
                 <loading :show="isLoading"></loading>
                 <div class="row" style="background-color:#F0F0F0">
@@ -21,6 +21,16 @@
                                 <input type="radio" name="leixing" v-model="request.spuCountryType" value="2" >跨境
                             </div>
                         </div>
+                        <!-- <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span>品牌类型：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                                <input type="radio" name="bandType" v-model="request.spuBandType" value="1" checked >自有品牌&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="bandType" v-model="request.spuBandType" value="2" >代理品牌&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="bandType" v-model="request.spuBandType" value="3" >第三方品牌
+                            </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>商品名称：
@@ -974,8 +984,9 @@ export default {
             let el = event.currentTarget;
             $(el).parent().parent().children("td").remove();  
         },
+        // 编辑保存
         addItem() {
-            this.isLoading = true
+            this.isLoading = true;
             if(this.editpdflag){
                 this.showMsg("点击过于频繁");
                 return;
@@ -1177,8 +1188,8 @@ export default {
                 "psrType": 3
             });
         });
-
-        client.postData(  SPU_EDIT , this.request).then(data => {
+        // 发送编辑保存请求
+        client.postData( SPU_EDIT , this.request ).then(data => {
             this.isLoading = false;
             if (data.code == 200) {
                 this.showMsg("编辑成功")
@@ -1471,6 +1482,7 @@ export default {
                 data.componentId = this.id;
             }
             this.isLoading = true;
+            //
             client.postData(url, data).then(response => {
                 this.isLoading = false;
                 if (response.code != 200) {

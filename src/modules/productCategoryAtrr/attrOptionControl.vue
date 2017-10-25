@@ -1,37 +1,43 @@
 <template>
     <!-- 通用属性-编辑属性值页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;"  v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'" :backdrop="true">
             <div slot="content">
-                <div class="row">
-                    <div>
-                         <p><button type="button" class="btn btn-xs blue" @click="addOption()">添加</button></p></br>
+                <form class="form-horizontal" name="addForm" role="form">
+                    <div class="form-group">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-xs blue" @click="addOption()">添加属性值</button>
+                        </div>
                     </div>
-                    <form class="form-horizontal" name="addForm" role="form">
-                        <table class="table table-striped table-bordered table-hover" id="attrOption-table">
-                            <thead>
-                                <tr>
-                                    <th style="width:;">属性值</th>
-                                    <th style="width:;">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="attrOptionTbody">
-                                <tr v-for="(index, itemobj) in dataList" v-if="itemobj.pcaoUseFlag == 1">                                                                  
-                                    <td>
-                                        <p style="padding-top:2px;">
-                                            <input type="text" ref="input" :value="itemobj.pcaoName" v-model="itemobj.pcaoName"/>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <p style="padding-top:4px;">
-                                            <button type="button" class="btn btn-xs blue" @click.stop="deleteOption(itemobj, index)">删除</button>
-                                        </p>
-                                    </td>
-                                </tr>                            
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
+                    <div class="form-group">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <table class="table table-striped table-bordered table-hover" id="attrOption-table">
+                                <thead>
+                                    <tr>
+                                        <th>属性值</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attrOptionTbody">
+                                    <tr v-for="(index, itemobj) in dataList" v-if="itemobj.pcaoUseFlag == 1">                                                                  
+                                        <td>
+                                            <p style="padding-top:2px;">
+                                                <input type="text" ref="input" :value="itemobj.pcaoName" v-model="itemobj.pcaoName" placeholder="限10个字符以内" maxlength="10"/>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p style="padding-top:4px; margin-left:4px;">
+                                                <button type="button" class="btn btn-xs blue" @click.stop="deleteOption(itemobj, index)">删除</button>
+                                            </p>
+                                        </td>
+                                    </tr>                            
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
             </div>
             <span slot="btnList">
                 <button type="button" class="btn blue" @click="submitInfo()" @blur="save">确定</button>

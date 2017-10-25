@@ -1,49 +1,52 @@
 <template>
     <!-- 销售属性-添加/编辑页面 -->
     <div style="position:absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :idp="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :idp="pcaId" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'30%'" :backdrop="true">
             <div slot="content">
                 <form class="form-horizontal" name="addForm" role="form">
                     <!-- 属性名称输入框 -->
                     <div class="form-group">
-                        <label for="title" class="col-sm-3 control-label">
+                        <div class="col-md-1"></div>
+                        <label for="title" class="col-md-3 control-label" style="font-size:18px; margin-left:-9px;">
                             <span class="required">* </span>属性名称：
                         </label>
-                        <div class="controls col-md-8">
-                            <input type="text" class="form-control input-sm" v-model="data.pcaName" placeholder="请输入属性名称,限20个字符以内">
+                        <div class="controls col-md-7">
+                            <input type="text" class="form-control input-sm" v-model="data.pcaName" placeholder="请输入属性名称,限20个字符以内" maxlength="20" style="width:103%;">
                         </div>
                     </div>
                     <!-- 编辑属性值 -->
                     <div class="form-group">
-                        <p>
-                            <h4>编辑属性值</h4>
-                        </p>
-                        <div>
-                            <button type="button" class="btn btn-xs blue" @click="addOption()">添加</button>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-xs blue" @click="addOption()">添加属性值</button>
                         </div>
-                        </br>
-                        <table class="table table-striped table-bordered table-hover" id="attrOption-table">
-                            <thead>
-                                <tr>
-                                    <th style="width:;">属性值</th>
-                                    <th style="width:;">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="attrOptionTbody">
-                                <tr v-for="(index, itemobj) in data.optionList" v-if="itemobj.pcaoUseFlag == 1">
-                                    <td>
-                                        <p style="padding-top:5px;">
-                                            <input type="text" ref="input" :value="itemobj.pcaoName" v-model="itemobj.pcaoName" />
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <p style="padding-top:5px;">
-                                            <button type="button" class="btn btn-xs blue" @click="deleteOption(index, itemobj)">删除</button>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <table class="table table-striped table-bordered table-hover" id="attrOption-table">
+                                <thead>
+                                    <tr>
+                                        <th>属性值</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attrOptionTbody">
+                                    <tr v-for="(index, itemobj) in data.optionList" v-if="itemobj.pcaoUseFlag == 1">
+                                        <td>
+                                            <p style="padding-top:3px;">
+                                                <input type="text" ref="input" :value="itemobj.pcaoName" v-model="itemobj.pcaoName" placeholder="限10个字符以内" maxlength="10"/>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p style="padding-top:5px;margin-left:5px;">
+                                                <button type="button" class="btn btn-xs blue" @click="deleteOption(index, itemobj)">删除</button>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -152,7 +155,7 @@ export default {
     methods: {
         // 添加一行
         addOption() {
-            console.log(this.pcaoIdNum);
+            //console.log(this.pcaoIdNum);
             // 首先判断属性值数量在2-50个之间
             if(this.pcaoIdNum <= 2){
                 this.data.optionList.push({ "pcaoId": "","pcaoName": "","pcaoUseFlag" : "1" });// 添加一行
@@ -182,7 +185,7 @@ export default {
         ajaxControlDel(){ 
             this.data.optionList.splice(this.deleteIndex, 1);//删除索引为deleteIndex的元素
             this.pcaoIdNum--;// 属性值数量-1
-            console.log(this.data.optionList);
+            //console.log(this.data.optionList);
         },
         // 删除回显属性值(隐藏,将pcaoUseFlag设置为0)
         sureDelete(){ 
