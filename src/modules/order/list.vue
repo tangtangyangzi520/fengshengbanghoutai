@@ -46,7 +46,8 @@
             <div class="table-responsive col-md-12" v-for="itemSet in dataList" :key="itemSet.orstNo">
                 <div class="col-md-12" style="background-color:rgba(228, 228, 228, 1);height:30px;padding:7px 0;">
                     <div class="col-md-9">
-                        <span style="color:green;">订单编号: {{itemSet.orstNo}} &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span>
+                        <span style="color:green;">订单编号: {{itemSet.orstNo}}</span>
+                        <span style="color:green;"> &nbsp;&nbsp;&nbsp;&nbsp; 支付流水号：{{itemSet.orsPayNum}}</span>
                         &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay.toFixed(2)}}元 &nbsp;&nbsp;&nbsp;&nbsp;
                         <span v-if="itemSet.orderSubList.length==1 && itemSet.orderSubList[0].ordOrderType==0" style="color:blue;">跨境订单</span>
                     </div>
@@ -54,8 +55,7 @@
                         <a href="javascript:;" @click="showDetail(itemSet,itemSet.orderSubList[0])" v-if="limitResource.orderSeeDetails">查看详情</a>
                         <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])" v-if="limitResource.editOrderSetDemo">备注</a>
-                        <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                                                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                        <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                         <a @click="setStar(itemSet.orderSubList[0])" v-if="limitResource.addStar && itemSet.orderSubList[0].ordStar<=0">加星</a>
                         <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSet.orderSubList[0].ordStar>0" @click="setStar(itemSet.orderSubList[0])">
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -119,7 +119,7 @@
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                                                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                                                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
                                     <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
