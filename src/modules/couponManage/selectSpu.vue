@@ -300,7 +300,7 @@ export default {
                     data.data.root.isSelected = false;
                     data.data.root.isShow = true;
                     this.treeList = data.data.root; 
-                    console.log(this.treeList);
+                    //console.log(this.treeList);
                     // this.selectList = Array.from(this.selectListSet);
                 } else {
                     this.showMsg(data.msg);

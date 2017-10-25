@@ -148,7 +148,7 @@ export default {
                 if (data.code == 200) {
                     
                     let list = data.data;
-                    console.log(list);
+                    //console.log(list);
                     this.inputtypesList = list;
                 } else {
                     this.showMsg(data.msg);
@@ -264,7 +264,7 @@ export default {
 
             this.isLoading = true;
             data.pcraCatId=this.selectedid;
-                console.log(data);
+            //console.log(data);
 return;
             client.postData(url, data).then(response => {
                 this.isLoading = false;

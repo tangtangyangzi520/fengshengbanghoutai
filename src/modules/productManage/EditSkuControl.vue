@@ -1,7 +1,7 @@
 <template>
 <!-- 商品列表-编辑SKU信息 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" :backdrop="true">
             <div slot="content" style="background-color:#F0F0F0">
                     <div >
                         <table class="tab" id="table" style="" border="1" cellspacing="0" cellpadding="0">  
@@ -478,7 +478,7 @@ export default {
                     })
                     this.skuList = data;
                     this.title = "商品名:"+this.spuname + this.title
-                    console.log(this.skuList)
+                    //console.log(this.skuList)
                     
                 //} else {
                   //  this.showMsg(data.msg);
@@ -496,7 +496,7 @@ export default {
             this.showDialog = this.show;
         },
         id() {
-            console.log(this.id)
+            //console.log(this.id)
             this.data = {
                 "componentType": 16,
                 "painIds": [],

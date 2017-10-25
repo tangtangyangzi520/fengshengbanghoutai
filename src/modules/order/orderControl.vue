@@ -438,7 +438,7 @@ export default {
         //进度条
         progressWidth() {
             let progress = this.subData.ordStatus;
-            console.log(progress)
+            //console.log(progress)
             switch (progress) {
                 case 0: this.progressObject.width = "25%"; return;
                 case 1: this.progressObject.width = "50%"; return;
@@ -574,7 +574,7 @@ export default {
     watch: {
         subData(val) {
             client.postData(ODD_GET_ORDERSUBID + "?ordOrderId=" + val.ordOrderId, {}).then(data => {
-                console.log(val.ordOrderId)
+                //console.log(val.ordOrderId)
                 if (data.code == 200) {
                     if (data.data == null) {
                         this.orderlog = []

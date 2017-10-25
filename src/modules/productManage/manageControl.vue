@@ -181,7 +181,7 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            console.log(list);
+            //console.log(list);
             //alert(0);
             if (this.selectPicType == 2) {
                 this.data.halfFigure = list[0].url;
@@ -402,7 +402,7 @@ export default {
                 this.isLoading = false;
                 if (response.code == 200) {
                     let data = response.data;
-                    console.log(data);
+                    //console.log(data);
                     if (data.painIds) {
                         data.painIds.forEach(item => {
                             this.painIdsSelect.push({ id: item, name: '' })

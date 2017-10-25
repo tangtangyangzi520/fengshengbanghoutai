@@ -1,7 +1,7 @@
 <template>
 <!-- 发布商品-新增页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" >
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" :backdrop="true">
             <div slot="content">
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form">
@@ -23,6 +23,16 @@
                                 <input type="radio" name="leixing" v-model="request.spuCountryType" value="2" >跨境
                             </div>
                         </div>
+                        <!-- <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span>品牌类型：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                                <input type="radio" name="bandType" v-model="request.spuBandType" value="1" checked >自有品牌&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="bandType" v-model="request.spuBandType" value="2" >代理品牌&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="bandType" v-model="request.spuBandType" value="3" >第三方品牌
+                            </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>商品名称：
@@ -1127,9 +1137,7 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            // alert(0);
-            console.log(list);
-            //alert(0);
+            //console.log(list);
             if (this.selectPicType == 2) {
 
                 this.request.resourceList[1] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 2, "psrType": 1,"psrResourceId":list[0].id } 
@@ -1754,9 +1762,9 @@ export default {
                         "sku_remark": skuname ,     //  拼接属性 
                         //"skuStockNum": erpkc2,  
                     }
-                    console.log(sin)
+                    //console.log(sin)
                     spulist.push(sin)
-                    console.log(spulist)
+                    //console.log(spulist)
 } else {
             //获取基本属性列表
            /*  $(base).each(function(b,za){
@@ -2508,7 +2516,7 @@ export default {
             this.showDialog = this.show;
         },
         id() {
-            console.log(this.id)
+            //console.log(this.id)
             this.data = {
                 "componentType": 16,
                 "painIds": [],

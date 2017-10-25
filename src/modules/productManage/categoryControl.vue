@@ -1,7 +1,7 @@
 <template>
 <!-- 发布商品-选择商品类目页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'800px'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'800px'" :backdrop="true">
             <div slot="content" >
                 <!-- 全局条件搜索 -->
                 <div class="form-group">       

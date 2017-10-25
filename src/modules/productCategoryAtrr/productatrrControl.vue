@@ -1,7 +1,7 @@
 <template>
     <!-- 通用属性添加/编辑页面 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'800px'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'800px'" :backdrop="true">
             <div slot="content">
                 <div class="row nopadding">
                     <form class="form-horizontal" name="addForm" role="form">
@@ -11,7 +11,7 @@
                             </label>
                             <div class="controls col-md-4">
                                 <input type="hidden" class="form-control input-sm" v-model="data.pcraCatId">
-                                <input type="text" class="form-control input-sm" style="margin-top:0px;" v-model="data.pcaName" placeholder="请输入属性名称,限30个字符以内">
+                                <input type="text" class="form-control input-sm" style="margin-top:0px;" v-model="data.pcaName" placeholder="请输入属性名称,限30个字符以内" maxlength="30">
                             </div>
                             <div class="col-md-6">
                                 <label for="title" class="col-sm-3 control-label">是否必填：</label>
