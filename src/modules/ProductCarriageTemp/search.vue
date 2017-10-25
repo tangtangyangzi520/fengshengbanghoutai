@@ -195,8 +195,8 @@ export default {
         selectPainFunc(list) {
 
               if( list.length !=0 ){
-                  console.log(list[0].name)
-                  console.log(list[0].id)
+                  //console.log(list[0].name)
+                  //console.log(list[0].id)
                  let select = this.leimuList 
                  let pain = []
                  for (let i = 0; i < select.length; i++) {
@@ -208,7 +208,7 @@ export default {
                              for (let z = 0; z < select[i].children[j].children.length; z++) {
 
                           pain = select[i].children[j].children
-                          console.log(select[i].children[j].children.length)
+                          //console.log(select[i].children[j].children.length)
                           pain[z].name = select[i].children[j].children[z].text
                           pain[z].id = select[i].children[j].children[z].id
                             }
@@ -223,15 +223,15 @@ export default {
         selectAuthorFunc(list) {
             
             if( list.length !=0 ){
-                  console.log(list[0].name)
-                  console.log(list[0].id)
+                  //console.log(list[0].name)
+                  //console.log(list[0].id)
                  let select = this.leimuList 
                  let pain = []
                  for (let i = 0; i < select.length; i++) {
                      if( list[0].id == select[i].id ){
                         pain = select[i].children
                         for (let j = 0; j < select[i].children.length; j++) {
-                           console.log(select[i].children.length)
+                           //console.log(select[i].children.length)
                         pain[j].name = select[i].children[j].text;
                         pain[j].id = select[i].children[j].id;
                     } 

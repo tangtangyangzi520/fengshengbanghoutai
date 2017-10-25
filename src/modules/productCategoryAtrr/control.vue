@@ -180,13 +180,13 @@ export default {
     },
     watch: {
         type(val) {
-            console.log("type is " + val);
+            //console.log("type is " + val);
             this.type = val;
         },
         show(val) {
             if (!val) return;
             this.options = {};
-            console.log("show is " + val + " type:" +this.type);
+            //console.log("show is " + val + " type:" +this.type);
             switch (this.type) {
                 case 'submit':
                     this.showSubmitDialog = true;
@@ -243,7 +243,7 @@ export default {
                     this.showImportantDialog = true;
                     break;
                 case 'delete':
-                    console.log(this.items[0].pcaoId);
+                    //console.log(this.items[0].pcaoId);
                     this.tips = '删除成功';
                      this.url = PCA_DELETE + "?pcaId=" + this.items[0].pcaId;
                     this.showDeleteDialog = true;

@@ -260,7 +260,7 @@ export default {
         },
         //获取省份数据
         getshengList() { 
-            console.log('获取省份信息');
+            //console.log('获取省份信息');
             client.postData( AREA_GET_LIST , {}).then(data => {
                 if (data.code == 200) {
                     this.shengNum = data.data.length;

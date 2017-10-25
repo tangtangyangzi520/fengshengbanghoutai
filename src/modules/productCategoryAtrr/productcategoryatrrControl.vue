@@ -149,7 +149,7 @@ export default {
                 if (data.code == 200) {
                     
                     let list = data.data;
-                    console.log(list);
+                    //console.log(list);
                     this.inputtypesList = list;
                 } else {
                     this.showMsg(data.msg);

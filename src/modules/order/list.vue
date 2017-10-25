@@ -316,7 +316,7 @@ export default {
         },
         //加星
         setStar(data) {
-            console.log(data);
+            //console.log(data);
             this.ordOrderId = data.ordOrderId;
             this.ordStar = data.ordStar
             this.showStarDialog = true;

@@ -1137,9 +1137,7 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            // alert(0);
-            console.log(list);
-            //alert(0);
+            //console.log(list);
             if (this.selectPicType == 2) {
 
                 this.request.resourceList[1] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 2, "psrType": 1,"psrResourceId":list[0].id } 
@@ -1764,9 +1762,9 @@ export default {
                         "sku_remark": skuname ,     //  拼接属性 
                         //"skuStockNum": erpkc2,  
                     }
-                    console.log(sin)
+                    //console.log(sin)
                     spulist.push(sin)
-                    console.log(spulist)
+                    //console.log(spulist)
 } else {
             //获取基本属性列表
            /*  $(base).each(function(b,za){
@@ -2518,7 +2516,7 @@ export default {
             this.showDialog = this.show;
         },
         id() {
-            console.log(this.id)
+            //console.log(this.id)
             this.data = {
                 "componentType": 16,
                 "painIds": [],

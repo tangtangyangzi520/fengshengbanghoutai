@@ -180,7 +180,7 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            console.log(list);
+            //console.log(list);
             this.data.pbdLogoUrl = list[0].url;
              this.data.pbdLogoId = list[0].id;
             this.showSelectPic({ show: false });

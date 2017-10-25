@@ -98,7 +98,7 @@ export default {
         //提交原因
         editCancelReason(){
             this.editReasonData.ordOrderId=this.id;
-            console.log(this.editCancelReason);
+            //console.log(this.editCancelReason);
             if(this.editReasonData.ordCancelReason==''){
                 this.showMsg("请选择订单状态");
                 return;

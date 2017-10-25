@@ -478,7 +478,7 @@ export default {
                     })
                     this.skuList = data;
                     this.title = "商品名:"+this.spuname + this.title
-                    console.log(this.skuList)
+                    //console.log(this.skuList)
                     
                 //} else {
                   //  this.showMsg(data.msg);
@@ -496,7 +496,7 @@ export default {
             this.showDialog = this.show;
         },
         id() {
-            console.log(this.id)
+            //console.log(this.id)
             this.data = {
                 "componentType": 16,
                 "painIds": [],

@@ -951,7 +951,7 @@ export default {
                  }
             }
             this.showSelectPic({ show: false });
-            console.log(this.singleimgList);
+            //console.log(this.singleimgList);
         },
         //删除基本属性
         closeProperty(event) { 

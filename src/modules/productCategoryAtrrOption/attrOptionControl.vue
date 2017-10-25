@@ -178,7 +178,7 @@ export default {
                 this.isLoading = false;
                 if (response.code == 200) {
                     let list = response.data;
-                    console.log(list);
+                    //console.log(list);
                     this.dataList = list;
                 } else {
                     this.showMsg(response.msg);
@@ -216,7 +216,7 @@ export default {
         },
         // 提交信息
         submitInfo() {
-    console.log(this.pcaName2);//属性名称
+    //console.log(this.pcaName2);//属性名称
             let pcaList2,url;
             //属性名称唯一性校验
             pcaList2=Object.assign([],this.pcaList);
@@ -225,7 +225,7 @@ export default {
                     pcaList2.splice(index,1);
                 }
             }
-    console.log(pcaList2);
+    //console.log(pcaList2);
             pcaList2.forEach(item => {
                 if (item.pcaName == this.pcaName2) {
                     this.showMsg('这个属性名已经存在，请输入新的属性名!');
@@ -245,8 +245,8 @@ export default {
             url = PCAO_CREATE; //添加属性值url        
             //将属性名称添加到每一个dataList的每一个json中
             this.dataList.forEach(item => item["pcaName"] = this.pcaName2);
-            console.log(this.dataList);
-            console.log(this.pcaid);
+            //console.log(this.dataList);
+            //console.log(this.pcaid);
             return;
 
             client.postData(url, { "pcaoList": this.dataList }).then(response => {
