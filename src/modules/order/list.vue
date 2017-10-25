@@ -16,8 +16,6 @@
             <form id="exportForm" method="POST">
                 <input type="hidden" v-model="exportString" name="request">
             </form>
-            </br>
-            </br>
             <div class="col-md-12 contentOrderleft">
                 <button class="btn default" :class="{'blue':checkedList[0]}" type="button" @click="getListByState(-1)">全部</button>
                 <button class="btn default" :class="{'blue':checkedList[1]}" type="button" @click="getListByState(0)">待付款</button>

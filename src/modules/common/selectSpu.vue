@@ -182,7 +182,7 @@ export default {
                 "spuCode":'',//spu商品编码
                 "spuName":'',//商品名称
                 "skuCode":'',//sku商品编码
-                "saleStatus":1,
+                "saleStatus":0,
                 "orderBy":-1,
                 "showCatIdList":[],
                 "page": {

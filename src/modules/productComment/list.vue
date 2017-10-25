@@ -1,0 +1,273 @@
+<template>
+    <div>
+        <div class="page-bar min-bar">
+            <page-title-bar v-show="showflag">
+                <span slot="title">商品内部评价</span>
+            </page-title-bar>
+            <search :onchange="changeSearchOptions" :oncreate="getList" v-ref:search></search>
+            <div class="col-md-12 left">
+                <div class="col-md-4"></div>
+                <div class="col-md-6">
+                    <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn blue" type="button" @click="getList(true,true)">导入评论</button>
+                </div>
+            </div>
+            <form id="exportForm" method="POST" enctype="multipart/form-data">
+                <input type="hidden" v-model="exportString" name="request">
+            </form>
+        </div>
+        <div class="contentOrderBlock" id="contentList">
+            <div class="table-responsive col-md-12">
+                <table class="table orderTable table-striped table-bordered table-hover">
+                    <thead>
+                        <tr style="background-color:rgba(215, 215, 215, 1);">
+                            <th style="width:10%;">买家昵称</th>
+                            <th style="width:20%;">商品名称</th>
+                            <th style="width:40%;">评论内容</th>
+                            <th style="width:5%;">星级</th>
+                            <th style="width:10%;">图片状态</th>
+                            <th style="width:15%;">操作</th>
+                        </tr>
+                        <tr v-for="item in dataList" :key="item.oicId">
+                            <td>{{item.oicMemberNickname}}</td>
+                            <td>{{item.oicProductName}}</td>
+                            <td>{{item.oicComment}}</td>
+                            <td>{{item.oicStarNum}}</td>
+                            <td>{{item.oicImgStatus==0 ? "无图" : "有图"}}</td>
+                            <td>
+                                <button class="btn blue" type="button" @click="edit(item)">查看/编辑评论</button>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div v-if="dataList.lenth==0" class="center">
+                暂无数据
+            </div>
+        </div>
+        <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
+        <!-- 创建订单详情弹窗 -->
+        <comment-control v-if="!destroyControlDialog" :id="orderEditId" :set-data="orderSetData" :sub-data="orderSubData" :show="showAddDialog" :onhide="hideAddDialog">
+            </order-control>
+            <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
+                <div slot="content">确定提交吗？</div>
+            </m-alert>
+            <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
+                <div slot="content">{{showAlertMsg}}</div>
+            </m-alert>
+            <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
+            <loading :show="isLoading"></loading>
+    </div>
+</template>
+<script>
+import client from '../../common/utils/client';
+import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect } from '../../components';
+import search from './search';
+import control from '../common/control';
+import loading from '../common/loading';
+import commentControl from './commentControl';
+let vueThis = null;
+export default {
+    components: {
+        pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, commentControl
+    },
+    props: {
+        title: '',
+        ospuid: 0,
+        oflag: false,
+        ooflag: false,
+        show: {
+            type: Boolean,
+            value: false
+        },
+        onhide: {
+            type: Function,
+            value: () => { }
+        },
+    },
+    data() {
+        return {
+            showflag: true,
+            limgflag: false,
+            lspuid: 0,
+            lflag: false,
+            exportString: '',
+            reason: false,
+            isLoading: false,
+            countDesc: '',  //数据统计
+            dataList: [],
+            page: {},   // 分页请求数据
+            showAlert: false,
+            showAddDialog: false,
+            showAlertTitle: '温馨提示',
+            showAlertMsg: '',
+            limitResource: null, //发布状态
+            clickItems: [],   //点击操作的数据项
+            controlType: '',  //当前操作的权限类型
+            showControl: false, //显示操作弹窗
+            destroyControlDialog: false, //注销良言操作弹框
+            destroyPaymentDialog: false,
+            orderEditId: '',
+            orderSetData: null,
+            orderSubData: null,
+            orsId: 0,
+            ordOrderId: 0,
+            ordStar: 0,
+            ordDemo: "",
+            testSelectedSpu: [],
+            checkedList: [true, false, false, false, false, false, false],//用来使被选中标签高亮
+
+        }
+    },
+    computed: {
+        selectItems() {
+            let list = [];
+            this.dataList.forEach(item => {
+                item.checked && list.push(item);
+            })
+            return list;
+        },
+    },
+    filters: {
+        filterStatus(id) {
+            return client.global.componentStatus.find(item => item.id == id).name;
+        },
+        filterTime(time) {
+            return client.formateTime(time);
+        }
+    },
+    methods: {
+        //编辑
+        edit(item) {
+
+        },
+        clearSearchOptions() {
+            this.$refs.search.clearOptions()
+        },
+        hideAddDialog(control) {
+            this.expertEditId = '';
+            this.showAddDialog = false;
+            if (control && control == 'create') {
+                this.showMsg('保存成功');
+            }
+            if (control && control == 'update') {
+                this.showMsg('更新成功');
+            }
+            if (control) {
+                setTimeout(() => {
+                    //移除组件
+                    this.destroyControlDialog = true;
+                }, 100)
+                setTimeout(() => {
+                    //重新加入
+                    this.destroyControlDialog = false;
+                }, 200)
+                this.getList();
+            }
+        },
+        // 搜索条件变化
+        changeSearchOptions(options) {
+            this.searchOptions = options;
+        },
+        hideControlFunc(type) {
+            if (type == 'success') {
+                this.getList();
+            }
+            this.showControl = false;
+        },
+        getList(page, firstSearch) {
+            let options;
+            options = Object.assign({}, this.searchOptions);
+            if (page) {
+                options.page = page;
+            }
+            this.isLoading = true;
+            this.dataList = [];
+            client.postData(OIC_GET_LIST, options).then(data => {
+                this.isLoading = false;
+                if (data.code == 200) {
+                    this.dataList = data.data;
+                    this.page = data.page;
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.isLoading = false;
+            })
+        },
+        getCount(options) {
+            options.componentType = [12];
+            client.postData(COMPONENT_ARTICLE_COUNTER, options).then(data => {
+                if (data.code == 200) {
+                    this.countDesc = data.data;
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+            })
+        },
+        selectAll() {
+            this.dataList.forEach(item => {
+                item.checked = true;
+            })
+        },
+        reverseList() {
+            this.dataList.forEach(item => {
+                item.checked = !item.checked;
+            })
+        },
+        selectItem(item) {
+            //item.checked = !item.checked;
+        },
+        showMsg(msg, title) {
+            if (title) {
+                this.showAlertTitle = title;
+            } else {
+                this.showAlertTitle = '温馨提示';
+            }
+            this.showAlertMsg = msg;
+            this.showAlert = true;
+        },
+        hideMsg() {
+            this.showAlert = false;
+            this.showAddDialog = false
+        }
+    },
+    created() {
+        vueThis = this;
+        this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
+        this.getList(false, true);
+    },
+    watch: {
+
+    },
+    route: {
+
+    },
+    ready() {
+        client.resetListHeight();
+    }
+};
+</script>
+
+<style lang="less">
+@import "../../common/css/common.less";
+@import "../../common/css/list.less";
+.contentOrderBlock {
+    overflow: auto;
+    border: none;
+    margin-top: 0px;
+}
+
+.contentOrderleft {
+    position: relative;
+    min-height: 1px;
+    padding-left: 6px;
+    padding-right: 15px;
+}
+
+.orderTable {
+    width: 100%;
+    margin-bottom: 8px;
+}
+</style>

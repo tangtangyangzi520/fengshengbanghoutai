@@ -20,6 +20,8 @@ import couponManage from './modules/couponManage/list.vue';
 import ProductCarriageTemp from './modules/ProductCarriageTemp/list.vue';
 //省市区三级联动
 import area from  './modules/area/selectArea.vue';
+//评论
+import productComment from  './modules/productComment/list.vue';
 
 export default function(router) {
     router.map({
@@ -66,6 +68,10 @@ export default function(router) {
         '/area': {
             name: 'area',
             component: area
+        },
+        '/productComment': {
+            name: 'productComment',
+            component: productComment
         },
         // '/channelLayout/:parentId': {
         //     name: 'channelLayout',
