@@ -261,7 +261,7 @@ export default {
         },
         hideMsg() {
             this.showAlert = false;
-            this.showAddDialog = false
+            this.showAddDialog = false;
         }
     },
     created() {
@@ -270,7 +270,6 @@ export default {
     },
     watch: {
          lflag() {
-           // alert(this.ospuid)
             this.spuid = this.lspuid
             this.flag = !this.flag 
 

@@ -1,44 +1,33 @@
 <template>
-    <form class="row search-form" style="margin: 5px 0 0 0">
-            
-            <input type="hidden" class="form-control"  v-model="searchOptions.saleStatus">
-              <div class="col-md-8 nopadding">
-            <div class="col-md-4 ">
-                <div class="form-group">
-                    <label class="col-md-4 ">&nbsp;&nbsp;商品名称</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" v-model="searchOptions.spuName" maxLength="50"/>
+    <div>
+        <form class="row search-form" style="margin: 5px 0 0 0">
+            <input type="hidden" class="form-control" v-model="searchOptions.saleStatus"/>
+            <div class="col-md-8 nopadding">
+                <div class="col-md-4 ">
+                    <div class="form-group">
+                        <label class="col-md-4 ">&nbsp;&nbsp;商品名称</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" v-model="searchOptions.spuName" maxLength="50"/>
+                        </div>
                     </div>
                 </div>
+                <div class="col-md-4 ">
+                    <div class="form-group">
+                        <label class="col-md-4 ">商品编码</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" v-model="searchOptions.spuCode" maxLength="50"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ">
+                    <div class="form-group">
+                        <label class="col-md-4 "> SKU编码</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" v-model="searchOptions.skuCode" maxLength="50"/>
+                        </div>
+                    </div>
+                </div> 
             </div>
-
-            <div class="col-md-4 ">
-                <div class="form-group">
-                    <label class="col-md-4 ">商品编码</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" v-model="searchOptions.spuCode" maxLength="50"/>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-4 ">
-                <div class="form-group">
-                    <label class="col-md-4 "> SKU编码</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" v-model="searchOptions.skuCode" maxLength="50"/>
-                    </div>
-                </div>
-            </div> 
-           </div>
-            <!-- <div class="col-md-4">
-                <div class="form-group">
-                    <label class="col-md-3">发布状态：</label>
-                    <div class="col-md-9">
-                        <m-select :data="stateList" :placeholder="'请选择内容'" :change-func="selectStateFunc" :class="'fixedIcon'"></m-select>
-                    </div>
-                </div>
-            </div> -->
-
             <br><br><br>
             <div class="col-md-12 nopadding">
                 <div class="form-group">
@@ -62,15 +51,11 @@
                                 <option v-for="item in chanelList" :value="item.id">{{item.text}}</option>
                             </select>
                         </div>
-                        
-                        <!-- <m-multi-select :data="authorList" :active-items="[]" :placeholder="'请选择一级类目'" :change-func="selectAuthorFunc"></m-multi-select> -->
                     </div>
                 </div>
             </div>
-
-<br><br><br>
-
-             <div class="col-md-12 nopadding">
+            <br><br><br>
+            <div class="col-md-12 nopadding">
                 <div class="form-group">
                     <label class="col-md-1 " style="width:8%;">&nbsp;&nbsp;展示类目</label>
                     <div class="col-md-7 nopadding" style="padding-left:2px;">
@@ -92,67 +77,24 @@
                                 <option v-for="item in threeList" :value="item.id">{{item.text}}</option>
                             </select>
                         </div>
-                        
-                        <!-- <m-multi-select :data="authorList" :active-items="[]" :placeholder="'请选择一级类目'" :change-func="selectAuthorFunc"></m-multi-select> -->
                     </div>
                 </div>
             </div>
-
-
-           <!--   <div class="col-md-4">
-                <div class="form-group">
-                    <label class="col-md-3">&nbsp;&nbsp;展示类目：</label>
-                    <div class="col-md-9">
-                        <select class="form-control" v-model="showfirstActive">
-                            <option value="0">请选择一级类目</option>
-                            <option v-for="item in oneList" :value="item.id">{{item.text}}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                     <label class="col-md-3"></label>
-                    <div class="col-md-9">
-                        <select class="form-control" v-model="showsecondActive">
-                            <option value="0">请选择二级类目</option>
-                            <option v-for="item in twoList" :value="item.id">{{item.text}}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                <label class="col-md-3"></label>
-                    <div class="col-md-9">
-                        <select class="form-control" v-model="showthirdActive">
-                            <option value="0">请选择三级类目</option>
-                            <option v-for="item in threeList" :value="item.id">{{item.text}}</option>
-                        </select>
-                    </div>
-                </div>
-            </div> -->
-
-            
-            <!--<div class="col-md-4">
-                    <div class="form-group">
-                        <label class="col-md-3">渠道：</label>
-                        <div class="col-md-9">
-                            <m-multi-select :data="chanelList" :active-items="channelIdActive" :placeholder="'请选择渠道'" :change-func="selectChanelFunc"></m-multi-select>
-                        </div>
-                    </div>
-                </div>-->
-          
-    </form>
+        </form>
+        <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
+            <div slot="content">{{showAlertMsg}}</div>
+        </m-alert>
+    </div>
 </template>
+
 <script>
 import client from '../../common/utils/client';
 import { getComponentList, getComponentChannelList } from '../../vuex/actions/actions.component';
 import { getPainTree } from '../../vuex/actions/actions.pain';
 import { mMultiSelect, mAlert, mSelect } from '../../components';
+
 export default {
+    components: { mMultiSelect, mSelect, mAlert },
     props: {
         cflag:true,
         parent: {
@@ -177,9 +119,11 @@ export default {
             getComponentChannelList, getPainTree
         }
     },
-    components: { mMultiSelect, mSelect, mAlert },
     data() {
         return {  
+            showAlertTitle: '温馨提示',
+            showAlertMsg: '',
+            showAlert: false,
             oneList:[],
             twoList:[],
             threeList:[],
@@ -244,23 +188,6 @@ export default {
         // 过滤请求参数，空值的字段删除
         setOptions() {
             let options = this.searchOptions;
-            //options.createStartTime = options.createEndTime = options.modifyedStartTime = options.modifyedEndTime = '';
-           /* let createStartTime = $('#createStartTime').val(),
-                createEndTime = $('#createEndTime').val(),
-                modifyedStartTime = $('#modifyedStartTime').val(),
-                modifyedEndTime = $('#modifyedEndTime').val();
-            if (createStartTime != '') {
-                options.createStartTime = createStartTime + ' 00:00:00';
-            }
-            if (createEndTime != '') {
-                options.createEndTime = createEndTime + " 23:59:59";
-            }
-            if (modifyedStartTime != '') {
-                options.modifyedStartTime = modifyedStartTime + ' 00:00:00';
-            }
-            if (modifyedEndTime != '') {
-                options.modifyedEndTime = modifyedEndTime + " 23:59:59";
-            }*/
             for (let item in options) {
                 if (options[item] === '') {
                     delete options[item];
@@ -287,9 +214,7 @@ export default {
         getLEIMUList() {
             client.postData(  TAG_LIST_GET + "?typeId=100", {}).then(data => {
                 if (data.code == 200) {
-
                     this.leimuList = data.data.root.children;
-                   
                     let list = data.data.root.children;
                     for (let i = 0; i < list.length; i++) {
                         list[i].name = list[i].text;
@@ -302,7 +227,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-            })
+            });
         },
         // 获取作者列表
         /*getExpertList() {
@@ -340,56 +265,43 @@ export default {
         },
         // 选择痛点回调
         selectPainFunc(list) {
-
-              if( list.length !=0 ){
-                  //console.log(list[0].name)
-                  //console.log(list[0].id)
-                 let select = this.leimuList 
-                 let pain = []
-                 for (let i = 0; i < select.length; i++) {
-
-                      for (let j = 0; j < select[i].children.length; j++) {
-
-                         if( list[0].id == select[i].children[j].id ){
-                             
-                             for (let z = 0; z < select[i].children[j].children.length; z++) {
-
-                          pain = select[i].children[j].children
-                          //console.log(select[i].children[j].children.length)
-                          pain[z].name = select[i].children[j].children[z].text
-                          pain[z].id = select[i].children[j].children[z].id
+            if( list.length !=0 ){
+                let select = this.leimuList ;
+                let pain = [];
+                for (let i = 0; i < select.length; i++) {
+                    for (let j = 0; j < select[i].children.length; j++) {
+                        if( list[0].id == select[i].children[j].id ){
+                            for (let z = 0; z < select[i].children[j].children.length; z++) {
+                                pain = select[i].children[j].children;
+                                pain[z].name = select[i].children[j].children[z].text;
+                                pain[z].id = select[i].children[j].children[z].id;
                             }
                         }
                     }
                 } 
-                     this.chanelList = pain         
+                this.chanelList = pain;         
             } 
-            
         },
         // 选择创建者回调
         selectAuthorFunc(list) {
-            
             if( list.length !=0 ){
-                  //console.log(list[0].name)
-                  //console.log(list[0].id)
-                 let select = this.leimuList 
-                 let pain = []
-                 for (let i = 0; i < select.length; i++) {
-                     if( list[0].id == select[i].id ){
+                let select = this.leimuList;
+                let pain = [];
+                for (let i = 0; i < select.length; i++) {
+                    if( list[0].id == select[i].id ){
                         pain = select[i].children
                         for (let j = 0; j < select[i].children.length; j++) {
-                           //console.log(select[i].children.length)
-                        pain[j].name = select[i].children[j].text;
-                        pain[j].id = select[i].children[j].id;
-                    } 
-                 }                                      
+                            pain[j].name = select[i].children[j].text;
+                            pain[j].id = select[i].children[j].id;
+                        } 
+                    }                                      
+                }
+                this.painList = pain;
             }
-            this.painList = pain
-        }
             let creators = [];
             list.forEach((item) => {
                 creators.push(item.id);
-            })
+            });
             this.authorListSelect = creators;
             if (this.authorListSelect.length != 0) {
                 this.searchOptions.creators = this.authorListSelect;
@@ -419,6 +331,18 @@ export default {
             } else {
                 this.searchOptions.submitStatus = item.id;
             }
+        },
+        showMsg(msg, title) {
+            if (title) {
+                this.showAlertTitle = title;
+            } else {
+                this.showAlertTitle = '温馨提示';
+            }
+            this.showAlertMsg = msg;
+            this.showAlert = true;
+        },
+        hideMsg() {
+            this.showAlert = false;
         }
     },
     created() {
@@ -429,142 +353,132 @@ export default {
     },
     watch: {
         cflag() {
-             if(this.searchOptions.showCatIdList.length>0){
-                let id = 0
+            if(this.searchOptions.showCatIdList.length>0){
+                let id = 0;
                 if(this.searchOptions.showCatIdList[0] > 0 ){
-                   id = this.searchOptions.showCatIdList[0]
-               }
-               if(this.searchOptions.showCatIdList[1] > 0 ){
-                   id = this.searchOptions.showCatIdList[1]
-               }
-               if(this.searchOptions.showCatIdList[2] > 0 ){
-                   id = this.searchOptions.showCatIdList[2]
-               }
-               if(id > 0 ){
-                let object= null
-                this.leimuList.forEach(item=>{ 
-                 if(item.id == id){
-                    object = item
-                 }
-                item.children.forEach(er=>{
-                    if(er.id == id){
-                    object = er
-                 }
-                    er.children.forEach(san=>{
-                        if(san.id == id){
-                    object = san
-                 }
-                    })}) } )
-               if(object.children != ""){
-                  alert("展示类目请选择到最后一级标签。")
-                  return
+                    id = this.searchOptions.showCatIdList[0];
+                }
+                if(this.searchOptions.showCatIdList[1] > 0 ){
+                    id = this.searchOptions.showCatIdList[1];
+                }
+                if(this.searchOptions.showCatIdList[2] > 0 ){
+                    id = this.searchOptions.showCatIdList[2];
+                }
+                if(id > 0 ){
+                    let object= null;
+                    this.leimuList.forEach(item=>{ 
+                        if(item.id == id){
+                            object = item;
+                        }
+                        item.children.forEach(er=>{
+                            if(er.id == id){
+                                object = er;
+                            }
+                            er.children.forEach(san=>{
+                                if(san.id == id){
+                                    object = san;
+                                }
+                            });
+                        });
+                    });
+                    if(object.children != ""){
+                        this.showMsg("展示类目请选择到最后一级标签。");
+                        return;
                     }
-               }
-           }
-           if( (this.firstActive ==0 && this.secondActive == 0 && this.thirdActive == 0) || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
-              this.oncreate(false, true);
-           }else{
-               alert("经营类目请选择到最后一级标签。")
-               return
-           }
+                }
+            }
+            if( (this.firstActive ==0 && this.secondActive == 0 && this.thirdActive == 0) || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
+                this.oncreate(false, true);
+            }else{
+                this.showMsg("经营类目请选择到最后一级标签。");
+                return;
+            }
         },
         parent(val){
-             if(this.searchOptions.showCatIdList.length>0){
-                let id = 0
+            if(this.searchOptions.showCatIdList.length>0){
+                let id = 0;
                 if(this.searchOptions.showCatIdList[0] > 0 ){
-                   id = this.searchOptions.showCatIdList[0]
-               }
-               if(this.searchOptions.showCatIdList[1] > 0 ){
-                   id = this.searchOptions.showCatIdList[1]
-               }
-               if(this.searchOptions.showCatIdList[2] > 0 ){
-                   id = this.searchOptions.showCatIdList[2]
-               }
-               if(id > 0 ){
-                let object= null
-                this.leimuList.forEach(item=>{ 
-                 if(item.id == id){
-                    object = item
-                 }
-                item.children.forEach(er=>{
-                    if(er.id == id){
-                    object = er
-                 }
-                    er.children.forEach(san=>{
-                        if(san.id == id){
-                    object = san
-                 }
-                    })}) } )
-               if(object.children != ""){
-                  alert("展示类目请选择到最后一级标签。")
-                  return
+                    id = this.searchOptions.showCatIdList[0];
+                }
+                if(this.searchOptions.showCatIdList[1] > 0 ){
+                    id = this.searchOptions.showCatIdList[1];
+                }
+                if(this.searchOptions.showCatIdList[2] > 0 ){
+                    id = this.searchOptions.showCatIdList[2];
+                }
+                if(id > 0 ){
+                    let object= null;
+                    this.leimuList.forEach(item=>{ 
+                        if(item.id == id){
+                            object = item;
+                        }
+                        item.children.forEach(er=>{
+                            if(er.id == id){
+                                object = er;
+                            }
+                            er.children.forEach(san=>{
+                                if(san.id == id){
+                                    object = san;
+                                }
+                            });
+                        });
+                    });
+                    if(object.children != ""){
+                        this.showMsg("展示类目请选择到最后一级标签。");
+                        return;
                     }
-               }
-           }
-           this.searchOptions.saleStatus = val;
-           if( (this.firstActive + this.secondActive + this.thirdActive) == 0 || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
-              this.oncreate(false, true);
-           }else{
-               alert("经营类目请选择到最后一级标签。")
-               return
-           }
+                }
+            }
+            this.searchOptions.saleStatus = val;
+            if( (this.firstActive + this.secondActive + this.thirdActive) == 0 || (this.firstActive >0 && this.secondActive > 0 && this.thirdActive > 0) ){
+                this.oncreate(false, true);
+            }else{
+                this.showMsg("经营类目请选择到最后一级标签。");
+                return;
+            }
         },
         showthirdActive(val) {
-            this.searchOptions.showCatIdList[2] = val
-
+            this.searchOptions.showCatIdList[2] = val;
         },
         showfirstActive(val){
-            //if( val == 0){
-                this.searchOptions.showCatIdList[2] = 0
-                this.searchOptions.showCatIdList[1] = 0
-                this.searchOptions.showCatIdList[0] = val
-                this.showsecondActive = 0
-                this.showthirdActive = 0
-                this.threeList =[]
-                this.twoList = []
-           // }else{
-             if( this.leimuList.find(item=>item.id==val) != null){
-                this.twoList = this.leimuList.find(item=>item.id==val).children
+            this.searchOptions.showCatIdList[2] = 0;
+            this.searchOptions.showCatIdList[1] = 0;
+            this.searchOptions.showCatIdList[0] = val;
+            this.showsecondActive = 0;
+            this.showthirdActive = 0;
+            this.threeList =[];
+            this.twoList = [];
+            if( this.leimuList.find(item=>item.id==val) != null){
+                this.twoList = this.leimuList.find(item=>item.id==val).children;
             }
         },
         showsecondActive(val){
-                this.searchOptions.showCatIdList[2] = 0
-                this.searchOptions.showCatIdList[1] = val
-            //if( val == 0){
-                this.showthirdActive = 0
-                this.threeList =[]
-            //}else{
+            this.searchOptions.showCatIdList[2] = 0;
+            this.searchOptions.showCatIdList[1] = val;
+            this.showthirdActive = 0;
+            this.threeList =[];
             if( this.twoList.find(item=>item.id==val) != null){
                 this.threeList = this.twoList.find(item=>item.id==val).children;
             }
         },
         thirdActive(val) {
-            this.searchOptions.spuCatId = val
-
+            this.searchOptions.spuCatId = val;
         },
         firstActive(val){
-            //if( val == 0){
-                this.secondActive = 0
-                this.thirdActive = 0
-                this.chanelList =[]
-                this.painList = []
-           // }else{
+            this.secondActive = 0;
+            this.thirdActive = 0;
+            this.chanelList =[];
+            this.painList = [];
             if(this.leimuList.find(item=>item.id==val) != null){
-
-                this.painList = this.leimuList.find(item=>item.id==val).children
+                this.painList = this.leimuList.find(item=>item.id==val).children;
             }
-           // }
         },
         secondActive(val){
-            //if( val == 0){
-                this.thirdActive = 0
-                this.chanelList =[]
-           // }else{
+            this.thirdActive = 0;
+            this.chanelList =[];
             if(this.painList.find(item=>item.id==val) != null){
-
                 this.chanelList = this.painList.find(item=>item.id==val).children;
             }
-           // }
         },
         title(val) {
             this.searchOptions.title = val;
@@ -606,6 +520,7 @@ export default {
     }
 }
 </script>
+
 <style lang="less" scope>
 .search-form .col-md-4{
     padding-left:0;
