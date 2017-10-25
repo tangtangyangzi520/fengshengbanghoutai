@@ -43,7 +43,7 @@
                             </ul>
                         </div> 
                     </div>
-                    <!-- 商品列表 -->
+                    <!-- 未选择的商品列表 -->
                     <div class="col-md-4">
                         <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                             <thead>
@@ -64,10 +64,10 @@
                                     <td class="tdTitle" style="text-align:center;vertical-align:middle;">
                                         <p>
                                             <a target="_blank" :href="item.imgUrl" title="查看大图">
-                                                <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
+                                                <img :src="item.imgUrl" class="img-rounded" style="height:55px; width:75px">
                                             </a>
                                         </p>
-                                        <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
+                                        <h4 class="tt"><p style="color:#6699CC;font-size:10px;">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
                                     </td>
                                     <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
                                 </tr>
@@ -87,7 +87,7 @@
                         </br>
                         <button class="btn blue" type="button" style="margin-left:25%;" @click="unSelectSpu()">&lt;&lt;</button>
                     </div>
-                    <!-- 被选中的商品列表 -->
+                    <!-- 已选择的商品列表 -->
                     <div class="col-md-4">
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
@@ -108,10 +108,10 @@
                                     <td class="tdTitle">
                                         <p>
                                             <a target="_blank" :href="item.imgUrl" title="查看大图">
-                                                <img :src="item.imgUrl" class="img-rounded" style="height:60px; width:80px">
+                                                <img :src="item.imgUrl" class="img-rounded" style="height:55px; width:75px">
                                             </a>
                                         </p>
-                                        <h4 class="tt"><p style="color:#6699CC">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
+                                        <h4 class="tt"><p style="color:#6699CC;font-size:10px;">{{item.spuName}}</p><span style="color:red;">¥{{item.minSalePrice}}</span></h4>
                                     </td>
                                     <td style="text-align:center;vertical-align:middle;">{{item.totalStockNum}}</td>
                                 </tr>
