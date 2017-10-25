@@ -84,6 +84,10 @@
                 </div>
             </div>
         </m-alert>
+        <!-- 提示框 -->
+        <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
+            <div slot="content">{{showAlertMsg}}</div>
+        </m-alert>
         <!-- 发布商品-新增页面 -->
         <product-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :par="sele" :onhide="hideAddDialog" :cflag="flag" :closeparentpage="hideDialog"></product-control> 
     </div>
@@ -252,7 +256,7 @@ export default {
         addItem() {
             let msg = "";
             if( this.sele[1] == null || this.sele[2] == null){
-                alert( "请先选择三级的类目");
+                this.showMsg( "请先选择三级的类目");
                 return;
             }
             //this.showMsg(msg);
@@ -271,7 +275,6 @@ export default {
             this.selectArray.forEach((item,index)=>{
                 this.sele.$set(index,item);
             });
-            //alert("sele"+this.selectArray.toString())
         },
         thirdbuild(val,event) {
             var el = event.currentTarget;

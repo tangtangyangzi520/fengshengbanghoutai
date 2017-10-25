@@ -536,7 +536,7 @@
                 </span>
             </div>
         </m-alert>
-
+        <!-- 提示框 -->
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
@@ -558,7 +558,8 @@
         <tag-tree v-if="showTagTreeSelect" :list="tagsList" :onselect="selectTagFunc" :oncancel="showTagDialog"   :type="0"></tag-tree>
         <tag-tree v-if="showperTreeSelect" :list="personList" :onselect="selectPerFunc" :oncancel="showperDialog" :type="3"></tag-tree>
         <tag-tree v-if="showneiTreeSelect" :list="neirongList" :onselect="selectNeiFunc" :oncancel="showneiDialog" :type="1"></tag-tree>
-        <template-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" v-bind:par="sele" :onhide="hideAddDialog" :getspu="spu"  :closeparent="hideDialog"></template-control> 
+        <!-- 商品详情图片上传弹框 -->
+        <template-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" v-bind:par="sele" :onhide="hideAddDialog" :getspu="spu" :closeparent="hideDialog"></template-control> 
     </div>
 </template>
 
@@ -639,8 +640,8 @@ export default {
             xssxList:[],
             idnum:0,
             destroyControlDialog: false, //注销良言操作弹框
-             expertEditId: '',
-             showAddDialog: false,
+            expertEditId: '',
+            showAddDialog: false,
             brandList:[],
             isLoading: false,
             showDialog: false,
@@ -684,11 +685,10 @@ export default {
             sj:'',
             kc:'',
             skubm:'',
-           // erpkc:'',
+            // erpkc:'',
             spu:{
                 "msg":"",
                 "id":0,
-
             }
         }
     },
@@ -880,213 +880,204 @@ export default {
         },
         //填写上榜理由校验
         checkshangb(val){
-          let count = 0;
-           this.createshangbanglist.forEach(data=>{
-               if($.trim(data.pcrReason)){
-                  count++
-               } 
-           })
-           if(this.shangb.length + count > 3 ){
-              val.pcrReason = ""
-              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
-           }
+            let count = 0;
+            this.createshangbanglist.forEach(data=>{
+                if($.trim(data.pcrReason)){
+                    count++;
+                } 
+            });
+            if(this.shangb.length + count > 3 ){
+                val.pcrReason = "";
+                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!");
+            }
         },
         //勾选消保类型校验
         insurance(event){
-             let el = event.currentTarget;
-             if( this.createinsurancelist.length ==1  ){
+            let el = event.currentTarget;
+            if( this.createinsurancelist.length ==1  ){
                 if( $.trim(this.createinsurancelist[0].keyValue) != "" || $.trim(this.createinsurancelist[0].description) != ""){
-                   if( $(".insu input:checked").length + this.createinsurancelist.length > 5){
-                      if($(el).is(':checked')){
-                         $(el).removeAttr("checked")
-                         this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
-                         return
-                      }
-                  }
-                }
-             }else if( this.createinsurancelist.length > 1  ){
-                 if( $(".insu input:checked").length + this.createinsurancelist.length > 5){
-                   if($(el).is(':checked')){
-                    $(el).removeAttr("checked")
-                    this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
-                    return
+                    if( $(".insu input:checked").length + this.createinsurancelist.length > 5){
+                        if($(el).is(':checked')){
+                            $(el).removeAttr("checked");
+                            this.showMsg("消保类型新增和库中勾选的总和不得超过5条!");
+                            return;
+                        }
                     }
-                 }
-             }    
-               if($(".insu input:checked").length > 5){
-                 if($(el).is(':checked')){
-                    $(el).removeAttr("checked")
-                    this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
-                  }
                 }
+            }else if( this.createinsurancelist.length > 1  ){
+                if( $(".insu input:checked").length + this.createinsurancelist.length > 5){
+                    if($(el).is(':checked')){
+                        $(el).removeAttr("checked");
+                        this.showMsg("消保类型新增和库中勾选的总和不得超过5条!");
+                        return;
+                    }
+                }
+            }    
+            if($(".insu input:checked").length > 5){
+                if($(el).is(':checked')){
+                    $(el).removeAttr("checked");
+                    this.showMsg("消保类型新增和库中勾选的总和不得超过5条!");
+                }
+            }
         },
         //删除自定义上榜理由
         deleteshangbang(index){
-            this.createshangbanglist.splice(index)
+            this.createshangbanglist.splice(index);
         },
         //添加上榜理由
         createshangbang(){
             if( this.shangb.length >= 3){
-              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
-              return
+                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!");
+                return;
             }
             if( this.shangb.length + this.createshangbanglist.length >= 3){
-              this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
-              return
+                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!");
+                return;
             }
-            this.createshangbanglist.push({"pcrReason": "",})
+            this.createshangbanglist.push({"pcrReason": "",});
         },
         //删除自定义消保类型
         deleteinsurance(index){
-            this.createinsurancelist.splice(index)
+            this.createinsurancelist.splice(index);
         },
         //添加消保类型
         createinsurance(){
             if(  $(".insu input:checked").length  >= 5){
-              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
-              return
+                this.showMsg("消保类型新增和库中勾选的总和不得超过5条!");
+                return;
             }
             if( $(".insu input:checked").length + this.createinsurancelist.length >= 5){
-              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
-              return
+                this.showMsg("消保类型新增和库中勾选的总和不得超过5条!");
+                return;
             }
-            this.createinsurancelist.push({"keyValue":"","description":""})
+            this.createinsurancelist.push({"keyValue":"","description":""});
         },
         //勾选上榜理由时校验
-      shangbang(event){
-         let el = event.currentTarget;
-         if( this.createshangbanglist.length ==1  ){
-            if( $.trim(this.createshangbanglist[0].pcrReason) != ""){
-               if( this.shangb.length + this.createshangbanglist.length >= 3){
-                 if($(el).is(':checked')){
-                    $(el).removeAttr("checked")
-                    this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
-                    return
+        shangbang(event){
+            let el = event.currentTarget;
+            if( this.createshangbanglist.length ==1  ){
+                if( $.trim(this.createshangbanglist[0].pcrReason) != ""){
+                    if( this.shangb.length + this.createshangbanglist.length >= 3){
+                        if($(el).is(':checked')){
+                            $(el).removeAttr("checked");
+                            this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!");
+                            return;
+                        }
+                    }
                 }
-              }
-            }
-         }else if( this.createshangbanglist.length > 1  ){
-             if( this.shangb.length + this.createshangbanglist.length >= 3){
-              if($(el).is(':checked')){
-                $(el).removeAttr("checked")
-                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
-                return
+            }else if( this.createshangbanglist.length > 1  ){
+                if( this.shangb.length + this.createshangbanglist.length >= 3){
+                    if($(el).is(':checked')){
+                        $(el).removeAttr("checked");
+                        this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!");
+                        return;
+                    }
                 }
-             }
-         }    
-           if(this.shangb.length >= 3){
-             if($(el).is(':checked')){
-                $(el).removeAttr("checked")
-                this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!")
-              }
+            }    
+            if(this.shangb.length >= 3){
+                if($(el).is(':checked')){
+                    $(el).removeAttr("checked");
+                    this.showMsg("上榜理由新增和理由库中勾选的总和不得超过3条!");
+                }
             }
-      },
+        },
         sput(event,clazz) {
-              let el = event.currentTarget;
-              //$(el).val(Math.abs($(el).val()).toFixed(2))
-              var reg = /^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/
-              let s = $(el).val()+""
-              let f = !reg.test(s)
-            if (  f ) {
-                   this.showMsg("请输入数字")
-                   $(el).val("")
-                   return
-               }
-              
-              $(clazz).val($(el).val())
+            let el = event.currentTarget;
+            var reg = /^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/;
+            let s = $(el).val()+"";
+            let f = !reg.test(s);
+            if ( f ) {
+                this.showMsg("请输入数字");
+                $(el).val("");
+                return;
+            }
+            $(clazz).val($(el).val());
         },
         ssput(event,clazz) {
-               let el = event.currentTarget;
-               $(el).val(Math.abs($(el).val()))
-               $(el).val(Math.round($(el).val()))
-               var reg = /^\d{0,10}$/
-               let s = $(el).val()+""
-               let f = !reg.test(s)
-            if (  f ) {
-                   this.showMsg("请输入整数")
-                   $(el).val("")
-                   return
-               }
-              
-              $(clazz).val($(el).val())
+            let el = event.currentTarget;
+            $(el).val(Math.abs($(el).val()));
+            $(el).val(Math.round($(el).val()));
+            var reg = /^\d{0,10}$/;
+            let s = $(el).val()+"";
+            let f = !reg.test(s);
+            if ( f ) {
+                this.showMsg("请输入整数");
+                $(el).val("");
+                return;
+            }
+            $(clazz).val($(el).val());
         },
         //输入内容 选中事件
         getcheck(event) {
             let el = event.currentTarget;
             if( $(el).val() != ""){
-                 $(el).prev(":checkbox").prop("checked","true")
+                 $(el).prev(":checkbox").prop("checked","true");
             }else{
-                  $(el).prev(":checkbox").removeAttr("checked")
+                $(el).prev(":checkbox").removeAttr("checked");
             }
-
         },
-         //小数校验
+        //小数校验
         checkfloat(event){
-               let el = event.currentTarget
-               //$(el).val(Math.abs($(el).val()).toFixed(2))
-               var reg = /^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/
-               let s = $(el).val()+""
-               let f = !reg.test(s)
-            if (  f ) {
-                   this.showMsg("请输入数字")
-                   //$(el).val(s.substring(0,s.length-1))
-                    $(el).val("")
-               }
+            let el = event.currentTarget;
+            var reg = /^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/;
+            let s = $(el).val()+"";
+            let f = !reg.test(s);
+            if ( f ) {
+                this.showMsg("请输入数字");
+                $(el).val("");
+            }
         },
         //整数校验
-         check(event){
-               let el = event.currentTarget;
-                $(el).val(Math.abs($(el).val()))
-               $(el).val(Math.round($(el).val()))
-               var reg = /^-?\d{0,10}$/
-               let s = $(el).val()+""
-              let f = !reg.test(s)
-            if (  f ) {
-                   this.showMsg("请输入整数")
-                   //$(el).val(s.substring(0,s.length-1))
-                    $(el).val("")
-               }
+        check(event){
+            let el = event.currentTarget;
+            $(el).val(Math.abs($(el).val()));
+            $(el).val(Math.round($(el).val()));
+            var reg = /^-?\d{0,10}$/;
+            let s = $(el).val()+"";
+            let f = !reg.test(s);
+            if ( f ) {
+                this.showMsg("请输入整数");
+                $(el).val("");
+            }
         },
         //重置基本属性
         reset() {
-            let arr =[]
-            arr.push(this.par[3])
-            arr.push(this.par[4])
-            arr.push(this.par[5])
+            let arr =[];
+            arr.push(this.par[3]);
+            arr.push(this.par[4]);
+            arr.push(this.par[5]);
+            //
             client.postData(  PCA_GET_BY_CATID , {"parentIds" :arr ,"pcaAtrrType":2}  ).then(data => {
                 if (data.code == 200) {
-
                     this.sxlist = data.data;
-                     this.yj  = ''
-                     this.sj  = ''
-                     this.kc  = ''
-                     this.skubm  = ''
-                    // this.erpkc  = ''
-                     this.xssxList = []
-                     $("#table").hide()
-                     $("#pltab").hide()
-                     $("#div1").show()
-                     $("#pltab input:text").val("")
-                     $("#base div[id!=\"0\"]").remove()
+                    this.yj  = '';
+                    this.sj  = '';
+                    this.kc  = '';
+                    this.skubm  = '';
+                    // this.erpkc  = '';
+                    this.xssxList = [];
+                    $("#table").hide();
+                    $("#pltab").hide();
+                    $("#div1").show();
+                    $("#pltab input:text").val("");
+                    $("#base div[id!=\"0\"]").remove();
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                this.showMsg("属性获取失败,请重试")
-            })
+                this.showMsg("属性获取失败,请重试");
+            });
         },
         //增加属性选项
         addsxxx( event ) {
             let el = event.currentTarget;
-            //console.log( $(el).siblings(".addsxxx"))
             if( $( $(el).parent().children("input:text") ).length > 23 ){
-                this.showMsg("添加属性不能超过24个")
-                return
+                this.showMsg("添加属性不能超过24个");
+                return;
             }
-            let f =  $(el).parent()
-            f.append("<input type='checkbox' class='input' value='1' style='width:16px;height:16px;margin-right:3px'> <input type='text' style ='width: 5%; height:100%''  placeholder=''  > &nbsp;&nbsp;&nbsp;&nbsp;")
-            $(el).parent().children("input:text").on("keyup",this.getcheck) 
-            //$(el).prev().add("<input type='checkbox' class='input' value='1' > <input type='text' style ='width: 5%; height:100%''  placeholder=''> ")
+            let f =  $(el).parent();
+            f.append("<input type='checkbox' class='input' value='1' style='width:16px;height:16px;margin-right:3px'> <input type='text' style ='width: 5%; height:100%''  placeholder=''  > &nbsp;&nbsp;&nbsp;&nbsp;");
+            $(el).parent().children("input:text").on("keyup",this.getcheck); 
         },
         // 显示选择图片
         showSelectPicDialog(type) {
@@ -1103,7 +1094,7 @@ export default {
                 this.selectPicType = 1;
             }
         },
-         // 隐藏选择资源弹窗
+        // 隐藏选择资源弹窗
         cancelSelect() {
             this.showSelectPic({ show: false });
         },
@@ -1121,7 +1112,7 @@ export default {
         cancelSelectComponent() {
             this.showComponent = false;
         },
-         showSelectPicDialog(type) {
+        showSelectPicDialog(type) {
             this.showSelectPic({ name: 'bannerPic', show: true, storeType: 4, single: true });
             if (type == 2) {
                 this.selectPicType = 2;
@@ -1137,39 +1128,37 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            //console.log(list);
             if (this.selectPicType == 2) {
-
-                this.request.resourceList[1] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 2, "psrType": 1,"psrResourceId":list[0].id } 
+                this.request.resourceList[1] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 2, "psrType": 1,"psrResourceId":list[0].id };
                 this.data.twoUrl = list[0].url;
             } else if (this.selectPicType == 3) {
-                 this.request.resourceList[2] =  {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 3, "psrType": 1,"psrResourceId":list[0].id} 
+                 this.request.resourceList[2] =  {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 3, "psrType": 1,"psrResourceId":list[0].id};
                 this.data.threeUrl = list[0].url;
             }else if (this.selectPicType == 4) {
-                 this.request.resourceList[3] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 4, "psrType": 1,"psrResourceId":list[0].id} 
+                 this.request.resourceList[3] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 4, "psrType": 1,"psrResourceId":list[0].id}; 
                 this.data.fourUrl = list[0].url;
             }else if (this.selectPicType == 5) {
-                 this.request.resourceList[4] =  {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 5, "psrType": 1,"psrResourceId":list[0].id} 
+                 this.request.resourceList[4] =  {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 5, "psrType": 1,"psrResourceId":list[0].id}; 
                 this.data.fiveUrl = list[0].url;
             }else {
-                 this.request.resourceList[0] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 1, "psrType": 1,"psrResourceId":list[0].id} 
+                 this.request.resourceList[0] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 1, "psrType": 1,"psrResourceId":list[0].id}; 
                  this.data.oneUrl = list[0].url;
-                 this.request.spuPic = list[0].url
+                 this.request.spuPic = list[0].url;
             }
             this.showSelectPic({ show: false });
         },
-       multiCartesian (data){  
-           var len = data.length;  
-           if(len == 0)  
-              return [];  
-           else if(len == 1)  
-              return data[0];  
-           else{  
-              var r=data[0];  
-              for(var i=1;i<len;i++){  
-                 r=this.Cartesian(r,data[i]);  
+        multiCartesian (data){  
+            var len = data.length;  
+            if(len == 0){
+                return [];  
+            }else if(len == 1){
+                return data[0];  
+            }else{  
+                var r = data[0];  
+                for(var i=1; i<len; i++){  
+                    r = this.Cartesian(r,data[i]);  
                 }  
-              return r;  
+                return r;  
             }  
         },
         ft(a,b) {  
@@ -1186,939 +1175,797 @@ export default {
                   ret.push(this.ft(a[i],b[j]));  
                 }  
             }  
-                return ret;  
+            return ret;  
         },
         dkej() {
-            
-             $("#table").hide()
-             $("#pltab").hide();
-             this.xssxList = []
-            let flag = false
-            let fla = false
-            let msg = ""
-            let msg3 = ""
+            $("#table").hide();
+            $("#pltab").hide();
+            this.xssxList = [];
+            let flag = false;
+            let fla = false;
+            let msg = "";
+            let msg3 = "";
             let a = new Array();
             //基本属性的遍历
-             $(".baseSx ").each(function(index,val){
-                     let arr = new Array()
-                     flag = false
-                     $(val).children(".pcao").children(":checked").each(function(index,check){
-                        arr.push( $(check).val() )
-                        flag = true
-                     })
-                     $(val).children(".addsxxx").children(":checked").each(function(index,check){
-                        if( $.trim( $(check).next(":text").val() ) == ""){
-                            msg = "添加属性值不能为空"
-                            return
-                        }
-                        arr.push( $(check).next(":text").val() )
-                        flag = true
-                        msg = ""
-                     })
-                       if(flag){
-                       a.push(arr)
+            $(".baseSx ").each(function(index,val){
+                let arr = new Array();
+                flag = false;
+                $(val).children(".pcao").children(":checked").each(function(index,check){
+                    arr.push( $(check).val() );
+                    flag = true;
+                });
+                $(val).children(".addsxxx").children(":checked").each(function(index,check){
+                    if( $.trim( $(check).next(":text").val() ) == ""){
+                        msg = "添加属性值不能为空";
+                        return;
+                    }
+                    arr.push( $(check).next(":text").val() )
+                        flag = true;
+                        msg = "";
+                    })
+                    if(flag){
+                        a.push(arr);
                     }else{
                         /*if(!fla){
                             fla = true
                         }*/
                         if( $($(val).children("span[class='pca']").children("input:hidden")[7]).val() == 1){
-                          msg3 += "属性:"+ $($(val).children("span[class='pca']").children("input:hidden")[0]).val()+"的属性值必须填 ! "
+                            msg3 += "属性:"+ $($(val).children("span[class='pca']").children("input:hidden")[0]).val()+"的属性值必须填 ! ";
                         }
                     }
-                })
-            if(msg != ""){
-                     $("#table").hide()
-                     $("#pltab").hide()
-                     this.xssxList = []
-                     this.showMsg(msg)
-                     return
-             }
-             if(msg3 != ""){
-                     $("#table").hide()
-                     $("#pltab").hide()
-                     this.xssxList = []
-                     this.showMsg(msg3)
-                     return
-             }
-             if(fla){
-                 //this.showMsg("请先选择基本属性或移除")
-                  //$("#table").hide()
+                });
+                if(msg != ""){
+                    $("#table").hide();
+                    $("#pltab").hide();
+                    this.xssxList = [];
+                    this.showMsg(msg);
+                    return;
+                }
+                if(msg3 != ""){
+                    $("#table").hide();
+                    $("#pltab").hide();
+                    this.xssxList = [];
+                    this.showMsg(msg3);
+                    return;
+                }
+                if(fla){
+                    //this.showMsg("请先选择基本属性或移除")
+                    //$("#table").hide()
                     // $("#pltab").hide()
-                     //this.xssxList = []
-                 //return
-             }
-            //销售属性的遍历 及 判空
-            let msg2 = ""
+                    //this.xssxList = []
+                    //return
+                }
+                //销售属性的遍历 及 判空
+                let msg2 = "";
 
-           $("#base div[id!=\"0\"]").each(function(index,v){
-                     let name = ''
-                     let arr = new Array()
-                     flag = false
+                $("#base div[id!=\"0\"]").each(function(index,v){
+                    let name = '';
+                    let arr = new Array();
+                    flag = false;
                 $(v).children("input").each(function(i,val){
-
                     if( i == 0 && $.trim( $(val).val() ) == ""){
-                        msg2 = "属性名称不能为空!"
-                         $("#table").hide()
-                         $("#pltab").hide()
-                         this.xssxList = []
+                        msg2 = "属性名称不能为空!";
+                        $("#table").hide();
+                        $("#pltab").hide();
+                        this.xssxList = [];
                         //this.showMsg("温馨提示",'属性名称不能为空');
-                        return 
+                        return; 
                     }
                     //获取属性名
                     if(i == 0){
-                        name = $(val).val()
+                        name = $(val).val();
                     }
                     //遍历属性值存进数组
                     if( i >= 1 && $.trim( $(val).val() ) != ""){
-                        arr.push( $(val).val() )
-                        flag = true
+                        arr.push( $(val).val() );
+                        flag = true;
                     }
-                })
+                });
                 if(flag){
                     for(let n=0 ; n<arr.length-1 ; n++){
                         for(let m =1+n; m<arr.length ; m++){
                             if(arr[n] == arr[m]){
-                                msg2 = " 属性名:"+ name +"->属性值'"+arr[n]+"'已重复!"
-                                return 
+                                msg2 = " 属性名:"+ name +"->属性值'"+arr[n]+"'已重复!";
+                                return; 
                             }
-
                         }
                     }
-                    a.push(arr)
+                    a.push(arr);
                 }else{
-                    msg2 += "\n属性名:"+ name + "->属性值不能为空!"
-                    $("#table").hide()
-                     $("#pltab").hide()
-                     this.xssxList = []
+                    msg2 += "\n属性名:"+ name + "->属性值不能为空!";
+                    $("#table").hide();
+                    $("#pltab").hide();
+                    this.xssxList = [];
                     //this.showMsg("温馨提示",'属性值不能为空!');
-                    return
+                    return;
                 }     
-           })
-           if( msg2 != ''){
-            this.showMsg(msg2)
-            return
-           }
-           // 组合数的判断 ,没超出范围就求笛卡尔积
-           if(a.length > 0){
-                   let sum = 1
-                   $(a).each(function(ind,va){
-                        sum *= $(va).length
-                   })
-               if(sum > 600){
-                   this.showMsg("SKU组合不能超过600种! 现在组合数"+sum+"种");
+            });
+            if( msg2 != ''){
+                this.showMsg(msg2);
+                return;
+            }
+            // 组合数的判断 ,没超出范围就求笛卡尔积
+            if(a.length > 0){
+                let sum = 1;
+                $(a).each(function(ind,va){
+                    sum *= $(va).length;
+                });
+                if(sum > 600){
+                    this.showMsg("SKU组合不能超过600种! 现在组合数"+sum+"种");
                     $("#table").style.display="none";
-                     $("#pltab").style.display="none";
-                     this.xssxList = []
-                   return 
-               }
-               this.xssxList = this.multiCartesian(a); 
-               $("#table").show()
-               $("#pltab").show()
-               $("#div1").hide()
+                    $("#pltab").style.display="none";
+                    this.xssxList = [];
+                    return; 
+                }
+                this.xssxList = this.multiCartesian(a); 
+                $("#table").show();
+                $("#pltab").show();
+                $("#div1").hide();
             }else{
-                   this.showMsg("请先选择商品属性");
-                    $("#table").style.display="none";
-                     $("#pltab").style.display="none";
-                     this.xssxList = []
-                 }  
+                this.showMsg("请先选择商品属性");
+                $("#table").style.display="none";
+                $("#pltab").style.display="none";
+                this.xssxList = [];
+            }  
         },
         //删除基本属性
         closeProperty(event) { 
             let el = event.currentTarget;
-           if( $(el).parent().hasClass("baseSx") ){
-               //if( confirm( "确定删除该属性?")){
-                   $(el).parent().remove() 
-                   this.xssxList = []; 
-                  $("#table").hide()
-                  $("#pltab").hide()
-              // }      
-          // }else{
-                   //$(el).parent().remove()  
+            if( $(el).parent().hasClass("baseSx") ){
+                $(el).parent().remove();
+                this.xssxList = []; 
+                $("#table").hide();
+                $("#pltab").hide();
             }
-           /*if(  $("#base div[id!=\"0\"]").length == 0 ){
-                  this.xssxList = []; 
-                  $("#table").style.display="none";
-                     $("#pltab").style.display="none";
-                     
-                  $("#div1").show()
-           }*/
         },
         //删除新增销售属性
         closexssx(event) {
-                //alert(1)
-                  let el = event.currentTarget;
-                   $(el).parent().remove()  
-           
-         if(  $("#base div[id!=\"0\"]").length == 0 ){
-                  this.xssxList = []; 
-                  $("#table").hide()
-                 $("#pltab").hide()
-                  $("#div1").show()
-           }
-
+            let el = event.currentTarget;
+            $(el).parent().remove();  
+            if(  $("#base div[id!=\"0\"]").length == 0 ){
+                this.xssxList = []; 
+                $("#table").hide();
+                $("#pltab").hide();
+                $("#div1").show();
+            }
         },
         //删除spu列
         close(event,index) { 
-           // let el = event.currentTarget;
-             //$(el).parent().parent().children("td").remove()  
-             this.xssxList.splice(index, 1);
-           },
-         addProperty(){ 
-             if( $("#base div[id!=\"0\"]").length + this.sxlist.length > 3 )  {
+            this.xssxList.splice(index, 1);
+        },
+        addProperty(){ 
+            if( $("#base div[id!=\"0\"]").length + this.sxlist.length > 3 ) {
                 this.showMsg("销售属性总数最多4组!");
-                  return
-             }
-             var el = $("#0").clone(true,true).attr("id",++this.idnum).show()
-             el.prependTo($("#base"))
-             $("#div1").hide()    
-             $(".box2 .delete").on("click",this.closexssx)        
-         },
-
-         addItem() {
-           if(this.addpdflag){
-                this.showMsg("点击过于频繁")
-                return
+                return;
             }
-            this.addpdflag = true
+            var el = $("#0").clone(true,true).attr("id",++this.idnum).show();
+            el.prependTo($("#base"));
+            $("#div1").hide();    
+            $(".box2 .delete").on("click",this.closexssx);        
+        },
+        addItem() {
+            if(this.addpdflag){
+                this.showMsg("点击过于频繁");
+                return;
+            }
+            this.addpdflag = true;
             setTimeout(()=>{
-                this.addpdflag = false
-            },5000)
-
+                this.addpdflag = false;
+            },5000);
             if( $.trim(this.request.spuName) == '' ){
-                this.showMsg("请输入商品名称")
-                return
+                this.showMsg("请输入商品名称");
+                return;
             }
             if( this.request.spuName.length >= 50 ){
-                this.showMsg("商品名称不能超过50字")
-                return
+                this.showMsg("商品名称不能超过50字");
+                return;
             }
-              
             if( this.request.spuAd.length >= 50 ){
-                this.showMsg("商品广告词不能超过50字")
-                return
+                this.showMsg("商品广告词不能超过50字");
+                return;
             }
             if( this.request.spuKeyword.length >= 50 ){
-                this.showMsg("商品关键词不能超过50字")
-                return
+                this.showMsg("商品关键词不能超过50字");
+                return;
             }
             if( $.trim(this.request.spuShareUrl) == '' ){
-                this.showMsg("请输入有赞商品地址")
-                return
+                this.showMsg("请输入有赞商品地址");
+                return;
             }
             if( this.request.spuShareUrl.length >= 100 ){
-                this.showMsg("有赞商品地址不能超过100字")
-                return
+                this.showMsg("有赞商品地址不能超过100字");
+                return;
             }
-                   //品牌判空
+            //品牌判空
             if(this.request.spuBrandId < 0 ){
-              this.showMsg("请选择品牌")
-              return
+                this.showMsg("请选择品牌");
+                return;
             }
-
-             this.request.tagList = []
+            this.request.tagList = [];
             //类目标签
             if( this.tagsList.length == 0){
-                  this.showMsg("请选择展示类目标签")
-                  return
+                this.showMsg("请选择展示类目标签");
+                return;
             }
-              this.tagsList.forEach((per,index)=>{
-                   this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
-              })
+            this.tagsList.forEach((per,index)=>{
+                this.request.tagList.push( { "prpTagType": 100 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } );
+            });
             //人群标签
-           /*
+            /*
             if( this.personList.length == 0){
-                  this.showMsg("请选择人群标签")
-                  return
+                this.showMsg("请选择人群标签")
+                return
             }*/
-              this.personList.forEach((per,index)=>{
-                   this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
-              })
+            this.personList.forEach((per,index)=>{
+                this.request.tagList.push( { "prpTagType": 300 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } );
+            });
             //内容标签
             if( this.neirongList.length == 0){
-                  this.showMsg("请选择内容标签")
-                  return
+                this.showMsg("请选择内容标签");
+                return;
             }
-              this.neirongList.forEach((per,index)=>{
-                   this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } )
-              })
-
-                 //上榜理由
-            this.request.pcrList = []
+            this.neirongList.forEach((per,index)=>{
+                this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } );
+            });
+            //上榜理由
+            this.request.pcrList = [];
             if(this.shangb.length > 3 ){
-                this.showMsg("最多选择3个上榜理由")
-                return
-             }
+                this.showMsg("最多选择3个上榜理由");
+                return;
+            }
             this.shangb.forEach((data,index)=>{
-                  let val = this.shangbanglist.find(item=>item.keyValue == data)
-                  if(val != null){
+                let val = this.shangbanglist.find(item=>item.keyValue == data);
+                if(val != null){
                     this.request.pcrList.push( {"pcrReason": val.keyValue,"pcrSortNo":val.sortNo,"pcrSpuId":val.dictionnaryId, }  );
-                  }
-                    //data.keyValue+','+data.dictionnaryId+','+data.sortNo"
-                 })
-             this.createshangbanglist.forEach(data=>{
-                   if( $.trim(data.pcrReason) ){
-                      this.request.pcrList.push({"pcrReason": data.pcrReason,"pcrSortNo":-1,})
-                   }
-              })
-             if(this.request.pcrList.length > 3){
-                  this.showMsg("最多选择3个上榜理由")
-                  return
-             }
-
+                }
+            });
+            this.createshangbanglist.forEach(data=>{
+                if( $.trim(data.pcrReason) ){
+                    this.request.pcrList.push({"pcrReason": data.pcrReason,"pcrSortNo":-1,});
+                }
+            });
+            if(this.request.pcrList.length > 3){
+                this.showMsg("最多选择3个上榜理由");
+                return;
+            }
             //if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
                 //this.showMsg("专家观点不能少于30字")
                 //return
             //}
             if( this.request.spuExpertOption.length >= 100 ){
-                this.showMsg("专家观点不能超过100字")
-                return
+                this.showMsg("专家观点不能超过100字");
+                return;
             }
             if( this. request.spuPackingList.length >= 200 ){
-                this.showMsg("包装清单不能超过200字")
-                return
+                this.showMsg("包装清单不能超过200字");
+                return;
             }
-            let sxmsg = ""
+            let sxmsg = "";
             this.radioList.forEach(i =>{
-               if(i.pcaRequired == 1){
+                if(i.pcaRequired == 1){
                     if(!i.pcaCreator){
-                    sxmsg += "属性("+i.pcaName+")必须选择!    "
-                  }
-               }
-            })
+                        sxmsg += "属性("+i.pcaName+")必须选择!    ";
+                    }
+                }
+            });
             this.boxList.forEach(i =>{
-               let f = false
-               if(i.pcaRequired == 1){
-                  i.pcaoList.forEach(pcao=>{
-                     if(pcao.checked){
-                       f = true
-                     }
-                  })
-                  if(!f){
-                      sxmsg += "属性("+i.pcaName+")必须选择!    "
-                  }
-               }
-            })
+                let f = false;
+                if(i.pcaRequired == 1){
+                    i.pcaoList.forEach(pcao=>{
+                        if(pcao.checked){
+                            f = true;
+                        }
+                    });
+                    if(!f){
+                        sxmsg += "属性("+i.pcaName+")必须选择!    ";
+                    }
+                }
+            });
             this.selectList.forEach(i =>{
-               if(i.pcaRequired == 1){
-                   if(i.pcaCreator == -1){
-                    sxmsg += "属性("+i.pcaName+")必须选择!    "
-                  }
-               }
-            })
+                if(i.pcaRequired == 1){
+                    if(i.pcaCreator == -1){
+                        sxmsg += "属性("+i.pcaName+")必须选择!    ";
+                    }
+                }
+            });
             this.inputList.forEach(i =>{
-               if(i.pcaRequired == 1){
-                   if(!i.pcaCreator){
-                    sxmsg += "属性("+i.pcaName+")必须填!    "
-                  }
-               }
-            })
+                if(i.pcaRequired == 1){
+                    if(!i.pcaCreator){
+                        sxmsg += "属性("+i.pcaName+")必须填!    ";
+                    }
+                }
+            });
             this.textList.forEach(i =>{
-               if(i.pcaRequired == 1){
-                  if(!i.pcaCreator){
-                    sxmsg += "属性("+i.pcaName+")必须填!     "
-                  }
-               }
-            })
+                if(i.pcaRequired == 1){
+                    if(!i.pcaCreator){
+                        sxmsg += "属性("+i.pcaName+")必须填!     ";
+                    }
+                }
+            });
             if( sxmsg ){
-              this.showMsg(sxmsg)
-              return
+                this.showMsg(sxmsg);
+                return;
             }
             //通用属性值
-            this.request.spuOptionList = []
-            let spuOptionList = []      
+            this.request.spuOptionList = [];
+            let spuOptionList = [];     
             this.radioList.forEach(i =>{
-                  if(i.pcaCreator){
+                if(i.pcaCreator){
                     spuOptionList.push({
-                          "ppaoAtrrId": i.pcaId,
-                          "ppaoAtrrValue": i.pcaCreator.pcaoName,
-                          "ppaoOptionId": i.pcaCreator.pcaoId,
-                          "ppaoSortNo": i.pcaCreator.pcaoSortNo,
-                          //"ppaoSpuId": 0,
-                          "ppaoType": i.pcaInputType,
-                        })
-                  }
-            })
+                        "ppaoAtrrId": i.pcaId,
+                        "ppaoAtrrValue": i.pcaCreator.pcaoName,
+                        "ppaoOptionId": i.pcaCreator.pcaoId,
+                        "ppaoSortNo": i.pcaCreator.pcaoSortNo,
+                        //"ppaoSpuId": 0,
+                        "ppaoType": i.pcaInputType,
+                    });
+                }
+            });
             this.boxList.forEach(i =>{
-                  i.pcaoList.forEach(pcao=>{
-                     if(pcao.checked){
-                      spuOptionList.push({
-                          "ppaoAtrrId": i.pcaId,
-                          "ppaoAtrrValue": pcao.pcaoName,
-                          "ppaoOptionId": pcao.pcaoId,
-                          "ppaoSortNo": pcao.pcaoSortNo,
-                          //"ppaoSpuId": 0,
-                          "ppaoType": i.pcaInputType,
-                        })
-                     }
-                  })
-            })
+                i.pcaoList.forEach(pcao=>{
+                    if(pcao.checked){
+                        spuOptionList.push({
+                            "ppaoAtrrId": i.pcaId,
+                            "ppaoAtrrValue": pcao.pcaoName,
+                            "ppaoOptionId": pcao.pcaoId,
+                            "ppaoSortNo": pcao.pcaoSortNo,
+                            //"ppaoSpuId": 0,
+                            "ppaoType": i.pcaInputType,
+                        });
+                    }
+                });
+            });
             this.selectList.forEach(i =>{
-                   if(i.pcaCreator != -1){
-                       spuOptionList.push({
-                          "ppaoAtrrId": i.pcaId,
-                          "ppaoAtrrValue": i.pcaCreator.pcaoName,
-                          "ppaoOptionId": i.pcaCreator.pcaoId,
-                          "ppaoSortNo": i.pcaCreator.pcaoSortNo,
-                          //"ppaoSpuId": 0,
-                          "ppaoType": i.pcaInputType,
-                        })
-               }
-            })
+                if(i.pcaCreator != -1){
+                    spuOptionList.push({
+                        "ppaoAtrrId": i.pcaId,
+                        "ppaoAtrrValue": i.pcaCreator.pcaoName,
+                        "ppaoOptionId": i.pcaCreator.pcaoId,
+                        "ppaoSortNo": i.pcaCreator.pcaoSortNo,
+                        //"ppaoSpuId": 0,
+                        "ppaoType": i.pcaInputType,
+                    });
+                }
+            });
             this.inputList.forEach(i =>{
-                   if(i.pcaCreator){
+                if(i.pcaCreator){
                     spuOptionList.push({
-                          "ppaoAtrrId": i.pcaId,
-                          "ppaoAtrrValue": i.pcaCreator,
-                          //"ppaoOptionId": i.pcaCreator.pcaoId,
-                          "ppaoSortNo": 0,
-                          //"ppaoSpuId": 0,
-                          "ppaoType": i.pcaInputType,
-                        })
-               }
-            })
+                        "ppaoAtrrId": i.pcaId,
+                        "ppaoAtrrValue": i.pcaCreator,
+                        //"ppaoOptionId": i.pcaCreator.pcaoId,
+                        "ppaoSortNo": 0,
+                        //"ppaoSpuId": 0,
+                        "ppaoType": i.pcaInputType,
+                    });
+                }
+            });
             this.textList.forEach(i =>{
-                  if(i.pcaCreator){
+                if(i.pcaCreator){
                     spuOptionList.push({
-                          "ppaoAtrrId": i.pcaId,
-                          "ppaoAtrrValue": i.pcaCreator,
-                          //"ppaoOptionId": i.pcaCreator.pcaoId,
-                          "ppaoSortNo": 0,
-                          //"ppaoSpuId": 0,
-                          "ppaoType": i.pcaInputType,
-                        })
-                  }
-            })
-            this.request.spuOptionList = spuOptionList 
+                        "ppaoAtrrId": i.pcaId,
+                        "ppaoAtrrValue": i.pcaCreator,
+                        //"ppaoOptionId": i.pcaCreator.pcaoId,
+                        "ppaoSortNo": 0,
+                        //"ppaoSpuId": 0,
+                        "ppaoType": i.pcaInputType,
+                    });
+                }
+            });
+            this.request.spuOptionList = spuOptionList; 
+            this.request.spuCatId = this.par[5];
+            let item = $("#itemList>tr");
+            let spuName  = this.request.spuName;
+            let spulist = [];
+            let bname = $("span[class='pca']");
+            let base = $(".baseSx");
+            let xsval =  $("#base div[id!=\"0\"]");
+            let leimuid = this.request.spuCatId ;
+            let msg = "";
 
-              this.request.spuCatId = this.par[5];
-              let item = $("#itemList>tr")
-              let spuName  = this.request.spuName
-              let spulist = []
-              let bname = $("span[class='pca']")
-              let base = $(".baseSx")
-              let xsval =  $("#base div[id!=\"0\"]")
-              let leimuid = this.request.spuCatId 
-              let msg = ""
-
-              let yjg = this.yj
-              let sjg = this.sj
-              let kcs = this.kc
-              let skubm2 = this.skubm
-             // let erpkc2 = this.erpkc
-             if( $("#div1").is(":visible") &&  $("#table").is( ":hidden") ){ 
-                   // alert("单一sku")
-                    let msg2 = ""
-                    let baseList = []
-                    let attrList = [] 
-                    let pcaoList = []
-                    let skuname = ''
-                    //获取每列spu数据         
-                   $(base).each(function(d,zc){
-                      let flag = true
-                       //alert($($(zc).children("span[class='pcao']").children("input:checked")).length)
-           // alert($($($(".addsxxx")[d]).children("input:checked")).length)
-                      //匹配基本属性
-                      if( $($(zc).children("span[class='pcao']").children("input:checked")).length +  $($($(".addsxxx")[d]).children("input:checked")).length > 1 ){
-                                   msg2 = "属性名称->"+ $($(bname[d]).children("input:hidden")[0]).val()+":不是单一的sku,请先生成SKU组合"
-                                   return
-                      }else if($($(zc).children("span[class='pcao']").children("input:checked")).length == 1 && $($($(".addsxxx")[d]).children("input:checked")).length == 0){
-                        //alert("基本")
-                            let list =  $(zc).children("span[class='pcao']").children("input:checked").siblings("input:hidden")
-                             let basesx = { //基本属性对象
-                                      "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(), //基本属性ID
-                                      "psaoAtrrValue": $($(zc).children("span[class='pcao']").children("input:checked")).val(),  // 选项值  
-                                      "psaoOptionId": $(list[0]).val() ,          // 属性值ID
-                                      "psaoSortNo": $(list[2]).val(),            // 
-                                      "psaoType": 2              //  2 
-                                    }
-                                baseList.push(basesx)
-                                skuname += $($(zc).children("span[class='pcao']").children("input:checked")).val()+","
-                       //添加属性被选中,基本属性没有选中
-                      }else if( $($($(".addsxxx")[d]).children("input:checked")).length == 1 && $($(zc).children("span[class='pcao']").children("input:checked")).length == 0){ 
-                               //上面不匹配，确定为新增基础属性
-                               //alert("添加")
-                        
-                               if( $.trim($($($(".addsxxx")[d]).children("input:checked").next(":text")).val() ) == "" ){
-                                       //alert(1)
-                                       msg2 = $($(bname[d]).children("input:hidden")[0]).val()+":添加属性值不能为空"
-                                       return false
-                               }
-                             let newbase =  {
-                                      "pcaoAtrrId":  $($(bname[d]).children("input:hidden")[1]).val(),//需要属性id
-                                      "pcaoIcon": 0,
-                                      "pcaoName": $($($(".addsxxx")[d]).children("input:checked").next(":text")).val(),
-                                      "pcaoSortNo": 0,
-                                      "pcaoUseFlag": 1,
-                                      "pcaoValue": $($($(".addsxxx")[d]).children("input:checked").next(":text")).val(),
-                                      "skuOptionList": [
-                                        {
-                                          "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(),//属性id
-                                          "psaoAtrrValue": $($($(".addsxxx")[d]).children("input:checked").next(":text")).val(),
-                                          "psaoSortNo": 0,
-                                          "psaoType": 2
-                                        }
-                                      ]
-                                    }
-                                     pcaoList.push(newbase)
-                                      skuname += $($($(".addsxxx")[d]).children("input:checked").next(":text")).val()+","
-                                // 基本属性和添加属性没有选的时候.判断属性是否必须填
-                            }/*else if( $($(zc).children("span[class='pcao']").children("input:checked")).length == 0 &&  $($($(".addsxxx")[d]).children("input:checked")).length == 0
-                                       && $($(bname[d]).children("input:hidden")[7]).val() == 1 ){
-
-                                       msg2 = "属性名(" +$($(bname[d]).children("input:hidden")[0]).val() +")的属性值必须填 ! "
-                                       return false
-                               }*/
-                      })
-
-                     if( msg2 != ''){
-                        this.showMsg(msg2)
-                        return
-                     }
-
-                     if(  this.sj == '' ){
-                        this.showMsg('请输入丰盛榜售价')
-                        return
-                    }
-                      /* if( this.yj == '' ){
-                        this.showMsg('请输入原价')
-                        return
+            let yjg = this.yj;
+            let sjg = this.sj;
+            let kcs = this.kc;
+            let skubm2 = this.skubm;
+            // let erpkc2 = this.erpkc;
+            if( $("#div1").is(":visible") &&  $("#table").is( ":hidden") ){ 
+                let msg2 = "";
+                let baseList = [];
+                let attrList = [];
+                let pcaoList = [];
+                let skuname = '';
+                //获取每列spu数据         
+                $(base).each(function(d,zc){
+                    let flag = true;
+                    //匹配基本属性
+                    if( $($(zc).children("span[class='pcao']").children("input:checked")).length +  $($($(".addsxxx")[d]).children("input:checked")).length > 1 ){
+                        msg2 = "属性名称->"+ $($(bname[d]).children("input:hidden")[0]).val()+":不是单一的sku,请先生成SKU组合";
+                        return;
+                    }else if($($(zc).children("span[class='pcao']").children("input:checked")).length == 1 && $($($(".addsxxx")[d]).children("input:checked")).length == 0){
+                        let list =  $(zc).children("span[class='pcao']").children("input:checked").siblings("input:hidden");
+                        let basesx = { //基本属性对象
+                            "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(), //基本属性ID
+                            "psaoAtrrValue": $($(zc).children("span[class='pcao']").children("input:checked")).val(),  // 选项值  
+                            "psaoOptionId": $(list[0]).val() ,          // 属性值ID
+                            "psaoSortNo": $(list[2]).val(),            // 
+                            "psaoType": 2              //  2 
+                        };
+                        baseList.push(basesx);
+                        skuname += $($(zc).children("span[class='pcao']").children("input:checked")).val()+",";
+                        //添加属性被选中,基本属性没有选中
+                    }else if( $($($(".addsxxx")[d]).children("input:checked")).length == 1 && $($(zc).children("span[class='pcao']").children("input:checked")).length == 0){ 
+                        //上面不匹配，确定为新增基础属性
+                        if( $.trim($($($(".addsxxx")[d]).children("input:checked").next(":text")).val() ) == "" ){
+                            msg2 = $($(bname[d]).children("input:hidden")[0]).val()+":添加属性值不能为空";
+                            return false;
+                        }
+                        let newbase =  {
+                            "pcaoAtrrId":  $($(bname[d]).children("input:hidden")[1]).val(),//需要属性id
+                            "pcaoIcon": 0,
+                            "pcaoName": $($($(".addsxxx")[d]).children("input:checked").next(":text")).val(),
+                            "pcaoSortNo": 0,
+                            "pcaoUseFlag": 1,
+                            "pcaoValue": $($($(".addsxxx")[d]).children("input:checked").next(":text")).val(),
+                            "skuOptionList": [
+                                {
+                                    "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(),//属性id
+                                    "psaoAtrrValue": $($($(".addsxxx")[d]).children("input:checked").next(":text")).val(),
+                                    "psaoSortNo": 0,
+                                    "psaoType": 2
+                                }
+                            ]
+                        };
+                        pcaoList.push(newbase);
+                        skuname += $($($(".addsxxx")[d]).children("input:checked").next(":text")).val()+",";
+                        // 基本属性和添加属性没有选的时候.判断属性是否必须填
+                    }/*else if( $($(zc).children("span[class='pcao']").children("input:checked")).length == 0 &&  $($($(".addsxxx")[d]).children("input:checked")).length == 0
+                            && $($(bname[d]).children("input:hidden")[7]).val() == 1 ){
+                        msg2 = "属性名(" +$($(bname[d]).children("input:hidden")[0]).val() +")的属性值必须填 ! "
+                        return false
                     }*/
-                      
-                      if(  this.kc == '' ){
-                        this.showMsg('请输入展示库存')
-                        return
-                    }
-                     /* if(  this.erpkc == '' ){
-                        this.showMsg('请输入ERP库存')
-                        return
-                    }*/
-                    if(  this.skubm == '' ){
-                        this.showMsg('请输入SKU编码')
-                        return
-                    }
-    /*$(xsval).each(function(f,ze){
-                    
+                });
+                if( msg2 != '' ){
+                    this.showMsg(msg2);
+                    return;
+                }
+                if( this.sj == '' ){
+                    this.showMsg('请输入丰盛榜售价');
+                    return;
+                }
+                /* if( this.yj == '' ){
+                    this.showMsg('请输入原价')
+                    return
+                }*/
+                if( this.kc == '' ){
+                    this.showMsg('请输入展示库存');
+                    return;
+                }
+                /* if( this.erpkc == '' ){
+                    this.showMsg('请输入ERP库存');
+                    return;
+                }*/
+                if( this.skubm == '' ){
+                    this.showMsg('请输入SKU编码');
+                    return;
+                }
+                /*$(xsval).each(function(f,ze){
                     let count = 0
                     let pcaname = ""
                     let pcaval = ""
                     $(ze).children(":text").each(function(g,zf){
-                         if( g == 0){
+                        if( g == 0){
                             pcaname = $(zf).val()
-                         }
-                         if( count > 1) {
+                        }
+                        if( count > 1) {
                             msg = "销售属性不唯一,不是单一的sku"
                             return 
-                         }
-                         if( $.trim( $(zf).val() ) != ""  ){
-                             count++    
-                             }
-                         })
-
-                        let map = {
-                                          "optionList": [  //销售属性选项  
-                                            {
-                                              "pcaoName": $(zf).val(),  //  选项值
-                                              "pcaoSortNo": g,       // 排序号
-                                              "pcaoValue": $(zf).val(), //  选项值
-                                             
-                                              "skuOptionList": [    //sku属性选项
-                                                {
-                                                  "psaoAtrrValue": $(zf).val(), // 选项值  
-                                                  "psaoSortNo": g,//排序号
-                                                  "psaoType": 2  // 2
-                                                }
-                                              ]
-                                            }
-                                          ],
-                                          "pcaInputType": 4,    //  4
-                                          "pcaMemo": pcaname, // 备注
-                                          "pcaName": pcaname, // 销售属性名
-                                          "pcaRequired": 0,   // 0
-                                          "pcaSaleProp": 1,  // 1
-                                          "pcaSortNo": g,   // 排序号
-                                          "pcraCatId": leimuid,  //  类目ID 
-                                        }
-                                 skuname += pcaval+","
-                                 attrList.push(map)
-                    })*/
-                  skuname = skuname.substring(0,skuname.length-1)
-                  //alert(skuname+spuName )
-            let  sin = {   
-                        "pcaoList": pcaoList,
-                        "skuOptionList":baseList,
-                        "attrList": attrList,
-                        "skuAtrr": skuname ,          // 拼接属性
-                        "skuClassify": "i",     //   i
-                        "skuCode": skubm2,        //   sku编码
-                        "skuMarketSalePrice": yjg,   //   原价
-                        "skuName":  skuname+spuName  ,      //    拼接属性spu名字
-                        "skuNew": 1,   
-                        "skuOverseas": 1,              // 1
-                        "skuSalePrice": sjg,            // 售价   
-                        "skuShowNum": kcs,            //  库存 $(el[4]).val()
-                        "skuUnit": "",         //  "" 
-                        "skuUrl": "",          //  ""
-                        "skuWhId": "",                //   ""
-                        "sku_remark": skuname ,     //  拼接属性 
-                        //"skuStockNum": erpkc2,  
-                    }
-                    //console.log(sin)
-                    spulist.push(sin)
-                    //console.log(spulist)
-} else {
-            //获取基本属性列表
-           /*  $(base).each(function(b,za){
-                  //alert( $($(za).children("input:hidden")[0]).val() )
-             })
-             //获取属性值
-             $("span[class='pcao']").each(function(d,zc){
-                
-             })
-             //获取新增属性
-              $(".addsxxx input:checked").each(function(e,zd){  
-                
-             })
-             //获取销售属性
-             $("#base div[id!=\"0\"] :text").each(function(c,zb){
-                    //alert($(zb).val())
-             })
-   
-         $(".addsxxx input:checked").each(function(r,y){  
-                alert( $(y).next(":text").val() )
-                             })*/
-                      if(this.xssxList.length == 0){
-                        this.showMsg("请先生成SKU组合")
-                        return
-                      }
-                      let xssx = this.xssxList 
-                      //alert(   $($(item)).length )
-                      $(item).each(function(a, z){
-                            let sin = {}
-                            let baseList = []
-                            let attrList = [] 
-                            let pcaoList = []
-                //alert(  xssx[a] )
-                           if( a < $(item).length -2){
-                            //alert(  xssx[a] )
-                            //获取每列spu数据
-                               let el =  $(z).children("td").children("input")
-                                
-                               //let zhi = $(el[0]).val().split(",")
-                               //alert(xssx[a])
-                               //取每一行的sku组合的值
-                               let s = xssx[a]+""
-                               let zhi = s.split(",")
-                               let  ii = 0
-               $(base).each(function(d,zc){
-                      let flag = true
-                      //匹配基本属性
-                  if( $($(zc).children("span[class='pcao']").children("input:checked")).length > 0 || 
-                      $($(zc).children("span[class='addsxxx']").children("input:checked")).length > 0 ){
-                     $(zc).children("span[class='pcao']").children("input:checked").each(function(b,za){
-                              if($(za).val()==zhi[ii] ){
-                               // alert($(za).siblings("input:hidden").length)
-                               let list = $(za).siblings("input:hidden")
-                               //alert($($(bname[d]).children("input:hidden")[1]).val()) 属性名相关参数
-                               let basesx = { //基本属性对象
-                                      "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(), //基本属性ID
-                                      "psaoAtrrValue": zhi[ii],  // 选项值  
-                                      "psaoOptionId": $(list[0]).val() ,          // 属性值ID
-                                      "psaoSortNo": $(list[2]).val(),            // 
-                                      "psaoType": 2              //  2 
-                                    }
-                                baseList.push(basesx)
-                                ++ii
-                                flag = false
-                                return false
-                              }
-                      })
-                  
-                  //上面不匹配，确定为新增基础属性
-            if( flag )   {
-                     let newbase =  {
-                                      "pcaoAtrrId":  $($(bname[d]).children("input:hidden")[1]).val(),//需要属性id
-                                      "pcaoIcon": 0,
-                                      "pcaoName": zhi[ii],
-                                      "pcaoSortNo": 0,
-                                      "pcaoUseFlag": 1,
-                                      "pcaoValue": zhi[ii],
-                                      "skuOptionList": [
-                                        {
-                                          "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(),//属性id
-                                          "psaoAtrrValue": zhi[ii],
-                                          "psaoSortNo": 0,
-                                          "psaoType": 2
-                                        }
-                                      ]
-                                    }
-                                     pcaoList.push(newbase)
-                                     ++ii
-                            }
-                  }
-
-              })
-                /*alert($(base).length)
-                alert($(xsval).length)
-                 alert($(bname).length)
-                 alert($(zhi).length)*/
-               //销售属性的匹配
-               let len = $(base).length
-               $(xsval).each(function(f,ze){
-                    let optionList = []
-                    $(ze).children(":text").each(function(g,zf){
-                         if(g > 0 ){
-                             if($(zf).val() == zhi[f+ii] ){
-                                //匹配成功
-                                 //alert($($(ze).children(":text")[0]).val()) //销售属性名称
-                                 //alert($(zf).val())
-                                 //let optionList = []
-                                 let map = {
-                                          "optionList": [  //销售属性选项  
-                                            {
-                                              "pcaoName": zhi[f+ii],  //  选项值
-                                              "pcaoSortNo": g,       // 排序号
-                                              "pcaoValue": zhi[f+ii], //  选项值
-                                             
-                                              "skuOptionList": [    //sku属性选项
-                                                {
-                                                  "psaoAtrrValue": zhi[f+ii], // 选项值  
-                                                  "psaoSortNo": g,//排序号
-                                                  "psaoType": 2  // 2
-                                                }
-                                              ]
-                                            }
-                                          ],
-                                          "pcaInputType": 4,    //  4
-                                          "pcaMemo": zhi[f+ii], // 备注
-                                          "pcaName": $($(ze).children(":text")[0]).val(), // 销售属性名
-                                          "pcaRequired": 0,   // 0
-                                          "pcaSaleProp": 1,  // 1
-                                          "pcaSortNo": g,   // 排序号
-                                          "pcraCatId": leimuid,  //  类目ID 
-                                          "pcaAtrrType":3,//1-通用属性; 2-销售属性; 3-私有属性
-                                        }
-
-                                 attrList.push(map)
-                                 return false
-                             }
-                         }
-                    })
-               })
-                        /*       "skuOptionList": [
-                        {
-                          "psaoAtrrId": 0,             //基本属性ID
-                          "psaoAtrrValue": "string",  // 选项值  
-                          "psaoOptionId": 0,          // 属性值ID
-                          "psaoSortNo": 0,            // 
-                          "psaoType": 0              //  2 
                         }
-                      ],，*/
+                        if( $.trim( $(zf).val() ) != ""  ){
+                            count++    
+                        }
+                    })
 
-                
-                                 /* <input :value="i.pcaName" type="hidden" />
-                                  <input :value="i.pcaId" type="hidden" />
-                                  <input :value="i.pcaSortNo" type="hidden" />
-                                  <input :value="i.pcraCatId" type="hidden" />
-                                  <input :value="i.pcaMemo" type="hidden" />
-                                  <input :value="i.pcaInputType" type="hidden" />
-                                  <input :value="i.pcaSaleProp" type="hidden" />
-                                  <input :value="i.pcaRequired" type="hidden" />*/
-
-                                 /* <input :value="s.pcaoId" type="hidden" />
-                                  <input :value="s.pcaoName" type="hidden" />
-                                  <input :value="s.pcaoSortNo" type="hidden" />
-                                  <input :value="s.pcaoValue" type="hidden" />*/
-
-                          //销售属性
-                       /*{
-                          "optionList": [  //销售属性选项  
-                               {
-                                  "pcaoName": "string",  //  选项值
-                                   "pcaoSortNo": 0,       // 排序号
-                                   "pcaoValue": "string", //  选项值
-                                   "skuOptionList": [    //sku属性选项
-                                      {
-                                           "psaoAtrrValue": "string", // 选项值  
-                                           "psaoSortNo": 0,//排序号
-                                           "psaoType": 0  // 2
-                                      }
-                                                    ]
-                                }
-                                      ],
-                                      "pcaInputType": 0,    //  4
-                                      "pcaMemo": "string", // 备注
-                                      "pcaName": "string", // 销售属性名
-                                      "pcaRequired": 0,   // 0
-                                      "pcaSaleProp": 0,  // 1
-                                      "pcaSortNo": 0,   // 排序号
-                                      "pcraCatId": 0,  //  类目ID 
-                                }*/
-
-            /*                     "pcaoList": [
+                    let map = {
+                        "optionList": [  //销售属性选项  
+                            {
+                                "pcaoName": $(zf).val(),  //  选项值
+                                "pcaoSortNo": g,       // 排序号
+                                "pcaoValue": $(zf).val(), //  选项值
+                                "skuOptionList": [    //sku属性选项
                                     {
-                                      "pcaoAtrrId": 0,//需要属性id
-                                      "pcaoIcon": 0,
-                                      "pcaoName": "string",
-                                      "pcaoSortNo": 0,
-                                      "pcaoUseFlag": 0,
-                                      "pcaoValue": "string",
-                                      "skuOptionList": [
-                                        {
-                                          "psaoAtrrId": 0,属性id
-                                          "psaoAtrrValue": "string",
-                                          "psaoSortNo": 0,
-                                          "psaoType": 0
-                                        }
-                                      ]
+                                        "psaoAtrrValue": $(zf).val(), // 选项值  
+                                        "psaoSortNo": g,//排序号
+                                        "psaoType": 2  // 2
                                     }
-                                  ],
-                            */
-                            
-                    if( $(el[2]).val() == ''){
-                        msg += "第"+$(el[0]).val()+"行: 未填写丰盛榜售价_________________"
-                        //return
+                                ]
+                            }
+                        ],
+                        "pcaInputType": 4,    //  4
+                        "pcaMemo": pcaname, // 备注
+                        "pcaName": pcaname, // 销售属性名
+                        "pcaRequired": 0,   // 0
+                        "pcaSaleProp": 1,  // 1
+                        "pcaSortNo": g,   // 排序号
+                        "pcraCatId": leimuid,  //  类目ID 
                     }
-                    /*if( $(el[3]).val() == ''){
-                        msg += "第"+$(el[0]).val()+"行: 未填写原价____________"
-                        //return
-                    }*/
-                    if( $(el[4]).val() == ''){
-                        msg += "第"+$(el[0]).val()+"行: 未填写展示库存_________________"
-                        //return
-                    }
-                   /* if( $(el[5]).val() == ''){
-                        msg += "第"+$(el[0]).val()+"行: 未填写ERP实际库存___________"
-                        //return
-                    }        */
-                    if( $(el[6]).val() == ''){
-                        msg += "第"+$(el[0]).val()+"行: 未填写sku编码_________________"
-                        //return
-                    }
-                    if(msg){
-                        return
-                    }
-                            
-              sin = {   
-                        "pcaoList": pcaoList,
-                        "skuOptionList":baseList,
-                        "attrList": attrList,
-                        "skuAtrr": $(el[1]).val() ,          // 拼接属性
-                        "skuClassify": "i",     //   i
-                        "skuCode": $(el[5]).val(),        //   sku编码
-                        "skuMarketSalePrice": $(el[3]).val(),   //   原价
-                        "skuName":  $(el[1]).val()+spuName  ,      //    拼接属性spu名字
-                        "skuNew": 1,   
-                        "skuOverseas": 1,              // 1
-                        "skuSalePrice": $(el[2]).val(),            // 售价   
-                        "skuStockNum": $(el[4]).val(),            //  库存 $(el[4]).val()
-                        "skuUnit": "",         //  "" 
-                        "skuUrl": "",          //  ""
-                        "skuWhId": "",                //   ""
-                        "sku_remark": $(el[1]).val() ,     //  拼接属性
-                        "skuShowNum": $(el[4]).val(),  //展示库存
-
-                    }
-                    //console.log(sin)
-                    spulist.push(sin)
-                    //console.log(spulist)
-           }      
-      })
-}
-      if( msg != ''){
-              this.showMsg(msg)
-              return
-      }
-       //sku
-      this.request.skuList = spulist
- 
-    /* if(this.shangb.length == 0 ){
-            this.showMsg("上榜理由不能为空")
-            return
-         }*/
-         //商品图片判空
-        for(let i = 0;i<this.request.resourceList.length;i++){
-          if(this.request.resourceList[i]==null){
-             this.request.resourceList.splice(i,1)
-             i--
-          }
-        }
-        if(this.request.resourceList.length == 0 ){
-            this.showMsg("商品图片至少上传一张")
-            return
-         }
-      
-    //保消类型
-         let arr = [];
-          
-         $(".insu input:checked").each(function(i , v){
-             //let ar = {"piInsuranceId": '',"piInsurance":'',"piSort":'', }
-               let ar = $(v).val().split(",")
-               let av = {"piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2],"piDesc":ar[3], }//
-               arr.push(av)
-         })
-          this.createinsurancelist.forEach(data=>{
-               if($.trim(data.keyValue) && $.trim(data.description) ){
-                   let av = {"piInsurance":data.keyValue,"piDesc":data.description, }
-                   arr.push(av)
-               }
-          })
-           if( arr .length > 5){
-              this.showMsg("消保类型新增和库中勾选的总和不得超过5条!")
-              return
+                    skuname += pcaval+","
+                    attrList.push(map)
+                })*/
+                skuname = skuname.substring(0,skuname.length-1);
+                let sin = {   
+                    "pcaoList": pcaoList,
+                    "skuOptionList":baseList,
+                    "attrList": attrList,
+                    "skuAtrr": skuname ,          // 拼接属性
+                    "skuClassify": "i",     //   i
+                    "skuCode": skubm2,        //   sku编码
+                    "skuMarketSalePrice": yjg,   //   原价
+                    "skuName":  skuname+spuName  ,      //    拼接属性spu名字
+                    "skuNew": 1,   
+                    "skuOverseas": 1,              // 1
+                    "skuSalePrice": sjg,            // 售价   
+                    "skuShowNum": kcs,            //  库存 $(el[4]).val()
+                    "skuUnit": "",         //  "" 
+                    "skuUrl": "",          //  ""
+                    "skuWhId": "",                //   ""
+                    "sku_remark": skuname ,     //  拼接属性 
+                    //"skuStockNum": erpkc2,  
+                }
+                //console.log(sin)
+                spulist.push(sin);
+                //console.log(spulist)
+            } else {
+                //获取基本属性列表
+                /*$(base).each(function(b,za){
+                })
+                //获取属性值
+                $("span[class='pcao']").each(function(d,zc){
+                    
+                })
+                //获取新增属性
+                $(".addsxxx input:checked").each(function(e,zd){  
+                    
+                })
+                //获取销售属性
+                $("#base div[id!=\"0\"] :text").each(function(c,zb){
+                })
+    
+                $(".addsxxx input:checked").each(function(r,y){  
+                })*/
+                if(this.xssxList.length == 0){
+                    this.showMsg("请先生成SKU组合");
+                    return;
+                }
+                let xssx = this.xssxList; 
+                $(item).each(function(a, z){
+                    let sin = {};
+                    let baseList = [];
+                    let attrList = [];
+                    let pcaoList = [];
+                    if( a < $(item).length -2){
+                        //获取每列spu数据
+                        let el =  $(z).children("td").children("input");
+                        //取每一行的sku组合的值
+                        let s = xssx[a]+"";
+                        let zhi = s.split(",");
+                        let  ii = 0;
+                        $(base).each(function(d,zc){
+                            let flag = true;
+                            //匹配基本属性
+                            if( $($(zc).children("span[class='pcao']").children("input:checked")).length > 0 || $($(zc).children("span[class='addsxxx']").children("input:checked")).length > 0 ){
+                                $(zc).children("span[class='pcao']").children("input:checked").each(function(b,za){
+                                    if( $(za).val()==zhi[ii] ){
+                                        let list = $(za).siblings("input:hidden");
+                                        let basesx = { //基本属性对象
+                                            "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(), //基本属性ID
+                                            "psaoAtrrValue": zhi[ii],  // 选项值  
+                                            "psaoOptionId": $(list[0]).val() ,  // 属性值ID
+                                            "psaoSortNo": $(list[2]).val(),     // 
+                                            "psaoType": 2    //  2 
+                                        }
+                                        baseList.push(basesx);
+                                        ++ii;
+                                        flag = false;
+                                        return false;
+                                    }
+                                });
+                                //上面不匹配，确定为新增基础属性
+                                if( flag ) {
+                                    let newbase =  {
+                                        "pcaoAtrrId":  $($(bname[d]).children("input:hidden")[1]).val(),//需要属性id
+                                        "pcaoIcon": 0,
+                                        "pcaoName": zhi[ii],
+                                        "pcaoSortNo": 0,
+                                        "pcaoUseFlag": 1,
+                                        "pcaoValue": zhi[ii],
+                                        "skuOptionList": [
+                                            {
+                                            "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(),//属性id
+                                            "psaoAtrrValue": zhi[ii],
+                                            "psaoSortNo": 0,
+                                            "psaoType": 2
+                                            }
+                                        ]
+                                    }
+                                    pcaoList.push(newbase);
+                                    ++ii;
+                                }
+                            }
+                        });
+                        //销售属性的匹配
+                        let len = $(base).length;
+                        $(xsval).each(function(f,ze){
+                            let optionList = [];
+                            $(ze).children(":text").each(function(g,zf){
+                                if(g > 0 ){
+                                    if($(zf).val() == zhi[f+ii] ){
+                                        //匹配成功
+                                        let map = {
+                                            "optionList": [  //销售属性选项  
+                                                {
+                                                    "pcaoName": zhi[f+ii],  //  选项值
+                                                    "pcaoSortNo": g,       // 排序号
+                                                    "pcaoValue": zhi[f+ii], //  选项值
+                                                    "skuOptionList": [    //sku属性选项
+                                                        {
+                                                        "psaoAtrrValue": zhi[f+ii], // 选项值  
+                                                        "psaoSortNo": g,//排序号
+                                                        "psaoType": 2  // 2
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "pcaInputType": 4,    //  4
+                                            "pcaMemo": zhi[f+ii], // 备注
+                                            "pcaName": $($(ze).children(":text")[0]).val(), // 销售属性名
+                                            "pcaRequired": 0,   // 0
+                                            "pcaSaleProp": 1,  // 1
+                                            "pcaSortNo": g,   // 排序号
+                                            "pcraCatId": leimuid,  //  类目ID 
+                                            "pcaAtrrType":3,//1-通用属性; 2-销售属性; 3-私有属性
+                                        };
+                                        attrList.push(map);
+                                        return false;
+                                    }
+                                }
+                            });
+                        });
+                        if( $(el[2]).val() == ''){
+                            msg += "第"+$(el[0]).val()+"行: 未填写丰盛榜售价_________________";
+                            //return
+                        }
+                        /*if( $(el[3]).val() == ''){
+                            msg += "第"+$(el[0]).val()+"行: 未填写原价____________"
+                            //return
+                        }*/
+                        if( $(el[4]).val() == ''){
+                            msg += "第"+$(el[0]).val()+"行: 未填写展示库存_________________";
+                            //return
+                        }
+                        /* if( $(el[5]).val() == ''){
+                            msg += "第"+$(el[0]).val()+"行: 未填写ERP实际库存___________"
+                            //return
+                        }        */
+                        if( $(el[6]).val() == ''){
+                            msg += "第"+$(el[0]).val()+"行: 未填写sku编码_________________";
+                            //return
+                        }
+                        if(msg){
+                            return;
+                        }
+                        sin = {   
+                            "pcaoList": pcaoList,
+                            "skuOptionList":baseList,
+                            "attrList": attrList,
+                            "skuAtrr": $(el[1]).val() ,          // 拼接属性
+                            "skuClassify": "i",     //   i
+                            "skuCode": $(el[5]).val(),        //   sku编码
+                            "skuMarketSalePrice": $(el[3]).val(),   //   原价
+                            "skuName":  $(el[1]).val()+spuName  ,      //    拼接属性spu名字
+                            "skuNew": 1,   
+                            "skuOverseas": 1,              // 1
+                            "skuSalePrice": $(el[2]).val(),            // 售价   
+                            "skuStockNum": $(el[4]).val(),            //  库存 $(el[4]).val()
+                            "skuUnit": "",         //  "" 
+                            "skuUrl": "",          //  ""
+                            "skuWhId": "",                //   ""
+                            "sku_remark": $(el[1]).val() ,     //  拼接属性
+                            "skuShowNum": $(el[4]).val(),  //展示库存
+                        }
+                        spulist.push(sin);
+                    }      
+                });
             }
-          this.request.piList = arr 
-         /*if(arr.length == 0 ){
-            this.showMsg("消保类型不能为空")
-            return
-         }*/
-         //上架时间
-      if( $(".radios input:checked").val() == 2 ){
-            if( this.time == ""){
-            this.showMsg("请输入上架时间")
-            return
-           }
-          if(new Date(this.time).getTime() - new Date().getTime() < -10000){
-                this.time = client.formateTimeNoSecond()
-           }
-           this.request.spuPlanShelvesDate = this.time
-      } else {
-           this.request.spuPlanShelvesDate = ""
-      } 
+            if( msg != ''){
+                this.showMsg(msg);
+                return;
+            }
+            //sku
+            this.request.skuList = spulist;
+            /* if(this.shangb.length == 0 ){
+                this.showMsg("上榜理由不能为空")
+                return
+            }*/
+            //商品图片判空
+            for(let i = 0;i<this.request.resourceList.length;i++){
+                if(this.request.resourceList[i]==null){
+                    this.request.resourceList.splice(i,1);
+                    i--;
+                }
+            }
+            if(this.request.resourceList.length == 0 ){
+                this.showMsg("商品图片至少上传一张");
+                return;
+            }
+            //保消类型
+            let arr = [];
+            $(".insu input:checked").each(function(i , v){
+                //let ar = {"piInsuranceId": '',"piInsurance":'',"piSort":'', }
+                let ar = $(v).val().split(",");
+                let av = {"piInsuranceId": ar[1],"piInsurance":ar[0],"piSort":ar[2],"piDesc":ar[3], };
+                arr.push(av);
+            });
+            this.createinsurancelist.forEach(data=>{
+                if($.trim(data.keyValue) && $.trim(data.description) ){
+                    let av = {"piInsurance":data.keyValue,"piDesc":data.description, };
+                    arr.push(av);
+                }
+            });
+            if( arr.length > 5 ){
+                this.showMsg("消保类型新增和库中勾选的总和不得超过5条!");
+                return;
+            }
+            this.request.piList = arr; 
+            /*if(arr.length == 0 ){
+                this.showMsg("消保类型不能为空")
+                return
+            }*/
+            //上架时间
+            if( $(".radios input:checked").val() == 2 ){
+                if( this.time == ""){
+                    this.showMsg("请输入上架时间");
+                    return;
+                }
+                if(new Date(this.time).getTime() - new Date().getTime() < -10000){
+                    this.time = client.formateTimeNoSecond();
+                }
+                this.request.spuPlanShelvesDate = this.time;
+            } else {
+                this.request.spuPlanShelvesDate = "";
+            } 
         
-         //this.request.spuAppSummary = this.request.spuPcSummary
-        if(this.yunfei == 0 && $.trim(this.request.spuFreight) == ''){
-             this.showMsg("请设置统一邮费的价格")
-             return
-        }
-         if(this.yunfei ==1 && this.request.spuCarriageId ==-1){
-             this.showMsg("请选择运费模板")
-             return
-        }
-         if(this.yunfei == 0){
-           this.request.spuCarriageId = -1
-        }else{
-          this.request.spuFreight = 0
-        }
-        client.postData( SPU_CREATE , this.request).then(data => {
-                this.isLoading = false
+            //this.request.spuAppSummary = this.request.spuPcSummary
+            if(this.yunfei == 0 && $.trim(this.request.spuFreight) == ''){
+                this.showMsg("请设置统一邮费的价格");
+                return;
+            }
+            if(this.yunfei ==1 && this.request.spuCarriageId ==-1){
+                this.showMsg("请选择运费模板");
+                return;
+            }
+            if(this.yunfei == 0){
+                this.request.spuCarriageId = -1;
+            }else{
+                this.request.spuFreight = 0;
+            }
+            //
+            client.postData( SPU_CREATE , this.request).then(data => {
+                this.isLoading = false;
                 if (data.code == 200) {
-                   this.isLoading = false
-                    //alert("新增成功")
+                    this.isLoading = false;
                     //this.showMsg("新增成功")
-                    this.spu.id = data.spuId
-                    this.spu.msg = "新增成功"
+                    this.spu.id = data.spuId;
+                    this.spu.msg = "新增成功";
                     this.expertEditId = '';
                     this.showAddDialog = true;
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
-              this.isLoading = false
-              this.addpdflag = false
-              this.showMsg("新增失败,请重试"+data.message);
-            })
-            
-    },
+                this.isLoading = false;
+                this.addpdflag = false;
+                this.showMsg("新增失败,请重试"+data.message);
+            });
+        },
         hideAddDialog(control) {
             this.expertEditId = '';
             this.showAddDialog = false;
@@ -2132,66 +1979,68 @@ export default {
                 setTimeout(() => {
                     //移除组件
                     this.destroyControlDialog = true;
-                }, 100)
+                }, 100);
                 setTimeout(() => {
                     //重新加入
                     this.destroyControlDialog = false;
-                }, 200)
+                }, 200);
                 //this.getList();
             }
         },
         //获取运费模板
-         getCarriageList() {
-          client.postData(  PCT_PCLIST , {}).then(data => {
+        getCarriageList() {
+            //
+            client.postData( PCT_PCLIST , {} ).then(data => {
                 if (data.code == 200) {
-                   this.carriageList = data.data
+                    this.carriageList = data.data;
                 } else {
-                    this.showMsg(data.msg)
+                    this.showMsg(data.msg);
                 }
             }, data => {
                 this.showMsg("获取运费模板失败,请刷新重试");
-            })
+            });
         },
         //获取消保类型
         getxbList() { 
-        client.postData(  SYSTEM_DICTIONARY  , {
-              "key": "",
-              "keyValue": "",
-              "page": {
-                "currentPage": 0,
-                "pageSize": 10,
-                "startIndex": 0,
-                "totalPage": 0,
-                "totalSize": 0
-              },
-              "parentCode": "product_insurance"
+            //
+            client.postData( SYSTEM_DICTIONARY , {
+                "key": "",
+                "keyValue": "",
+                "page": {
+                    "currentPage": 0,
+                    "pageSize": 10,
+                    "startIndex": 0,
+                    "totalPage": 0,
+                    "totalSize": 0
+                },
+                "parentCode": "product_insurance"
             }).then(data => {
                 if (data.code == 200) {
                     this.insurancelist = data.data;
                 } else {
-
                     this.showMsg(data.msg);
                 }
             }, data => {
-                 this.showMsg("获取消保类型信息失败,请刷新重试"+data.message);
-            })
+                this.showMsg("获取消保类型信息失败,请刷新重试"+data.message);
+            });
         },
         //获取上榜 理由
         getshangbangList() { 
-        client.postData(  SYSTEM_REASON , {}).then(data => {
+            //
+            client.postData( SYSTEM_REASON , {} ).then(data => {
                 if (data.code == 200) {
                     this.shangbanglist = data.data;
                 } else {
-
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.showMsg("获取上榜理由信息失败,请刷新重试");
-            })
+            });
         },
         //获取品牌
         getbrandList() { 
-        client.postData(  PBD_GET_LISTUSED , {}).then(data => {
+            //
+            client.postData( PBD_GET_LISTUSED , {} ).then(data => {
                 if (data.code == 200) {
                     let list = data.data;
                     for (let i = 0; i < list.length; i++) {
@@ -2199,18 +2048,16 @@ export default {
                         list[i].id = list[i].pbdId;
                     }
                     this.brandList = list;
-                   
+                    
                 } else {
-
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.showMsg("获取品牌信息失败,请刷新重试");
-            })
+            });
         },
-        //品牌回调
+        // 品牌回调
         selectTagStatusFunc(item) {
-            alert(item.id);
             if (item == '') {
                 this.searchOptions.existTag = '';
             } else {
@@ -2220,15 +2067,15 @@ export default {
         },
         // 弹出选择标签弹窗
         showTagDialog() {
-            this.tagsList = []
+            this.tagsList = [];
             this.showTagTreeSelect = !this.showTagTreeSelect;
         },
         showperDialog() {
-            this.personList = []
+            this.personList = [];
             this.showperTreeSelect = !this.showperTreeSelect;
         },
         showneiDialog() {
-            this.neirongList = []
+            this.neirongList = [];
             this.showneiTreeSelect = !this.showneiTreeSelect;
         },
         // 移除某个标签
@@ -2246,52 +2093,29 @@ export default {
         },
         //内容标签回调
         selectNeiFunc(list) {
-            /*if( list.length > 3 ){
-                alert("标签不能超过3个")
-                return
-            }*/
-            let flag = false 
-            this.neirongList = []
+            let flag = false; 
+            this.neirongList = [];
             this.data.labelIds = [];
-           /* list.forEach(item => {
-                if( item.children != "" ){
-                    flag = true
-                    return 
-                }
-                this.data.labelIds.push(item.id);
-            })*/
             if(flag){
-                 alert("请选择到最后一级标签。")
-               this.data.labelIds = []
-               this.neirongList = list;
-               return
+                this.showMsg("请选择到最后一级标签。");
+                this.data.labelIds = [];
+                this.neirongList = list;
+                return;
             }else{
-               this.neirongList = list;
-               this.showneiTreeSelect = !this.showneiTreeSelect;
+                this.neirongList = list;
+                this.showneiTreeSelect = !this.showneiTreeSelect;
             }
         },
         //人群标签回调
         selectPerFunc(list) {
-           /* if( list.length > 3 ){
-                alert("标签不能超过3个")
-                return
-            }*/
-             let flag = false 
+            let flag = false; 
             this.personList = [];
             this.data.labelIds = [];
-           /* list.forEach(item => {
-              //alert(item.children )
-                 if( item.children != "" ){
-                    flag = true
-                    return 
-                }
-                this.data.labelIds.push(item.id);
-            })*/
-             if(flag){
-                alert("请选择到最后一级标签。")
-               this.data.labelIds = []
-               this.tagsList = list;
-               return
+            if(flag){
+                this.showMsg("请选择到最后一级标签。");
+                this.data.labelIds = [];
+                this.tagsList = list;
+                return;
             }else{
                 this.personList = list;
                 this.showperTreeSelect = !this.showperTreeSelect;
@@ -2299,25 +2123,21 @@ export default {
         },
         // 选择标签回调
         selectTagFunc(list) {
-            /*if( list.length > 3 ){
-                alert("标签不能超过3个")
-                return
-            }*/
-            let flag = false 
-            this.tagsList = []
+            let flag = false;
+            this.tagsList = [];
             this.data.labelIds = [];
             list.forEach(item => {
-                 if( item.children != "" ){
-                    flag = true
-                    return 
+                if( item.children != "" ){
+                    flag = true;
+                    return;
                 }
                 this.data.labelIds.push(item.id);
-            })
+            });
             if(flag){
-                alert("请选择到最后一级标签。")
-               this.data.labelIds = []
-               this.tagsList = list;
-               return
+                this.showMsg("请选择到最后一级标签。");
+                this.data.labelIds = [];
+                this.tagsList = list;
+                return;
             }else{
                 this.tagsList = list;
                 this.showTagTreeSelect = !this.showTagTreeSelect;
@@ -2340,7 +2160,6 @@ export default {
             this.painIdsSelect = arr;
             this.data.painIds = arr;
         },
-        
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;
@@ -2381,13 +2200,14 @@ export default {
             data.labelIds = [];
             this.tagsList.forEach(item => {
                 data.labelIds.push(item.id);
-            })
+            });
             let url = COMPONENT_ADD;
             if (this.id != '') {
                 url = COMPONENT_EDIT;
                 data.componentId = this.id;
             }
             this.isLoading = true;
+            //
             client.postData(url, data).then(response => {
                 this.isLoading = false;
                 if (response.code != 200) {
@@ -2403,120 +2223,116 @@ export default {
             }, response => {
                 this.isLoading = false;
                 this.showMsg('网络连接错误');
-            })
+            });
         }
     },
-   
     created() {
-         this.getbrandList()
-         this.getxbList()
-         this.getshangbangList()
-         this.getCarriageList() 
+        this.getbrandList();
+        this.getxbList();
+        this.getshangbangList();
+        this.getCarriageList();
     },
     watch: {
         rad(val){
-           if(val == 1){
-             $("#selecttime").hide()
-           }else{
-             $("#selecttime").show()
-           }
+            if(val == 1){
+                $("#selecttime").hide();
+            }else{
+                $("#selecttime").show();
+            }
         },
         time(val) {
             if( val ) {
-               let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])))?$/
-              if(!reg.test(val)){
-                this.showMsg('日期格式不合法')
-                this.time = "" 
-                return
-              }
-            /* val = val.replace(/-/g,"/")
-             let end = new Date(val)
-             if(end <= new Date()){
-               this.showMsg('上架时间不可以小于现在时间')
-               this.time = "" 
-               return
-               }*/
+                let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])))?$/;
+                if(!reg.test(val)){
+                    this.showMsg('日期格式不合法');
+                    this.time = "";
+                    return;
+                }
+                /* val = val.replace(/-/g,"/")
+                let end = new Date(val)
+                if(end <= new Date()){
+                    this.showMsg('上架时间不可以小于现在时间')
+                    this.time = "" 
+                    return
+                }*/
             }
         },
-        "request.spuFreight":{　　
+        "request.spuFreight": {　　
           　handler(curVal,oldVal){　
-             if(curVal > 0 ){
-            this.request.spuCarriageId = -1
-            //setTimeout(() => {
-                this.yunfei = 0　
-            //}, 50)　　　　　　　　　　　
-            　}　　
-          },　　　　　　　　　　
-          deep:true　　　　　　　　
+                if(curVal > 0){
+                    this.request.spuCarriageId = -1;
+                    this.yunfei = 0;　
+                }　　
+            },　　　　　　　　　　
+            deep:true　　　　　　　　
         },
-        "request.spuCarriageId":{　　
-          　handler(curVal,oldVal){　
-            if(curVal != -1){　
-                this.request.spuFreight = 0.00　　　　　　　　　　　
-                this.yunfei = 1　
-             }　　　　　　　
-          },　　　　　　　　　　
-          deep:true　　　　　　　　
+        "request.spuCarriageId": {　　
+            handler(curVal,oldVal){　
+                if(curVal != -1){　
+                    this.request.spuFreight = 0.00;　　　　　　　　　　　
+                    this.yunfei = 1;　
+                }　　　　　　　
+            },　　　　　　　　　　
+            deep:true　　　　　　　　
         },
         cflag() {
-            //alert(this.spuCatId)
             let arr =[]
-            arr.push(this.par[3])
-            arr.push(this.par[4])
-            arr.push(this.par[5])
+            arr.push(this.par[3]);
+            arr.push(this.par[4]);
+            arr.push(this.par[5]);
+            //
             client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1,}  ).then(data => {
                 if (data.code == 200) {
                     data.data.forEach(sx =>{
-                      if(sx.pcaInputType==1){
-                        sx.pcaCreator = ""
-                        this.radioList.push(sx)
-                      }else if(sx.pcaInputType==2){
-                        sx.pcaoList.forEach(item=>{
-                          item.checked = false
-                        })
-                        this.boxList.push(sx)
-                      }else if(sx.pcaInputType==3){
-                        sx.pcaCreator = -1
-                        this.selectList.push(sx)
-                      }else if(sx.pcaInputType==4){
-                        sx.pcaCreator = ""
-                        this.inputList.push(sx)
-                      }else if(sx.pcaInputType==5){
-                        sx.pcaCreator = ""
-                        this.textList.push(sx)
-                      }
-                    })
+                        if(sx.pcaInputType==1){
+                            sx.pcaCreator = "";
+                            this.radioList.push(sx);
+                        }else if(sx.pcaInputType==2){
+                            sx.pcaoList.forEach(item=>{
+                                item.checked = false;
+                            });
+                            this.boxList.push(sx);
+                        }else if(sx.pcaInputType==3){
+                            sx.pcaCreator = -1;
+                            this.selectList.push(sx);
+                        }else if(sx.pcaInputType==4){
+                            sx.pcaCreator = "";
+                            this.inputList.push(sx);
+                        }else if(sx.pcaInputType==5){
+                            sx.pcaCreator = "";
+                            this.textList.push(sx);
+                        }
+                    });
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.showMsg("获取通用属性失败,请刷新重试");
-            })
-            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":2}  ).then(data => {
+            });
+            //
+            client.postData( GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":2} ).then(data => {
                 if (data.code == 200) {
                     this.sxlist = data.data;
                     if(this.sxlist.length >= 4){
-                        //$("#dkej").hide()
-                        $("#addsx").hide()
+                        $("#addsx").hide();
                     }   
                 } else {
                     this.showMsg(data.msg);
                 }
             }, data => {
                 this.showMsg("获取销售属性失败,请刷新重试");
-            })
+            });
         },
         par(){
-             //this.showMsg("watch"+this.par);
-             this.request.spuCatId = this.par[5];
-             this.spuCatId = this.par[3]+","+this.par[4]+","+this.par[5];
+            //this.showMsg("watch"+this.par);
+            this.request.spuCatId = this.par[5];
+            this.spuCatId = this.par[3]+","+this.par[4]+","+this.par[5];
         },
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
         },
         id() {
-            //console.log(this.id)
             this.data = {
                 "componentType": 16,
                 "painIds": [],
@@ -2531,12 +2347,13 @@ export default {
                 this.tagsList = [];
                 setTimeout(() => {
                     this.typesList = client.global.componentTypes;
-                }, 30)
+                }, 30);
                 return;
             }
             this.title = '编辑基本信息';
             this.isLoading = true;
             this.painList = [];
+            //
             client.postData(COMPONENT_GETWITHPAINS + '?componentId=' + this.id, {}).then(response => {
                 this.isLoading = false;
                 if (response.code == 200) {
@@ -2544,13 +2361,13 @@ export default {
                     if (data.painIds) {
                         data.painIds.forEach(item => {
                             this.painIdsSelect.push({ id: item, name: '' })
-                        })
+                        });
                         this.data.painIds = data.painIds;
                     }
                     data.tags.forEach(item => {
                         item.id = item.tagId;
                         item.text = item.tagName;
-                    })
+                    });
                     this.tagsList = data.tags;
                     this.getPainList();
                     this.data.title = data.title;
@@ -2561,58 +2378,57 @@ export default {
             }, data => {
                 this.isLoading = false;
                 this.showMsg('网络连接错误');
-            })
+            });
         }
     },
     ready() {   
         this.typesList = client.global.componentTypes;
         this.showPainListSelect = true;
         let dates = $("#createStartTime0");
-          dates.datetimepicker({
-          dateFormat: "yy-mm-dd",
-          timeFormat: 'HH:mm',
-          showMonthAfterYear: true,
-          changeMonth: true, 
-          changeYear: true,
-          buttonImageOnly: true,
-          stepHour: 1,
-          stepMinute: 1,
-          closeText: '确定',
-          prevText: '&#x3c;上月',
-          nextText: '下月&#x3e;',
-          currentText: '今天',
-          monthNames: ['一月','二月','三月','四月','五月','六月',
-          '七月','八月','九月','十月','十一月','十二月'],
-          monthNamesShort: ['一','二','三','四','五','六',
-          '七','八','九','十','十一','十二'],
-          dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
-          dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
-          dayNamesMin: ['日','一','二','三','四','五','六'],
-          weekHeader: '周',
-          showAnim:'highlight',
-          isClear:true, //是否显示清空 
-          isRTL: false,
-          onSelect: function(selectedDate){
-           //var option = this.id == "createStartTime2" ? "minDate" : "maxDate";
-           //dates.not(this).datepicker("option", option, selectedDate );
-          },
-          onClose: function(data,inst){   
-             dates.removeAttr("disabled")
-          },
-          beforeShow: function(){
-             dates.attr("disabled","disabled")
-              $(this).datepicker('option', 'minDate', new Date() )
-          },
-      });
-          dates.on("click",function(){
-            $(this).attr("disabled","disabled")
-          })
+        dates.datetimepicker({
+            dateFormat: "yy-mm-dd",
+            timeFormat: 'HH:mm',
+            showMonthAfterYear: true,
+            changeMonth: true, 
+            changeYear: true,
+            buttonImageOnly: true,
+            stepHour: 1,
+            stepMinute: 1,
+            closeText: '确定',
+            prevText: '&#x3c;上月',
+            nextText: '下月&#x3e;',
+            currentText: '今天',
+            monthNames: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+            monthNamesShort: ['一','二','三','四','五','六','七','八','九','十','十一','十二'],
+            dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+            dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+            dayNamesMin: ['日','一','二','三','四','五','六'],
+            weekHeader: '周',
+            showAnim:'highlight',
+            isClear:true, //是否显示清空 
+            isRTL: false,
+            onSelect: function(selectedDate){
+            //var option = this.id == "createStartTime2" ? "minDate" : "maxDate";
+            //dates.not(this).datepicker("option", option, selectedDate );
+            },
+            onClose: function(data,inst){   
+                dates.removeAttr("disabled")
+            },
+            beforeShow: function(){
+                dates.attr("disabled","disabled")
+                $(this).datepicker('option', 'minDate', new Date() )
+            },
+        });
+        dates.on("click",function(){
+            $(this).attr("disabled","disabled");
+        });
     },
     beforeDestroy() {
         this.showPainListSelect = false;
     }
 };
 </script>
+
 <style lang="less" scoped>
     .box{
         //margin-left: 2%;
@@ -2643,63 +2459,63 @@ export default {
         width: 80%
     }
     .clo{
-  //display: inline-block;
-  //margin-top: 0px;
- // margin-right: 0px;
-  width: 9px;
-  height: 9px;
-  //background-repeat: no-repeat !important;
-  //text-indent: -10000px;
-  outline: none;
-  background-image: url("../../../assets/global/img/remove-icon-small.png") !important; }
-.tab{
+        //display: inline-block;
+        //margin-top: 0px;
+        // margin-right: 0px;
+        width: 9px;
+        height: 9px;
+        //background-repeat: no-repeat !important;
+        //text-indent: -10000px;
+        outline: none;
+        background-image: url("../../../assets/global/img/remove-icon-small.png") !important; }
+    .tab{
         text-align: center;
         border-collapse: collapse;
     }
     table,table tr th, table tr td { text-align: center; border:1px solid   #A5A552; }
-.time-box{
-    display:-webkit-box;
-    display:-moz-box;
-    div{-webkit-box-flex: 1.0;-moz-box-flex: 1.0}
-    div:nth-child(2){line-height:34px;width:85px;margin:0 5px;text-align:center}
-}
-.delete{
-    //font-family:"Microsoft Yahei",simSun,Arial;
-    font-size:23px;
-   /* position: relative;
-    left: 65%;
-    top: -10%;*/
-    float: right;
-    margin-right:5%;
-    text-decoration:none
-}
-.delete:hover{
-    color:red
-}
-.dele{
-    //font-family:"Microsoft Yahei",simSun,Arial;
-    font-size:18px;
-   /* position: relative;
-    <!-- left: 65%; -->
-    top: -10%;*/
-    float: right;
-    margin-right:5%;
-    text-decoration:none
-}
-.dele:hover{
-    color:red
-}
-.delete2{
-    //font-family:"Microsoft Yahei",simSun,Arial;
-    font-size:23px;
-   /* position: relative;
-    left: 65%;
-    top: -10%;*/
-    //float: left;
-    margin-left:3%;
-    text-decoration:none
-}
-.delete2:hover{
-    color:red
-}
+    .time-box{
+        display:-webkit-box;
+        display:-moz-box;
+        div{-webkit-box-flex: 1.0;-moz-box-flex: 1.0}
+        div:nth-child(2){line-height:34px;width:85px;margin:0 5px;text-align:center}
+    }
+    .delete{
+        //font-family:"Microsoft Yahei",simSun,Arial;
+        font-size:23px;
+        /* position: relative;
+        left: 65%;
+        top: -10%;*/
+        float: right;
+        margin-right:5%;
+        text-decoration:none
+    }
+    .delete:hover{
+        color:red
+    }
+    .dele{
+        //font-family:"Microsoft Yahei",simSun,Arial;
+        font-size:18px;
+        /* position: relative;
+        <!-- left: 65%; -->
+        top: -10%;*/
+        float: right;
+        margin-right:5%;
+        text-decoration:none
+    }
+    .dele:hover{
+        color:red
+    }
+    .delete2{
+        //font-family:"Microsoft Yahei",simSun,Arial;
+        font-size:23px;
+        /* position: relative;
+        left: 65%;
+        top: -10%;*/
+        //float: left;
+        margin-left:3%;
+        text-decoration:none
+    }
+    .delete2:hover{
+        color:red
+    }
 </style>

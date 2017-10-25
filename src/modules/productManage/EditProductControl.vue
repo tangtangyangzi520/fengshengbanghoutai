@@ -389,7 +389,7 @@
                 <button type="button" class="btn default" @click="hideDialog()" >取消</button>
             </span>
         </m-alert>
-
+        <!-- 提示框 -->
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
@@ -1334,7 +1334,7 @@ export default {
         //内容标签回调
         selectNeiFunc(list) {
             /*if( list.length > 3 ){
-                alert("标签不能超过3个")
+                this.showMsg("标签不能超过3个")
                 return
             }*/
             let flag = false 
@@ -1348,7 +1348,7 @@ export default {
                 this.data.labelIds.push(item.id);
             })*/
             if(flag){
-                 alert("请选择到最后一级标签。")
+                 this.showMsg("请选择到最后一级标签。")
                this.data.labelIds = []
                this.neirongList = list;
                return
@@ -1360,14 +1360,13 @@ export default {
         //人群标签回调
         selectPerFunc(list) {
             /* if( list.length > 3 ){
-                alert("标签不能超过3个")
+                this.showMsg("标签不能超过3个")
                 return
             }*/
             let flag = false 
             this.personList = [];
             this.data.labelIds = [];
             /* list.forEach(item => {
-                //alert(item.children )
                 if( item.children != "" ){
                     flag = true
                     return 
@@ -1375,7 +1374,7 @@ export default {
                 this.data.labelIds.push(item.id);
             })*/
             if(flag){
-                alert("请选择到最后一级标签。")
+                this.showMsg("请选择到最后一级标签。")
                 this.data.labelIds = [];
                 this.tagsList = list;
                 return;
@@ -1387,7 +1386,7 @@ export default {
         // 选择标签回调
         selectTagFunc(list) {
             /*if( list.length > 3 ){
-                alert("标签不能超过3个")
+                this.showMsg("标签不能超过3个")
                 return
             }*/
             let flag = false;
@@ -1401,7 +1400,7 @@ export default {
                 this.data.labelIds.push(item.id);
             });
             if(flag){
-                alert("请选择到最后一级标签。")
+                this.showMsg("请选择到最后一级标签。")
                 this.data.labelIds = [];
                 this.tagsList = list;
                 return;
@@ -1571,7 +1570,6 @@ export default {
                                 })
                             })
                             })
-                    alert(arr)
                     client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1}  ).then(data => {
                         if (data.code == 200) {
                             data.data.forEach(sx =>{
@@ -1675,7 +1673,6 @@ export default {
                     }
                     this.uptime = data.data.spuOnShelvesTime
                     //this.stime = sjtime.getFullYear() + "-0"+(sjtime.getMonth()+1)+"-"+sjtime.getDate()
-                    //alert(stime)
                     //上榜理由回显
                     for(var i=0;i< data.data.reasonsList.length;i++){
                         if(data.data.reasonsList[i].pcrSortNo == -1){

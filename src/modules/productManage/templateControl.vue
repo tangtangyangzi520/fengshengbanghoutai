@@ -344,7 +344,7 @@ export default {
         },
         //品牌回调
         selectTagStatusFunc(item) {
-            alert(item.id);
+            //alert(item.id);
             if (item == '') {
                 this.searchOptions.existTag = '';
             } else {

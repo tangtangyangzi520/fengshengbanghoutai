@@ -181,8 +181,6 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            //console.log(list);
-            //alert(0);
             if (this.selectPicType == 2) {
                 this.data.halfFigure = list[0].url;
             } else if (this.selectPicType == 3) {

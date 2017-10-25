@@ -260,7 +260,6 @@ export default {
             this.painIdsSelect = arr;
             this.data.painIds = arr;
         },
-        
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;
@@ -367,7 +366,6 @@ export default {
         pflag() {
              client.postData(  APP_SPU_GET_ONE +"?spuId=" + this.pspuid , {}).then(data => {
                 if (data.code == 200) {
-                    //alert("新增成功")
                     this.banner =  data.data.bannerList[0].psrResourceUrl
                     this.spuName = data.data.spuName
                     this.maxSalePrice = data.data.maxSalePrice
@@ -379,7 +377,6 @@ export default {
                 }
             }, data => {
                 this.showMsg("spu获取失败");
-                //alert("spu获取失败")
              })
         },
         imgList( val ) {
