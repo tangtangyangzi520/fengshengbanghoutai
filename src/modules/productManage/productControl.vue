@@ -1695,19 +1695,19 @@ export default {
                     "pcaoList": pcaoList,
                     "skuOptionList":baseList,
                     "attrList": attrList,
-                    "skuAtrr": skuname ,          // 拼接属性
-                    "skuClassify": "i",     //   i
-                    "skuCode": skubm2,        //   sku编码
-                    "skuMarketSalePrice": yjg,   //   原价
-                    "skuName":  skuname+spuName  ,      //    拼接属性spu名字
+                    "skuAtrr": skuname ,           //  拼接属性
+                    "skuClassify": "i",            //  i
+                    "skuCode": skubm2,             //  sku编码
+                    "skuMarketSalePrice": yjg,     //  原价
+                    "skuName":  skuname+spuName  , //  拼接属性spu名字
                     "skuNew": 1,   
-                    "skuOverseas": 1,              // 1
-                    "skuSalePrice": sjg,            // 售价   
-                    "skuShowNum": kcs,            //  库存 $(el[4]).val()
-                    "skuUnit": "",         //  "" 
-                    "skuUrl": "",          //  ""
-                    "skuWhId": "",                //   ""
-                    "sku_remark": skuname ,     //  拼接属性 
+                    "skuOverseas": 1,              //  1
+                    "skuSalePrice": sjg,           //  售价   
+                    "skuShowNum": kcs,             //  库存 $(el[4]).val()
+                    "skuUnit": "",                 //  "" 
+                    "skuUrl": "",                  //  ""
+                    "skuWhId": "",                 //  ""
+                    "sku_remark": skuname ,        //  拼接属性 
                     //"skuStockNum": erpkc2,  
                 }
                 //console.log(sin)
@@ -1856,20 +1856,20 @@ export default {
                             "pcaoList": pcaoList,
                             "skuOptionList":baseList,
                             "attrList": attrList,
-                            "skuAtrr": $(el[1]).val() ,          // 拼接属性
-                            "skuClassify": "i",     //   i
-                            "skuCode": $(el[5]).val(),        //   sku编码
-                            "skuMarketSalePrice": $(el[3]).val(),   //   原价
-                            "skuName":  $(el[1]).val()+spuName  ,      //    拼接属性spu名字
+                            "skuAtrr": $(el[1]).val() ,           //  拼接属性
+                            "skuClassify": "i",                   //  i
+                            "skuCode": $(el[5]).val(),            //  sku编码
+                            "skuMarketSalePrice": $(el[3]).val(), //  原价
+                            "skuName":  $(el[1]).val()+spuName  , //  拼接属性spu名字
                             "skuNew": 1,   
-                            "skuOverseas": 1,              // 1
-                            "skuSalePrice": $(el[2]).val(),            // 售价   
-                            "skuStockNum": $(el[4]).val(),            //  库存 $(el[4]).val()
-                            "skuUnit": "",         //  "" 
-                            "skuUrl": "",          //  ""
-                            "skuWhId": "",                //   ""
-                            "sku_remark": $(el[1]).val() ,     //  拼接属性
-                            "skuShowNum": $(el[4]).val(),  //展示库存
+                            "skuOverseas": 1,                     //  1
+                            "skuSalePrice": $(el[2]).val(),       //  售价   
+                            "skuStockNum": $(el[4]).val(),        //  库存 $(el[4]).val()
+                            "skuUnit": "",                        //  "" 
+                            "skuUrl": "",                         //  ""
+                            "skuWhId": "",                        //  ""
+                            "sku_remark": $(el[1]).val() ,        //  拼接属性
+                            "skuShowNum": $(el[4]).val(),         //  展示库存
                         }
                         spulist.push(sin);
                     }      

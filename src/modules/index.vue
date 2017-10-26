@@ -16,7 +16,7 @@
         <div style="text-align:center;vertical-align:middle;min-height:500px">
         <!-- <a target="_black" href="http://192.168.4.247:7007/dist/#!/">oms系统</a><span v-for="i in 10">&nbsp;</span> 
         <a href="http://192.168.4.249:7007/dist/#!/" target="_black">cms系统</a> -->
-        <a href="http://cms.fshtop.com/index.html" target="_black"><button class="btn yellow-crusta" type="button" >跳转到CMS系统</button> </a>
+        <a :href="CMS_SERVER_URL" target="_black"><button class="btn yellow-crusta" type="button" >跳转到CMS系统</button> </a>
         </div>
     </div>
 </template>
@@ -25,6 +25,7 @@ import client from '../common/utils/client';
 export default {
     data() {
         return {
+            CMS_SERVER_URL: CMS_SERVER //CMS系统首页
         }
     },
     methods: {

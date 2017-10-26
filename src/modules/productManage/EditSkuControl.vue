@@ -25,7 +25,7 @@
                                 <td style="width:40%"><span > {{ g.skuAtrr }} </span></td>
                                 <td>￥<input class=" input2" type="number" v-model="g.skuSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)" min="0" max="99999999"/></td>
                                 <td>￥<input class=" input2" type="number" v-model="g.skuMarketSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)"  min="0" max="99999999"/></td>
-                                <td><input class=" input2" type="number" v-model="g.skuShowNum" @keyup="check($event)" @change="check($event)" @blur="check($event)" min="0" max="2000000000"/></td>
+                                <td> <input class=" input2" type="number" v-model="g.skuShowNum" @keyup="check($event)" @change="check($event)" @blur="check($event)" min="0" max="2000000000"/></td>
                                 <td> {{ g.skuStockNum }} </td>
                                 <td style="width:17%"> {{ g.skuCode }} </td>
                             </tr>

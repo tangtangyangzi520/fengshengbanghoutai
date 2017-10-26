@@ -64,7 +64,7 @@ export default {
         },
         backdrop: {
             type: Boolean,
-            default: false
+            default: true
         }
     },
     data() {

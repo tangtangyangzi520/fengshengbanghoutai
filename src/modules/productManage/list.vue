@@ -91,37 +91,11 @@
                                 <a  style="text-decoration:none;" title="订单列表"  @click.stop="order(item.spuId,item.spuName)"> 
                                    {{item.totalSaleNum}}
                                 </a>
-                               
-                                <!-- 商品状态 -->
-                                <!-- <span class="label label-default" v-if="item.deployStatus==4">{{item.spuCatId|filterStatus}}</span>
-                                <template v-else>
-                                    <span class="label label-success" v-if="item.deployStatus==2">{{item.spuReferLayout|filterStatus}}</span>
-                                    <span class="label label-info" v-else>{{item.spuReferLayout|filterStatus}}</span>
-                                </template>
-                                <p style="padding-top:5px;">
-                                    <span class="label label-default" v-if="item.spuReferLayout!=1">下架</span>
-                                    <span class="label label-success" v-else>上架</span>
-                                </p>
-                                <p style="padding-top:5px;">
-                                    <span class="label label-warning" v-if="item.spuReferLayout>0">{{item.spuReferLayout+'个标签'}}</span>
-                                </p> -->
                             </td>
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
-                            <!--  <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td> -->
                             <td style="text-align:center;vertical-align:middle;">
-                                <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
                                 <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')" v-if="limitResource.productSpu_edit">编辑</button>
                                 <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')"v-if="limitResource.productSku_edit">查看SKU列表</button>
-
-                                <!-- 
-                                    <button type="button" v-show="(item.deployStatus==3||item.deployStatus==4)" @click.stop="showControlFunc(item,'submit')" v-if="limitResource.expert_info_submit" class="btn btn-xs purple">提交</button>
-                                    <button type="button" v-show="(item.deployStatus==5||item.deployStatus==1)" @click.stop="showControlFunc(item,'publish')" v-if="limitResource.expert_info_deploy" class="btn btn-xs purple">发布</button>
-                                    <button type="button" v-show="(item.deployStatus==5)" @click.stop="showControlFunc(item,'reject')" v-if="limitResource.expert_info_reject" class="btn btn-xs default">拒绝</button>
-                                    <button type="button" v-show="(item.submitStatus!=1)" @click.stop="showControlFunc(item,'putaway')" v-if="limitResource.expert_info_putaway" class="btn btn-xs default">上架</button>
-                                    <button type="button" v-show="item.submitStatus==1" @click.stop="showControlFunc(item,'soldOut')" v-if="limitResource.expert_info_soldOut" class="btn btn-xs default">下架</button>
-                                    <button type="button" v-show="(item.deployStatus==2)" @click.stop="showControlFunc(item,'withdraw')" v-if="limitResource.expert_info_withdraw" class="btn btn-xs default">撤回</button>
-                                    <button type="button" v-if="limitResource.expert_info_delete" @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button>
-                                -->
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">
@@ -131,20 +105,16 @@
                 </table>
             </div>
         </div>
+
         <form action="" id="exportForm" method="post"> 
             <input type="hidden" name="request" :value="spuName"/> 
-            <!--   
-                <input type="hidden" name="skuCode" v-model="skuCode"/> 
-                <input type="hidden" name="spuCatId" v-model="spuCatId"/> 
-                <input type="hidden" name="skuCode" v-model="skuCode"/>  
-            -->
         </form>
         
         <!-- 分页条 -->
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging> 
         <!-- 订单列表弹框 -->
         <order-list v-if="!destroyControlDialog" :show="showorderDialog" :onhide="hideDialog3" :lspuid="oospuid" :lflag="ooflag" :title="ordertitle"></order-list>
-        <!--  -->
+        <!-- 预览商品弹框 -->
         <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showpreDialog"  :onhide="hideDialog2" :pspuid="lspuid" :pflag="lflag" :imgflag="limgflag"></preview> 
         <!-- 选择商品类目弹框 -->
         <category-control v-if="!destroyControlDialog" :id="expertEditId" :show="showAddDialog" :onhide="hideAddDialog"  :closepar="getList"></category-control> 
@@ -230,7 +200,7 @@ export default {
             let list = [];
             this.dataList.forEach(item => {
                 item.checked && list.push(item);
-            })
+            });
             return list;
         }
     },
@@ -269,6 +239,7 @@ export default {
                 this.showMsg("删除失败,请重试");
             });
         },
+        // 上架
         up() {
             let arr = [];
             this.dataList.forEach( item => {
@@ -288,6 +259,7 @@ export default {
             setTimeout(()=>{
                 this.upflag = false;
             },3000);
+            //
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 1 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("上架成功");
@@ -300,6 +272,7 @@ export default {
                 this.showMsg("上架失败,请重试");
             });
         },
+        // 下架
         down() {
             let arr = [];
             this.dataList.forEach( item => {
@@ -319,6 +292,7 @@ export default {
             setTimeout(()=>{
                 this.downflag = false;
             },3000);
+            //
             client.postData( SPU_EDIT_UP_DOWN ,  { "ids": arr, "spuShelvesStatus": 0 }).then(data => {
                 if (data.code == 200) {
                     this.showMsg("下架成功");
@@ -330,8 +304,8 @@ export default {
                 this.downflag = false;
                 this.showMsg("下架失败,请重试");
             });
-         },
-         //根据时间升降序
+        },
+        // 根据时间升降序
         orderByTime( val ) {
             let options;
             if (true) {
@@ -369,7 +343,7 @@ export default {
                 this.isLoading = false;
             });
         },
-        //根据售价升降序
+        // 根据售价升降序
         orderByPrice( val ) {
             let options;
             if (true) {
@@ -392,6 +366,7 @@ export default {
                 options.orderBy = 1;
             }
             options.orderType = 1;
+            //
             client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -407,26 +382,28 @@ export default {
                 this.isLoading = false;
             });
         },
-        //隐藏订单
+        // 关闭查看订单列表弹框
         hideDialog3() {
             this.showorderDialog = false;
-            //console.log(this.$children);
             setTimeout(() => {
                 //this.onhide('cancel');
             }, 300);
         },
+        // 查看订单列表
         order(val,name) {
             this.oospuid = val;
             this.ordertitle = name+"---订单列表";
             this.ooflag = !this.ooflag;
             this.showorderDialog = true;
         },
+        // 关闭预览商品弹框
         hideDialog2() {
             this.showpreDialog = false;
             setTimeout(() => {
                 this.onhide('cancel');
             }, 300);
         },
+        // 预览商品
         previewpro(val) {
             setTimeout(()=>{
                 this.lspuid = val;
@@ -435,6 +412,7 @@ export default {
                 this.showpreDialog = true;
             },100); 
         },
+        // 导出
         productexport() {
             if(this.exportflag){
                 this.showMsg("点击过于频繁");
@@ -454,13 +432,15 @@ export default {
             /*console.log( this.searchOptions)
             console.log(options)
             return*/
-            this.spuName =  JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,}) +""
-            $("input[name='request']").val(JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,"showCatIdList":options.showCatIdList}) +"")
+            this.spuName =  JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,}) +"";
+            $("input[name='request']").val(JSON.stringify({"spuName":options.spuName,"spuCatId":options.spuCatId,"spuCode":options.spuCode,"skuCode":options.skuCode,"saleStatus":options.saleStatus,"showCatIdList":options.showCatIdList}) +"");
             var url= SPU_EXPORT; // 
             $("#exportForm").attr("action",url);  
+            $('#exportForm').attr('target','_blank');
             $("#exportForm").submit();  
             this.getList();
         },
+        // 搜索按钮
         search(){
             this.flag = !this.flag;
             $("#timeasc").hide();
@@ -468,6 +448,7 @@ export default {
             $("#asc").hide();
             $("#desc").show();
         },
+        // 关闭编辑SKU信息弹框
         hideEditspuDialog(control) {
             this.expertEditId = '';
             this.showEditspuDialog = false;
@@ -488,9 +469,8 @@ export default {
                 }, 200);
                 this.getList();
             }
-
          } ,
-        //编辑商品
+        // 关闭编辑商品弹框
         hideEditDialog(control) {
             this.expertEditId = '';
             this.showEditDialog = false;
@@ -512,7 +492,7 @@ export default {
                 this.getList();
             }
          } ,
-        //点击改变样式
+        // 点击改变样式(出售中/已售罄/仓库中)
         changeClass(obj) {
             $("#timedesc").show();
             $("#timeasc").hide();
@@ -531,6 +511,7 @@ export default {
             }
              //this.getList(false,true);
         },
+        // 查看SKU列表按钮
         showEditspu(item, name , type) {
             this.kflag = !this.kflag;
             this.controlType = type;
@@ -539,7 +520,7 @@ export default {
             //console.log(this.spu);
             this.showEditspuDialog = true;  
         },
-        //打开编辑页面
+        // 打开编辑页面
         showEdit(item, type) {
             this.pflag = !this.pflag;
             this.controlType = type;
@@ -551,7 +532,7 @@ export default {
         show(){
             this.showEditDialog = true;
         },
-        //添加良言
+        // 发布商品
         addItem() {
             //document.location = '/dist/#!/categoryControl';
             this.expertEditId = '';
@@ -582,32 +563,14 @@ export default {
         changeSearchOptions(options) {
             this.searchOptions = options;
         },
-        showControlFunc(item, type) {
-            this.controlType = type;
-            //this.showEditDialog = true;
-            //console.log(item);
-            if (!item) {
-                if (this.selectItems.length != 0) {
-                    this.clickItems = this.selectItems;
-                    this.showControl = true;
-                }
-            } else {
-                this.clickItems = typeof item == 'array' ? item : [item];
-                if (type == 'edit') {
-                    this.expertEditId = item.componentId;
-                    this.showAddDialog = true;
-                } else {
-                    this.showControl = true;
-                }
-            }
-        },
+        // 关闭control的提示框
         hideControlFunc(type) {
             if (type == 'success') {
                 this.getList();
             }
             this.showControl = false;
         },
-        //查询列表数据
+        // 获取商品列表数据
         getList(page, firstSearch) {
             let options;
             if (!firstSearch) {
@@ -622,12 +585,9 @@ export default {
             this.isLoading = true;
             this.dataList = [];
             this.lastSearchOptions = options;
-            // 统计数据
-            //this.getCount(options);
-            //options.componentType = [12];
 
             /*this.dataList =  {"code":200,"msg":"操作成功","serverTime":"0","data":[{"maxSalePrice":110.00,"minSalePrice":110.00,"totalStockNum":110,"totalSaleNum":1,"spuId":"900646218680655873","spuName":"iphone","spuCreatedTime":1503566566000,"spuModifyTime":1503567684000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777344","spuName":"string","spuCreatedTime":1503883598000,"spuModifyTime":1503883598000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777345","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777346","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777347","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777348","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777349","spuName":"string","spuCreatedTime":1503883600000,"spuModifyTime":1503883600000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777350","spuName":"string","spuCreatedTime":1503883601000,"spuModifyTime":1503883601000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777351","spuName":"string","spuCreatedTime":1503883601000,"spuModifyTime":1503883601000},{"maxSalePrice":0,"minSalePrice":0,"totalStockNum":0,"totalSaleNum":0,"spuId":"901979298590777352","spuName":"string","spuCreatedTime":1503883601000,"spuModifyTime":1503883601000}],"page":{"currentPage":1,"pageSize":10,"startIndex":0,"totalPage":6,"totalSize":52}}.data*/
-            client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
+            client.postData( SPU_GET_LIST , options).then(data => {  
                 this.isLoading = false;
                 if (data.code == 200) {
                     data.data.forEach(item => {
@@ -642,31 +602,23 @@ export default {
                 this.isLoading = false;
             });
         },
-        //查询行头统计数据
-        /*getCount(options) {
-            options.componentType = [12];
-            client.postData(COMPONENT_ARTICLE_COUNTER, options).then(data => {
-                if (data.code == 200) {
-                    this.countDesc = data.data;
-                } else {
-                    this.showMsg(data.msg);
-                }
-            }, data => {
-            })
-        },*/
+        // 全选
         selectAll() {
             this.dataList.forEach(item => {
                 item.checked = true;
             });
         },
+        // 反选
         reverseList() {
             this.dataList.forEach(item => {
                 item.checked = !item.checked;
             });
         },
+        // 选中行
         selectItem(item) {
             item.checked = !item.checked;
         },
+        // 打开提示框
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;
@@ -676,6 +628,7 @@ export default {
             this.showAlertMsg = msg;
             this.showAlert = true;
         },
+        // 关闭提示框
         hideMsg() {
             this.showAlert = false;
             this.showEditDialog = false;
@@ -686,7 +639,6 @@ export default {
     created() {
         vueThis = this;
         this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
-        //console.log(JSON.parse(localStorage.getItem('limitResource')));
     },
     watch: {
     },
@@ -726,7 +678,6 @@ export default {
     text-align:center;
     line-height: 30px;
     border-radius:20px
-    
 };
 td{
     text-align: center;

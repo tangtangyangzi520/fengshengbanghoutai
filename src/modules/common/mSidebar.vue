@@ -106,27 +106,27 @@ export default {
                                 item.url = '/dist/#!/productManage';
                                 break;
                             case 'info.productCategoryAtrrMgr':
-                                // 商品列表
+                                // 通用属性列表
                                 item.url = '/dist/#!/productCategoryAtrr';
                                 break;
                             case 'info.productCategoryAtrrOptionMgr':
-                                 // 商品列表
+                                 // 销售属性列表
                                 item.url = '/dist/#!/productCategoryAtrrOption';
                                 break;
                             case 'info.orderMgr':
-                                // 商品列表
+                                // 订单列表
                                 item.url = '/dist/#!/order';
                                 break;
                             case 'info.ProductCarriageMgr':
-                                // 商品列表
+                                // 运费模板列表
                                 item.url = '/dist/#!/ProductCarriageTemp';
                                 break;
                             case 'info.couponMgr':
-                                // 商品列表
+                                // 优惠券列表
                                 item.url = '/dist/#!/couponManage';
                                 break;
                             case 'info.discountMgr':
-                                // 商品列表
+                                // 限时折扣列表
                                 item.url = '/dist/#!/discountManage';
                                 break;
                             default:
@@ -143,35 +143,34 @@ export default {
                         }
                         item.children.forEach(sitem=>{
                             resource[sitem.code] = sitem.state.selected;
-                        })
-                        
-                    })
-                })
+                        });
+                    });
+                });
                 localStorage.setItem('limitResource', JSON.stringify(resource));
                 this.navList = list;
                 this.catList.forEach(cat=>{
                     this.navList.forEach(nav=>{
+                        // 根据前两个字判断属于哪个菜单
                         if( nav.text.indexOf(cat.text) >-1 ){
-                            cat.children.push(nav)
+                            cat.children.push(nav);
                         }
                     })
                 })
             }
         }, response => {
-        })
+        });
         if(this.$route.path=='/'){
             this.isIndexPage = true;
             this.navList.forEach(litem => {
                 litem.active = false;
                 litem.children.forEach(item => {
                     item.active = litem.active = false;
-                })
-            })
+                });
+            });
         }
     },
     methods: {
         changeUrl(subitem) {
-
             if (subitem.url != null && !/dist/.test(subitem.url)) {
                 location.href = '/#/' + subitem.url.replace(/\./g, '/');
             } else if (subitem.url != null && /dist/.test(subitem.url)) {
@@ -189,16 +188,15 @@ export default {
                         item.active = false;
                     }
                     item.children.forEach(san => {
-                    if (san.url == subitem.url) {
-                        console.log(san.url, subitem.url)
-                        litem.active = san.active = true;
-                    } else {
-                        san.active = false;
-                    }
-                    
-                    })
-                })
-            })
+                        if (san.url == subitem.url) {
+                            console.log(san.url, subitem.url)
+                            litem.active = san.active = true;
+                        } else {
+                            san.active = false;
+                        }
+                    });
+                });
+            });
         }
     },
     watch: {
@@ -209,14 +207,14 @@ export default {
                     litem.active = false;
                     litem.children.forEach(item => {
                         item.active = litem.active = false;
-                    })
-                })
+                    });
+                });
                 this.catList.forEach(litem => {
                     litem.active = false;
                     litem.children.forEach(item => {
                         item.active = litem.active = false;
-                    })
-                })
+                    });
+                });
             }else{
                 this.isIndexPage = false;
             }
