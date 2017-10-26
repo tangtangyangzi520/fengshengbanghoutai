@@ -163,7 +163,10 @@ export default {
         editActAmount() {
             //校验数据
             this.checkTransportAmount(this.editPaymentData);
-            this.editPaymentData.orderDetailList.forEach(item => this.checkChangePrice(item));
+            for (let index = 0; index < this.editPaymentData.orderDetailList.length; index++) {
+                let element = this.editPaymentData.orderDetailList[index];
+                this.checkChangePrice(element);
+            }
             client.postData(ORDER_EDIT_ACT_AMOUNT, this.editPaymentData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
