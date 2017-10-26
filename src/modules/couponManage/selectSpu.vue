@@ -198,7 +198,7 @@ export default {
             showAlertMsg: '',
             removeAddDialog: false,
             title: '选择活动商品',
-            searchList:[{id:1,name:'商品编码'},{id:2,name:'商品名称'}],
+            searchList:[{id:1,name:'商品编码'},{id:2,name:'商品名称'},{id:3,name:'SKU编码'}],
             searchType:1,
             searchWord:'',
             treeList: [],
@@ -359,16 +359,22 @@ export default {
                 });
             }
         },
-        //获取未选商品数据
+        // 获取未选商品数据
         getUnSelectedList(page, firstSearch){
             let options;
-            //判断查询条件
-            if(this.searchType==2){ 
+            // 判断查询条件
+            if(this.searchType==1){// 按商品编码搜索
+                this.searchOptions.spuCode =this.searchWord;
+                this.searchOptions.spuName ='';
+                this.searchOptions.skuCode ='';
+            }else if(this.searchType==2){// 按商品名称搜索
                 this.searchOptions.spuCode ='';
                 this.searchOptions.spuName =this.searchWord;
-            }else{
+                this.searchOptions.skuCode ='';
+            }else if(this.searchType==3){// 按SKU编码搜索
+                this.searchOptions.spuCode ='';
                 this.searchOptions.spuName ='';
-                this.searchOptions.spuCode =this.searchWord;
+                this.searchOptions.skuCode =this.searchWord;
             }
             if (!firstSearch) {
                 // 拿最后一次请求的参数

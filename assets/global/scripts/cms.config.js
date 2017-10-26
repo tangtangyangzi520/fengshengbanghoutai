@@ -377,3 +377,6 @@ var AREA_GET_LIST = OMS_TEST + "/area/list";                          //获取�
 //系统配置管理
 var SYSTEM_SETTING_LIST = OMS_TEST + "/systemSetting/list";           //获取所有系统配置参数
 var SYSTEM_SETTING_EDIT = OMS_TEST + "/systemSetting/edit";           //编辑所有系统配置参数
+
+//CMS系统
+var CMS_SERVER = "http://cms.fshtop.com/index.html";                  //CMS系统首页
