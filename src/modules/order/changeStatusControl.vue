@@ -6,10 +6,11 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">订单状态：</label>
                         <div class="controls col-md-6">
-                        <select v-model="editStatusData.ordStatus" class="type"> 
-                        <option v-for="item in orderSubStatusList" :value="item.id" selected = "selected">{{item.name}}</option>
-                        </select>
-                    </div> 
+                            <select v-model="editStatusData.ordStatus" class="type">
+                                <option v-for="item in orderSubStatusList" :value="item.id" selected="selected">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             <span slot="btnList">
@@ -55,11 +56,11 @@ export default {
             isLoading: false,
             showDialog: false,
             showPage: false,
-            orderSubStatusList:[{ id: 5, name: '售后线下处理' }],
+            orderSubStatusList: [{ id: 5, name: '售后线下处理' }],
             componentShowOption: {},
-            editStatusData:{
-                "ordOrderId":0,
-                "ordStatus":0,
+            editStatusData: {
+                "ordOrderId": 0,
+                "ordStatus": 0,
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
@@ -77,17 +78,17 @@ export default {
     },
     methods: {
         //选择下拉框
-        selectComponentFunc(item){
-            this.editStatusData.ordStatus=item.id;
+        selectComponentFunc(item) {
+            this.editStatusData.ordStatus = item.id;
         },
         //修改子订单状态
-        editOrderSubStatus(){
-            this.editStatusData.ordOrderId=this.id;
+        editOrderSubStatus() {
+            this.editStatusData.ordOrderId = this.id;
             // if(!this.editStatusData.ordStatus){
             //     this.showMsg("请选择订单状态");
             //     return;
             // }
-            client.postData(ORDER_EDIT_STATUS,this.editStatusData).then(data => {
+            client.postData(ORDER_EDIT_STATUS, this.editStatusData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.hideDialog();
@@ -132,13 +133,13 @@ export default {
         hideMsg() {
             this.showAlert = false;
         },
-       
+
     },
-    computed(){
-        
+    computed() {
+
     },
     created() {
-        
+
     },
     watch: {
         show() {

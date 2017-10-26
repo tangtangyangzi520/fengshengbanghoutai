@@ -2,8 +2,7 @@
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'500px'">
             <div slot="content">
-                    <textarea v-model="editDemoData.ordDemo" placeholder="最多可输入256个字" rows="10" cols="50" maxlength="256"></textarea>
-                    
+                <textarea v-model="editDemoData.ordDemo" placeholder="最多可输入256个字" rows="10" cols="50" maxlength="256"></textarea>
             </div>
             {{this.editDemoData.ordDemo}}
             <span slot="btnList">
@@ -42,7 +41,7 @@ export default {
             type: String,
             value: 0
         },
-        ordsubdemo:""
+        ordsubdemo: ""
     },
     data() {
         return {
@@ -65,16 +64,16 @@ export default {
                 "painIds": [],
                 "painOptions": []
             },
-            editDemoData:{
-                "ordOrderId":0,
-                "ordDemo":'',
+            editDemoData: {
+                "ordOrderId": 0,
+                "ordDemo": '',
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
             title: '商家备注',
-            sourceDemo:'',//取消时回显
+            sourceDemo: '',//取消时回显
         }
     },
     vuex: {
@@ -86,13 +85,13 @@ export default {
     },
     methods: {
         //提交商家备注
-        editDetailDemo(){
-            this.editDemoData.ordOrderId=this.id;
-            client.postData(ORDER_EDIT_DEMO,this.editDemoData).then(data => {
+        editDetailDemo() {
+            this.editDemoData.ordOrderId = this.id;
+            client.postData(ORDER_EDIT_DEMO, this.editDemoData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.showMsg(data.msg);
-                    this.$parent.getList(false,true);
+                    this.$parent.getList(false, true);
                 } else {
                     this.showMsg(data.msg);
                 }
@@ -116,7 +115,7 @@ export default {
         },
         hideDialog() {
             this.showDialog = false;
-            this.editDemoData.ordDemo= this.sourceDemo;
+            this.editDemoData.ordDemo = this.sourceDemo;
             setTimeout(() => {
                 this.showPage = false;
                 this.onhide();
@@ -135,22 +134,22 @@ export default {
             this.showAlert = false;
             this.hideDialog();
         },
-       
+
     },
-    computed(){
-        
+    computed() {
+
     },
     created() {
-        
+
     },
     watch: {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
         },
-        ordsubdemo(){
+        ordsubdemo() {
             this.editDemoData.ordDemo = this.ordsubdemo;
-             this.sourceDemo= this.ordsubdemo;
+            this.sourceDemo = this.ordsubdemo;
         },
     },
     ready() {

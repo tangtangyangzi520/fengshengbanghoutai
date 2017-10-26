@@ -146,7 +146,7 @@
                     </tbody>
                 </table>
             </div>
-            <div v-if="dataList.lenth==0" class="center">
+            <div v-if="dataList.length==0" class="center">
                 暂无数据
             </div>
         </div>
@@ -532,7 +532,6 @@ export default {
             // alert(this.ospuid)
             this.showflag = false
             this.getList(false, true)
-
         },
         show() {
             this.showPage = this.show

@@ -63,10 +63,11 @@
                         </div>
                     </div>
                 </div>
-                <span slot="btnList">
-                    <button type="button" @click.stop="editActAmount" class="btn default blue">确定</button>
-                    <button type="button" class="btn default" data-dismiss="modal">取消</button>
-                </span>
+            </div>
+            <span slot="btnList">
+                <button type="button" @click.stop="editActAmount" class="btn default blue">确定</button>
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+            </span>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
@@ -78,7 +79,7 @@
             <select-component-all v-show="showComponent" :options="componentShowOption" :onselect="selectComponentFunc" :oncancel="cancelSelectComponent"></select-component-all>
         </div>
         <loading :show="isLoading"></loading>
-        </div>
+    </div>
 </template>
 <script>
 import client from '../../common/utils/client';
@@ -140,7 +141,7 @@ export default {
                 item.ordChangePrice = 0;
                 return;
             }
-            item.ordChangePrice=Number(item.ordChangePrice).toFixed(2);
+            item.ordChangePrice = Number(item.ordChangePrice).toFixed(2);
             if (item.ordOriginal * item.ordSkuNum + Number(item.ordChangePrice) - item.ordShareAmount < 0) {
                 this.$parent.showMsg("减价幅度不得大于需付价格");
                 item.ordChangePrice = 0;
@@ -164,7 +165,7 @@ export default {
             this.checkTransportAmount(this.editPaymentData);
             this.editPaymentData.orderDetailList.forEach(item => this.checkChangePrice(item));
             client.postData(ORDER_EDIT_ACT_AMOUNT, this.editPaymentData).then(data => {
-                this.isLoading = false; 
+                this.isLoading = false;
                 if (data.code == 200) {
                     this.$parent.getList();
                     this.hideDialog();

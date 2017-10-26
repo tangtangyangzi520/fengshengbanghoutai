@@ -284,7 +284,10 @@ var  SKU_EDIT_LIST      =  OMS_TEST + "/sku/editProductSku";         //编辑sku
 var  SKU_GET_BY_ID      =  OMS_TEST + "/sku/getProductSkuBySpuId";   //根据spuID获取sku列表
 
 //评论管理
-var  OIC_GET_LIST      =  OMS_TEST + "/oic/listOic";   //获取评论列表
+var  OIC_GET_LIST       =  OMS_TEST + "/oic/listOic";                //获取评论列表
+var  OIC_IMPORT_LIST    =  OMS_TEST + "/oic/exportOics";             //导入评论
+var  OIC_DELETE         =  OMS_TEST + "/oic/deleteOic";              //删除评论
+var  OIC_EDIT           =  OMS_TEST + "/oic/editOrderItemComment";   //编辑评论
 
 //spu,图片资源
 var  SPU_EXPORT         =  OMS_TEST + "/spu/exportSpu";              //根据spuid导出sku列表

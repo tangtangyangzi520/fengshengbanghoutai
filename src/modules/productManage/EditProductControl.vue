@@ -896,17 +896,7 @@ export default {
         // 显示选择图片
         showSelectPicDialog(type) {
             this.showSelectPic({ name: 'bannerPic', show: true, storeType: 4, single: true });
-            if (type == 2) {
-                this.selectPicType = 2;
-            } else if (type == 3) {
-                this.selectPicType = 3;
-            }else if (type == 4) {
-                this.selectPicType = 4;
-            }else if (type == 5) {
-                this.selectPicType = 5;
-            }else if (type == 1) {
-                this.selectPicType = 1;
-            }
+            this.selectPicType = type;
         },
         // 隐藏选择资源弹窗
         cancelSelect() {

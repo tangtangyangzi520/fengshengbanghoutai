@@ -7,14 +7,14 @@
             <search :onchange="changeSearchOptions" :oncreate="getList" v-ref:search></search>
             <div class="col-md-12 left">
                 <div class="col-md-4"></div>
-                <div class="col-md-6">
-                    <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button class="btn blue" type="button" @click="getList(true,true)">导入评论</button>
+                <div class="col-md-8 right">
+                    <form id="exportForm" method="POST" enctype="multipart/form-data">
+                        <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
+                        <button class="btn blue" type="button" @click="importComment()">导入评论</button>
+                        <input type="file" name="file" accept=".csv,application/vnd.ms-excel" style="display:inline">(Excel 97-2003)
+                    </form>
                 </div>
             </div>
-            <form id="exportForm" method="POST" enctype="multipart/form-data">
-                <input type="hidden" v-model="exportString" name="request">
-            </form>
         </div>
         <div class="contentOrderBlock" id="contentList">
             <div class="table-responsive col-md-12">
@@ -22,20 +22,23 @@
                     <thead>
                         <tr style="background-color:rgba(215, 215, 215, 1);">
                             <th style="width:10%;">买家昵称</th>
-                            <th style="width:20%;">商品名称</th>
-                            <th style="width:40%;">评论内容</th>
+                            <th style="width:20%;">sku名称</th>
+                            <th style="width:35%;">评论内容</th>
                             <th style="width:5%;">星级</th>
-                            <th style="width:10%;">图片状态</th>
-                            <th style="width:15%;">操作</th>
+                            <th style="width:5%;">图片状态</th>
+                            <th style="width:15%;">评论时间</th>
+                            <th style="width:10%;">操作</th>
                         </tr>
                         <tr v-for="item in dataList" :key="item.oicId">
-                            <td>{{item.oicMemberNickname}}</td>
-                            <td>{{item.oicProductName}}</td>
-                            <td>{{item.oicComment}}</td>
-                            <td>{{item.oicStarNum}}</td>
-                            <td>{{item.oicImgStatus==0 ? "无图" : "有图"}}</td>
-                            <td>
-                                <button class="btn blue" type="button" @click="edit(item)">查看/编辑评论</button>
+                            <td style="vertical-align: middle;">{{item.oicMemberNickname}}</td>
+                            <td style="vertical-align: middle;">{{item.oicProductName}}</td>
+                            <td style="vertical-align: middle;">{{item.oicComment}}</td>
+                            <td style="vertical-align: middle;">{{item.oicStarNum}}</td>
+                            <td style="vertical-align: middle;">{{item.oicImgStatus==0 ? "无图" : "有图"}}</td>
+                            <td style="vertical-align: middle;">{{item.oicCreatedTime}}</td>
+                            <td style="vertical-align: middle;">
+                                <button class="btn blue" type="button" @click="edit(item)">编辑</button>
+                                <button class="btn blue" type="button" @click="deleteItem(item)">删除</button>
                             </td>
                         </tr>
                     </thead>
@@ -46,17 +49,16 @@
             </div>
         </div>
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
-        <!-- 创建订单详情弹窗 -->
-        <comment-control v-if="!destroyControlDialog" :id="orderEditId" :set-data="orderSetData" :sub-data="orderSubData" :show="showAddDialog" :onhide="hideAddDialog">
-            </order-control>
-            <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
-                <div slot="content">确定提交吗？</div>
-            </m-alert>
-            <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
-                <div slot="content">{{showAlertMsg}}</div>
-            </m-alert>
-            <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
-            <loading :show="isLoading"></loading>
+        <!-- 创建编辑评论弹窗 -->
+        <comment-control v-if="!destroyControlDialog" :id="orderEditId" :edit-data="editItem" :show="showAddDialog" :onhide="hideAddDialog"></comment-control>
+        <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
+            <div slot="content">确定提交吗？</div>
+        </m-alert>
+        <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
+            <div slot="content">{{showAlertMsg}}</div>
+        </m-alert>
+        <control :show="showControl" :items="clickItems" :onhide="hideControlFunc" :type="controlType"></control>
+        <loading :show="isLoading"></loading>
     </div>
 </template>
 <script>
@@ -116,7 +118,7 @@ export default {
             ordDemo: "",
             testSelectedSpu: [],
             checkedList: [true, false, false, false, false, false, false],//用来使被选中标签高亮
-
+            editItem: {},
         }
     },
     computed: {
@@ -137,9 +139,34 @@ export default {
         }
     },
     methods: {
+        //弹出删除
+        showDelete(item) {
+
+        },
+        //导入excel
+        importComment() {
+            $("#exportForm").attr("action", OIC_IMPORT_LIST);
+            $("#exportForm").submit();
+        },
         //编辑
         edit(item) {
-
+            this.editItem = item;
+            this.showAddDialog = true;
+        },
+        //确认删除
+        deleteItem(item) {
+            if (!confirm("确定删除商品吗")) {
+                return;
+            }
+            client.postData(OIC_DELETE + "?id=" + item.oicId).then(data => {
+                if (data.code == 200) {
+                    this.showMsg("删除成功");
+                    this.getList(false, true);
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+            })
         },
         clearSearchOptions() {
             this.$refs.search.clearOptions()
@@ -180,6 +207,8 @@ export default {
             options = Object.assign({}, this.searchOptions);
             if (page) {
                 options.page = page;
+            } else {
+                options.page = this.page;
             }
             this.isLoading = true;
             this.dataList = [];

@@ -3,31 +3,31 @@
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showReasonDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'600px'">
             <div slot="content">
                 <!-- <m-select :data="cancelReasonList" :placeholder="'请选择取消原因'" :change-func="selectReasonFunc" :class="'fixedIcon'" ></m-select> -->
-                <div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">取消原因：</label>
                     <div class="controls col-md-6">
-                    <select v-model="editReasonData.ordCancelReason" class="type" id="ordCancelReason">
-                        <option v-for="item in cancelReasonList" :value="item.keyValue">{{item.keyValue}}</option>
-                    </select>
+                        <select v-model="editReasonData.ordCancelReason" class="type" id="ordCancelReason">
+                            <option v-for="item in cancelReasonList" :value="item.keyValue">{{item.keyValue}}</option>
+                        </select>
+                    </div>
                 </div>
-                </div>
-                <span slot="btnList">
-                    <button type="button" @click.stop="editCancelReason" class="btn default blue">确定</button>
-                    <button type="button" class="btn default" data-dismiss="modal">取消</button>
-                </span>
             </div>
-        </m-alert>
-        <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
-            <div slot="content">{{showAlertMsg}}</div>
-        </m-alert>
-        <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
-            <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
-        </div>
-        <div style="position:fixed;z-index:11111;" v-show="showComponent">
-            <select-component-all v-show="showComponent" :options="componentShowOption" :onselect="selectComponentFunc" :oncancel="cancelSelectComponent"></select-component-all>
-        </div>
-        <loading :show="isLoading"></loading>
+            <span slot="btnList">
+                <button type="button" @click.stop="editCancelReason" class="btn default blue">确定</button>
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+            </span>
+    </div>
+    </m-alert>
+    <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
+        <div slot="content">{{showAlertMsg}}</div>
+    </m-alert>
+    <div style="position:fixed;z-index:111111;" v-show="picShowOption.show">
+        <select-pic v-show="picShowOption.show" :options="picShowOption" :onselect="selectPicFunc" :oncancel="cancelSelect"></select-pic>
+    </div>
+    <div style="position:fixed;z-index:11111;" v-show="showComponent">
+        <select-component-all v-show="showComponent" :options="componentShowOption" :onselect="selectComponentFunc" :oncancel="cancelSelectComponent"></select-component-all>
+    </div>
+    <loading :show="isLoading"></loading>
     </div>
 </template>
 <script>
@@ -50,15 +50,15 @@ export default {
             type: String,
             value: 0
         },
-        setdata:{},
-        sendReq:false,
+        setdata: {},
+        sendReq: false,
     },
     data() {
         return {
-            editReasonData:{
-                "ordOrderId":0,
-                "ordStatus":5,
-                "ordCancelReason":'',
+            editReasonData: {
+                "ordOrderId": 0,
+                "ordStatus": 5,
+                "ordCancelReason": '',
             },
             isLoading: false,
             showReasonDialog: false,
@@ -84,7 +84,7 @@ export default {
             showAlertMsg: '',
             removeAddDialog: false,
             title: '取消订单',
-            cancelReasonList:[],
+            cancelReasonList: [],
         }
     },
     vuex: {
@@ -96,14 +96,14 @@ export default {
     },
     methods: {
         //提交原因
-        editCancelReason(){
-            this.editReasonData.ordOrderId=this.id;
+        editCancelReason() {
+            this.editReasonData.ordOrderId = this.id;
             //console.log(this.editCancelReason);
-            if(this.editReasonData.ordCancelReason==''){
+            if (this.editReasonData.ordCancelReason == '') {
                 this.showMsg("请选择订单状态");
                 return;
             }
-            client.postData(ORDER_EDIT_REASON,this.editReasonData).then(data => {
+            client.postData(ORDER_EDIT_REASON, this.editReasonData).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.hideDialog();
@@ -117,14 +117,14 @@ export default {
 
         },
         //获取取消原因
-        getCancelReasonList(){
-            let url=ORDER_CANCEL_REASON;
-            client.postData(url,{}).then(data => {
-               // this.isLoading = false;
+        getCancelReasonList() {
+            let url = ORDER_CANCEL_REASON;
+            client.postData(url, {}).then(data => {
+                // this.isLoading = false;
                 if (data.code != 200) {
                     this.showMsg(data.msg);
                 } else {
-                    this.cancelReasonList=data.data;
+                    this.cancelReasonList = data.data;
                 }
             }, data => {
                 //this.isLoading = false;
@@ -154,13 +154,13 @@ export default {
         hideMsg() {
             this.showAlert = false;
         },
-       
+
     },
     created() {
-        
+
     },
     watch: {
-        sendReq(){
+        sendReq() {
             this.getCancelReasonList();
         },
         show() {
