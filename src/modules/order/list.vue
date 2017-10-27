@@ -71,7 +71,7 @@
                                     <span v-if="itemSub.ordOrderType==0" style="color:blue;">跨境订单</span>
                                 </p>
                                 <p>
-                                    <a target="_blank" :href="itemDetail.detailSpu.spuPic" title="查看大图">
+                                    <a target="_blank" :href="itemDetail.detailSpu.spuPic != '' ? itemDetail.detailSpu.spuPic : 'javascript:;'" title="查看大图">
                                         <img :src="itemDetail.detailSpu.spuPic" class="img-rounded" style="height:50px">
                                     </a>
                                 </p>
@@ -117,7 +117,7 @@
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                                                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                                                                                   (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
                                     <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
