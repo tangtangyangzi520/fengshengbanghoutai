@@ -12,7 +12,7 @@
             <div class="form-group">
                 <label class="col-md-3 sea">图片状态：</label>
                 <div class="col-md-9">
-                     <select class="form-control" v-model="searchOptions.oicImgStatus">
+                    <select class="form-control" v-model="searchOptions.oicImgStatus">
                         <option v-for="item in logiTypeList" :value="item.id">{{item.name}}</option>
                     </select>
                 </div>

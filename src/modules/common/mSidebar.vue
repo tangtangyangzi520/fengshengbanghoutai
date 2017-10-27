@@ -129,6 +129,10 @@ export default {
                                 // 限时折扣列表
                                 item.url = '/dist/#!/discountManage';
                                 break;
+                            case 'info.productCommentMgr':
+                                // 商品评论列表
+                                item.url = '/dist/#!/productComment';
+                                break;
                             default:
                                 break;
                         }

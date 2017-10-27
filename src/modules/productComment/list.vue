@@ -5,14 +5,16 @@
                 <span slot="title">商品内部评价</span>
             </page-title-bar>
             <search :onchange="changeSearchOptions" :oncreate="getList" v-ref:search></search>
+            <br>
             <div class="col-md-12 left">
                 <div class="col-md-4"></div>
                 <div class="col-md-8 right">
                     <form id="exportForm" method="POST" enctype="multipart/form-data">
                         <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
-                        <button class="btn blue" type="button" @click="downloadTemplate">下载导入模板</button>
-                        <button class="btn blue" type="button" @click="importComment">导入评论</button>
-                        <input type="file" name="file" accept=".csv,application/vnd.ms-excel" style="display:inline">(Excel 97-2003)
+                        <button class="btn blue" type="button" @click="downloadTemplate" v-if="limitResource.productComment_downloadTemplate">下载导入模板</button>
+                        <button class="btn blue" type="button" @click="importComment" v-if="limitResource.productComment_importComment">导入评论</button>
+                        <input type="file" name="file" accept=".csv,application/vnd.ms-excel" style="display:inline" v-if="limitResource.productComment_importComment">
+                        <span v-if="limitResource.productComment_importComment">(Excel 97-2003)</span>
                     </form>
                 </div>
             </div>
@@ -41,8 +43,8 @@
                             <td style="vertical-align: middle;">{{item.oicImgStatus==0 ? "无图" : "有图"}}</td>
                             <td style="vertical-align: middle;">{{item.oicCreatedTime}}</td>
                             <td style="vertical-align: middle;">
-                                <button class="btn blue" type="button" @click="edit(item)">编辑</button>
-                                <button class="btn blue" type="button" @click="showDelete(item)">删除</button>
+                                <button class="btn blue" type="button" @click="edit(item)" v-if="limitResource.productComment_edit">编辑</button>
+                                <button class="btn blue" type="button" @click="showDelete(item)" v-if="limitResource.productComment_delete">删除</button>
                             </td>
                         </tr>
                     </thead>
