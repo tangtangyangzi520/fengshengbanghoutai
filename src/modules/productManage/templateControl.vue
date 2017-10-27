@@ -5,43 +5,21 @@
             <div slot="content">
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form">
-                        <!--   
-                        <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌：
-                            </label>
-                            <div class="col-md-4">    
-                                <select class="form-control" v-model="firstActive">
-                                    <option value="0">请选择一级类目</option>
-                                    <option v-for="item in authorList" :value="item.id">{{item.text}}</option>
-                                </select><a>刷新</a> | <a>+新建</a>
-                            </div>
-                        </div> 
-                        -->
                         <h1><font style="color:red">{{getspu.msg}}</font></h1>
-
                         <h4><strong>商品详情图片上传</strong></h4> 
                         <div class="col-md-4" style="padding-bottom:10px;">
                             <input type="button" sytle="width=100px;height=100px" @click="showSelectPicDialog(1)" height="80" value="点击编辑图片广告" />
                         </div>
                         <br><br><br>
                         <div id="img" style="text-align:center; margin-left:30%;" v-for=" (index,a) in imgList ">
-                            <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right=false>
+                            <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right="false">
                                 <img class="images" :src="a.url" style="height:300px; width:400px;">
                             </item-move><br>
                         </div>
-
-                        <!-- <div   id="img" style="text-align:center" v-for=" a in imgList "> 
-                            <img class="images" :src="a.url"    style=" width: 400px ; height:300px"/><br>
-                        </div> -->
                     </form>
                 </div>
             </div>
             <span slot="btnList">
-                <!--  <button type="button" class="btn default" data-dismiss="modal">上一步</button> -->
-                <!--  <button type="button" class="btn yellow-crusta" data-dismiss="modal">上架</button>
-                <button type="button" class="btn green-meadow" @click="submitInfo">下架</button>  -->
-                <!--  <button type="button" class="btn purple" @click="submitInfo">预览</button>  -->
                     <button type="button" class="btn blue" @click="save">保存</button> 
                     <button type="button" class="btn green" @click="up()" >上架</button>
                     <button type="button" class="btn default" @click="down()" >下架</button>

@@ -206,7 +206,7 @@
                                                 <div class="buy-pic" style="bottom:0;" v-if="data.oneUrl==''">
                                                     <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 1 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                                <item-move v-if="data.oneUrl!=''" :change-left="moveLeft.bind(this,1)" :change-right="moveRight.bind(this,1)" :remove-item="removeMoveItem.bind(this,1)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <item-move v-if="data.oneUrl!=''" :change-left="moveLeft.bind(this,1)" :change-right="moveRight.bind(this,1)" :remove-item="removeMoveItem.bind(this,1)" :class="'item-edit-block'" :hidden-up-down="false">
                                                     <div class="buy-pic" style="bottom:0;">
                                                         <img :src="data.oneUrl" style="height:194px; width:194px;">
                                                     </div>
@@ -219,7 +219,7 @@
                                                 <div class="buy-pic" style="bottom:0;" v-if="data.twoUrl=='' && data.oneUrl!=''">
                                                     <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 2 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                                <item-move v-if="data.twoUrl!=''" :change-left="moveLeft.bind(this,2)" :change-right="moveRight.bind(this,2)" :remove-item="removeMoveItem.bind(this,2)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <item-move v-if="data.twoUrl!=''" :change-left="moveLeft.bind(this,2)" :change-right="moveRight.bind(this,2)" :remove-item="removeMoveItem.bind(this,2)" :class="'item-edit-block'" :hidden-up-down="false">
                                                     <div class="buy-pic" style="bottom:0;">
                                                         <img :src="data.twoUrl" style="height:194px; width:194px;">
                                                     </div>
@@ -232,7 +232,7 @@
                                                 <div class="buy-pic" style="bottom:0;" v-if="data.threeUrl=='' && data.twoUrl!=''">
                                                     <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 3 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                                <item-move v-if="data.threeUrl!=''" :change-left="moveLeft.bind(this,3)" :change-right="moveRight.bind(this,3)" :remove-item="removeMoveItem.bind(this,3)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <item-move v-if="data.threeUrl!=''" :change-left="moveLeft.bind(this,3)" :change-right="moveRight.bind(this,3)" :remove-item="removeMoveItem.bind(this,3)" :class="'item-edit-block'" :hidden-up-down="false">
                                                     <div class="buy-pic" style="bottom:0;">
                                                         <img :src="data.threeUrl" style="height:194px; width:194px;">
                                                     </div>
@@ -245,7 +245,7 @@
                                                 <div class="buy-pic" style="bottom:0;" v-if="data.fourUrl=='' && data.threeUrl!=''">
                                                     <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 4 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                                <item-move v-if="data.fourUrl!=''" :change-left="moveLeft.bind(this,4)" :change-right="moveRight.bind(this,4)" :remove-item="removeMoveItem.bind(this,4)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <item-move v-if="data.fourUrl!=''" :change-left="moveLeft.bind(this,4)" :change-right="moveRight.bind(this,4)" :remove-item="removeMoveItem.bind(this,4)" :class="'item-edit-block'" :hidden-up-down="false">
                                                     <div class="buy-pic" style="bottom:0;">
                                                         <img :src="data.fourUrl" style="height:194px; width:194px;">
                                                     </div>
@@ -258,7 +258,7 @@
                                                 <div class="buy-pic" style="bottom:0;" v-if="data.fiveUrl=='' && data.fourUrl!=''">
                                                     <i class="fa glyphicon glyphicon-plus pick-img" @click="showSelectPicDialog( 5 )" style="margin-top: 20px; font-size:44px;"></i>
                                                 </div>
-                                                <item-move v-if="data.fiveUrl!=''" :change-left="moveLeft.bind(this,5)" :change-right="moveRight.bind(this,5)" :remove-item="removeMoveItem.bind(this,5)" :class="'item-edit-block'" :hidden-up-down=false>
+                                                <item-move v-if="data.fiveUrl!=''" :change-left="moveLeft.bind(this,5)" :change-right="moveRight.bind(this,5)" :remove-item="removeMoveItem.bind(this,5)" :class="'item-edit-block'" :hidden-up-down="false">
                                                     <div class="buy-pic" style="bottom:0;">
                                                         <img :src="data.fiveUrl" style="height:194px; width:194px;">
                                                     </div>
@@ -377,7 +377,7 @@
                         </div>
                         <br><br><br>
                         <div id="img" style="text-align:center; margin-left:30%;" v-for=" (index,a) in imgList ">
-                            <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right=false>
+                            <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right="false">
                                 <img class="images" :src="a.url" style="height:300px; width:400px;">
                             </item-move><br>
                         </div>

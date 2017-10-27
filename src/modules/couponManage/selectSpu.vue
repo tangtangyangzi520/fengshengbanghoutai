@@ -1,7 +1,7 @@
 <template>
 <!-- 优惠券-选择商品页面(单选) -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1200px'" >
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1400px'" >
             <div slot="content">
                 <div class="col-md-12 right">
                     <div class="col-md-1 right"></div>
@@ -13,7 +13,7 @@
                     <div class="col-md-4 right">
                         <input type="text" class="form-control" placeholder="请输入" v-model="searchWord">
                     </div>
-                    <div class="col-md-1 right">
+                    <div class="col-md-1 right" style="margin-top:2px;">
                         <button class="btn blue" type="button" @click="getUnSelectedList(false,true)">搜索</button>
                     </div>   
                     <div class="col-md-4 right"></div>
