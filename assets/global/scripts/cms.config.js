@@ -288,6 +288,7 @@ var  OIC_GET_LIST       =  OMS_TEST + "/oic/listOic";                //获取评
 var  OIC_IMPORT_LIST    =  OMS_TEST + "/oic/exportOics";             //导入评论
 var  OIC_DELETE         =  OMS_TEST + "/oic/deleteOic";              //删除评论
 var  OIC_EDIT           =  OMS_TEST + "/oic/editOrderItemComment";   //编辑评论
+var  OIC_EXPORT_TEMPLATE=  OMS_TEST + "/oic/exportOicTemplate";      //导出评论模板
 
 //spu,图片资源
 var  SPU_EXPORT         =  OMS_TEST + "/spu/exportSpu";              //根据spuid导出sku列表

@@ -10,18 +10,21 @@
                 <div class="col-md-8 right">
                     <form id="exportForm" method="POST" enctype="multipart/form-data">
                         <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
-                        <button class="btn blue" type="button" @click="downloadTemplate()">下载导入模板</button>
-                        <button class="btn blue" type="button" @click="importComment()">导入评论</button>
+                        <button class="btn blue" type="button" @click="downloadTemplate">下载导入模板</button>
+                        <button class="btn blue" type="button" @click="importComment">导入评论</button>
                         <input type="file" name="file" accept=".csv,application/vnd.ms-excel" style="display:inline">(Excel 97-2003)
                     </form>
                 </div>
             </div>
         </div>
+        <form id="templateForm" method="POST">
+            <input type="hidden" v-model="exportString" name="request">
+        </form>
         <div class="contentOrderBlock" id="contentList">
             <div class="table-responsive col-md-12">
                 <table class="table orderTable table-striped table-bordered table-hover">
                     <thead>
-                        <tr style="background-color:rgba(215, 215, 215, 1);">
+                        <tr style="background-color:rgba(215, 215, 215, 1);height:40px;">
                             <th style="width:10%;">买家昵称</th>
                             <th style="width:20%;">sku名称</th>
                             <th style="width:35%;">评论内容</th>
@@ -142,13 +145,18 @@ export default {
         }
     },
     methods: {
+        //下载导入模板
+        downloadTemplate() {
+            $("#templateForm").attr("action", OIC_EXPORT_TEMPLATE);
+            $("#templateForm").submit();
+        },
         // 弹出删除
         showDelete(item) {
             this.selRow = item
             this.showDeleteDialog = true;
         },
         // 确认删除
-        deleteControl(){
+        deleteControl() {
             this.deleteItem(this.selRow);
             this.showDeleteDialog = false;
         },
@@ -171,7 +179,7 @@ export default {
                     this.showMsg("删除成功");
                     this.getList(false, true);
                 } else {
-                    this.showMsg("删除失败"+data.msg);
+                    this.showMsg("删除失败" + data.msg);
                 }
             }, data => {
                 this.showMsg("删除失败");

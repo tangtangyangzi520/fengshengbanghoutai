@@ -146,7 +146,7 @@
                     </tbody>
                 </table>
             </div>
-            <div v-if="dataList.length==0" class="center">
+            <div v-if="dataList.length==0" class="center" style="text-align:center">
                 暂无数据
             </div>
         </div>
