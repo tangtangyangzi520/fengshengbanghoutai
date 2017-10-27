@@ -18,7 +18,7 @@
             <div class="table-responsive col-md-12">
                 <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                     <thead>
-                        <tr>
+                        <tr style="background-color:#D7D7D7;height:40px;">
                             <th style="width:20%;">品牌Logo</th>
                             <th style="width:10%;">品牌名称</th>
                             <th style="width:10%;">英文名称</th>
@@ -33,29 +33,26 @@
                     <tbody>
                         <tr v-for="item in dataList" @click="selectItem(item)">
                             <td  style="width:200px;text-align:center;vertical-align:middle;">
-                                <p >
-                                    <a  target="_blank" :href="item.pbdLogoUrl" title="查看大图">
-
-                                        <img :src="item.pbdLogoUrl" style="height:50px;width:50px" v-if="item.pbdLogoUrl != null">
+                                <p>
+                                    <a target="_blank" :href="item.pbdLogoUrl != '' ? item.pbdLogoUrl : 'javascript:;'" title="查看大图">
+                                        <img :src="item.pbdLogoUrl" style="height:50px;width:50px" >
                                     </a>
                                 </p>
                             </td>
-                            <td>{{item.pbdName}}</td>
-                            <td>{{item.pbdEnglishName}}</td>
-                            <td>{{item.pbdWebsite}}</td>
-                            <td>{{item.pbdIntroduce}}</td>
-                            <td>{{item.pbdCountry}}</td>
-                            <td>
+                            <td style="vertical-align: middle;">{{item.pbdName}}</td>
+                            <td style="vertical-align: middle;">{{item.pbdEnglishName}}</td>
+                            <td style="vertical-align: middle;">{{item.pbdWebsite}}</td>
+                            <td style="vertical-align: middle;">{{item.pbdIntroduce}}</td>
+                            <td style="vertical-align: middle;">{{item.pbdCountry}}</td>
+                            <td style="vertical-align: middle;">
                                 <span v-if="item.pbdDisplay == 1">启用</span>
                                 <span v-if="item.pbdDisplay == 0">停用</span>
                             </td>
-                            <td>{{item.pbdSort}}</td>
-                            <td style="text-align:center;vertical-align:middle;">
-                                <button type="button"  class="btn btn-xs blue" @click.stop="showControlFunc(item,'edit')" v-if="limitResource.brand_edit">编辑</button><!-- v-if="limitResource.brand_edit" -->
-                                <button type="button"  @click.stop="showControlFunc(item,'unuse')" class="btn btn-xs red"
-                                v-if="limitResource.brand_delete && item.pbdDisplay == 1">停用</button><!--   -->
-                                <button type="button"  @click.stop="showControlFunc(item,'use')" class="btn btn-xs green"
-                                v-if="limitResource.brand_delete && item.pbdDisplay == 0">启用</button><!--   -->
+                            <td style="vertical-align: middle;">{{item.pbdSort}}</td>
+                            <td style="vertical-align:middle;">
+                                <button type="button"  @click.stop="showControlFunc(item,'edit')"  class="btn btn-xs blue"  v-if="limitResource.brand_edit">编辑</button>
+                                <button type="button"  @click.stop="showControlFunc(item,'unuse')" class="btn btn-xs red"   v-if="limitResource.brand_delete && item.pbdDisplay == 1">停用</button>
+                                <button type="button"  @click.stop="showControlFunc(item,'use')"   class="btn btn-xs green" v-if="limitResource.brand_delete && item.pbdDisplay == 0">启用</button>
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">

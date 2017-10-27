@@ -30,7 +30,7 @@
             <div class="table-responsive col-md-12">
                 <table class="table orderTable table-striped table-bordered table-hover">
                     <thead>
-                        <tr style="background-color:rgba(215, 215, 215, 1);">
+                        <tr style="background-color:rgba(215, 215, 215, 1);height:40px;">
                             <th style="width:26%;">商品信息</th>
                             <th style="width:7%;">单价/数量</th>
                             <th style="width:7%;">下单时间</th>

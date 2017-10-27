@@ -29,7 +29,7 @@
             <div class="col-md-6" id="contentList" style="width:75%;">
                 <table class="table table-striped table-bordered table-hover" id="category-table">
                     <thead>
-                        <tr>
+                        <tr style="background-color:#D7D7D7;height:35px;">
                             <th>属性名称</th>
                             <th>属性类型</th>
                             <th>是否必填</th>
@@ -45,9 +45,7 @@
                         <tr v-for="itemobj in dataList">
                             <td>
                                 <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-algin:center; display:inline-block;" title="{{itemobj.pcaName}}">
-                                <!-- <p style="padding-top:5px;"> -->
                                     <span>{{itemobj.pcaName}}</span>
-                                <!-- </p> -->
                                 </div>
                             </td>
                             <td>

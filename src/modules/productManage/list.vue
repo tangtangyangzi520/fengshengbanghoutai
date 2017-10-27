@@ -40,10 +40,10 @@
             <div class="table-responsive col-md-12">
                 <table class="table table-striped table-bordered table-hover" id="sku-content-table">
                     <thead>
-                        <tr>
-                            <th style="width:5%">
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
-                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
+                        <tr style="background-color:#D7D7D7;height:40px;">
+                            <th style="width:5%;">
+                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-top:3px;" @click="selectAll">全选</button>
+                                <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-top:3px;" @click="reverseList">反选</button>
                             </th>
                             <th style="width:35%;">商品信息</th>
                             <th style="width:10%;">丰盛榜售价

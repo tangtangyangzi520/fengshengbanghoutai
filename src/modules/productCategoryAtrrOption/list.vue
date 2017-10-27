@@ -26,15 +26,14 @@
             </div>
             <!-- 销售属性列表 -->
             <div class="col-md-6" id="contentList" style="width:75%;">
-                <div><h3>属性列表</h3></div>
-                <div><button class="btn green" type="button"  @click="addItem()" 
-                    v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_add" >添加自定义属性
-                </button>
+                <!-- <div><h3>属性列表</h3></div> -->
+                <div>
+                    <button class="btn green" type="button"  @click="addItem()" v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_add">添加自定义属性</button>
                 </div>
                 </br>
                 <table class="table table-striped table-bordered table-hover" id="category-table">
                     <thead>
-                        <tr>
+                        <tr style="background-color:#D7D7D7;height:35px;">
                             <th style="width:15%;">属性名称</th>
                             <th style="width:20%;">属性值</th>
                             <th style="width:15%;">所属类目</th>
@@ -46,16 +45,12 @@
                         <tr v-for="itemobj in dataList" >
                             <td>
                                 <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:inline-block;" title="{{itemobj.pcaName}}">
-                                    <!-- <p style="padding-top:5px;"> -->
-                                        {{itemobj.pcaName}}
-                                    <!-- </p> -->
+                                    {{itemobj.pcaName}}
                                 </div>
                             </td>
                             <td>
                                 <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-algin:center; display:inline-block;" title="{{ itemobj.pcaoList | filterPcaoList }}">
-                                <!-- <p style="padding-top:5px;"> -->
                                     {{ itemobj.pcaoList | filterPcaoList }}
-                                <!-- </p> -->
                                 </div>
                             </td>
                             <td>
@@ -67,9 +62,9 @@
                             <td>
                                 <p style="padding-top:5px;">
                                     <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" 
-                                    v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_edit" >修改</button>                            
+                                        v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_edit" >修改</button>                            
                                     <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" 
-                                    v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_delete" >删除</button>
+                                        v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_delete" >删除</button>
                                 </p>
                             </td>
                         </tr>
@@ -113,14 +108,13 @@ import attrOptionControl from './attrOptionControl';
 import treeview from '../common/tagTreeItem';
 
 export default {
-   
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, loading, saleproductatrrControl, treeview, itemList, attrOptionControl },
     props: {
         list: Array, // 已选列表
         show: Boolean,
         onselect: Function,
         oncancel: Function
     },
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect,mSelect, loading, saleproductatrrControl, treeview, itemList, attrOptionControl},
     data() {
         return {
             name: '',
