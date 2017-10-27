@@ -15,9 +15,6 @@
                 </div>
             </div>
         </div>
-        <form id="templateForm" method="POST">
-            <input type="hidden" v-model="exportString" name="request">
-        </form>
         <div class="contentOrderBlock" id="contentList">
             <div class="table-responsive col-md-12">
                 <table class="table orderTable table-striped table-bordered table-hover">
@@ -50,15 +47,33 @@
                 暂无数据
             </div>
         </div>
+        <!-- 分页 -->
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
+        <!-- 下载导入模板 -->
+        <form id="templateForm" method="POST">
+            <input type="hidden" v-model="exportString" name="request">
+        </form>
         <!-- 创建编辑评论弹窗 -->
         <comment-control v-if="!destroyControlDialog" :id="orderEditId" :edit-data="editItem" :show="showAddDialog" :onhide="hideAddDialog"></comment-control>
         <!-- 创建导入评论弹窗 -->
-        <import-control v-if="!destroyControlDialog" :id="orderEditId" :edit-data="editItem" :show="showImport" :onhide="hideImportDialog"></import-control>
+        <m-alert :title="'导入评论'" :show="showImportDialog" :show-cancel-btn="true" :onsure="importComment" :onhide="hideImportDialog" :width="'610px'">
+            <div slot="content" style="padding-bottom=20px;">
+                <div style="padding-bottom=20px;">
+                    <form id="exportForm" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="file" :value="fileName" accept=".csv,application/vnd.ms-excel" style="display:inline">
+                    </form>
+                </div></br>
+                <div>说明: 请按照下载的导入模板进行上传导入,文件格式为".xls" (Excel 2003-2007)</div>
+            </div>
+            <!-- <span slot="btnList">
+                <button type="button" class="btn blue" @click="importComment">确定</button>
+                <button type="button" class="btn default" @click="hideImportDialog">取消</button>
+            </span> -->
+        </m-alert>
+        <!-- 删除确认弹框 -->
         <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showDeleteDialog" :onsure="deleteControl" :onhide="hideMsg">
             <div slot="content">是否确认删除？</div>
         </m-alert>
-
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
@@ -73,11 +88,10 @@ import search from './search';
 import control from '../common/control';
 import loading from '../common/loading';
 import commentControl from './commentControl';
-import importControl from './importControl';
 let vueThis = null;
 export default {
     components: {
-        pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, commentControl, importControl
+        pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, commentControl
     },
     props: {
         title: '',
@@ -125,19 +139,20 @@ export default {
             testSelectedSpu: [],
             checkedList: [true, false, false, false, false, false, false],//用来使被选中标签高亮
             editItem: {},
-            showDeleteDialog: false, //删除弹框
+            showDeleteDialog: false, //删除确认弹框
             selRow: {}, //选择的行
-            showImportDialog: false,
+            showImportDialog: false, //导入评论弹框
+            fileName:'', //导入文件名称
         }
     },
     computed: {
-        selectItems() {
-            let list = [];
-            this.dataList.forEach(item => {
-                item.checked && list.push(item);
-            })
-            return list;
-        },
+        // selectItems() {
+        //     let list = [];
+        //     this.dataList.forEach(item => {
+        //         item.checked && list.push(item);
+        //     });
+        //     return list;
+        // },
     },
     filters: {
         filterStatus(id) {
@@ -148,14 +163,23 @@ export default {
         }
     },
     methods: {
-        //弹出导入评论框
-        showImport() {
-            this.showImportDialog = true;
-        },
-        //下载导入模板
+        // 下载导入模板
         downloadTemplate() {
             $("#templateForm").attr("action", OIC_EXPORT_TEMPLATE);
             $("#templateForm").submit();
+        },
+        // 弹出导入评论框
+        showImport() {
+            this.showImportDialog = true;
+        },
+        // 导入excel
+        importComment() {
+            if(this.fileName.length==0){
+                this.showMsg("请选择需要上传的文件");
+                return;
+            }
+            $("#exportForm").attr("action", OIC_IMPORT_LIST);
+            $("#exportForm").submit();
         },
         // 弹出删除
         showDelete(item) {
@@ -188,12 +212,14 @@ export default {
             });
         },
         clearSearchOptions() {
-            this.$refs.search.clearOptions()
+            this.$refs.search.clearOptions();
         },
-        //隐藏导入评论
+        // 隐藏导入评论弹框
         hideImportDialog() {
+            this.fileName = '';
             this.showImportDialog = false;
         },
+        // 隐藏编辑评论弹框
         hideAddDialog(control) {
             this.expertEditId = '';
             this.showAddDialog = false;
@@ -207,11 +233,11 @@ export default {
                 setTimeout(() => {
                     //移除组件
                     this.destroyControlDialog = true;
-                }, 100)
+                }, 100);
                 setTimeout(() => {
                     //重新加入
                     this.destroyControlDialog = false;
-                }, 200)
+                }, 200);
                 this.getList();
             }
         },
@@ -225,6 +251,7 @@ export default {
             }
             this.showControl = false;
         },
+        // 获取列表数据
         getList(page, firstSearch) {
             let options;
             options = Object.assign({}, this.searchOptions);
@@ -235,6 +262,7 @@ export default {
             }
             this.isLoading = true;
             this.dataList = [];
+            //
             client.postData(OIC_GET_LIST, options).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -247,30 +275,30 @@ export default {
                 this.isLoading = false;
             })
         },
-        getCount(options) {
-            options.componentType = [12];
-            client.postData(COMPONENT_ARTICLE_COUNTER, options).then(data => {
-                if (data.code == 200) {
-                    this.countDesc = data.data;
-                } else {
-                    this.showMsg(data.msg);
-                }
-            }, data => {
-            })
-        },
-        selectAll() {
-            this.dataList.forEach(item => {
-                item.checked = true;
-            })
-        },
-        reverseList() {
-            this.dataList.forEach(item => {
-                item.checked = !item.checked;
-            })
-        },
-        selectItem(item) {
-            //item.checked = !item.checked;
-        },
+        // getCount(options) {
+        //     options.componentType = [12];
+        //     client.postData(COMPONENT_ARTICLE_COUNTER, options).then(data => {
+        //         if (data.code == 200) {
+        //             this.countDesc = data.data;
+        //         } else {
+        //             this.showMsg(data.msg);
+        //         }
+        //     }, data => {
+        //     })
+        // },
+        // selectAll() {
+        //     this.dataList.forEach(item => {
+        //         item.checked = true;
+        //     })
+        // },
+        // reverseList() {
+        //     this.dataList.forEach(item => {
+        //         item.checked = !item.checked;
+        //     })
+        // },
+        // selectItem(item) {
+        //     //item.checked = !item.checked;
+        // },
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;

@@ -223,7 +223,7 @@ export default {
                         this.hideDialog();
                     }, 10);
                 } else {
-                    this.showMsg(data.msg);
+                    this.showMsg(data.message);
                 }
             }, data => {
                 this.editskuflag = false;

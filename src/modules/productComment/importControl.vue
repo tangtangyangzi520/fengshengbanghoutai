@@ -1,13 +1,13 @@
 <template>
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'500px'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'600px'">
             <div slot="content" style="padding-bottom=20px;">
                 <div style="padding-bottom=20px;">
                     <form id="exportForm" method="POST" enctype="multipart/form-data">
                         <input type="file" name="file" :value="fileName" accept=".csv,application/vnd.ms-excel" style="display:inline">
                     </form>
                 </div></br>
-                <div>请选择需要导入的文件,文件格式为：.xls (Excel 97-2003)</div>
+                <div>说明: 请按照下载的导入模板进行上传导入,文件格式为".xls" (Excel 97-2003)</div>
             </div>
             <span slot="btnList">
                 <button type="button" class="btn blue" @click="importComment">确定</button>
