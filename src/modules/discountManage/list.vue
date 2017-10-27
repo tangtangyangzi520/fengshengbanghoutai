@@ -410,9 +410,8 @@ export default {
         },
         showControlFunc(item, type) {
             this.clickItems = [];
-            this.controlType = type;this.showControl = true;
-             //this.showEditDialog = true;
-            //console.log(item);
+            this.controlType = type;
+            this.showControl = true;
             if (!item) {
                 if (this.selectItems.length != 0) {
                     this.clickItems = this.selectItems;

@@ -10,6 +10,7 @@
                 <div class="col-md-8 right">
                     <form id="exportForm" method="POST" enctype="multipart/form-data">
                         <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
+                        <button class="btn blue" type="button" @click="downloadTemplate()">下载导入模板</button>
                         <button class="btn blue" type="button" @click="importComment()">导入评论</button>
                         <input type="file" name="file" accept=".csv,application/vnd.ms-excel" style="display:inline">(Excel 97-2003)
                     </form>
@@ -38,7 +39,7 @@
                             <td style="vertical-align: middle;">{{item.oicCreatedTime}}</td>
                             <td style="vertical-align: middle;">
                                 <button class="btn blue" type="button" @click="edit(item)">编辑</button>
-                                <button class="btn blue" type="button" @click="deleteItem(item)">删除</button>
+                                <button class="btn blue" type="button" @click="showDelete(item)">删除</button>
                             </td>
                         </tr>
                     </thead>
@@ -51,8 +52,8 @@
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
         <!-- 创建编辑评论弹窗 -->
         <comment-control v-if="!destroyControlDialog" :id="orderEditId" :edit-data="editItem" :show="showAddDialog" :onhide="hideAddDialog"></comment-control>
-        <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div slot="content">确定提交吗？</div>
+        <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showDeleteDialog" :onsure="deleteControl" :onhide="hideMsg">
+            <div slot="content">是否确认删除？</div>
         </m-alert>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
@@ -119,6 +120,8 @@ export default {
             testSelectedSpu: [],
             checkedList: [true, false, false, false, false, false, false],//用来使被选中标签高亮
             editItem: {},
+            showDeleteDialog: false, //删除弹框
+            selRow: {}, //选择的行
         }
     },
     computed: {
@@ -139,34 +142,40 @@ export default {
         }
     },
     methods: {
-        //弹出删除
+        // 弹出删除
         showDelete(item) {
-
+            this.selRow = item
+            this.showDeleteDialog = true;
         },
-        //导入excel
+        // 确认删除
+        deleteControl(){
+            this.deleteItem(this.selRow);
+            this.showDeleteDialog = false;
+        },
+        // 导入excel
         importComment() {
             $("#exportForm").attr("action", OIC_IMPORT_LIST);
             $("#exportForm").submit();
         },
-        //编辑
+        // 编辑
         edit(item) {
             this.editItem = item;
             this.showAddDialog = true;
         },
-        //确认删除
+        // 删除操作
         deleteItem(item) {
-            if (!confirm("确定删除商品吗")) {
-                return;
-            }
+            // 发送删除请求
             client.postData(OIC_DELETE + "?id=" + item.oicId).then(data => {
+                this.isLoading = false;
                 if (data.code == 200) {
                     this.showMsg("删除成功");
                     this.getList(false, true);
                 } else {
-                    this.showMsg(data.msg);
+                    this.showMsg("删除失败"+data.msg);
                 }
             }, data => {
-            })
+                this.showMsg("删除失败");
+            });
         },
         clearSearchOptions() {
             this.$refs.search.clearOptions()
@@ -259,7 +268,8 @@ export default {
         },
         hideMsg() {
             this.showAlert = false;
-            this.showAddDialog = false
+            this.showAddDialog = false;
+            this.showDeleteDialog = false;
         }
     },
     created() {
