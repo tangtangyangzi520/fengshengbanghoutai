@@ -136,6 +136,7 @@ export default {
                     this.imgList.push(obj);
                 }
             });
+            console.log(this.imgList);
         },
         //保存编辑
         saveEdit() {

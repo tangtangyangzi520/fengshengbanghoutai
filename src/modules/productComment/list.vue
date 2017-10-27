@@ -9,13 +9,9 @@
             <div class="col-md-12 left">
                 <div class="col-md-4"></div>
                 <div class="col-md-8 right">
-                    <form id="exportForm" method="POST" enctype="multipart/form-data">
-                        <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
-                        <button class="btn blue" type="button" @click="downloadTemplate" v-if="limitResource.productComment_downloadTemplate">下载导入模板</button>
-                        <button class="btn blue" type="button" @click="importComment" v-if="limitResource.productComment_importComment">导入评论</button>
-                        <input type="file" name="file" accept=".csv,application/vnd.ms-excel" style="display:inline" v-if="limitResource.productComment_importComment">
-                        <span v-if="limitResource.productComment_importComment">(Excel 97-2003)</span>
-                    </form>
+                    <button class="btn blue" type="button" @click="downloadTemplate" v-if="limitResource.productComment_downloadTemplate">下载导入模板</button>
+                    <button class="btn blue" type="button" @click="showImport" v-if="limitResource.productComment_importComment">导入评论</button>
+                    <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
                 </div>
             </div>
         </div>
@@ -57,9 +53,12 @@
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
         <!-- 创建编辑评论弹窗 -->
         <comment-control v-if="!destroyControlDialog" :id="orderEditId" :edit-data="editItem" :show="showAddDialog" :onhide="hideAddDialog"></comment-control>
+        <!-- 创建导入评论弹窗 -->
+        <import-control v-if="!destroyControlDialog" :id="orderEditId" :edit-data="editItem" :show="showImport" :onhide="hideImportDialog"></import-control>
         <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showDeleteDialog" :onsure="deleteControl" :onhide="hideMsg">
             <div slot="content">是否确认删除？</div>
         </m-alert>
+
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
             <div slot="content">{{showAlertMsg}}</div>
         </m-alert>
@@ -74,10 +73,11 @@ import search from './search';
 import control from '../common/control';
 import loading from '../common/loading';
 import commentControl from './commentControl';
+import importControl from './importControl';
 let vueThis = null;
 export default {
     components: {
-        pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, commentControl
+        pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, commentControl, importControl
     },
     props: {
         title: '',
@@ -127,6 +127,7 @@ export default {
             editItem: {},
             showDeleteDialog: false, //删除弹框
             selRow: {}, //选择的行
+            showImportDialog: false,
         }
     },
     computed: {
@@ -147,6 +148,10 @@ export default {
         }
     },
     methods: {
+        //弹出导入评论框
+        showImport() {
+            this.showImportDialog = true;
+        },
         //下载导入模板
         downloadTemplate() {
             $("#templateForm").attr("action", OIC_EXPORT_TEMPLATE);
@@ -161,11 +166,6 @@ export default {
         deleteControl() {
             this.deleteItem(this.selRow);
             this.showDeleteDialog = false;
-        },
-        // 导入excel
-        importComment() {
-            $("#exportForm").attr("action", OIC_IMPORT_LIST);
-            $("#exportForm").submit();
         },
         // 编辑
         edit(item) {
@@ -189,6 +189,10 @@ export default {
         },
         clearSearchOptions() {
             this.$refs.search.clearOptions()
+        },
+        //隐藏导入评论
+        hideImportDialog() {
+            this.showImportDialog = false;
         },
         hideAddDialog(control) {
             this.expertEditId = '';
