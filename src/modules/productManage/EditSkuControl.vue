@@ -227,7 +227,7 @@ export default {
                 }
             }, data => {
                 this.editskuflag = false;
-                this.showMsg("编辑失败,请重试");
+                this.showMsg(data.message);
             });
         },
         hideAddDialog(control) {
