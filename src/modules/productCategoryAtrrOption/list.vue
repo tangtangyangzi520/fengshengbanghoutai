@@ -6,15 +6,13 @@
                 <span slot="title">类目销售属性设置（SKU属性）</span>
             </page-title-bar>
             <div class="col-md-12 right">
-                <span v-if="selectItems.length>0" class="desc">已选
-                    <em>{{selectItems.length}}</em> 项 </span>   
-                <!-- <button class="btn green-meadow" @click="getList(false,true)" type="button">搜索</button> -->
+                <span v-if="selectItems.length>0" class="desc">已选<em>{{selectItems.length}}</em> 项 </span>   
             </div>
             <div style="height:5px;clear:both;"></div>
         </div>
         <!-- 销售属性树菜单 -->
         <div>
-            <div class="col-md-3" style="height:500px;overflow:auto;">
+            <div class="col-md-2" style="height:500px;overflow:auto;">
                 <div class="tree-demo jstree jstree-1 jstree-default">
                     <ul class="jstree-container-ul jstree-children jstree-wholerow-ul jstree-no-dots">
                         <treeview  :model="treeList" :select="selectItem"></treeview>
@@ -25,7 +23,7 @@
                 </div> 
             </div>
             <!-- 销售属性列表 -->
-            <div class="col-md-6" id="contentList" style="width:75%;">
+            <div class="col-md-10" id="contentList">
                 <!-- <div><h3>属性列表</h3></div> -->
                 <div>
                     <button class="btn green" type="button"  @click="addItem()" v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_add">添加自定义属性</button>
@@ -33,12 +31,12 @@
                 </br>
                 <table class="table table-striped table-bordered table-hover" id="category-table">
                     <thead>
-                        <tr style="background-color:#D7D7D7;height:35px;">
+                        <tr style="background-color:#D7D7D7;height:40px;">
                             <th style="width:15%;">属性名称</th>
-                            <th style="width:20%;">属性值</th>
+                            <th style="width:40%;">属性值</th>
                             <th style="width:15%;">所属类目</th>
-                            <th style="width:10%;">创建时间</th>
-                            <th style="width:20%;">操作</th>
+                            <th style="width:15%;">创建时间</th>
+                            <th style="width:15%;">操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,23 +47,17 @@
                                 </div>
                             </td>
                             <td>
-                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-algin:center; display:inline-block;" title="{{ itemobj.pcaoList | filterPcaoList }}">
+                                <div style="padding-top:5px; width:300px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-algin:center; display:inline-block;" title="{{ itemobj.pcaoList | filterPcaoList }}">
                                     {{ itemobj.pcaoList | filterPcaoList }}
                                 </div>
                             </td>
-                            <td>
-                                <p style="padding-top:5px;">{{ getNameByTreeId(treeList, itemobj.pcraCatId) }}</p>
-                            </td> 
-                            <td>
-                                <p style="padding-top:5px; width:180px;">{{itemobj.pcaCreatedTime | filterTime}}</p>
-                            </td>
-                            <td>
-                                <p style="padding-top:5px;">
-                                    <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" 
-                                        v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_edit" >修改</button>                            
-                                    <button type="button"  @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" 
-                                        v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_delete" >删除</button>
-                                </p>
+                            <td style="vertical-align: middle;">{{ getNameByTreeId(treeList, itemobj.pcraCatId) }}</td> 
+                            <td style="vertical-align: middle;">{{itemobj.pcaCreatedTime | filterTime}}</td>
+                            <td style="vertical-align: middle;">
+                                <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" style="margin-top:3px;margin-left:6px;"
+                                    v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_edit">修改</button>                            
+                                <button type="button" class="btn btn-xs red"  @click.stop="showControlFunc(itemobj,'delete')" style="margin-top:3px;margin-left:6px;"
+                                    v-if="isLastLevel && limitResource.SaleSpuCategoryAtrr_delete">删除</button>
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">

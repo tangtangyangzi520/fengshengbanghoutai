@@ -5,22 +5,17 @@
             <page-title-bar>
                 <span slot="title">商品列表</span>
             </page-title-bar>
-
             <!-- 条件搜索 -->
             <search :onchange="changeSearchOptions" :oncreate="getList" :parent="par" :cflag="flag"></search>
             <br>
-            
             <!-- 按钮/链接 -->
             <!--  说明:配置按钮的权限方法:添加v-if="limitResource.product_add"(按钮名称(product_add)在数据库中配置) -->
             <div class="col-md-12 right" style="display:inline-block">
-                <span v-if="selectItems.length>0" class="desc">已选
-                    <em>{{selectItems.length}}</em> 项 
-                </span>
-
+                <span v-if="selectItems.length>0" class="desc">已选<em>{{selectItems.length}}</em> 项 </span>
                 <button class="btn green" type="button"  @click="addItem()" style="margin-left:10px;" v-if="limitResource.product_add">发布商品</button>
                 <span v-if="par == 3">
                     <button type="button" class="btn blue" @click="up()" v-if="limitResource.product_shelves">上架</button>
-                    </span>
+                </span>
                 <span v-else>
                     <button type="button" class="btn default" @click="down()" v-if="limitResource.product_shelves">下架</button>
                 </span>
@@ -28,13 +23,11 @@
                 <button class="btn yellow-crusta" type="button"  @click="productexport()" v-if="limitResource.product_export">导出</button> 
                 <button class="btn green-meadow"  type="button"  @click="search()" >搜索</button>
             </div>
-
             <a><div id="1" class="cha"     style="float:left"  @click="changeClass(1)">出售中</div></a>  
             <a><div id="2" class="select"  style="float:left"  @click="changeClass(2)">已售罄</div></a>   
             <a><div id="3" class="select"  style="float:left"  @click="changeClass(3)">仓库中</div></a>
             <div style="height:5px;clear:both;"></div>
         </div>
-
         <!-- 列表数据 -->
         <div class="contentBlock" id="contentList">
             <div class="table-responsive col-md-12">

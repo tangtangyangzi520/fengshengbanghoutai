@@ -12,7 +12,7 @@
             <div style="height:5px;clear:both;"></div>
         </div>
         <div>
-            <div class="col-md-3" style="height:500px;overflow:auto;">
+            <div class="col-md-2" style="height:500px;overflow:auto;">
                 <div class="tree-demo jstree jstree-1 jstree-default">
                     <ul class="jstree-container-ul jstree-children jstree-wholerow-ul jstree-no-dots">
                         <treeview  :model="treeList" :select="selectItem"></treeview>
@@ -22,14 +22,14 @@
                     </ul>
                 </div> 
             </div>
-            <div class="col-md-3"> 
-                <p><button class="btn green" type="button" @click="addItem()" v-show="isShowAddBtn" 
-                    v-if="limitResource.ProductCategoryAtrr_add">新增</button></p></br>
-            </div>
-            <div class="col-md-6" id="contentList" style="width:75%;">
+            <div class="col-md-10" id="contentList">
+                <div>
+                    <button class="btn green" type="button" @click="addItem()" v-show="isShowAddBtn" v-if="limitResource.ProductCategoryAtrr_add">新增</button>
+                </div>
+                </br>
                 <table class="table table-striped table-bordered table-hover" id="category-table">
                     <thead>
-                        <tr style="background-color:#D7D7D7;height:35px;">
+                        <tr style="background-color:#D7D7D7;height:40px;">
                             <th>属性名称</th>
                             <th>属性类型</th>
                             <th>是否必填</th>
@@ -44,12 +44,12 @@
                     <tbody>
                         <tr v-for="itemobj in dataList">
                             <td>
-                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-algin:center; display:inline-block;" title="{{itemobj.pcaName}}">
+                                <div style="padding-top:6px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-algin:center; display:inline-block;" title="{{itemobj.pcaName}}">
                                     <span>{{itemobj.pcaName}}</span>
                                 </div>
                             </td>
                             <td>
-                                <p style="padding-top:5px;">
+                                <p style="padding-top:6px;">
                                     <span v-show="itemobj.pcaInputType==1">单选</span>
                                     <span v-show="itemobj.pcaInputType==2">多选</span>
                                     <span v-show="itemobj.pcaInputType==3">下拉列表</span>
@@ -58,43 +58,41 @@
                                 </p>
                             </td>
                             <td>
-                                <p style="padding-top:5px;">
+                                <p style="padding-top:6px;">
                                     <span v-if="itemobj.pcaRequired==1">√</span>
                                 </p>
                             </td>
                             <td>
-                                <p style="padding-top:5px;">
+                                <p style="padding-top:6px;">
                                     <span v-if="itemobj.pcaIsShow==1">√</span>
                                 </p>
                             </td> 
                             <td>
-                                <div style="padding-top:5px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-algin:center; display:inline-block;" title="{{ itemobj.pcaoList | filterPcaoList }}">
+                                <div style="padding-top:6px; width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-algin:center; display:inline-block;" title="{{ itemobj.pcaoList | filterPcaoList }}">
                                 <!-- <p style="padding-top:5px;"> -->
                                     <span>{{ itemobj.pcaoList | filterPcaoList }}</span>
                                 <!-- </p> -->
                                 </div>
                             </td>
                             <td>
-                                <p style="padding-top:5px;">
+                                <p style="padding-top:6px;">
                                     <span>{{ getNameByTreeId(treeList, itemobj.pcraCatId) }}</span>
                                 </p>
                             </td>
                             <td>
-                                <p style="padding-top:5px;">
+                                <p style="padding-top:6px;">
                                     <span>{{ itemobj.pcaCreatedTime | filterTime }}</span>
                                 </p>   
                             </td>
                             <td>
-                                <p style="padding-top:5px;">
+                                <p style="padding-top:6px;">
                                     <span>{{ itemobj.pcaSortNo }}</span>
                                 </p>
                             </td>
                             <td>
-                                <p style="padding-top:5px;">
-                                    <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')" 
-                                    v-if="selectTreeId==itemobj.pcraCatId && limitResource.ProductCategoryAtrr_edit">修改</button>
-                                    <button type="button" @click.stop="showControlFunc(itemobj,'delete')" class="btn btn-xs red" 
-                                    v-if="selectTreeId==itemobj.pcraCatId && limitResource.ProductCategoryAtrr_delete">删除</button>
+                                <p style="padding-top:5px;margin-left:6px;">
+                                    <button type="button" class="btn btn-xs blue" @click.stop="showControlFunc(itemobj,'edit')"   v-if="selectTreeId==itemobj.pcraCatId && limitResource.ProductCategoryAtrr_edit">修改</button>
+                                    <button type="button" class="btn btn-xs red"  @click.stop="showControlFunc(itemobj,'delete')" v-if="selectTreeId==itemobj.pcraCatId && limitResource.ProductCategoryAtrr_delete">删除</button>
                                 </p>
                             </td>
                         </tr>
