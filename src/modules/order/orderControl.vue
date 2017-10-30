@@ -1,6 +1,6 @@
 <template>
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1200px'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1300px'">
             <div slot="content">
                 <div class="row nopadding">
                     <!-- 订单进度条 -->
@@ -194,7 +194,7 @@
                             <tbody>
                                 <tr>
                                     <td colspan="6" style="text-align:left">
-                                        <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompany}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}
+                                        <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompanyName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}
                                         <span v-if="orderlog.length >0" style="margin-left:5%">{{orderlog[0].oddTime}}&nbsp;[{{orderlog[0].oddStatus}}]&nbsp;{{orderlog[0].oddContent}}</span>
                                         <a v-if="orderlog.length >0" style="text-decoration:none;margin-left:3%" @click="showOdd()">更多</a>
                                     </td>

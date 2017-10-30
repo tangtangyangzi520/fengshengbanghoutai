@@ -49,7 +49,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp; 付款时间：{{itemSet.orderSubList[0].ordPayTime}} &nbsp;&nbsp;&nbsp;&nbsp; 实付金额:{{itemSet.orsOpenPay.toFixed(2)}}元 &nbsp;&nbsp;&nbsp;&nbsp;
                         <span v-if="itemSet.orderSubList.length==1 && itemSet.orderSubList[0].ordOrderType==0" style="color:blue;">跨境订单</span>
                     </div>
-                    <div v-show="showflag" class="col-md-3 right" v-if="itemSet.orderSubList.length == 1">
+                    <div v-show="showflag" class="col-md-3" style="text-align:center;" v-if="itemSet.orderSubList.length == 1">
                         <a href="javascript:;" @click="showDetail(itemSet,itemSet.orderSubList[0])" v-if="limitResource.orderSeeDetails">查看详情</a>
                         <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                         <a href="javascript:;" @click="setDemo(itemSet.orderSubList[0])" v-if="limitResource.editOrderSetDemo">备注</a>
@@ -93,10 +93,10 @@
                                     <span class="">（{{itemDetail.ordSkuNum}}{{itemDetail.ordUnit}}）</span>
                                 </p>
                             </td>
-                            <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
+                            <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 {{itemSub.ordCreatedTime}}
                             </td>
-                            <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
+                            <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <!-- 订单状态 -->
                                 {{itemSub.ordStatusDisplay}}
                                 <p>
@@ -106,18 +106,18 @@
                                     <button type="button" @click.stop="editStatus(itemSub)" class="btn btn-xs blue" v-if="limitResource.changeOrdStatus&&(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)&&showflag">修改状态</button>
                                 </p>
                             </td>
-                            <td align="center" style="width:7%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
+                            <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <p>{{itemSet.orsMemberNickname}}</p>
                                 <p>{{itemSub.ordReceiveName}}</p>
                                 <p>{{itemSub.ordReceiveMobile}}</p>
                             </td>
-                            <td align="center" style="width:15%;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
+                            <td align="center" style="width:15%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <p v-show="showflag" v-if="itemSet.orderSubList.length > 1">
                                     <a href="javascript:;" @click="showDetail(itemSet,itemSub)" v-if="limitResource.orderSeeDetails">查看详情</a>
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                                                                                   (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                                                                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
                                     <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
