@@ -43,7 +43,7 @@
                     </thead>
                 </table>
             </div>
-            <div v-if="dataList.lenth==0" class="center">
+            <div v-if="dataList.length==0" class="center" style="text-align:center">
                 暂无数据
             </div>
         </div>
@@ -60,15 +60,16 @@
             <div slot="content" style="padding-bottom=20px;">
                 <div style="padding-bottom=20px;">
                     <form id="exportForm" method="POST" enctype="multipart/form-data">
-                        <input type="file" name="file" :value="fileName" accept=".csv,application/vnd.ms-excel" style="display:inline">
+                        <input type="file" name="file" id="exportInput" accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:inline">
                     </form>
-                </div></br>
-                <div>说明: 请按照下载的导入模板进行上传导入,文件格式为".xls" (Excel 2003-2007)</div>
+                </div>
+                </br>
+                <div>说明: 请按照下载的导入模板进行上传导入,文件格式为".xls"或".xlsx"</div>
             </div>
             <!-- <span slot="btnList">
-                <button type="button" class="btn blue" @click="importComment">确定</button>
-                <button type="button" class="btn default" @click="hideImportDialog">取消</button>
-            </span> -->
+                                                <button type="button" class="btn blue" @click="importComment">确定</button>
+                                                <button type="button" class="btn default" @click="hideImportDialog">取消</button>
+                                            </span> -->
         </m-alert>
         <!-- 删除确认弹框 -->
         <m-alert :title="'温馨提示'" :show-cancel-btn="true" :show="showDeleteDialog" :onsure="deleteControl" :onhide="hideMsg">
@@ -142,17 +143,10 @@ export default {
             showDeleteDialog: false, //删除确认弹框
             selRow: {}, //选择的行
             showImportDialog: false, //导入评论弹框
-            fileName:'', //导入文件名称
         }
     },
     computed: {
-        // selectItems() {
-        //     let list = [];
-        //     this.dataList.forEach(item => {
-        //         item.checked && list.push(item);
-        //     });
-        //     return list;
-        // },
+
     },
     filters: {
         filterStatus(id) {
@@ -171,15 +165,29 @@ export default {
         // 弹出导入评论框
         showImport() {
             this.showImportDialog = true;
+            $("#exportInput").val("");
         },
         // 导入excel
         importComment() {
-            if(this.fileName.length==0){
+            if ($("#exportInput").val().length == 0) {
                 this.showMsg("请选择需要上传的文件");
                 return;
             }
-            $("#exportForm").attr("action", OIC_IMPORT_LIST);
-            $("#exportForm").submit();
+            let importData = new FormData($("#exportForm")[0]), vueThis = this;
+            $.ajax({
+                type: "POST",
+                url: OIC_IMPORT_LIST,
+                data: importData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if (data.code == 200) {
+                        vueThis.showMsg("导入评论成功");
+                        vueThis.getList(false, true);
+                    }
+                }
+            }).done(function(data) {
+            });
         },
         // 弹出删除
         showDelete(item) {
@@ -216,7 +224,6 @@ export default {
         },
         // 隐藏导入评论弹框
         hideImportDialog() {
-            this.fileName = '';
             this.showImportDialog = false;
         },
         // 隐藏编辑评论弹框
@@ -275,30 +282,6 @@ export default {
                 this.isLoading = false;
             })
         },
-        // getCount(options) {
-        //     options.componentType = [12];
-        //     client.postData(COMPONENT_ARTICLE_COUNTER, options).then(data => {
-        //         if (data.code == 200) {
-        //             this.countDesc = data.data;
-        //         } else {
-        //             this.showMsg(data.msg);
-        //         }
-        //     }, data => {
-        //     })
-        // },
-        // selectAll() {
-        //     this.dataList.forEach(item => {
-        //         item.checked = true;
-        //     })
-        // },
-        // reverseList() {
-        //     this.dataList.forEach(item => {
-        //         item.checked = !item.checked;
-        //     })
-        // },
-        // selectItem(item) {
-        //     //item.checked = !item.checked;
-        // },
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;
