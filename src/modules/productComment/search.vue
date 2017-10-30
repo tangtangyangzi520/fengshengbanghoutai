@@ -1,6 +1,6 @@
 <template>
     <form class="row search-form" style="margin: 5px 0 0 0">
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-left:6px;">
             <div class="form-group">
                 <label class="col-md-3 sea" >sku名称：</label>
                 <div class="col-md-9" >

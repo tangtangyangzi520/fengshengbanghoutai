@@ -6,14 +6,19 @@
             </page-title-bar>
             <search :onchange="changeSearchOptions" :oncreate="getList" v-ref:search></search>
             <br>
-            <div class="col-md-12 left">
+            <!-- <div class="col-md-12 left">
                 <div class="col-md-4"></div>
                 <div class="col-md-8 right">
                     <button class="btn blue" type="button" @click="downloadTemplate" v-if="limitResource.productComment_downloadTemplate">下载导入模板</button>
                     <button class="btn blue" type="button" @click="showImport" v-if="limitResource.productComment_importComment">导入评论</button>
                     <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
                 </div>
-            </div>
+            </div> -->
+            <span style="float:right;display:inline-block;margin-bottom:10px;margin-right:0.4%">
+                <button class="btn blue" type="button" @click="downloadTemplate" v-if="limitResource.productComment_downloadTemplate">下载导入模板</button>
+                <button class="btn blue" type="button" @click="showImport" v-if="limitResource.productComment_importComment">导入评论</button>
+                <button class="btn blue" type="button" @click="getList(false,true)">筛选</button>
+            </span>
         </div>
         <div class="contentOrderBlock" id="contentList">
             <div class="table-responsive col-md-12">
