@@ -27,9 +27,10 @@
                                 <span class="required">* </span>品牌类型：
                             </label>
                             <div class="controls col-md-4" style="margin-top:1%">
-                                <input type="radio" name="leixing" v-model="data.pbdTagId" value="500001" >{{tagsList[0].text}}&nbsp;
-                                <input type="radio" name="leixing" v-model="data.pbdTagId" value="500002" >{{tagsList[1].text}}&nbsp;
-                                <input type="radio" name="leixing" v-model="data.pbdTagId" value="500003" >{{tagsList[2].text}}
+                                 
+                                <input type="radio" v-model="data.pbdTagId" value="500001" checked >{{tagsList[0].text}}&nbsp;
+                                <input type="radio" v-model="data.pbdTagId" value="500002" >{{tagsList[1].text}}&nbsp;
+                                <input type="radio" v-model="data.pbdTagId" value="500003" >{{tagsList[2].text}}
                             </div>
                         </div>
                         <div class="form-group">
@@ -83,7 +84,7 @@
                                 </span>预览Logo
                             </label>
                             <div class="controls col-md-6">
-                                <img :src="data.pbdLogoUrl" class="cursor"  height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                <img :src="data.pbdLogoUrl" class="cursor"  height="80" style="pointer:corsor;margin-bottom:-10px;">
                             </div>
                         </div>
                        
@@ -159,7 +160,7 @@ export default {
                 "pbdCountry": "",
                 "pbdSort": "",
                 "pbdTagName": "",
-                "pbdTagId": 0
+                "pbdTagId": 500001
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
@@ -193,7 +194,6 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            //console.log(list);
             this.data.pbdLogoUrl = list[0].url;
              this.data.pbdLogoId = list[0].id;
             this.showSelectPic({ show: false });
@@ -255,7 +255,7 @@ export default {
                 "pbdCountry": "",
                 "pbdSort": "",
                 "pbdTagName": "",
-                "pbdTagId": 0
+                "pbdTagId": 500001
             }
         },
         // 提交信息
@@ -331,9 +331,7 @@ export default {
             client.postData(TAG_LIST_GET + '?typeId=500', {}).then(response => {
                 this.isLoading = false;
                 if (response.code == 200) {
-                    
                     this.tagsList = response.data.root.children;
-                    console.log(this.tagsList);
                     
                 } else {
                     this.showMsg(response.msg);
@@ -356,7 +354,7 @@ export default {
                 "pbdCountry": "",
                 "pbdSort": "",
                 "pbdTagName": "",
-                "pbdTagId": 0
+                "pbdTagId": 500001
             }
             this.isLoading = true;
             client.postData(  PBD_GET_MAXSORT).then(response => {
