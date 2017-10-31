@@ -24,7 +24,7 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌类型：
+                                <span class="required">* </span>品牌类型
                             </label>
                             <div class="controls col-md-4" style="margin-top:1%">
                                  
