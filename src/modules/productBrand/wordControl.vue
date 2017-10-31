@@ -7,7 +7,7 @@
     
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌名称
+                                <span class="required">* </span>品牌名称：
                             </label>
                             <div class="controls col-md-6">
                                 <input type="text" class="form-control input-sm" v-model="data.pbdName" >
@@ -16,7 +16,7 @@
     
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                英文名称
+                                英文名称：
                             </label>
                             <div class="controls col-md-6">
                                 <input type="text" class="form-control input-sm" v-model="data.pbdEnglishName" >
@@ -24,7 +24,7 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌类型
+                                <span class="required">* </span>品牌类型：
                             </label>
                             <div class="controls col-md-4" style="margin-top:1%">
                                  
@@ -35,7 +35,7 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                品牌网址
+                                品牌网址：
                             </label>
                             <div class="controls col-md-6">
                                 <input type="text" class="form-control input-sm" v-model="data.pbdWebsite" >
@@ -43,7 +43,7 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                品牌描述
+                                品牌描述：
                             </label>
                             <div class="controls col-md-6">
                                 <textarea v-model="data.pbdIntroduce"  rows="2" cols="50" maxlength="256"></textarea>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                </span>国家
+                                </span>国家：
                             </label>
                             <div class="controls col-md-6">
                                 <input type="text" class="form-control input-sm" v-model="data.pbdCountry" >
@@ -59,7 +59,7 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label" >
-                                </span>是否停用
+                                </span>是否停用：
                             </label>
                             <div class="controls col-md-6" style="margin-top:1.3%">
                                <span >
@@ -69,7 +69,7 @@
                         </div>
                         <div class="form-group" style="padding-bottom:10px;">
                             <label class="col-sm-3 control-label">
-                                品牌Logo</label>
+                                品牌Logo：</label>
                             <div class="controls col-md-6">
                                 <button class="btn" @click="showSelectPicDialog(1)" type="button" v-if="data.pbdLogoUrl==''">选择图片</button>
                                 <label v-if="data.pbdLogoUrl==''" class="control-label">
@@ -81,7 +81,7 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                </span>预览Logo
+                                </span>预览Logo：
                             </label>
                             <div class="controls col-md-6">
                                 <img :src="data.pbdLogoUrl" class="cursor"  height="80" style="pointer:corsor;margin-bottom:-10px;">
@@ -90,7 +90,7 @@
                        
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌排序
+                                <span class="required">* </span>品牌排序：
                             </label>
                             <div class="controls col-md-6">
                                 <input type="text" class="form-control input-sm" v-model="data.pbdSort" >
