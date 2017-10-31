@@ -24,6 +24,16 @@
                         </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span>品牌类型：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                                <input type="radio" name="leixing" v-model="data.pbdTagId" value="500001" >{{tagsList[0].text}}&nbsp;
+                                <input type="radio" name="leixing" v-model="data.pbdTagId" value="500002" >{{tagsList[1].text}}&nbsp;
+                                <input type="radio" name="leixing" v-model="data.pbdTagId" value="500003" >{{tagsList[2].text}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
                                 品牌网址
                             </label>
                             <div class="controls col-md-6">
@@ -147,13 +157,16 @@ export default {
                 "pbdLogoId": "",
                 "pbdIntroduce": "",
                 "pbdCountry": "",
-                "pbdSort": ""
+                "pbdSort": "",
+                "pbdTagName": "",
+                "pbdTagId": 0
             },
             showAlert: false,
             showAlertTitle: '温馨提示',
             showAlertMsg: '',
             removeAddDialog: false,
             title: '添加品牌',
+            tagsList: [],
             selectPicType: 1,//logo类型
         }
     },
@@ -240,7 +253,9 @@ export default {
                 "pbdLogoId": "",
                 "pbdIntroduce": "",
                 "pbdCountry": "",
-                "pbdSort": ""
+                "pbdSort": "",
+                "pbdTagName": "",
+                "pbdTagId": 0
             }
         },
         // 提交信息
@@ -277,6 +292,12 @@ export default {
                     $(el).val("")
             }
 
+            //设置品牌类型text
+            this.tagsList.forEach(item => {
+                if(data.pbdTagId==item.id){
+                    data.pbdTagName=item.text;
+                }
+            });
             let url = PBD_CREATE ;
             if (this.id != 0) {
                 url =  PBD_EDIT  + '?pbdBrandId=' + this.id;
@@ -306,6 +327,21 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
+            //获取品牌类型
+            client.postData(TAG_LIST_GET + '?typeId=500', {}).then(response => {
+                this.isLoading = false;
+                if (response.code == 200) {
+                    
+                    this.tagsList = response.data.root.children;
+                    console.log(this.tagsList);
+                    
+                } else {
+                    this.showMsg(response.msg);
+                }
+            }, data => {
+                this.isLoading = false;
+                this.showMsg('网络连接错误');
+            });
         },
         id() {
             this.data = {
@@ -318,7 +354,9 @@ export default {
                 "pbdLogoId": "",
                 "pbdIntroduce": "",
                 "pbdCountry": "",
-                "pbdSort": ""
+                "pbdSort": "",
+                "pbdTagName": "",
+                "pbdTagId": 0
             }
             this.isLoading = true;
             client.postData(  PBD_GET_MAXSORT).then(response => {
@@ -354,6 +392,8 @@ export default {
                     this.data.pbdCountry = data.pbdCountry;
                     this.data.pbdSort = data.pbdSort;
                     this.data.pbdDisplay = data.pbdDisplay;
+                    this.data.pbdTagId = data.pbdTagId;
+                    this.data.pbdTagName = data.pbdTagName;
                     if(this.data.pbdDisplay==1){
                         $("#pbdCheckbox").prop('checked',false);
                     } else{
