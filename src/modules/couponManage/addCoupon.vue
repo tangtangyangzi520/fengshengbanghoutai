@@ -336,8 +336,9 @@ export default {
         },*/
         checkFloat(event){
             let el = event.currentTarget;
-            $(el).val(Math.abs($(el).val()));
-            var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/;
+            //$(el).val(Math.abs($(el).val()));
+            //var reg = /^[0-9]{1,7}([.]{1}[0-9]{1,2})?$/;
+            var reg = /^([1-9]\d*|0)(\.\d{1,2})?$/;
             let s = $(el).val()+"";
             let f = !reg.test(s);
             if ( f ) {
