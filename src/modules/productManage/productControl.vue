@@ -23,16 +23,6 @@
                                 <input type="radio" name="leixing" v-model="request.spuCountryType" value="2" >跨境
                             </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌类型：
-                            </label>
-                            <div class="controls col-md-4" style="margin-top:1%">
-                                <input type="radio" name="bandType" v-model="request.spuBandType" value="1" checked >自有品牌&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="bandType" v-model="request.spuBandType" value="2" >代理品牌&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="bandType" v-model="request.spuBandType" value="3" >第三方品牌
-                            </div>
-                        </div> -->
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>商品名称：
@@ -70,11 +60,21 @@
                                 <span class="required">* </span>品牌：
                             </label>
                             <div class="col-md-3">
-                                <select class="form-control" v-model="request.spuBrandId">
+                                <select class="form-control" v-model="request.spuBrandId" :change="brandTypeChangeByBrand(request.spuBrandId)">
                                     <option value="-1">请选择</option>
                                     <option v-for="item in brandList" :value="item.pbdBrandId">{{item.pbdName}}</option>
                                  </select>
                                 <!-- <m-select :data="brandList" :placeholder="'请选择内容'" :change-func="selectTagStatusFunc" :class="'fixedIcon'"></m-select> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span>品牌类型：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                                <span v-for="item in brandTypeList">
+                                    <input type="radio" name="brandType" v-model="request.pbdTagId" :value="item.id" disabled>{{item.text}}&nbsp;&nbsp;&nbsp;&nbsp;
+                                </span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -620,6 +620,7 @@ export default {
                 "resourceList": [],//图片集合
                 "tagList":[],//标签集合
                 "skuList":[],
+                "pbdTagId":"",//品牌类型ID
             },
             createshangbanglist:[{"pcrReason": "",}],
             createinsurancelist:[{"keyValue":"","description":""}],
@@ -689,7 +690,8 @@ export default {
             spu:{
                 "msg":"",
                 "id":0,
-            }
+            },
+            brandTypeList: [],// 品牌类型list
         }
     },
     vuex: {
@@ -700,6 +702,28 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        // 选择品牌后回调(选中对应的品牌类型)
+        brandTypeChangeByBrand(brandId){
+            // 初始化,将所有radio取消选中
+            this.request.pbdTagId = "";
+            if(brandId != -1){
+                for(let i=0; i<this.brandList.length; i++){
+                    // 获取选中品牌对应的品牌类型ID
+                    if(brandId == this.brandList[i].pbdBrandId){
+                        let brandTypeID = this.brandList[i].pbdTagId;// 品牌类型ID
+                        // 将品牌类型ID赋值给radio标签的v-model,当v-model的值和value的值相等时,radio就会选中
+                        this.request.pbdTagId = brandTypeID;
+                        for(let j=0; j<this.brandTypeList.length; j++){
+                            if(brandTypeID == this.brandTypeList[j].id){
+                                this.brandTypeList[j].checkedValue = true;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        },
         // 图片左移
         moveLeft(index){
             if(this.request.resourceList.length > 1){
@@ -1407,6 +1431,12 @@ export default {
             this.neirongList.forEach((per,index)=>{
                 this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } );
             });
+            // 品牌类型
+            this.brandTypeList.forEach((per,index)=>{
+                if(per.checkedValue){
+                    this.request.tagList.push( { "prpTagType": 500 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum } );
+                }
+            });
             //上榜理由
             this.request.pcrList = [];
             if(this.shangb.length > 3 ){
@@ -1710,9 +1740,7 @@ export default {
                     "sku_remark": skuname ,        //  拼接属性 
                     //"skuStockNum": erpkc2,  
                 }
-                //console.log(sin)
                 spulist.push(sin);
-                //console.log(spulist)
             } else {
                 //获取基本属性列表
                 /*$(base).each(function(b,za){
@@ -1947,7 +1975,7 @@ export default {
             }else{
                 this.request.spuFreight = 0;
             }
-            //
+            // 发送新增商品请求
             client.postData( SPU_CREATE , this.request).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -2037,7 +2065,7 @@ export default {
                 this.showMsg("获取上榜理由信息失败,请刷新重试");
             });
         },
-        //获取品牌
+        // 获取品牌
         getbrandList() { 
             //
             client.postData( PBD_GET_LISTUSED , {} ).then(data => {
@@ -2048,7 +2076,6 @@ export default {
                         list[i].id = list[i].pbdId;
                     }
                     this.brandList = list;
-                    
                 } else {
                     this.showMsg(data.msg);
                 }
@@ -2064,6 +2091,23 @@ export default {
                 this.searchOptions.existTag = item.id === 0 ? false : true;
             }
             this.setOptions();
+        },
+        // 获取品牌类型
+        getBrandTypeList() { 
+            // 从CMS获取品牌类型数据,typeId=500
+            client.postData(TAG_LIST_GET + '?typeId=500', {}).then(data => {
+                this.isLoading = false;
+                if (data.code == 200) {
+                    this.brandTypeList = data.data.root.children;
+                    this.brandTypeList.forEach(item=>{
+                        item["checkedValue"] = false;
+                    });
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.showMsg("获取品牌类型数据失败,请刷新重试");
+            });
         },
         // 弹出选择标签弹窗
         showTagDialog() {
@@ -2134,7 +2178,7 @@ export default {
                 this.data.labelIds.push(item.id);
             });
             if(flag){
-                this.showMsg("请选择到最后一级标签。");
+                alert("请选择到最后一级标签。");
                 this.data.labelIds = [];
                 this.tagsList = list;
                 return;
@@ -2231,6 +2275,7 @@ export default {
         this.getxbList();
         this.getshangbangList();
         this.getCarriageList();
+        this.getBrandTypeList();// 获取品牌类型数据
     },
     watch: {
         rad(val){

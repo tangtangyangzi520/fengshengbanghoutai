@@ -21,16 +21,6 @@
                                 <input type="radio" name="leixing" v-model="request.spuCountryType" value="2" >跨境
                             </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
-                                <span class="required">* </span>品牌类型：
-                            </label>
-                            <div class="controls col-md-4" style="margin-top:1%">
-                                <input type="radio" name="bandType" v-model="request.spuBandType" value="1" checked >自有品牌&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="bandType" v-model="request.spuBandType" value="2" >代理品牌&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="bandType" v-model="request.spuBandType" value="3" >第三方品牌
-                            </div>
-                        </div> -->
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>商品名称：
@@ -65,11 +55,21 @@
                                 <span class="required">* </span>品牌：
                             </label>
                             <div class="col-md-3">
-                                <select class="form-control" v-model="request.spuBrandId">
+                                <select class="form-control" v-model="request.spuBrandId" :change="brandTypeChangeByBrand(request.spuBrandId)">
                                      <option value="-1">请选择</option>
                                      <option v-for="item in brandList" :value="item.pbdBrandId">{{item.pbdName}}</option>
                                  </select>
                                 <!-- <m-select :data="brandList" :placeholder="'请选择内容'" :change-func="selectTagStatusFunc" :class="'fixedIcon'"></m-select> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required">* </span>品牌类型：
+                            </label>
+                            <div class="controls col-md-4" style="margin-top:1%">
+                                <span v-for="item in brandTypeList">
+                                    <input type="radio" name="brandType" v-model="request.pbdTagId" :value="item.id" disabled>{{item.text}}&nbsp;&nbsp;&nbsp;&nbsp;
+                                </span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -357,14 +357,6 @@
                                     </span>
                                     <div class="col-md-9 time-box" id="selecttime1" style="display:none">
                                         <input type="text" class="form-control inline-block datePicker" placeholder="选择开始时间" id="createStartTime1" v-model="stime"/>
-                                        <!--  <select  v-model="hour" style="width:90px; height:27px">
-                                                <option value="-1">选择小时</option>
-                                                <option v-for="item in 24" :value="item">{{item}}时</option>
-                                            </select>&nbsp;&nbsp;
-                                            <select v-model="minutes" style="width:90px; height:27px">
-                                                <option value="-1">选择分钟</option>
-                                                <option v-for="item in 60" :value="item">{{item}}分</option>
-                                            </select> -->
                                     </div>  
                                 </div>
                             </span>
@@ -478,7 +470,8 @@ export default {
                 "spuPlanShelvesDate":"",//上架时间
                 "resourceList": [],//图片集合
                 "tagList":[],//标签集合
-                "detailsList": []
+                "detailsList": [],
+                "pbdTagId":"",//品牌类型ID
             },
             createshangbanglist:[{"pcrReason": "",}],
             createinsurancelist:[{"keyValue":"","description":""}],
@@ -532,6 +525,7 @@ export default {
             showperTreeSelect: false,//
             showneiTreeSelect: false,
             editpdflag:false,
+            brandTypeList: [],// 品牌类型list
         }
     },
     vuex: {
@@ -547,6 +541,32 @@ export default {
         }
     },
     methods: {
+        // 选择品牌后回调(选中对应的品牌类型)
+        brandTypeChangeByBrand(brandId){
+            // 初始化,将所有radio取消选中
+            this.request.pbdTagId = "";
+            // 将brandTypeList中所有元素的checkedValue设为false
+            for(let k=0; k<this.brandTypeList.length; k++){
+                this.brandTypeList[k].checkedValue = false;
+            }
+            if(brandId != -1){
+                for(let i=0; i<this.brandList.length; i++){
+                    // 获取选中品牌对应的品牌类型ID
+                    if(brandId == this.brandList[i].pbdBrandId){
+                        let brandTypeID = this.brandList[i].pbdTagId;// 品牌类型ID
+                        // 将品牌类型ID赋值给radio标签的v-model,当v-model的值和value的值相等时,radio就会选中
+                        this.request.pbdTagId = brandTypeID;
+                        for(let j=0; j<this.brandTypeList.length; j++){
+                            if(brandTypeID == this.brandTypeList[j].id){
+                                this.brandTypeList[j].checkedValue = true;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        },
         // 详情图片上移
         detailMoveUp(index){
             if(this.imgList.length > 1){
@@ -883,7 +903,6 @@ export default {
         //增加属性选项
         addsxxx( event ) {
             let el = event.currentTarget;
-            //console.log( $(el).siblings(".addsxxx"))
             let f =  $(el).parent();
             f.append("<input type='checkbox' class='input' value='1' > <input type='text' style ='width: 5%; height:100%''  placeholder=''>&nbsp;&nbsp;没有合适的？可以自己输入。 ")
             //$(el).prev().add("<input type='checkbox' class='input' value='1' > <input type='text' style ='width: 5%; height:100%''  placeholder=''> ")
@@ -918,7 +937,6 @@ export default {
         },
         // 选择图片文件回调
         selectPicFunc(list) {
-            //console.log(list);
             if (this.selectPicType == 2) {
                 this.singleimgList[1] = {"psrBlock": 1, "psrResourceUrl":  list[0].url,"psrSortNo": 2, "psrType": 1,"psrResourceId":list[0].id } 
                 this.data.twoUrl = list[0].url;
@@ -941,7 +959,6 @@ export default {
                  }
             }
             this.showSelectPic({ show: false });
-            //console.log(this.singleimgList);
         },
         //删除基本属性
         closeProperty(event) { 
@@ -1065,6 +1082,18 @@ export default {
             this.neirongList.forEach((per,index)=>{
                 this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum, "prpSpuId":this.spuid ,"prpSort":index} )
             });
+            // 先清空tagList中的品牌类型
+            for(let i=0; i<this.request.tagList.length; i++){
+                if(this.request.tagList[i].prpTagType == 500){
+                    this.request.tagList.splice(i,1);
+                }
+            }
+            // 品牌类型
+            this.brandTypeList.forEach((per,index)=>{
+                if(per.checkedValue){
+                    this.request.tagList.push( { "prpTagType": 500 ,"prpTagId": per.id ,"prpTagName": per.text, "prpSpuId":this.spuid, "prpSort": 0 } );
+                }
+            });
             //上榜理由
             this.request.pcrList = [];
             if(this.shangb.length > 3 ){
@@ -1156,7 +1185,6 @@ export default {
             //商品图片判空
             let i = 0; 
             this.singleimgList.forEach(data =>{
-            //console.log(data)
                 if(data != null){
                     this.request.resourceList.$set(i, data);
                     data.psrSortNo = ++i;
@@ -1298,6 +1326,23 @@ export default {
             }
             this.setOptions();
         },
+        // 获取品牌类型
+        getBrandTypeList() { 
+            // 从CMS获取品牌类型数据,typeId=500
+            client.postData(TAG_LIST_GET + '?typeId=500', {}).then(data => {
+                this.isLoading = false;
+                if (data.code == 200) {
+                    this.brandTypeList = data.data.root.children;
+                    this.brandTypeList.forEach(item=>{
+                        item["checkedValue"] = false;
+                    });
+                } else {
+                    this.showMsg(data.msg);
+                }
+            }, data => {
+                this.showMsg("获取品牌类型数据失败,请刷新重试");
+            });
+        },
         // 弹出选择标签弹窗
         showTagDialog() {
             this.showTagTreeSelect = !this.showTagTreeSelect;
@@ -1323,48 +1368,26 @@ export default {
         },
         //内容标签回调
         selectNeiFunc(list) {
-            /*if( list.length > 3 ){
-                this.showMsg("标签不能超过3个")
-                return
-            }*/
-            let flag = false 
-            this.neirongList = []
+            let flag = false;
+            this.neirongList = [];
             this.data.labelIds = [];
-           /* list.forEach(item => {
-                if( item.children != "" ){
-                    flag = true
-                    return 
-                }
-                this.data.labelIds.push(item.id);
-            })*/
             if(flag){
-                 this.showMsg("请选择到最后一级标签。")
-               this.data.labelIds = []
-               this.neirongList = list;
-               return
+                this.showMsg("请选择到最后一级标签。");
+                this.data.labelIds = [];
+                this.neirongList = list;
+                return;
             }else{
-               this.neirongList = list;
-               this.showneiTreeSelect = !this.showneiTreeSelect;
+                this.neirongList = list;
+                this.showneiTreeSelect = !this.showneiTreeSelect;
             }
         },
-        //人群标签回调
+        //适合人群标签回调
         selectPerFunc(list) {
-            /* if( list.length > 3 ){
-                this.showMsg("标签不能超过3个")
-                return
-            }*/
-            let flag = false 
+            let flag = false; 
             this.personList = [];
             this.data.labelIds = [];
-            /* list.forEach(item => {
-                if( item.children != "" ){
-                    flag = true
-                    return 
-                }
-                this.data.labelIds.push(item.id);
-            })*/
             if(flag){
-                this.showMsg("请选择到最后一级标签。")
+                this.showMsg("请选择到最后一级标签。");
                 this.data.labelIds = [];
                 this.tagsList = list;
                 return;
@@ -1373,24 +1396,28 @@ export default {
                 this.showperTreeSelect = !this.showperTreeSelect;
             }
         },
-        // 选择标签回调
+        // 展示类目标签回调
         selectTagFunc(list) {
-            /*if( list.length > 3 ){
-                this.showMsg("标签不能超过3个")
-                return
-            }*/
             let flag = false;
             this.tagsList = [];
             this.data.labelIds = [];
+            // for(let i=0; i<list.length; i++){
+            //     if( list[i].children.length != 0 ){
+            //         flag = true;
+            //         list.splice(i,1);
+            //         break;
+            //     }
+            //     this.data.labelIds.push(list[i].id);
+            // }
             list.forEach(item => {
-                 if( item.children != "" ){
+                if( item.children != "" ){
                     flag = true;
-                    return ;
+                    return;
                 }
                 this.data.labelIds.push(item.id);
             });
             if(flag){
-                this.showMsg("请选择到最后一级标签。")
+                alert("请选择到最后一级标签。")
                 this.data.labelIds = [];
                 this.tagsList = list;
                 return;
@@ -1495,6 +1522,7 @@ export default {
          this.getshangbangList(); 
          this.getbrandList();
          this.getCarriageList();
+         this.getBrandTypeList();// 获取品牌类型数据
     },
     watch: {
         rad(val){
@@ -1691,7 +1719,7 @@ export default {
                             this.tagsList.push(item);
                         }else if( item.prpTagType == 300 ){
                             this.personList.push(item);
-                        }else{
+                        }else if( item.prpTagType == 201 ){
                             this.neirongList.push(item);
                         }
                         item.id = item.prpTagId;
@@ -1749,7 +1777,6 @@ export default {
             this.showDialog = this.show;
         },
         id() {
-            //console.log(this.id)
             this.data = {
                 "componentType": 16,
                 "painIds": [],
