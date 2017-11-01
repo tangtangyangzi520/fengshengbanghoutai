@@ -134,8 +134,20 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        //实付为0的商品进行手动改价,返回true,否则返回false; 
+        isUnableChange(item) {
+            let actDetail;
+            actDetail = Number(item.ordOriginal) * Number(item.ordSkuNum) - Number(item.ordCampaignAmount)-Number(item.ordDiscount);
+            return actDetail == 0 && item.ordChangePrice != 0;
+        },
         //校验涨价减价
         checkChangePrice(item) {
+            //实付为0的商品不得涨价或减价
+            if (this.isUnableChange(item)) {
+                this.$parent.showMsg("该商品实付金额为0元,不可手动改价");
+                item.ordChangePrice = 0;
+                return;
+            }
             if (isNaN(item.ordChangePrice)) {
                 alert("请输入不超过2位的金额");
                 item.ordChangePrice = 0;
@@ -178,6 +190,7 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
+                this.showMsg(data.message);
             });
         },
         //计算实付款
