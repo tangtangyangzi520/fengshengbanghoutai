@@ -281,7 +281,10 @@ export default {
                 this.showMsg('请输入国家(1~20字)');
                 return;
             }
-           
+            if (data.pbdTagId != null) {
+                this.showMsg('品牌类型不能为空');
+                return;
+            }
 
             var reg = /^\+?[1-9][0-9]{0,11}$/
             
