@@ -226,7 +226,6 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                this.editskuflag = false;
                 this.showMsg(data.message);
             });
         },
