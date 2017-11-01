@@ -223,10 +223,9 @@ export default {
                         this.hideDialog();
                     }, 10);
                 } else {
-                    this.showMsg(data.message);
+                    this.showMsg(data.msg);
                 }
             }, data => {
-                this.editskuflag = false;
                 this.showMsg(data.message);
             });
         },
