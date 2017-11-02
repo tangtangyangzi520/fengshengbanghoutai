@@ -88,7 +88,7 @@
                             <td style="text-align:center;vertical-align:middle;">{{item.spuModifyTime|filterTime}}</td>
                             <td style="text-align:center;vertical-align:middle;">
                                 <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.spuId,'edit')" v-if="limitResource.productSpu_edit">编辑</button>
-                                <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')"v-if="limitResource.productSku_edit">查看SKU列表</button>
+                                <button type="button"  class="btn btn-xs yellow-crusta" @click.stop="showEditspu(item.spuId,item.spuName,'edit')"v-if="limitResource.productSku_edit">编辑SKU信息</button>
                             </td>
                         </tr>
                         <tr v-if="dataList.length==0">

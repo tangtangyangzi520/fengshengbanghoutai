@@ -16,7 +16,7 @@
                                 <th>原价</th>
                                 <th><span style="color:red">*</span>展示库存（件）</th>
                                 <th>ERP实际库存</th>
-                                <th>SKU编码</th>
+                                <th><span style="color:red">*</span>SKU编码</th>
                             </tr>
                         </thead>
                         <tbody id="itemList">
@@ -25,9 +25,9 @@
                                 <td style="width:40%"><span > {{ g.skuAtrr }} </span></td>
                                 <td>￥<input class=" input2" type="number" v-model="g.skuSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)" min="0" max="99999999"/></td>
                                 <td>￥<input class=" input2" type="number" v-model="g.skuMarketSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)"  min="0" max="99999999"/></td>
-                                <td> <input class=" input2" type="number" v-model="g.skuShowNum" @keyup="check($event)" @change="check($event)" @blur="check($event)" min="0" max="2000000000"/></td>
+                                <td>  <input class=" input2" type="number" v-model="g.skuShowNum" @keyup="check($event)" @change="check($event)" @blur="check($event)" min="0" max="2000000000"/></td>
                                 <td> {{ g.skuStockNum }} </td>
-                                <td style="width:17%"> {{ g.skuCode }} </td>
+                                <td style="width:17%"><input style="margin-left: 2%;margin-top: 0%;height: 100%;width: 75%" type="text" v-model="g.skuCode" maxlength="20"/></td>
                             </tr>
                         </tbody>
                     </table>
@@ -204,10 +204,25 @@ export default {
             //let el = event.currentTarget;
             // $(el).parent().parent().children("td").remove()  
         },
+        // 编辑保存
         addItem() {
             if(this.editskuflag){
                 this.showMsg("点击过于频繁");
                 return;
+            }
+            for(let i=0; i<this.skuList.length; i++){
+                if(this.skuList[i].skuSalePrice == ""){
+                    this.showMsg("丰盛榜售价不能为空");
+                    return;
+                }
+                if(this.skuList[i].skuShowNum == ""){
+                    this.showMsg("展示库存不能为空");
+                    return;
+                }
+                if(this.skuList[i].skuCode == ""){
+                    this.showMsg("SKU编码不能为空");
+                    return;
+                }
             }
             this.editskuflag = true;
             setTimeout(()=>{
