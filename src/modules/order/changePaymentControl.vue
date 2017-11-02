@@ -1,6 +1,6 @@
 <template>
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
-        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'900px'">
+        <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1200px'">
             <div slot="content">
                 <div class="row nopadding col-md-12">
                     <div>
@@ -30,22 +30,22 @@
                                     <p>{{itemDetail.detailSku.skuName}}</p>
                                     <!-- <p>SKU编码：{{itemDetail.detailSku.skuCode}}</p> -->
                                 </td>
-                                <td align="center" style="width:7%;">
+                                <td align="center" style="width:7%;vertical-align: middle;">
                                     {{itemDetail.ordOriginal}}
                                 </td>
-                                <td align="center" style="width:7%;">
+                                <td align="center" style="width:7%;vertical-align: middle;">
                                     {{itemDetail.ordSkuNum}}
                                 </td>
-                                <td align="center" style="width:7%;">
+                                <td align="center" style="width:7%;vertical-align: middle;">
                                     {{itemDetail.ordOriginal*itemDetail.ordSkuNum}}
                                 </td>
-                                <td align="center" style="width:12%;">
+                                <td align="center" style="width:12%;vertical-align: middle;">
                                     -{{getCampaignAmount(itemDetail)}}
                                 </td>
-                                <td align="center" style="width:12%;">
+                                <td align="center" style="width:12%;vertical-align: middle;">
                                     <input type="text" class="form-control" v-model="itemDetail.ordChangePrice" @blur="checkChangePrice(itemDetail)">
                                 </td>
-                                <td align="center" style="width:12%;" :rowspan="editPaymentData.orderDetailList.length" v-if="index===0">
+                                <td align="center" style="width:12%;vertical-align: middle;" :rowspan="editPaymentData.orderDetailList.length" v-if="index===0">
                                     <input type="text" class="form-control" v-model="editPaymentData.ordTransportAmount" @blur="checkTransportAmount(editPaymentData)">
                                 </td>
                             </tr>

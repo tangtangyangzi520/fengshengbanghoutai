@@ -237,6 +237,7 @@
                             <!-- <div style="width:50px;" @mouseenter.stop="showCompaign" @mouseleave.stop="showCompaign">
                                                                             <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
                                                                         </div> -->
+                            <!-- 优惠券信息 -->
                             <img style="" @mouseout="hidePreferentialContent($event)" @mouseover="showPreferentialContent($event)" src="u7027.jpg">
                             <table class="table table-striped table-bordered table-hover" id="PreferentialContent">
                                 <thead>
@@ -285,7 +286,7 @@
                 <button type="button" class="btn default" data-dismiss="modal">确定</button>
             </span>
         </m-alert>
-        <!-- 优惠信息气泡 -->
+        <!-- 物流信息 -->
         <odd-log-detail v-if="!destroyControlDialog" :show="showOddDialog" :onhide="hideOddDialog" :orderlogdetail="orderlog"></odd-log-detail>
         <campaign-control v-if="!destroyControlDialog" :show="showCampaignStatus" :onhide="hideCampaignDialog"></campaign-control>
         <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">

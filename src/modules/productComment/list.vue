@@ -189,7 +189,12 @@ export default {
                     if (data.code == 200) {
                         vueThis.showMsg("导入评论成功");
                         vueThis.getList(false, true);
+                    }else{
+                        vueThis.showMsg(data.msg);
                     }
+                },
+                error:function(data){
+                    vueThis.showMsg("导入失败,请检查导入的文件内容格式是否正确");
                 }
             }).done(function(data) {
             });
