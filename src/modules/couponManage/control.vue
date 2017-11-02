@@ -22,7 +22,7 @@
     
         <!--确定删除-->
         <m-alert :title="'优惠券失效'" :show-cancel-btn="true" :show="showDeleteDialog" :onsure="ajaxControl" :onhide="hideMsg">
-            <div slot="content">确定让这组优惠券失效？<br><br> 失效后，买家无法再领取该优惠券；你也不能继续编辑优惠内容；买家之前已领到的优惠券，在有效期内还能继续使用。</div>
+            <div slot="content">确定让这组优惠券失效？<br><br> 失效后，买家无法再领取该优惠券；你也不能继续编辑优惠内容；买家之前已领到的优惠券，将无法使用。</div>
         </m-alert>
         <m-alert :title="'拒绝提交申请'" :show-cancel-btn="true" :onsure="ajaxControl" :show="showRejectDialog" :onhide="hideMsg">
             <div class="form-group" slot="content" style="padding-bottom:15px;">
