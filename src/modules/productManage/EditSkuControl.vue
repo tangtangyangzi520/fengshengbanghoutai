@@ -168,7 +168,7 @@ export default {
             if ( f ) {
                 this.showMsg("请输入数字");
                 //$(el).val(s.substring(0,s.length-1))
-                $(el).val("");
+                $(el).val("0");
             }
         },
         //整数校验
@@ -182,7 +182,7 @@ export default {
             if ( f ) {
                 this.showMsg("请输入整数");
                 //$(el).val(s.substring(0,s.length-1))
-                $(el).val("");
+                $(el).val("0");
             }
         },
         selectAll() {
@@ -211,15 +211,15 @@ export default {
                 return;
             }
             for(let i=0; i<this.skuList.length; i++){
-                if(this.skuList[i].skuSalePrice == ""){
+                if(this.skuList[i].skuSalePrice === ""){
                     this.showMsg("丰盛榜售价不能为空");
                     return;
                 }
-                if(this.skuList[i].skuShowNum == ""){
+                if(this.skuList[i].skuShowNum === ""){
                     this.showMsg("展示库存不能为空");
                     return;
                 }
-                if(this.skuList[i].skuCode == ""){
+                if(this.skuList[i].skuCode === ""){
                     this.showMsg("SKU编码不能为空");
                     return;
                 }
