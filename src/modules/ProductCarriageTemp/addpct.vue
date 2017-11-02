@@ -238,7 +238,7 @@ export default {
                 client.postData( PCT_CREATE ,{"pctSet":pctList,"pcName":this.pctName,}).then(data => {
                     this.isLoading = false;
                     if (data.code == 200) {
-                            this.showMsg("新健运费模板成功");
+                            this.showMsg("新建运费模板成功");
                     this.isLoading = false;
                         setTimeout(() => {
                             this.hideDialog();
@@ -249,7 +249,7 @@ export default {
                 }, data => {
                     this.isLoading = false;
                     this.pctflag = false;
-                    this.showMsg("新健运费模板失败;"+data.message);
+                    this.showMsg("新建运费模板失败;"+data.message);
                 });
             }
             ev.preventDefault();  

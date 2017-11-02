@@ -169,7 +169,7 @@
                                 <span class="required" v-if="selects.pcaRequired == 1">* </span> {{selects.pcaName}}：
                             </label>
                             <div class="controls col-md-3" style="margin-top:1%">
-                                <select  v-model="selects.pcaCreator" >
+                                <select class="form-control" v-model="selects.pcaCreator" >
                                     <option value="-1" >请选择</option>
                                     <option v-for="select in selects.pcaoList" :value="select">{{select.pcaoName}}</option>
                                 </select>
@@ -1065,14 +1065,14 @@ export default {
                 $(el).val("");
             }
         },
-        //重置基本属性
+        //重置销售属性
         reset() {
             let arr =[];
             arr.push(this.par[3]);
             arr.push(this.par[4]);
             arr.push(this.par[5]);
             //
-            client.postData(  PCA_GET_BY_CATID , {"parentIds" :arr ,"pcaAtrrType":2}  ).then(data => {
+            client.postData(  GET_ATRR_LIST , {"parentIds" :arr ,"pcaAtrrType":2}  ).then(data => {
                 if (data.code == 200) {
                     this.sxlist = data.data;
                     this.yj  = '';
@@ -1090,7 +1090,7 @@ export default {
                     this.showMsg(data.msg);
                 }
             }, data => {
-                this.showMsg("属性获取失败,请重试");
+                this.showMsg("销售属性获取失败,请重试");
             });
         },
         //增加属性选项
@@ -1327,7 +1327,7 @@ export default {
                 $("#pltab").show();
                 $("#div1").hide();
             }else{
-                this.showMsg("请先选择商品属性");
+                this.showMsg("请先勾选销售属性");
                 $("#table").style.display="none";
                 $("#pltab").style.display="none";
                 this.xssxList = [];
