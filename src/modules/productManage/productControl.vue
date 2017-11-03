@@ -195,6 +195,7 @@
                         <hr style="height:1px;border:none;border-top:1px solid white;" /><br>    
                         <!-- 销售属性 -->
                         <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">销售属性总数最多4组，SKU组合不能超过600组。</font>
+                        <!-- 按钮 -->
                         <div class="form-group">
                             <label for="title" class="col-sm-2 control-label" id="addsx">
                                 <button type="button" class="btn yellow" @click="addProperty()">添加销售属性</button> 
@@ -206,6 +207,7 @@
                                 <button type="button" class="btn green" v-on:click="dkej()">生成SKU组合</button>
                             </label>
                         </div>
+                        <!-- 所选类目带过来的销售属性及属性值 -->
                         <div v-for="(v,i) in sxlist"  style ="width: 100%; background-color:white;border:1px solid #F0F0F0;" > 
                             <div class="baseSx"> 
                                 <span class="pca" style="margin-left:5%;display:-moz-inline-box;display:inline-block;width:75px;">{{i.pcaName}}：
@@ -227,8 +229,7 @@
                                     <!-- 6个换一行 -->
                                     <a v-if="(ind+1)%8 == 0"><br> <span style="margin-left:13.8%;color:white">{{i.pcaName}}</span></a>
                                 </span>
-                           
-                                <!-- <span v-for="a in 0">&nbsp;</span> -->
+                                <!-- 添加属性值 -->
                                 <span class="addsxxx" >
                                     <input type="checkbox" class="input tianjia" value="1" style="width:16px;height:16px;margin-right:3px"> 
                                     <input type="text" style ="width: 5%; height:100%"  placeholder=""  @keyup="getcheck($event)" maxLength="20">
@@ -245,7 +246,6 @@
                         </div> -->
                              
                         <hr style="height:1px;border:none;border-top:1px solid white;" /><br>  
-
                         <div id="div1" class="box">
                             <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">只有一个SKU的情况,可直接填写如下数据;如有多个SKU的情况,请先生成SKU组合!</font>
                             <div class="form-group" >
@@ -278,11 +278,12 @@
                                     <span class="required">* </span>ERP库存（件）：
                                 </label>
                                 <div class="controls col-md-2">
-                                <input type="text" class="form-control input-sm" v-model="erpkc" placeholder="" @keyup="check($event)">
+                                    <input type="text" class="form-control input-sm" v-model="erpkc" placeholder="" @keyup="check($event)">
                                 </div> 
                                 -->
                             </div> 
-                        </div>     
+                        </div>   
+                        <!-- 添加销售属性及属性值 -->
                         <div id="base">
                             <div id="0" class="box2" style="display:none">
                                 <a class="delete">×</a>   
@@ -296,10 +297,11 @@
                                 <button type="button" class="btn green" v-on:click="dkej()">生成SKU组合</button>
                             </label>
                         </div> -->
+                        <!-- SKU组合 -->
                         <div >
                             <table id="pltab" border="1" cellspacing="0" cellpadding="0" style="display:none">  
                                 <tr style="text-align: center">
-                                    <td style="width:42.4%;border:1px solid white"> <h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
+                                    <td style="width:42.4%;border:1px solid white"><h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
                                     <td style="width:12%;border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
                                         @change="sput($event,'.put0')" min="0"max="99999999"/></td>
                                     <td style="width:11.6%;border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
@@ -321,25 +323,22 @@
                                     <th>ERP实际库存</th>
                                     <th>SKU编码</th>
                                 </tr>
-                                <tbody id="itemList" >
+                                <tbody id="itemList">
                                     <tr v-for="(index,group) in xssxList">
                                     <td>{{index+1}}<input class="input2" type="hidden" :value="index+1"/></td>
                                     <td style="width:40%;;line-height:30px"> <a class="dele" @click="close($event,index)" >×</a> {{ group }} <input class="input2" type="hidden" :value="group"/></td>
-                                    <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
-                                        @blur="checkfloat($event)"/></td>
-                                    <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" 
-                                        @blur="checkfloat($event)"/></td>
+                                    <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" @blur="checkfloat($event)"/></td>
+                                    <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" @blur="checkfloat($event)"/></td>
                                     <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
                                     <td>  <!-- <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/> --></td>
-                                    <td style="width:17%">  <input class="put4 input2" type="text" 
-                                        maxLength="20" /></td>
+                                    <td style="width:17%"><input class="put4 input2" type="text" maxLength="20"/></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
-        
+                        <!-- 图片上传 -->
                         <h4><strong>图片上传</strong></h4>
                         <div class="" style="padding-bottom:10px;">  
                             <div class="controls " style="text-align:center"> 
@@ -416,37 +415,35 @@
                                                 </item-move>
                                             </div>
                                         </td>
-
-                                    <!-- 
+                                        <!-- 
                                         <td  style="height:100px ; width: 25%">
-                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
-                                    <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                            <i class="fa fa-image pick-img" @click="showSelectPicDialog( 1 )" v-if="data.oneUrl==''" style="margin-top: 20px;"></i>
+                                            <img :src="data.oneUrl" class="cursor" @click="showSelectPicDialog(1 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                         </td>
                                         <td  style="height:100px ; width: 25%">
-                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
-                                    <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                            <i class="fa fa-image pick-img" @click="showSelectPicDialog( 2 )" v-if="data.twoUrl==''" style="margin-top: 20px;"></i>
+                                            <img :src="data.twoUrl" class="cursor" @click="showSelectPicDialog(2 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                         </td>
                                         <td  style="height:100px ; width: 25%">
-                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" v-if="data.threeUrl==''" style="margin-top: 20px;"></i>
-                                    <img :src="data.threeUrl" class="cursor" @click="showSelectPicDialog(3 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                            <i class="fa fa-image pick-img" @click="showSelectPicDialog( 3 )" v-if="data.threeUrl==''" style="margin-top: 20px;"></i>
+                                            <img :src="data.threeUrl" class="cursor" @click="showSelectPicDialog(3 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                         </td>
                                         <td  style="height:100px ; width: 25%">
-                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 4 )" v-if="data.fourUrl==''" style="margin-top: 20px;"></i>
-                                    <img :src="data.fourUrl" class="cursor" @click="showSelectPicDialog(4 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                            <i class="fa fa-image pick-img" @click="showSelectPicDialog( 4 )" v-if="data.fourUrl==''" style="margin-top: 20px;"></i>
+                                            <img :src="data.fourUrl" class="cursor" @click="showSelectPicDialog(4 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                         </td>
                                         <td  style="height:100px ; width: 25%">
-                                    <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" v-if="data.fiveUrl==''" style="margin-top: 20px;"></i>
-                                    <img :src="data.fiveUrl" class="cursor" @click="showSelectPicDialog(5 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
+                                            <i class="fa fa-image pick-img" @click="showSelectPicDialog( 5 )" v-if="data.fiveUrl==''" style="margin-top: 20px;"></i>
+                                            <img :src="data.fiveUrl" class="cursor" @click="showSelectPicDialog(5 )" height="80" v-else style="pointer:corsor;margin-bottom:-10px;">
                                         </td> 
                                         -->
-                                    
                                     </tr>
                                 </tbody>
                             </table>        
                         </div>
 
                         <br><hr style="height:1px;border:none;border-top:1px solid white;" /><br>
-
+                        <!-- 物流/其他设置 -->
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required">* </span>运费设置：
@@ -508,9 +505,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="title" class="col-sm-3 control-label">
-                                    开始时间：
-                                </label>
+                                <label for="title" class="col-sm-3 control-label">开始时间：</label>
                                 <div class="controls col-md-4 ">
                                     <span class="radios">
                                         <input type="radio" name="startTime" v-model="rad" value="1" checked>立刻                                                              
@@ -1736,7 +1731,8 @@ export default {
                     "skuClassify": "i",            //  i
                     "skuCode": skubm2,             //  sku编码
                     "skuMarketSalePrice": yjg,     //  原价
-                    "skuName":  skuname+spuName  , //  拼接属性spu名字
+                    //"skuName":  skuname+spuName , //  拼接属性spu名字
+                    "skuName":  skuname,            //  拼接属性spu名字
                     "skuNew": 1,   
                     "skuOverseas": 1,              //  1
                     "skuSalePrice": sjg,           //  售价   
@@ -1895,7 +1891,8 @@ export default {
                             "skuClassify": "i",                   //  i
                             "skuCode": $(el[5]).val(),            //  sku编码
                             "skuMarketSalePrice": $(el[3]).val(), //  原价
-                            "skuName":  $(el[1]).val()+spuName  , //  拼接属性spu名字
+                            //"skuName":  $(el[1]).val()+spuName  , //  拼接属性spu名字
+                            "skuName":  $(el[1]).val(),            //  拼接属性spu名字
                             "skuNew": 1,   
                             "skuOverseas": 1,                     //  1
                             "skuSalePrice": $(el[2]).val(),       //  售价   
@@ -1985,6 +1982,8 @@ export default {
                 this.request.spuFreight = 0;
             }
             // 发送新增商品请求
+            console.log(this.request);
+            return;
             client.postData( SPU_CREATE , this.request).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
