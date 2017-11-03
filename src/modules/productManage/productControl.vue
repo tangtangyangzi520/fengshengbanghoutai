@@ -1982,8 +1982,6 @@ export default {
                 this.request.spuFreight = 0;
             }
             // 发送新增商品请求
-            console.log(this.request);
-            return;
             client.postData( SPU_CREATE , this.request).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
