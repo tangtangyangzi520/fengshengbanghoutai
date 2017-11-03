@@ -16,7 +16,7 @@
                                 <th>原价</th>
                                 <th><span style="color:red">*</span>展示库存（件）</th>
                                 <th>ERP实际库存</th>
-                                <th><span style="color:red">*</span>SKU编码</th>
+                                <th>SKU编码</th>
                             </tr>
                         </thead>
                         <tbody id="itemList">
@@ -219,10 +219,10 @@ export default {
                     this.showMsg("展示库存不能为空");
                     return;
                 }
-                if(this.skuList[i].skuCode === ""){
-                    this.showMsg("SKU编码不能为空");
-                    return;
-                }
+                // if(this.skuList[i].skuCode === ""){
+                //     this.showMsg("SKU编码不能为空");
+                //     return;
+                // }
             }
             this.editskuflag = true;
             setTimeout(()=>{

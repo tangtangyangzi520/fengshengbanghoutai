@@ -143,7 +143,7 @@
                         </div>
 
                         <hr style="height:1px;border:none;border-top:1px solid white;" /> 
-
+                        <!-- 通用属性 -->
                         <div class="form-group" v-for="radios in radioList">
                             <label for="title" class="col-sm-3 control-label">
                                 <span class="required" v-if="radios.pcaRequired == 1">* </span> {{radios.pcaName}}：
@@ -193,16 +193,21 @@
                         </div>
 
                         <hr style="height:1px;border:none;border-top:1px solid white;" /><br>    
-
+                        <!-- 销售属性 -->
+                        <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">销售属性总数最多4组，SKU组合不能超过600组。</font>
                         <div class="form-group">
-                            <label for="title" class="col-sm-3 control-label">
+                            <label for="title" class="col-sm-2 control-label" id="addsx">
+                                <button type="button" class="btn yellow" @click="addProperty()">添加销售属性</button> 
+                            </label>
+                            <label for="title" class="col-sm-2 control-label">
                                 <button type="button" class="btn purple" @click="reset()">重置销售属性</button> 
                             </label>
+                            <label for="title" class="col-sm-2 control-label">                         
+                                <button type="button" class="btn green" v-on:click="dkej()">生成SKU组合</button>
+                            </label>
                         </div>
-                    <!-- <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">请先移除不需要的属性,再生成SKU组合</font> -->
                         <div v-for="(v,i) in sxlist"  style ="width: 100%; background-color:white;border:1px solid #F0F0F0;" > 
                             <div class="baseSx"> 
-                            <!-- <a class="delete2" @click="closeProperty($event)" >×</a> -->                         
                                 <span class="pca" style="margin-left:5%;display:-moz-inline-box;display:inline-block;width:75px;">{{i.pcaName}}：
                                     <input :value="i.pcaName" type="hidden" />
                                     <input :value="i.pcaId" type="hidden" />
@@ -227,22 +232,22 @@
                                 <span class="addsxxx" >
                                     <input type="checkbox" class="input tianjia" value="1" style="width:16px;height:16px;margin-right:3px"> 
                                     <input type="text" style ="width: 5%; height:100%"  placeholder=""  @keyup="getcheck($event)" maxLength="20">
-                                    <a class="" style="text-decoration:none" @click="addsxxx($event)" >添加&nbsp;&nbsp;&nbsp;&nbsp;</a>  
+                                    <a class="" style="text-decoration:none" @click="addsxxx($event)">添加&nbsp;&nbsp;&nbsp;&nbsp;</a>  
                                 </span>
                             </div>
                         </div>
                         <br>
-                        <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">销售属性总数最多4组，SKU组合不能超过600组。</font>
+                        <!-- <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">销售属性总数最多4组，SKU组合不能超过600组。</font>
                         <div class="form-group" id="addsx">
                             <label for="title" class="col-sm-3 control-label">
                                 <button type="button" class="btn yellow" @click="addProperty()">添加销售属性</button> 
                             </label>
-                        </div>
+                        </div> -->
                              
                         <hr style="height:1px;border:none;border-top:1px solid white;" /><br>  
 
                         <div id="div1" class="box">
-                            <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">只有一个SKU的情况：如需添加销售属性请先生成SKU组合</font>
+                            <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">只有一个SKU的情况,可直接填写如下数据;如有多个SKU的情况,请先生成SKU组合!</font>
                             <div class="form-group" >
                                 <label for="title" class="col-sm-3 control-label">
                                     <span class="required">* </span>丰盛榜售价：
@@ -250,9 +255,7 @@
                                 <div class="controls col-md-2">
                                     <input type="number" class="form-control input-sm" v-model="sj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0" max="99999999" @blur="checkfloat($event)"/>
                                 </div>
-                                <label for="title" class="col-sm-2 control-label">
-                                    原价：
-                                </label>
+                                <label for="title" class="col-sm-2 control-label">原价：</label>
                                 <div class="controls col-md-2">
                                     <input type="number" class="form-control input-sm" v-model="yj" placeholder="" @keyup="checkfloat($event)" @change="checkfloat($event)" min="0"max="99999999" @blur="checkfloat($event)"/>
                                 </div>
@@ -268,9 +271,8 @@
                                     SKU编码：
                                 </label>
                                 <div class="controls col-md-2">
-                                <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="20">  
+                                    <input type="text" class="form-control input-sm" v-model="skubm" placeholder="" maxlength="20">  
                                 </div>
-                        
                                 <!--   
                                 <label for="title" class="col-sm-2 control-label">
                                     <span class="required">* </span>ERP库存（件）：
@@ -283,17 +285,17 @@
                         </div>     
                         <div id="base">
                             <div id="0" class="box2" style="display:none">
-                                <a class="delete"  >×</a>   
+                                <a class="delete">×</a>   
                                 <input type="text" class="col-md-2 input" placeholder="销售属性名称" maxlength="60"/>
-                                <br><br>                           
-                                <input type="text" class="col-md-2 input" v-for="i in 10 " placeholder="" maxlength="20"/>
+                                <br><span>：</span><br>                           
+                                <input type="text" class="col-md-2 input" v-for="i in 10 " :placeholder="placeholderName(i)" maxlength="20"/>
                             </div>
                         </div>
-                        <div id="dkej" class="form-group"> 
+                        <!-- <div id="dkej" class="form-group"> 
                             <label for="title" class="col-sm-3 control-label">                         
                                 <button type="button" class="btn green" v-on:click="dkej()">生成SKU组合</button>
                             </label>
-                        </div>
+                        </div> -->
                         <div >
                             <table id="pltab" border="1" cellspacing="0" cellpadding="0" style="display:none">  
                                 <tr style="text-align: center">
@@ -703,6 +705,9 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        placeholderName(i){
+            return "属性值"+(i+1);
+        },
         // 选择品牌后回调(选中对应的品牌类型)
         brandTypeChangeByBrand(brandId){
             // 初始化,将所有radio取消选中
@@ -1102,7 +1107,7 @@ export default {
             }
             let f =  $(el).parent();
             f.append("<input type='checkbox' class='input' value='1' style='width:16px;height:16px;margin-right:3px'> <input type='text' style ='width: 5%; height:100%''  placeholder=''  > &nbsp;&nbsp;&nbsp;&nbsp;");
-            $(el).parent().children("input:text").on("keyup",this.getcheck); 
+            $(el).parent().children("input:text").on("keyup",this.getcheck); // 给追加的input输入框注册事件
         },
         // 显示选择图片
         showSelectPicDialog(type) {
@@ -1368,6 +1373,7 @@ export default {
             $("#div1").hide();    
             $(".box2 .delete").on("click",this.closexssx);        
         },
+        // 保存并下一步
         addItem() {
             if(this.addpdflag){
                 this.showMsg("点击过于频繁");
@@ -1674,10 +1680,10 @@ export default {
                     this.showMsg('请输入ERP库存');
                     return;
                 }*/
-                if( this.skubm == '' ){
-                    this.showMsg('请输入SKU编码');
-                    return;
-                }
+                // if( this.skubm == '' ){
+                //     this.showMsg('请输入SKU编码');
+                //     return;
+                // }
                 /*$(xsval).each(function(f,ze){
                     let count = 0
                     let pcaname = ""
