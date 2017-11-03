@@ -1916,10 +1916,12 @@ export default {
             }
             //sku
             this.request.skuList = spulist;
-            /* if(this.shangb.length == 0 ){
-                this.showMsg("上榜理由不能为空")
-                return
-            }*/
+            if(this.request.skuList.length == 1 ){
+                if(this.request.skuList[0].skuAtrr == ""){
+                    this.showMsg("请先勾选需要生成SKU的销售属性");
+                    return;
+                }
+            }
             //商品图片判空
             for(let i = 0;i<this.request.resourceList.length;i++){
                 if(this.request.resourceList[i]==null){
