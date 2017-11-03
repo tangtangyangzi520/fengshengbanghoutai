@@ -281,7 +281,7 @@ export default {
                 this.showMsg('请输入国家(1~20字)');
                 return;
             }
-            if (data.pbdTagId != null) {
+            if (data.pbdTagId<=0) {
                 this.showMsg('品牌类型不能为空');
                 return;
             }
