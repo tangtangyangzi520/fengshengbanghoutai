@@ -1723,6 +1723,7 @@ export default {
                     attrList.push(map)
                 })*/
                 skuname = skuname.substring(0,skuname.length-1);
+                let sku_name = skuname == ""?spuName:skuname;
                 let sin = {   
                     "pcaoList": pcaoList,
                     "skuOptionList":baseList,
@@ -1732,7 +1733,7 @@ export default {
                     "skuCode": skubm2,             //  sku编码
                     "skuMarketSalePrice": yjg,     //  原价
                     //"skuName":  skuname+spuName , //  拼接属性spu名字
-                    "skuName":  skuname,            //  拼接属性spu名字
+                    "skuName":  sku_name,          // 如果sku为空,直接用spuName
                     "skuNew": 1,   
                     "skuOverseas": 1,              //  1
                     "skuSalePrice": sjg,           //  售价   
@@ -1883,16 +1884,17 @@ export default {
                         if(msg){
                             return;
                         }
+                        let sku_name = $(el[1]).val() == ""?spuName:$(el[1]).val();
                         sin = {   
                             "pcaoList": pcaoList,
                             "skuOptionList":baseList,
                             "attrList": attrList,
-                            "skuAtrr": $(el[1]).val() ,           //  拼接属性
-                            "skuClassify": "i",                   //  i
-                            "skuCode": $(el[5]).val(),            //  sku编码
-                            "skuMarketSalePrice": $(el[3]).val(), //  原价
+                            "skuAtrr": $(el[1]).val() ,             //  拼接属性
+                            "skuClassify": "i",                     //  i
+                            "skuCode": $(el[5]).val(),              //  sku编码
+                            "skuMarketSalePrice": $(el[3]).val(),   //  原价
                             //"skuName":  $(el[1]).val()+spuName  , //  拼接属性spu名字
-                            "skuName":  $(el[1]).val(),            //  拼接属性spu名字
+                            "skuName":  sku_name,                   // 如果sku为空,直接用spuName
                             "skuNew": 1,   
                             "skuOverseas": 1,                     //  1
                             "skuSalePrice": $(el[2]).val(),       //  售价   
@@ -1913,12 +1915,12 @@ export default {
             }
             //sku
             this.request.skuList = spulist;
-            if(this.request.skuList.length == 1 ){
-                if(this.request.skuList[0].skuAtrr == ""){
-                    this.showMsg("请先勾选需要生成SKU的销售属性");
-                    return;
-                }
-            }
+            // if(this.request.skuList.length == 1 ){
+            //     if(this.request.skuList[0].skuAtrr == ""){
+            //         this.showMsg("请先勾选需要生成SKU的销售属性");
+            //         return;
+            //     }
+            // }
             //商品图片判空
             for(let i = 0;i<this.request.resourceList.length;i++){
                 if(this.request.resourceList[i]==null){
