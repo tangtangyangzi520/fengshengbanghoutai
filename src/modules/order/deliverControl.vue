@@ -7,18 +7,24 @@
                     <div class="col-md-10">{{ordAddress()}}</div>
                 </div>
                 <div class="col-md-12" style="padding-bottom:5px;">
+                    <div class="col-md-2">发货方式:</div>
+                    <div class="col-md-10">
+                        <input type="radio" checked>物流发货
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-bottom:5px;">
                     <div class="col-md-2">物流公司:</div>
                     <div class="col-md-4">
-
+                        <m-select :data="logiCompanyList" :placeholder="'请选择内容'" :change-func="selectLogiCompanyFunc" :class="'fixedIcon'"></m-select>
                     </div>
                     <div class="col-md-2">快递单号:</div>
                     <div class="col-md-4">
-                        <input type="text" v-model="subData.ordLogiName">
+                        <input type="text" v-model="orderSub.ordLogiName">
                     </div>
                 </div>
             </div>
             <span slot="btnList">
-                <button type="button" @click.stop="editDetailDemo" class="btn default blue">提交</button>
+                <button type="button" @click.stop="deliver" class="btn default blue">提交</button>
                 <button type="button" class="btn default" data-dismiss="modal">取消</button>
             </span>
         </m-alert>
@@ -89,6 +95,12 @@ export default {
             removeAddDialog: false,
             title: '商品发货',
             sourceDemo: '',//取消时回显
+            logiCompanyList: [],//物流公司列表
+            orderSub:{
+                "ordOrderId":"",
+                "ordLogiCompany":"",
+                "ordLogiName":""
+            }
         }
     },
     vuex: {
@@ -101,14 +113,23 @@ export default {
     methods: {
         //显示收货信息
         ordAddress() {
-            let orderSub = this.subData;
+            let orderSub = this.orderSub;
             return orderSub.ordReceiveProvince + " " + orderSub.ordReceiveCitity + " " + orderSub.ordReceiveArea + " " + orderSub.ordReceiveDetail +
                 "," + orderSub.ordReceiveName + "," + orderSub.ordReceiveMobile
         },
         //提交商家备注
-        editDetailDemo() {
-            this.editDemoData.ordOrderId = this.id;
-            client.postData(ORDER_EDIT_DEMO, this.editDemoData).then(data => {
+        deliver() {
+            //参数校验
+            console.log(this.orderSub.ordLogiCompany);
+            if (this.orderSub.ordLogiCompany==null||this.orderSub.ordLogiCompany === "") {
+                alert("请选择物流公司");
+                return;
+            }
+            if (this.orderSub.ordLogiName === "") {
+                alert("请填写快递单号");
+                return;
+            }
+            client.postData(ORDER_DELIVER, this.orderSub).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
                     this.showMsg(data.msg);
@@ -118,7 +139,21 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
+                this.showMsg(data.message);
             });
+        },
+        //获取物流公司列表
+        getLogiCompanyList() {
+            client.postData(ORDER_GET_LOGI_COMPANY, {}).then(data => {
+                if (data.code == 200) {
+                    this.logiCompanyList = data.data;
+                }
+            }, data => {
+            });
+        },
+        //选择物流公司回调
+        selectLogiCompanyFunc(item) {
+            this.orderSub.ordLogiCompany = item.id;
         },
         // 选择组件回调
         selectComponentFunc(list) {
@@ -167,6 +202,8 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
+            this.orderSub.ordOrderId=this.subData.ordOrderId;
+            this.getLogiCompanyList();
         },
         ordsubdemo() {
             this.editDemoData.ordDemo = this.ordsubdemo;
@@ -176,51 +213,6 @@ export default {
     ready() {
         this.typesList = client.global.componentTypes;
         this.showPainListSelect = true;
-        let dates = $("#createStartTimeOrder");
-        dates.datepicker({
-            dateFormat: "yy-mm-dd",
-            timeFormat: 'HH:mm:ss',
-            showMonthAfterYear: true,
-            changeMonth: true,
-            changeYear: true,
-            buttonImageOnly: true,
-            stepHour: 1,
-            stepMinute: 1,
-            closeText: '确定',
-            prevText: '&#x3c;上月',
-            nextText: '下月&#x3e;',
-            currentText: '今天',
-            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
-                '七月', '八月', '九月', '十月', '十一月', '十二月'],
-            monthNamesShort: ['一', '二', '三', '四', '五', '六',
-                '七', '八', '九', '十', '十一', '十二'],
-            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
-            weekHeader: '周',
-            showAnim: 'highlight',
-            isClear: true, //是否显示清空 
-            isRTL: false,
-            onSelect: function(selectedDate) {
-                var option = this.id == "createStartTimeOrder" ? "minDate" : "maxDate";
-                dates.not(this).datepicker("option", option, selectedDate);
-            },
-            onClose: function(data, inst) {
-                $(this).blur()
-                dates.removeAttr("disabled")
-            },
-            beforeShow: function() {
-                dates.attr("disabled", "disabled")
-                if ($("#createEndTimeOrder").datepicker('getDate') != null) {
-                    return
-                }
-                $(this).datepicker('option', 'maxDate', new Date())
-            },
-        });
-        dates.on("click", function() {
-            $(this).attr("disabled", "disabled")
-        })
-        dates.on("blur", this.setOptions)
     },
     beforeDestroy() {
         this.showPainListSelect = false;

@@ -96,6 +96,7 @@ export default {
                 }
             }, data => {
                 this.isLoading = false;
+                this.showMsg(data.message);
             });
         },
         // 选择组件回调

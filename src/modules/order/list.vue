@@ -106,8 +106,7 @@
                                     <button type="button" @click.stop="editStatus(itemSub)" class="btn btn-xs blue" v-if="limitResource.changeOrdStatus&&(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)&&showflag">修改状态</button>
                                 </p>
                                 <p>
-                                    <!-- limitResource.deliverOrderSub&& -->
-                                    <button type="button" @click.stop="deliver(itemSub)" class="btn btn-xs blue" v-if="(itemSub.ordStatus==1&&itemSub.ordOrderType==0)&&showflag">手动发货</button>
+                                    <button type="button" @click.stop="deliver(itemSub)" class="btn btn-xs blue" v-if="limitResource.deliverOrderSub&&(itemSub.ordStatus==1&&itemSub.ordOrderType==0)&&showflag">手动发货</button>
                                 </p>
                             </td>
                             <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
@@ -121,7 +120,7 @@
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                                                                                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                                                                                                               (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
                                     <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>

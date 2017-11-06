@@ -328,6 +328,8 @@ var ORDER_EDIT_REASON  =  OMS_TEST + "/order/cancelOrderSub";            //取�
 var ORDER_EDIT_ACT_AMOUNT =  OMS_TEST + "/order/editActAmount";          //修改订单价格
 var ORDER_EXPORT       =  OMS_TEST + "/order/exportOrder";               //订单导出
 var ORDER_ADD_STAR     =  OMS_TEST + "/order/addStar";                   //订单加星提交
+var ORDER_DELIVER      =  OMS_TEST + "/order/deliverOrderSub";           //订单手动发货
+var ORDER_GET_LOGI_COMPANY=  OMS_TEST + "/order/getLogiCompanyList";     //获取物流公司列表
 
 //物流模块
 var ODD_GET_ORDERSUBID       =  OMS_TEST + "/odd/getByOrderSubId";       //根据子单获取物流信息?ordOrderId=1

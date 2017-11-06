@@ -194,9 +194,9 @@
                             <tbody>
                                 <tr>
                                     <td colspan="6" style="text-align:left">
-                                        <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompanyName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 运单号：&nbsp;{{subData.ordLogiName}}
-                                        <span v-if="orderlog.length >0" style="margin-left:5%">{{orderlog[0].oddTime}}&nbsp;[{{orderlog[0].oddStatus}}]&nbsp;{{orderlog[0].oddContent}}</span>
-                                        <a v-if="orderlog.length >0" style="text-decoration:none;margin-left:3%" @click="showOdd()">更多</a>
+                                        <span style="font-weight:bold;">包裹-1</span>&nbsp;&nbsp;&nbsp;&nbsp; {{subData.ordLogiCompanyName}}&nbsp;&nbsp;&nbsp;&nbsp;运单号：&nbsp;{{subData.ordLogiName}}
+                                        <span v-if="orderlog.length >0" style="margin-left:1%">{{orderlog[0].oddTime}}&nbsp;[{{orderlog[0].oddStatus}}]&nbsp;{{orderlog[0].oddContent}}</span>
+                                        <a v-if="orderlog.length >0" style="text-decoration:none;margin-left:1%" @click="showOdd()">更多</a>
                                     </td>
                                 </tr>
                                 <tr v-for="(index,itemDetail) in subData.orderDetailList">
