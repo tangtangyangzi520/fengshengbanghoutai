@@ -113,7 +113,7 @@ export default {
     methods: {
         //显示收货信息
         ordAddress() {
-            let orderSub = this.orderSub;
+            let orderSub = this.subData;
             return orderSub.ordReceiveProvince + " " + orderSub.ordReceiveCitity + " " + orderSub.ordReceiveArea + " " + orderSub.ordReceiveDetail +
                 "," + orderSub.ordReceiveName + "," + orderSub.ordReceiveMobile
         },
