@@ -16,13 +16,6 @@
                         <input type="text" v-model="subData.ordLogiName">
                     </div>
                 </div>
-                <div class="col-md-12" style="padding-bottom:5px;">
-                    <div class="col-md-2">发货时间:</div>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control inline-block datePicker" placeholder="选择发货时间" id="createStartTimeOrder"  v-model="subData.ordLogiTime">
-                    </div>
-                </div>
-
             </div>
             <span slot="btnList">
                 <button type="button" @click.stop="editDetailDemo" class="btn default blue">提交</button>
