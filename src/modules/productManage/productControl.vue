@@ -245,7 +245,8 @@
                             </label>
                         </div> -->
                              
-                        <hr style="height:1px;border:none;border-top:1px solid white;" /><br>  
+                        <hr style="height:1px;border:none;border-top:1px solid white;" /><br> 
+                        <!-- 一个SKU的情况 -->
                         <div id="div1" class="box">
                             <span style="color:#F00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* </span><font style="color:#6699CC" size="3">只有一个SKU的情况,可直接填写如下数据;如有多个SKU的情况,请先生成SKU组合!</font>
                             <div class="form-group" >
@@ -297,20 +298,24 @@
                                 <button type="button" class="btn green" v-on:click="dkej()">生成SKU组合</button>
                             </label>
                         </div> -->
-                        <!-- SKU组合 -->
-                        <div >
+                        <!-- 多个SKU情况,生成SKU组合 -->
+                        <div>
                             <table id="pltab" border="1" cellspacing="0" cellpadding="0" style="display:none">  
                                 <tr style="text-align: center">
                                     <td style="width:42.4%;border:1px solid white"><h5 style="color:#6699CC"><strong>批量输入数据</strong></h5></td>
-                                    <td style="width:12%;border:1px solid white;line-height:30px">￥<input class=" input2" type="number"  @keyup="sput($event,'.put0')"  @blur="sput($event,'.put0')" 
-                                        @change="sput($event,'.put0')" min="0"max="99999999"/></td>
-                                    <td style="width:11.6%;border:1px solid white">￥<input class=" input2" type="number"  @keyup="sput($event,'.put1')" @change="sput($event,'.put1')"  
-                                        @blur="sput($event,'.put1')"  min="0"max="99999999"/></td>
-                                    <td style="border:1px solid white">  <input class=" input2" type="number"  @keyup="ssput($event,'.put2')" @change="ssput($event,'.put2')"
-                                        min="0"max="2000000000" @blur="ssput($event,'.put2')"/></td>
-                                    <td style="border:1px solid white">  <!-- <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')"
-                                        min="0"max="2000000000" @blur="ssput($event,'.put3')"/> --></td>
-                                    <td style="border:1px solid white;width:24.3%"> <!--  <input class=" input2" type="text"  maxLength="25" /> --></td>
+                                    <td style="width:12%;border:1px solid white;line-height:30px">
+                                        ￥<input class=" input2" type="number" @keyup="sput($event,'.put0')" @blur="sput($event,'.put0')" @change="sput($event,'.put0')" min="0"max="99999999"/>
+                                    </td>
+                                    <td style="width:11.6%;border:1px solid white">
+                                        ￥<input class=" input2" type="number" @keyup="sput($event,'.put1')" @change="sput($event,'.put1')" @blur="sput($event,'.put1')"  min="0"max="99999999"/>
+                                    </td>
+                                    <td style="border:1px solid white">  
+                                        <input class=" input2" type="number" @keyup="ssput($event,'.put2')" @change="ssput($event,'.put2')" min="0"max="2000000000" @blur="ssput($event,'.put2')"/>
+                                    </td>
+                                    <td style="border:1px solid white">  
+                                        <!-- <input class=" input2" type="number"  @keyup="ssput($event,'.put3')" @change="ssput($event,'.put3')" min="0"max="2000000000" @blur="ssput($event,'.put3')"/> -->
+                                    </td>
+                                    <td style="border:1px solid white;width:24.3%"><!-- <input class=" input2" type="text"  maxLength="25" /> --></td>
                                 </tr>
                             </table>
                             <table class="tab" id="table" style="display:none" border="1" cellspacing="0" cellpadding="0">  
@@ -453,11 +458,11 @@
                                 <input type="radio" name="yunfei" v-model="yunfei" value="0" checked >统一邮费
                                 </div>
                                 <h4 class="col-md-1">￥</h4>
-                                <div class="col-sm-5" >
-                                    <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999"  min="0"
-                                    @keyup="check($event)" @change="check($event)"/></div>
+                                <div class="col-sm-5">
+                                    <input type="number" class="form-control input-sm" v-model="request.spuFreight" placeholder="0.00" max="999" min="0"
+                                        @keyup="check($event)" @change="check($event)"/></div>
                                 <br><br><br>
-                                <div class="col-md-4" >
+                                <div class="col-md-4">
                                     <input type="radio" name="yunfei" v-model="yunfei" value="1">运费模板</div>
                                     <div class="col-md-6">
                                         <select class="form-control" v-model="request.spuCarriageId">
@@ -568,6 +573,7 @@ import tagTree from '../common/tagTree';
 import templateControl from './templateControl';
 import { selectPic, mAlert, mSelect, mMultiSelect, itemList } from '../../components';
 import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';//上传图片插件
+
 export default {
     components: { selectPic, tagTree, mAlert, mSelect, mMultiSelect, itemList, templateControl, itemMove },
     props: {
@@ -595,30 +601,30 @@ export default {
     },
     data() {
         return {
-            request:{
-                "spuOptionList":[],
-                "spuCountryType":1,
-                "spuCarriageId":-1,//运费模板id
-                "spuType": 1,
-                "spuShareUrl":'',
-                "spuPic": '',
-                "spuAppSummary": "",
-                "spuPcSummary":"",
-                "spuName": "",
-                "spuCatId": -1,
-                "spuKeyword":"",
-                "spuAd":"",
-                "spuBrandId" : -1,
-                "pcrList":[],
-                "spuExpertOption":"",//专家观点
-                "spuFreight":"", //运费
-                "spuPackingList":"",//包装清单
-                "piList" : [],//消保集合
-                "spuPlanShelvesDate":"",//上架时间
-                "resourceList": [],//图片集合
-                "tagList":[],//标签集合
-                "skuList":[],
-                "pbdTagId":"",//品牌类型ID
+            request:{                    //请求参数封装对象:
+                "spuOptionList":[],      //sku属性的选项列表
+                "spuCountryType":1,      //国内外分类
+                "spuCarriageId":-1,      //运费模板id
+                "spuType": 1,            //商品类型
+                "spuShareUrl":'',        //分享地址
+                "spuPic": '',            //商品主图
+                "spuAppSummary": "",     //商品详情
+                "spuPcSummary":"",       //商品简介
+                "spuName": "",           //商品名称
+                "spuCatId": -1,          //商品类目ID
+                "spuKeyword":"",         //关键词
+                "spuAd":"",              //广告词
+                "spuBrandId" : -1,       //品牌ID
+                "pcrList":[],            //上榜理由
+                "spuExpertOption":"",    //专家观点
+                "spuFreight":"",         //运费
+                "spuPackingList":"",     //包装清单
+                "piList" : [],           //消保集合
+                "spuPlanShelvesDate":"", //上架时间
+                "resourceList": [],      //图片集合
+                "tagList":[],            //标签集合
+                "skuList":[],            //SKU集合
+                "pbdTagId":"",           //品牌类型ID
             },
             createshangbanglist:[{"pcrReason": "",}],
             createinsurancelist:[{"keyValue":"","description":""}],
@@ -700,6 +706,7 @@ export default {
         actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        // 渲染添加销售属性的placeholder显示
         placeholderName(i){
             return "属性值"+(i+1);
         },
@@ -1202,6 +1209,7 @@ export default {
             }  
             return ret;  
         },
+        // 生成SKU组合
         dkej() {
             $("#table").hide();
             $("#pltab").hide();
@@ -1211,7 +1219,7 @@ export default {
             let msg = "";
             let msg3 = "";
             let a = new Array();
-            //基本属性的遍历
+            // 销售属性的遍历
             $(".baseSx ").each(function(index,val){
                 let arr = new Array();
                 flag = false;
@@ -1260,9 +1268,8 @@ export default {
                     //this.xssxList = []
                     //return
                 }
-                //销售属性的遍历 及 判空
+                // 新添加的销售属性的校验
                 let msg2 = "";
-
                 $("#base div[id!=\"0\"]").each(function(index,v){
                     let name = '';
                     let arr = new Array();
@@ -1309,7 +1316,7 @@ export default {
                 this.showMsg(msg2);
                 return;
             }
-            // 组合数的判断 ,没超出范围就求笛卡尔积
+            // 组合数的判断,没超出范围就求笛卡尔积
             if(a.length > 0){
                 let sum = 1;
                 $(a).each(function(ind,va){
@@ -1333,17 +1340,17 @@ export default {
                 this.xssxList = [];
             }  
         },
-        //删除基本属性
-        closeProperty(event) { 
-            let el = event.currentTarget;
-            if( $(el).parent().hasClass("baseSx") ){
-                $(el).parent().remove();
-                this.xssxList = []; 
-                $("#table").hide();
-                $("#pltab").hide();
-            }
-        },
-        //删除新增销售属性
+        // 删除基本属性
+        // closeProperty(event) { 
+        //     let el = event.currentTarget;
+        //     if( $(el).parent().hasClass("baseSx") ){
+        //         $(el).parent().remove();
+        //         this.xssxList = []; 
+        //         $("#table").hide();
+        //         $("#pltab").hide();
+        //     }
+        // },
+        // 删除新增销售属性
         closexssx(event) {
             let el = event.currentTarget;
             $(el).parent().remove();  
@@ -1354,10 +1361,11 @@ export default {
                 $("#div1").show();
             }
         },
-        //删除spu列
+        // 删除新添加的销售属性及属性值
         close(event,index) { 
             this.xssxList.splice(index, 1);
         },
+        // 添加销售属性及属性值
         addProperty(){ 
             if( $("#base div[id!=\"0\"]").length + this.sxlist.length > 3 ) {
                 this.showMsg("销售属性总数最多4组!");
@@ -1599,6 +1607,7 @@ export default {
             let kcs = this.kc;
             let skubm2 = this.skubm;
             // let erpkc2 = this.erpkc;
+            // 一个SKU的情况
             if( $("#div1").is(":visible") &&  $("#table").is( ":hidden") ){ 
                 let msg2 = "";
                 let baseList = [];
@@ -1746,6 +1755,7 @@ export default {
                 }
                 spulist.push(sin);
             } else {
+                // 多个SKU的情况
                 //获取基本属性列表
                 /*$(base).each(function(b,za){
                 })
@@ -1789,10 +1799,10 @@ export default {
                                         let list = $(za).siblings("input:hidden");
                                         let basesx = { //基本属性对象
                                             "psaoAtrrId": $($(bname[d]).children("input:hidden")[1]).val(), //基本属性ID
-                                            "psaoAtrrValue": zhi[ii],  // 选项值  
+                                            "psaoAtrrValue": zhi[ii],           // 选项值  
                                             "psaoOptionId": $(list[0]).val() ,  // 属性值ID
                                             "psaoSortNo": $(list[2]).val(),     // 
-                                            "psaoType": 2    //  2 
+                                            "psaoType": 2                       //  2 
                                         }
                                         baseList.push(basesx);
                                         ++ii;
@@ -1823,7 +1833,7 @@ export default {
                                 }
                             }
                         });
-                        //销售属性的匹配
+                        // 销售属性的匹配
                         let len = $(base).length;
                         $(xsval).each(function(f,ze){
                             let optionList = [];
@@ -1834,14 +1844,14 @@ export default {
                                         let map = {
                                             "optionList": [  //销售属性选项  
                                                 {
-                                                    "pcaoName": zhi[f+ii],  //  选项值
-                                                    "pcaoSortNo": g,       // 排序号
-                                                    "pcaoValue": zhi[f+ii], //  选项值
-                                                    "skuOptionList": [    //sku属性选项
+                                                    "pcaoName": zhi[f+ii],  // 选项值
+                                                    "pcaoSortNo": g,        // 排序号
+                                                    "pcaoValue": zhi[f+ii], // 选项值
+                                                    "skuOptionList": [      // sku属性选项
                                                         {
-                                                        "psaoAtrrValue": zhi[f+ii], // 选项值  
-                                                        "psaoSortNo": g,//排序号
-                                                        "psaoType": 2  // 2
+                                                            "psaoAtrrValue": zhi[f+ii], // 选项值  
+                                                            "psaoSortNo": g, //排序号
+                                                            "psaoType": 2    // 2
                                                         }
                                                     ]
                                                 }
@@ -1984,6 +1994,8 @@ export default {
                 this.request.spuFreight = 0;
             }
             // 发送新增商品请求
+            console.log(this.request)
+            return;
             client.postData( SPU_CREATE , this.request).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -2333,8 +2345,8 @@ export default {
             arr.push(this.par[3]);
             arr.push(this.par[4]);
             arr.push(this.par[5]);
-            //
-            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1,}  ).then(data => {
+            // 获取通用属性
+            client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1} ).then(data => {
                 if (data.code == 200) {
                     data.data.forEach(sx =>{
                         if(sx.pcaInputType==1){
@@ -2362,7 +2374,7 @@ export default {
             }, data => {
                 this.showMsg("获取通用属性失败,请刷新重试");
             });
-            //
+            // 获取销售属性
             client.postData( GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":2} ).then(data => {
                 if (data.code == 200) {
                     this.sxlist = data.data;
@@ -2437,6 +2449,7 @@ export default {
     ready() {   
         this.typesList = client.global.componentTypes;
         this.showPainListSelect = true;
+        // 渲染时间控件
         let dates = $("#createStartTime0");
         dates.datetimepicker({
             dateFormat: "yy-mm-dd",
@@ -2461,15 +2474,15 @@ export default {
             isClear:true, //是否显示清空 
             isRTL: false,
             onSelect: function(selectedDate){
-            //var option = this.id == "createStartTime2" ? "minDate" : "maxDate";
-            //dates.not(this).datepicker("option", option, selectedDate );
+                //var option = this.id == "createStartTime2" ? "minDate" : "maxDate";
+                //dates.not(this).datepicker("option", option, selectedDate );
             },
             onClose: function(data,inst){   
-                dates.removeAttr("disabled")
+                dates.removeAttr("disabled");
             },
             beforeShow: function(){
-                dates.attr("disabled","disabled")
-                $(this).datepicker('option', 'minDate', new Date() )
+                dates.attr("disabled","disabled");
+                $(this).datepicker('option', 'minDate', new Date());
             },
         });
         dates.on("click",function(){
