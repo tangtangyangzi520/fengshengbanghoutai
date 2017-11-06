@@ -105,6 +105,10 @@
                                 <p>
                                     <button type="button" @click.stop="editStatus(itemSub)" class="btn btn-xs blue" v-if="limitResource.changeOrdStatus&&(itemSub.ordStatus==1||itemSub.ordStatus==2||itemSub.ordStatus==3)&&showflag">修改状态</button>
                                 </p>
+                                <p>
+                                    <!-- limitResource.deliverOrderSub&& -->
+                                    <button type="button" @click.stop="deliver(itemSub)" class="btn btn-xs blue" v-if="(itemSub.ordStatus==1&&itemSub.ordOrderType==0)&&showflag">手动发货</button>
+                                </p>
                             </td>
                             <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <p>{{itemSet.orsMemberNickname}}</p>
@@ -117,7 +121,7 @@
                                     <span v-if="limitResource.orderSeeDetails && limitResource.editOrderSetDemo">--</span>
                                     <a href="javascript:;" @click="setDemo(itemSub)" v-if="limitResource.editOrderSetDemo">备注</a>
                                     <span v-if="(limitResource.editOrderSetDemo && limitResource.addStar) || 
-                                                                                                                       (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
+                                                                                                                                           (limitResource.orderSeeDetails && limitResource.addStar)">--</span>
                                     <a @click="setStar(itemSub)" v-if="limitResource.addStar&&itemSub.ordStar<=0">加星</a>
                                     <a style="font-size:15px;color:#ffcc00;text-decoration:none;" v-if="limitResource.addStar&&itemSub.ordStar>0" @click="setStar(itemSub)">
                                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -151,21 +155,23 @@
             </div>
         </div>
         <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
-        <!-- 创建订单详情弹窗 -->
+        <!-- 订单详情 -->
         <order-control v-if="!destroyControlDialog" :id="orderEditId" :set-data="orderSetData" :sub-data="orderSubData" :show="showAddDialog" :onhide="hideAddDialog"></order-control>
-        <!-- 创建订单备注弹窗 -->
+        <!-- 订单备注 -->
         <demo-control v-if="!destroyControlDialog" :id="ordOrderId" :ordsubdemo="ordDemo" :show="showDemoDialog" :onhide="hideDemoDialog"></demo-control>
-        <!-- 创建修改订单状态弹窗 -->
+        <!-- 手动发货 -->
+        <deliver-control v-if="!destroyControlDialog" :sub-data="orderSubData" :show="showDeliverDialog" :onhide="hideDeliverDialog"></deliver-control>
+        <!-- 修改订单状态 -->
         <change-status-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showStatusDialog" :onhide="hideStatusDialog"></change-status-control>
-        <!-- 创建取消订单弹窗 -->
+        <!-- 取消订单 -->
         <cancel-order-control v-if="!destroyControlDialog" :id="ordOrderId" :show="showReasonDialog" :onhide="hideReasonDialog" :send-req="reason"></cancel-order-control>
-        <!-- 创建修改订单价格弹窗 -->
+        <!-- 修改订单价格 -->
         <change-payment-control v-if="!destroyPaymentDialog" :sub-data="orderSubData" :show="showPaymentDialog" :onhide="hidePaymentDialog"></change-payment-control>
         <!-- 测试选择商品弹窗 -->
         <select-spu v-if="!destroyControlDialog" :show="showSpuDialog" :onhide="hideAddDialog" @spu-data="getSelected"></select-spu>
         <!--加星-->
         <star v-if="!destroyControlDialog" :id="ordOrderId" :starnum="ordStar" :show="showStarDialog" :onhide="hideStarDialog"></star>
-        <!-- 创建预览商品弹窗 -->
+        <!-- 预览商品 -->
         <preview v-if="!destroyControlDialog" :id="expertEditId" :show="showpreDialog" :onhide="hidePreDialog" :pspuid="lspuid" :pflag="lflag" :imgflag="limgflag"></preview>
 
         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
@@ -187,6 +193,7 @@ import loading from '../common/loading';
 import selectSpu from '../common/selectSpu';
 import orderControl from './orderControl';
 import demoControl from './demoControl';
+import deliverControl from './deliverControl';
 import changeStatusControl from './changeStatusControl';
 import cancelOrderControl from './cancelOrderControl';
 import changePaymentControl from './changePaymentControl';
@@ -196,7 +203,7 @@ let vueThis = null;
 export default {
     components: {
         pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control,
-        loading, orderControl, demoControl, changeStatusControl, cancelOrderControl, changePaymentControl, selectSpu, preview, star,
+        loading, orderControl, demoControl, changeStatusControl, cancelOrderControl, changePaymentControl, selectSpu, preview, star, deliverControl
     },
     props: {
         title: '',
@@ -231,6 +238,7 @@ export default {
             showStatusDialog: false,
             showReasonDialog: false,
             showPaymentDialog: false,
+            showDeliverDialog: false,
             showpreDialog: false,
             showSpuDialog: false,
             showAlertTitle: '温馨提示',
@@ -271,6 +279,11 @@ export default {
         }
     },
     methods: {
+        //弹出手动发货窗口
+        deliver(itemSub) {
+            this.showDeliverDialog = true;
+            this.orderSubData = itemSub;
+        },
         clearSearchOptions() {
             this.$refs.search.clearOptions()
             //console.log(this.$refs.search)
@@ -394,6 +407,12 @@ export default {
         },
         hideDemoDialog() {
             this.showDemoDialog = false
+            setTimeout(() => {
+                this.onhide('cancel');
+            }, 300)
+        },
+        hideDeliverDialog() {
+            this.showDeliverDialog = false
             setTimeout(() => {
                 this.onhide('cancel');
             }, 300)
@@ -529,7 +548,6 @@ export default {
             this.showflag = true
         },
         oflag() {
-            // alert(this.ospuid)
             this.showflag = false
             this.getList(false, true)
         },

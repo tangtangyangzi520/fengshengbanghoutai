@@ -4,7 +4,6 @@
             <div slot="content">
                 <textarea v-model="editDemoData.ordDemo" placeholder="最多可输入256个字" rows="10" cols="50" maxlength="256"></textarea>
             </div>
-            {{this.editDemoData.ordDemo}}
             <span slot="btnList">
                 <button type="button" @click.stop="editDetailDemo" class="btn default blue">提交</button>
                 <button type="button" class="btn default" data-dismiss="modal">取消</button>
