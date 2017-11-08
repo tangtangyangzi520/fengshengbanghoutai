@@ -96,10 +96,10 @@ export default {
             title: '商品发货',
             sourceDemo: '',//取消时回显
             logiCompanyList: [],//物流公司列表
-            orderSub:{
-                "ordOrderId":"",
-                "ordLogiCompany":"",
-                "ordLogiName":""
+            orderSub: {
+                "ordOrderId": "",
+                "ordLogiCompany": "",
+                "ordLogiName": ""
             }
         }
     },
@@ -121,7 +121,7 @@ export default {
         deliver() {
             //参数校验
             console.log(this.orderSub.ordLogiCompany);
-            if (this.orderSub.ordLogiCompany==null||this.orderSub.ordLogiCompany === "") {
+            if (this.orderSub.ordLogiCompany == null || this.orderSub.ordLogiCompany === "") {
                 alert("请选择物流公司");
                 return;
             }
@@ -202,7 +202,7 @@ export default {
         show() {
             this.showPage = this.show;
             this.showDialog = this.show;
-            this.orderSub.ordOrderId=this.subData.ordOrderId;
+            this.orderSub.ordOrderId = this.subData.ordOrderId;
             this.getLogiCompanyList();
         },
         ordsubdemo() {

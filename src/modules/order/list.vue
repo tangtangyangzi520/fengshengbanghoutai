@@ -65,14 +65,14 @@
                 <table class="table orderTable table-striped table-bordered table-hover">
                     <tbody v-for="itemSub in itemSet.orderSubList" :key="itemSub.ordOrderNo">
                         <tr v-for="(index,itemDetail) in itemSub.orderDetailList" @click="selectItem(item)" :key="index">
-                            <td class="tdTitle" style="width:26%;">
+                            <td class="tdTitle" style="width:26%;text-align:left;">
                                 <p v-if="index===0 && itemSet.orderSubList.length>1">
                                     子订单号:{{itemSub.ordOrderNo}}&nbsp;&nbsp;&nbsp;&nbsp;
                                     <span v-if="itemSub.ordOrderType==0" style="color:blue;">跨境订单</span>
                                 </p>
                                 <p>
                                     <a target="_blank" :href="itemDetail.detailSpu.spuPic != '' ? itemDetail.detailSpu.spuPic : 'javascript:;'" title="查看大图">
-                                        <img :src="itemDetail.detailSpu.spuPic" class="img-rounded" style="height:50px">
+                                        <img :src="itemDetail.detailSpu.spuPic" class="img-rounded" style="height:85px">
                                     </a>
                                 </p>
                                 <h4>
