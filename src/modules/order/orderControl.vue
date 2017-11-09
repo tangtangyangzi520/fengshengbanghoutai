@@ -536,6 +536,7 @@ export default {
                 this.showPage = false;
                 this.onhide();
             }, 300)
+            this.$parent.getList(false, true);
         },
         hideCampaignDialog() {
             this.showCampaignStatus = false;
