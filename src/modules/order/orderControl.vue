@@ -2,9 +2,9 @@
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1300px'">
             <div slot="content">
-                <div class="row nopadding">
+                <div class="row nopadding " style="padding:30px;">
                     <!-- 订单进度条 -->
-                    <div class="col-md-12 myBorder" v-if="this.subData.ordStatus==0||this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">
+                    <div class="col-md-12 myBorder" style="margin-bottom:30px;" v-if="this.subData.ordStatus==0||this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">
                         </br>
                         <div class="col-md-12">
                             <div class="col-md-3" style="text-align:center;">
@@ -12,22 +12,22 @@
                             </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span style="color:#63B8FF;font-weight:bold;" v-if="this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">买家付款</span>
-                                <span v-else> 买家付款</span>
+                                <span v-else style="color:#AAAAAA;font-weight:bold;"> 买家付款</span>
                             </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span style="color:#63B8FF;font-weight:bold;" v-if="this.subData.ordStatus==2||this.subData.ordStatus==3">商家发货</span>
-                                <span v-else> 商家发货</span>
+                                <span v-else style="color:#AAAAAA;font-weight:bold;"> 商家发货</span>
                             </div>
                             <div class="col-md-3" style="text-align:center;">
                                 <span style="color:#63B8FF;font-weight:bold;" v-if="this.subData.ordStatus==3">交易完成</span>
-                                <span v-else> 交易完成</span>
+                                <span v-else style="color:#AAAAAA;font-weight:bold;"> 交易完成</span>
                             </div>
                         </div>
                         </br>
                         </br>
                         <!-- 进度条start -->
                         <div class="col-md-12" v-if="this.subData.ordStatus==0">
-                            <div class="progress">
+                            <div class="progress" style="height:8px;">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:25%;">
                                     <span class="sr-only"></span>
                                 </div>
@@ -74,15 +74,15 @@
                         </div>
                     </div>
                     <!-- 订单信息 -->
-                    <div class="col-md-12">
-                        <div class="col-md-6 myBorder">
-                            <div class="col-md-12">
+                    <div class="col-md-12 myBorder">
+                        <div class="col-md-6 " style="border-right:1px solid #A9A9A9;">
+                            <div class="col-md-12" style="padding-top:10px;">
                                 <div class="col-md-6">
                                     <h4>
                                         <strong>订单信息</strong>
                                     </h4>
                                 </div>
-                                <div class="col-md-6 right" style="padding-top:5px;">
+                                <div class="col-md-6 right" style="padding-top:10px;">
                                     担保交易
                                 </div>
                             </div>
@@ -103,6 +103,7 @@
                                     <td width="30%" style="text-align:right;">买家昵称: </td>
                                     <td width="70%" style="text-align:left;">{{setData.orsMemberNickname}}</td>
                                 </tr>
+
                                 <tr v-if="subData.ordMemberName.length >0">
                                     <td width="30%" style="text-align:right;">姓名: </td>
                                     <td width="70%" style="text-align:left;">{{subData.ordMemberName}}</td>
@@ -126,7 +127,7 @@
                             </table>
                         </div>
 
-                        <div class="col-md-6 myBorder">
+                        <div class="col-md-6 " style="padding:10px 0px 0px 30px;">
                             <h4>
                                 <strong>订单状态:
                                     <span v-if="subData.ordStatus==0">&nbsp;&nbsp;商品已拍下,等待买家付款 </span>
@@ -136,30 +137,30 @@
                                     <span v-if="subData.ordStatus==4">&nbsp;&nbsp;交易关闭 </span>
                                 </strong>
                             </h4>
-                            <div v-if="subData.ordStatus==0">如买家未在规定时间内付款,订单将按照设置逾期自动关闭;</div>
-                            <div v-if="subData.ordStatus==1">买家已付款至你的财付通账户,请尽快发货,否则买家有权申请退款;</div>
-                            <div v-if="subData.ordStatus==2">买家如在
-                                <span style="color:red;">7天内</span>没有申请退款,交易将自动完成;</div>
-                            <div v-if="subData.ordStatus==3">
-                                </br>
+                            <div style="padding:10px 0px 0px 30px;">
+                                <div v-if="subData.ordStatus==0">如买家未在规定时间内付款,订单将按照设置逾期自动关闭.</div>
+                                <div v-if="subData.ordStatus==1">买家已付款至你的财付通账户,请尽快发货,否则买家有权申请退款.</div>
+                                <div v-if="subData.ordStatus==2">买家如在
+                                    <span style="color:red;">7天内</span>没有申请退款,交易将自动完成.</div>
+                                <div v-if="subData.ordStatus==3">
+                                    </br>
+                                </div>
+                                <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</br>
+                                </div>
                             </div>
-                            <div v-if="subData.ordStatus==4">{{subData.ordCancelReason}}</br>
-                                </br>
-                            </div>
-                            <div>
+                            <div style="padding:20px 0px 0px 30px;">
                                 <a @click.stop="setDemo(subData)">备注</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <a @click.stop="setStar(subData)">加星</a>
-                                <p>
-                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="editPayAmount(subData)" class="btn btn-xs blue">修改价格</button>
+                                <div style="padding-top:10px;">
+                                    <button type="button" v-show="(subData.ordStatus==0)" @click.stop="editPayAmount(subData)" class="btn btn-xs blue">修改价格</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <button type="button" v-show="(subData.ordStatus==0)" @click.stop="cancelOrder(subData)" class="btn btn-xs blue">取消订单</button>
-                                </p>
-
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-12 myBorder" v-if="subData.ordStatus!=0 && subData.ordStatus!=4">
-                        <table class="table table-bordered table-hover">
+                        <table class=" table-bordered table-hover" style="width:100%;">
                             <tr style="height:35px;">
                                 <th style="width:30%;vertical-align:middle;">订单号 | 交易单号 | 支付方式</th>
                                 <th style="width:20%;text-align:center;vertical-align:middle;">付款人及留言</th>
@@ -167,7 +168,7 @@
                                 <th style="width:10%;text-align:center;vertical-align:middle;">实收（元）</th>
                                 <th style="width:10%;text-align:center;vertical-align:middle;">状态</th>
                             </tr>
-                            <tr>
+                            <tr style="height:80px;">
                                 <td width="20%" style="text-align:left;">
                                     <p>{{subData.ordOrderNo}}</p>
                                     <p>{{setData.orsPayNum}}</p>
@@ -183,7 +184,7 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 " style="padding:40px 0px 0px 0px;">
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr style="background-color:#CFCFCF;">
@@ -237,10 +238,10 @@
                             </tbody>
                         </table>
                         <div class="right">
-                            订单共{{totalNum()}}件商品，总计：¥{{subData.ordActAmount}}（含运费 ￥{{subData.ordTransportAmount}}）
+                            订单共{{totalNum()}}件商品，总计：¥ {{subData.ordActAmount.toFixed(2)}}（含运费 ￥{{subData.ordTransportAmount.toFixed(2)}}）
                             <!-- <div style="width:50px;" @mouseenter.stop="showCompaign" @mouseleave.stop="showCompaign">
-                                                                                        <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
-                                                                                    </div> -->
+                                                                                                        <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
+                                                                                                    </div> -->
                             <!-- 优惠券信息 -->
                             <img style="" @mouseout="hidePreferentialContent($event)" @mouseover="showPreferentialContent($event)" src="u7027.jpg">
                             <table class="table table-striped table-bordered table-hover" id="PreferentialContent">
@@ -402,7 +403,7 @@ export default {
             this.subData.orderDetailList.forEach(item => {
                 total = total + item.ordChangePrice;
             });
-            return total;
+            return total.toFixed(2);
         },
         //弹出物流详情窗口
         showOdd() {
@@ -536,7 +537,7 @@ export default {
                 this.showPage = false;
                 this.onhide();
             }, 300)
-            this.$parent.getList(false, true);
+            // this.$parent.getList(false, true);
         },
         hideCampaignDialog() {
             this.showCampaignStatus = false;
@@ -682,7 +683,9 @@ export default {
 </script>
 <style>
 .myBorder {
-    border-top: 1px solid #000
+    border-color: #000000;
+    border: 1px solid;
+    padding: 0px;
 }
 
 .fade-enter-active,
