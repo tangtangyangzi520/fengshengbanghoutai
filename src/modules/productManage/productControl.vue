@@ -1468,10 +1468,10 @@ export default {
                 this.showMsg("最多选择3个上榜理由");
                 return;
             }
-            //if( this.request.spuExpertOption.length > 0 && this.request.spuExpertOption.length < 30 ){
-                //this.showMsg("专家观点不能少于30字")
-                //return
-            //}
+            if( this.request.spuExpertOption.trim().length == 0){
+                this.showMsg("请输入专家观点");
+                return;
+            }
             if( this.request.spuExpertOption.length >= 100 ){
                 this.showMsg("专家观点不能超过100字");
                 return;

@@ -57,7 +57,7 @@ export default {
         return {
             editReasonData: {
                 "ordOrderId": 0,
-                "ordStatus": 5,
+                "ordStatus": 4,
                 "ordCancelReason": '',
             },
             isLoading: false,

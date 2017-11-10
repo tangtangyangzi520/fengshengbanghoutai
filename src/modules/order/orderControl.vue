@@ -26,7 +26,7 @@
                         </br>
                         </br>
                         <!-- 进度条start -->
-                        <div class="col-md-12" v-if="this.subData.ordStatus==0">
+                        <!-- <div class="col-md-12" v-if="this.subData.ordStatus==0">
                             <div class="progress" style="height:8px;">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:25%;">
                                     <span class="sr-only"></span>
@@ -53,8 +53,48 @@
                                     <span class="sr-only"></span>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- 进度条end -->
+                        <!-- 进度条 -->
+                        <div class="col-md-12 stap" style="padding-bottom:10px;vertical-align:middle;" v-if="this.subData.ordStatus==0||this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">
+                            <div style="width:10%;">&nbsp;</div>
+
+                            <div style="width:5%;">
+                                <span class="glyphicon glyphicon-ok-sign" style="color:#63B8FF;font-size:20px;"></span>
+                            </div>
+
+                            <div style="width:20%;padding-top:4px;">
+                                <div style="width:100%; height:8px; background-color:#63B8FF">&nbsp;</div>
+                            </div>
+
+                            <div style="width:5%;">
+                                <span v-if="this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3" class="glyphicon glyphicon-ok-sign" style="color:#63B8FF;font-size:20px;"></span>
+                                <span v-else class="glyphicon glyphicon-record" style="color:#AAAAAA;font-size:20px;"></span>
+                            </div>
+
+                            <div style="width:20%;padding-top:4px;">
+                                <div v-if="this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3" style="width:100%; height:8px; background-color:#63B8FF">&nbsp;</div>
+                                <div v-else style="width:100%; height:8px; background-color:#AAAAAA">&nbsp;</div>
+                            </div>
+
+                            <div style="width:5%;">
+                                <span v-if="this.subData.ordStatus==2||this.subData.ordStatus==3" class="glyphicon glyphicon-ok-sign" style="color:#63B8FF;font-size:20px;"></span>
+                                <span v-else class="glyphicon glyphicon-record" style="color:#AAAAAA;font-size:20px;"></span>
+                            </div>
+
+                            <div style="width:20%;padding-top:4px;">
+                                <div v-if="this.subData.ordStatus==2||this.subData.ordStatus==3" style="width:100%; height:8px; background-color:#63B8FF">&nbsp;</div>
+                                <div v-else style="width:100%; height:8px; background-color:#AAAAAA">&nbsp;</div>
+                            </div>
+
+                            <div style="width:5%;">
+                                 <span v-if="this.subData.ordStatus==3" class="glyphicon glyphicon-ok-sign" style="color:#63B8FF;font-size:20px;"></span>
+                                <span v-else class="glyphicon glyphicon-record" style="color:#AAAAAA;font-size:20px;"></span>
+                            </div>
+
+                            <div style="width:10%;">&nbsp;</div>
+                        </div>
+
                         <!-- 具体时间 -->
                         <div class="col-md-12">
                             <div class="col-md-3" style="text-align:center;color:#AAAAAA;">
@@ -240,8 +280,8 @@
                         <div class="right">
                             订单共{{totalNum()}}件商品，总计：¥ {{subData.ordActAmount.toFixed(2)}}（含运费 ￥{{subData.ordTransportAmount.toFixed(2)}}）
                             <!-- <div style="width:50px;" @mouseenter.stop="showCompaign" @mouseleave.stop="showCompaign">
-                                                                                                        <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
-                                                                                                    </div> -->
+                                                                                                                                <span class="glyphicon glyphicon-exclamation-sign" style="color:blue;" aria-hidden="true"></span>
+                                                                                                                            </div> -->
                             <!-- 优惠券信息 -->
                             <img style="" @mouseout="hidePreferentialContent($event)" @mouseover="showPreferentialContent($event)" src="u7027.jpg">
                             <table class="table table-striped table-bordered table-hover" id="PreferentialContent">
@@ -707,5 +747,10 @@ export default {
     background-color: white;
     border-right: 2px solid #D7D7D7;
     border-left: 2px solid #D7D7D7;
+}
+
+.stap div {
+    float: left;
+    text-align: center;
 }
 </style>
