@@ -105,18 +105,15 @@
                                     </td>
                                     <td style="width:35%"> SKU组合 </td>
                                     <td style="width:20%"> 原价（元） </td>
-                                    <td style="width:18%" colspan="2"> 减价后</td>
-                                    <!-- <td style="width:15%"> 操作</td> -->                                
+                                    <td style="width:18%"> 减价后</td>
+                                    <td style="width:15%">是否展示</td>                                
                                 </tr>
                                 <tr v-for=" g in spu.skuList" style="height:20%"  @click="selectItem(g)">  
                                     <td style="width:7%"> <!-- <input type="checkbox" :checked="g.checked"></input> --> </td>
                                     <td style="width:35%"> {{ g.skuName }} </td>
                                     <td style="width:20%"> {{ g.skuSalePrice }}</td>
-                                    <td style="width:18%" colspan="2"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"  >  -->{{g.skureduce}} </td>
-                                    <!-- 
-                                    <td style="width:15%"> 
-                                    <button type="button"  @click.stop="showControlFunc(item,'delete')" class="btn btn-xs red">删除</button> </td>
-                                    -->                                
+                                    <td style="width:18%"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"> -->{{g.skureduce}} </td>
+                                    <td style="width:15%"><span v-if="g.skuFrontIsshow == 0">是</span><span v-else>否</span></td>
                                 </tr>
                             </tbody>
                         </table>

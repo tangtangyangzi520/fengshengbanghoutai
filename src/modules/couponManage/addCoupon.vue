@@ -165,14 +165,21 @@
                                                 &nbsp;&nbsp;&nbsp;&nbsp;<!-- 库存:{{spu.totalStockNum}} --></h4>
                                             </a>
                                         </th>
-                                        <th style="width:40%">{{spu.spuCreatedTime|filterTime}}</th>
+                                        <th style="width:40%" colspan="2">{{spu.spuCreatedTime|filterTime}}</th>
                                     </tr>
                                 </thead>
                                 <tbody :id="spu.spuId" style="display:none">
+                                    <tr>
+                                        <td style="width:10%"></td>
+                                        <td style="width:50%">SKU组合</td>
+                                        <td style="width:30%">创建时间</td>
+                                        <td style="width:10%">是否展示</td>
+                                    </tr>
                                     <tr v-for=" g in spu.skuList" style="height:20%"  @click="selectItem(g)">  
                                         <td style="width:10%"> <!-- <input type="checkbox" :checked="g.checked"></input> --> </td>
                                         <td style="width:50%"> {{ g.skuName }} </td>
-                                        <td style="width:40%"> {{ g.skuCreatedTime|filterTime }}</td>
+                                        <td style="width:30%"> {{ g.skuCreatedTime|filterTime }}</td>
+                                        <td style="width:10%"><span v-if="g.skuFrontIsshow == 0">是</span><span v-else>否</span></td>
                                     </tr>
                                 </tbody>
                             </table>
