@@ -1996,7 +1996,7 @@ export default {
             }else{
                 this.request.spuFreight = 0;
             }
-            // 发送新增商品请求
+            // 发送新增商品请求  
             client.postData( SPU_CREATE , this.request).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
