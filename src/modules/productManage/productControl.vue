@@ -327,16 +327,18 @@
                                     <th><span style="color:red">*</span>展示库存（件）</th>
                                     <th>ERP实际库存</th>
                                     <th>SKU编码</th>
+                                    <th>前端是否展示</th>
                                 </tr>
                                 <tbody id="itemList">
                                     <tr v-for="(index,group) in xssxList">
-                                    <td>{{index+1}}<input class="input2" type="hidden" :value="index+1"/></td>
-                                    <td style="width:40%;;line-height:30px"> <a class="dele" @click="close($event,index)" >×</a> {{ group }} <input class="input2" type="hidden" :value="group"/></td>
-                                    <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" @blur="checkfloat($event)"/></td>
-                                    <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" @blur="checkfloat($event)"/></td>
-                                    <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
-                                    <td>  <!-- <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/> --></td>
-                                    <td style="width:17%"><input class="put4 input2" type="text" maxLength="20"/></td>
+                                        <td>{{index+1}}<input class="input2" type="hidden" :value="index+1"/></td>
+                                        <td style="width:40%;;line-height:30px"> <a class="dele" @click="close($event,index)" >×</a> {{ group }} <input class="input2" type="hidden" :value="group"/></td>
+                                        <td>￥<input class="put0 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" @blur="checkfloat($event)"/></td>
+                                        <td>￥<input class="put1 input2" type="number"  @keyup="checkfloat($event)" @change="checkfloat($event)" min="0.01" max="99999999" @blur="checkfloat($event)"/></td>
+                                        <td>  <input class="put2 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/></td>
+                                        <td>  <!-- <input class="put3 input2" type="number"  @keyup="check($event)" @change="check($event)" min="0" max="2000000000" @blur="check($event)"/> --></td>
+                                        <td style="width:17%"><input class="put4 input2" type="text" maxLength="20"/></td>
+                                        <td style="width:6%;"><input type="checkbox" :checked="true"></input></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1912,8 +1914,9 @@ export default {
                             "skuUnit": "",                        //  "" 
                             "skuUrl": "",                         //  ""
                             "skuWhId": "",                        //  ""
-                            "sku_remark": $(el[1]).val() ,        //  拼接属性
+                            "sku_remark": $(el[1]).val(),         //  拼接属性
                             "skuShowNum": $(el[4]).val(),         //  展示库存
+                            "skuFrontIsshow": $(el[6])[0].checked?0:1, //前端是否展示
                         }
                         spulist.push(sin);
                     }      

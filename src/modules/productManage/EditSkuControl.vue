@@ -2,32 +2,39 @@
 <!-- 商品列表-编辑SKU信息 -->
     <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
         <m-alert v-if="!removeAddDialog" :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1000px'" :backdrop="true">
-            <div slot="content" style="background-color:#F0F0F0">
-                <div >
+            <div slot="content">
+                <div style="padding:5px; margin-left:-4px;">
+                    <button type="button" class="btn blue" @click="addSKU()">添加SKU组合</button>
+                </div>
+                <div style="background-color:#F0F0F0">
                     <table class="tab" id="table" style="" border="1" cellspacing="0" cellpadding="0">  
                         <thead>
                             <tr>
-                                <th style="width:4%">
+                                <!-- <th style="width:4%">
                                     <button type="button" class="btn btn-xs btn-xs blue btn-select-type" style="margin-bottom:3px;" @click="selectAll">全选</button>
                                     <button type="button" class="btn btn-xs btn-xs blue btn-select-type" @click="reverseList">反选</button>
-                                </th>
+                                </th> -->
                                 <th>SKU组合</th>
                                 <th><span style="color:red">*</span>丰盛榜售价</th>
                                 <th>原价</th>
                                 <th><span style="color:red">*</span>展示库存（件）</th>
                                 <th>ERP实际库存</th>
                                 <th>SKU编码</th>
+                                <th>前端是否展示</th>
+                                <th>操作</th>
                             </tr>
                         </thead>
-                        <tbody id="itemList">
-                            <tr v-for=" g in skuList" style="height:20%"  @click="selectItem(g)"> 
-                                <td style="text-align:center;vertical-align:middle;"><input type="checkbox" :checked="g.checked"></input></td>
-                                <td style="width:40%"><span > {{ g.skuAtrr }} </span></td>
+                        <tbody id="SKUList">
+                            <tr v-for="(index,g) in skuList" style="height:20%;"> 
+                                <!-- <td style="text-align:center;vertical-align:middle;"><input type="checkbox" :checked="g.checked"></input></td> -->
+                                <td style="width:40%;"><input v-if="g.newAdd" style="margin-left: 2%;margin-top: 0%;height: 100%;width: 90%" type="text" placeholder="请输入SKU组合,属性值之间用逗号分隔" v-model="g.skuName" maxlength="20"/><span v-else> {{ g.skuName }} </span></td>
                                 <td>￥<input class=" input2" type="number" v-model="g.skuSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)" min="0" max="99999999"/></td>
                                 <td>￥<input class=" input2" type="number" v-model="g.skuMarketSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)"  min="0" max="99999999"/></td>
                                 <td>  <input class=" input2" type="number" v-model="g.skuShowNum" @keyup="check($event)" @change="check($event)" @blur="check($event)" min="0" max="2000000000"/></td>
                                 <td> {{ g.skuStockNum }} </td>
-                                <td style="width:17%"><input style="margin-left: 2%;margin-top: 0%;height: 100%;width: 75%" type="text" v-model="g.skuCode" maxlength="20"/></td>
+                                <td style="width:17%;"><input style="margin-left: 2%;margin-top: 0%;height: 100%;width: 75%" type="text" v-model="g.skuCode" maxlength="20"/></td>
+                                <td style="width:6%;"><input type="checkbox" :checked="g.checked" @click.stop="changeChecked(g)"></input></td>
+                                <td style="width:5%;"><button type="button"  class="btn btn-xs blue" @click.stop="deleteRow(index)" v-if="g.newAdd">删除</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -39,7 +46,7 @@
                 <button type="button" class="btn blue" @click="addItem()">编辑保存</button>
                 <!-- <button type="button" class="btn yellow-crusta" @click="up()" >批量上架</button>
                 <button type="button" class="btn default" @click="down()">批量下架</button> -->
-                <button type="button" class="btn green-meadow" @click="hideDialog()" >关闭</button>
+                <button type="button" class="btn green-meadow" @click="hideDialog()">取消</button>
             </span>
         </m-alert>
         <!-- 提示框 -->
@@ -151,13 +158,42 @@ export default {
         }
     },
     vuex: {
-        getters: {
-            picShowOption: ({ resourceControl }) => resourceControl.picShowOption,
-            selectPicList: ({ resourceControl }) => resourceControl.selectPicList,
-        },
-        actions: { showSelectPic, getSelectPicList }
+        // getters: {
+        //     picShowOption: ({ resourceControl }) => resourceControl.picShowOption,
+        //     selectPicList: ({ resourceControl }) => resourceControl.selectPicList,
+        // },
+        // actions: { showSelectPic, getSelectPicList }
     },
     methods: {
+        // 根据前端是否展示复选框的勾选设置skuFrontIsshow字段的值
+        changeChecked(item){
+            item.checked = !item.checked;
+            if(item.checked){
+                item.skuFrontIsshow = 0;
+            }else{
+                item.skuFrontIsshow = 1;
+            }
+        },
+        // 删除新添加的SKU行
+        deleteRow(index){
+            this.skuList.splice(index,1);
+        },
+        // 添加SKU行
+        addSKU(){
+            let newSkuJson = {
+                checked: true,
+                skuName: "",
+                skuCode: "",
+                skuId: 0,
+                skuMarketSalePrice: 0,
+                skuSalePrice: 0,
+                skuShowNum: 0,
+                skuStockNum: 0,
+                skuFrontIsshow: 0, //前端是否显示:0-显示，1-不显示
+                newAdd: true //新添加行标识
+            };
+            this.skuList.push(newSkuJson);
+        },
         //小数校验
         checkfloat(event){
             let el = event.currentTarget;
@@ -185,25 +221,25 @@ export default {
                 $(el).val("0");
             }
         },
-        selectAll() {
-            this.skuList.forEach(item => {
-                item.checked = true;
-            });
-        },
-        reverseList() {
-            this.skuList.forEach(item => {
-                item.checked = !item.checked;
-            });
-        },
-        selectItem(item) {
-            item.checked = !item.checked;
-        },
-        //删除spu列
-        close(i) {
-            this.skuList.$remove(this.skuList.find(t => t.skuId === i));
-            //let el = event.currentTarget;
-            // $(el).parent().parent().children("td").remove()  
-        },
+        // selectAll() {
+        //     this.skuList.forEach(item => {
+        //         item.checked = true;
+        //     });
+        // },
+        // reverseList() {
+        //     this.skuList.forEach(item => {
+        //         item.checked = !item.checked;
+        //     });
+        // },
+        // selectItem(item) {
+        //     item.checked = !item.checked;
+        // },
+        // //删除spu列
+        // close(i) {
+        //     this.skuList.$remove(this.skuList.find(t => t.skuId === i));
+        //     //let el = event.currentTarget;
+        //     // $(el).parent().parent().children("td").remove()  
+        // },
         // 编辑保存
         addItem() {
             if(this.editskuflag){
@@ -265,80 +301,80 @@ export default {
                 //this.getList();
             }
         },
-        //品牌回调
-        selectTagStatusFunc(item) {
-            if (item == '') {
-                this.searchOptions.existTag = '';
-            } else {
-                this.searchOptions.existTag = item.id === 0 ? false : true;
-            }
-            this.setOptions();
-        },
-        // 弹出选择标签弹窗
-        showTagDialog() {
-            this.showTagTreeSelect = !this.showTagTreeSelect;
-        },
-        showperDialog() {
-            this.showperTreeSelect = !this.showperTreeSelect;
-        },
-        showneiDialog() {
-            this.showneiTreeSelect = !this.showneiTreeSelect;
-        },
-        // 移除某个标签
-        removeTagItem(item) {
-            let index = this.tagsList.findIndex(subitem => subitem.id == item.id);
-            this.tagsList.splice(index, 1);
-        },
-        removeperItem(item) {
-            let index = this.personList.findIndex(subitem => subitem.id == item.id);
-            this.personList.splice(index, 1);
-        },
-        removeneiItem(item) {
-            let index = this.neirongList.findIndex(subitem => subitem.id == item.id);
-            this.neirongList.splice(index, 1);
-        },
-        //内容标签回调
-        selectNeiFunc(list) {
-            if( list.length > 3 ){
-                this.showMsg("标签不能超过3个");
-                return;
-            }
-            this.neirongList = [];
-            this.neirongList = list;
-            this.data.labelIds = [];
-            list.forEach(item => {
-                this.data.labelIds.push(item.id);
-            });
-            this.showneiTreeSelect = !this.showneiTreeSelect;
-        },
-        //人群标签回调
-        selectPerFunc(list) {
-            if( list.length > 3 ){
-                this.showMsg("标签不能超过3个");
-                return;
-            }
-            this.personList = [];
-            this.personList = list;
-            this.data.labelIds = [];
-            list.forEach(item => {
-                this.data.labelIds.push(item.id);
-            });
-            this.showperTreeSelect = !this.showperTreeSelect;
-        },
-        // 选择标签回调
-        selectTagFunc(list) {
-            if( list.length > 3 ){
-                this.showMsg("标签不能超过3个");
-                return;
-            }
-            this.tagsList = [];
-            this.tagsList = list;
-            this.data.labelIds = [];
-            list.forEach(item => {
-                this.data.labelIds.push(item.id);
-            });
-            this.showTagTreeSelect = !this.showTagTreeSelect;
-        },
+        // //品牌回调
+        // selectTagStatusFunc(item) {
+        //     if (item == '') {
+        //         this.searchOptions.existTag = '';
+        //     } else {
+        //         this.searchOptions.existTag = item.id === 0 ? false : true;
+        //     }
+        //     this.setOptions();
+        // },
+        // // 弹出选择标签弹窗
+        // showTagDialog() {
+        //     this.showTagTreeSelect = !this.showTagTreeSelect;
+        // },
+        // showperDialog() {
+        //     this.showperTreeSelect = !this.showperTreeSelect;
+        // },
+        // showneiDialog() {
+        //     this.showneiTreeSelect = !this.showneiTreeSelect;
+        // },
+        // // 移除某个标签
+        // removeTagItem(item) {
+        //     let index = this.tagsList.findIndex(subitem => subitem.id == item.id);
+        //     this.tagsList.splice(index, 1);
+        // },
+        // removeperItem(item) {
+        //     let index = this.personList.findIndex(subitem => subitem.id == item.id);
+        //     this.personList.splice(index, 1);
+        // },
+        // removeneiItem(item) {
+        //     let index = this.neirongList.findIndex(subitem => subitem.id == item.id);
+        //     this.neirongList.splice(index, 1);
+        // },
+        // //内容标签回调
+        // selectNeiFunc(list) {
+        //     if( list.length > 3 ){
+        //         this.showMsg("标签不能超过3个");
+        //         return;
+        //     }
+        //     this.neirongList = [];
+        //     this.neirongList = list;
+        //     this.data.labelIds = [];
+        //     list.forEach(item => {
+        //         this.data.labelIds.push(item.id);
+        //     });
+        //     this.showneiTreeSelect = !this.showneiTreeSelect;
+        // },
+        // //人群标签回调
+        // selectPerFunc(list) {
+        //     if( list.length > 3 ){
+        //         this.showMsg("标签不能超过3个");
+        //         return;
+        //     }
+        //     this.personList = [];
+        //     this.personList = list;
+        //     this.data.labelIds = [];
+        //     list.forEach(item => {
+        //         this.data.labelIds.push(item.id);
+        //     });
+        //     this.showperTreeSelect = !this.showperTreeSelect;
+        // },
+        // // 选择标签回调
+        // selectTagFunc(list) {
+        //     if( list.length > 3 ){
+        //         this.showMsg("标签不能超过3个");
+        //         return;
+        //     }
+        //     this.tagsList = [];
+        //     this.tagsList = list;
+        //     this.data.labelIds = [];
+        //     list.forEach(item => {
+        //         this.data.labelIds.push(item.id);
+        //     });
+        //     this.showTagTreeSelect = !this.showTagTreeSelect;
+        // },
         hideDialog() {
             this.showDialog = false;
             setTimeout(() => {
@@ -346,14 +382,14 @@ export default {
                 this.onhide('cancel');
             }, 300);
         },
-        selectPainFunc(list) {
-            let arr = [];
-            list.forEach(item => {
-                arr.push(item.id);
-            });
-            this.painIdsSelect = arr;
-            this.data.painIds = arr;
-        },
+        // selectPainFunc(list) {
+        //     let arr = [];
+        //     list.forEach(item => {
+        //         arr.push(item.id);
+        //     });
+        //     this.painIdsSelect = arr;
+        //     this.data.painIds = arr;
+        // },
         showMsg(msg, title) {
             if (title) {
                 this.showAlertTitle = title;
@@ -366,16 +402,16 @@ export default {
         hideMsg() {
             this.showAlert = false;
         },
-        clearInfo() {
-            this.data = {
-                "componentType": 16,
-                "painIds": [],
-                "subtitle": "",
-                "title": ""
-            }
-            this.painIdsSelect = [];
-            this.getPainList();
-        },
+        // clearInfo() {
+        //     this.data = {
+        //         "componentType": 16,
+        //         "painIds": [],
+        //         "subtitle": "",
+        //         "title": ""
+        //     }
+        //     this.painIdsSelect = [];
+        //     this.getPainList();
+        // },
         // 提交信息
         submitInfo() {
             let data = this.data;
@@ -427,11 +463,15 @@ export default {
     },
     watch: {
         skuflag(){
-            //
+            //回显数据
             client.postData( SKU_GET_BY_ID + "?spuId="+this.spuid2, {}).then(data => {
                 this.isLoading = false;
                 data.forEach(item => {
-                    item.checked = false;
+                    if(item.skuFrontIsshow == 0){
+                        item.checked = true;
+                    }else{
+                        item.checked = false;
+                    }
                 });
                 this.skuList = data;
                 this.title = "商品名:"+this.spuname + this.title;
