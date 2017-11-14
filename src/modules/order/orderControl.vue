@@ -25,36 +25,6 @@
                         </div>
                         </br>
                         </br>
-                        <!-- 进度条start -->
-                        <!-- <div class="col-md-12" v-if="this.subData.ordStatus==0">
-                            <div class="progress" style="height:8px;">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:25%;">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" v-if="this.subData.ordStatus==1">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:50%;">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" v-if="this.subData.ordStatus==2">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:75%;">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" v-if="this.subData.ordStatus==3">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%;">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- 进度条end -->
                         <!-- 进度条 -->
                         <div class="col-md-12 stap" style="padding-bottom:10px;vertical-align:middle;" v-if="this.subData.ordStatus==0||this.subData.ordStatus==1||this.subData.ordStatus==2||this.subData.ordStatus==3">
                             <div style="width:10%;">&nbsp;</div>

@@ -1038,10 +1038,10 @@ export default {
                 this.isLoading = false;
                 return;
             }
-             if( this.request.spuExpertOption.trim().length == 0){
-                this.showMsg("请输入专家观点");
-                return;
-            }
+            //  if( this.request.spuExpertOption.trim().length == 0){
+            //     this.showMsg("请输入专家观点");
+            //     return;
+            // }
             if( this.request.spuExpertOption.length >= 100 ){
                 this.showMsg("专家观点不能超过100字");
                 this.isLoading = false;
