@@ -1754,6 +1754,7 @@ export default {
                     "skuWhId": "",                 //  ""
                     "sku_remark": skuname ,        //  拼接属性 
                     //"skuStockNum": erpkc2,  
+                    "skuFrontIsshow": 0,           //前端是否展示,0-展示,1-不展示
                 }
                 spulist.push(sin);
             } else {

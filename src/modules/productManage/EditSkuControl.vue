@@ -27,7 +27,7 @@
                         <tbody id="SKUList">
                             <tr v-for="(index,g) in skuList" style="height:20%;"> 
                                 <!-- <td style="text-align:center;vertical-align:middle;"><input type="checkbox" :checked="g.checked"></input></td> -->
-                                <td style="width:40%;"><input v-if="g.newAdd" style="margin-left: 2%;margin-top: 0%;height: 100%;width: 90%" type="text" placeholder="请输入SKU组合,属性值之间用逗号分隔" v-model="g.skuName" maxlength="20"/><span v-else> {{ g.skuName }} </span></td>
+                                <td style="width:40%;"><input v-if="g.newAdd" style="margin-left: 2%;margin-top: 0%;height: 100%;width: 90%;" type="text" placeholder="请输入SKU组合,属性值之间用逗号分隔" v-model="g.skuName"/><span v-else> {{ g.skuName }} </span></td>
                                 <td>￥<input class=" input2" type="number" v-model="g.skuSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)" min="0" max="99999999"/></td>
                                 <td>￥<input class=" input2" type="number" v-model="g.skuMarketSalePrice" @keyup="checkfloat($event)" @change="checkfloat($event)" @blur="checkfloat($event)"  min="0" max="99999999"/></td>
                                 <td>  <input class=" input2" type="number" v-model="g.skuShowNum" @keyup="check($event)" @change="check($event)" @blur="check($event)" min="0" max="2000000000"/></td>
