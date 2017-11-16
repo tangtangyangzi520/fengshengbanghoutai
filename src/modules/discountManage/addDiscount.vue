@@ -112,7 +112,7 @@
                                     <td style="width:7%"> <!-- <input type="checkbox" :checked="g.checked"></input> --> </td>
                                     <td style="width:35%"> {{ g.skuName }} </td>
                                     <td style="width:20%"> {{ g.skuSalePrice }}</td>
-                                    <td style="width:18%"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"> -->{{g.skureduce}} </td>
+                                    <td style="width:18%"> <!-- <input type="text" class="input-sm" v-model="g.skuSalePrice"> -->{{g.skureduce.toFixed(2)}} </td>
                                     <td style="width:15%"><span v-if="g.skuFrontIsshow == 0">是</span><span v-else>否</span></td>
                                 </tr>
                             </tbody>
