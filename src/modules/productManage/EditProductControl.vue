@@ -6,6 +6,7 @@
                 <loading :show="isLoading"></loading>
                 <div class="row" style="background-color:#F0F0F0">
                     <form class="form-horizontal" name="addForm" role="form">
+                        <br>
                         <div class="form-group">
                             <label for="title" class="col-md-3 control-label">商品类目：</label>
                             <label for="title" class="col-sm-5 control-label">
@@ -1625,9 +1626,15 @@ export default {
                     //类目回显
                     client.postData( TAG_LIST_GET + "?typeId=100", {}).then(data => {
                         if (data.code == 200) {
-                            let arr = []
+                            let arr = [];
                             data.data.root.children.forEach(item=>{
+                                if(item.id ==  this.request.spuCatId ){
+                                    this.leimu = item.text;
+                                }
                                 item.children.forEach(er=>{
+                                    if(er.id ==  this.request.spuCatId ){
+                                        this.leimu = item.text+" >"+" "+er.text;
+                                    }
                                     er.children.forEach(san=>{
                                         if(san.id ==  this.request.spuCatId ){
                                             this.leimu = item.text+" >"+" "+er.text+" >"+" "+san.text;

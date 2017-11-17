@@ -11,7 +11,8 @@
                                 <span class="required">* </span>商品类目：   
                             </label>
                             <label for="title" class="col-sm-5 control-label">
-                                <span style="float:left">{{par[0]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[1]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[2]}}</span>  
+                                <!-- <span style="float:left">{{par[0]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[1]}}&nbsp;&nbsp;>&nbsp;&nbsp;{{par[2]}}</span> -->
+                                <span style="float:left">{{par | parFilter}}</span>  
                             </label>
                         </div>
                         <div class="form-group">
@@ -1077,9 +1078,15 @@ export default {
         //重置销售属性
         reset() {
             let arr =[];
-            arr.push(this.par[3]);
-            arr.push(this.par[4]);
-            arr.push(this.par[5]);
+            if(this.par[3] != null){
+                arr.push(this.par[3]);
+            }
+            if(this.par[4] != null){
+                arr.push(this.par[4]);
+            }
+            if(this.par[5] != null){
+                arr.push(this.par[5]);
+            }
             //
             client.postData(  GET_ATRR_LIST , {"parentIds" :arr ,"pcaAtrrType":2}  ).then(data => {
                 if (data.code == 200) {
@@ -1594,7 +1601,14 @@ export default {
                 }
             });
             this.request.spuOptionList = spuOptionList; 
-            this.request.spuCatId = this.par[5];
+            //this.request.spuCatId = this.par[5];
+            if(this.par[5] != null){
+                this.request.spuCatId = this.par[5];
+            }else if(this.par[4] != null){
+                this.request.spuCatId = this.par[4];
+            }else if(this.par[3] != null){
+                this.request.spuCatId = this.par[3];
+            }
             let item = $("#itemList>tr");
             let spuName  = this.request.spuName;
             let spulist = [];
@@ -1997,7 +2011,7 @@ export default {
             }else{
                 this.request.spuFreight = 0;
             }
-            // 发送新增商品请求  
+            // 发送新增商品请求 
             client.postData( SPU_CREATE , this.request).then(data => {
                 this.isLoading = false;
                 if (data.code == 200) {
@@ -2292,6 +2306,18 @@ export default {
             });
         }
     },
+    filters: {
+        parFilter(parList){
+            let parString = parList[0];
+            if(parList[1] != null){
+                parString = parString+" >"+" "+parList[1];
+            }
+            if(parList[2] != null){
+                parString = parString+" >"+" "+parList[2];
+            }
+            return parString;
+        }
+    },
     created() {
         this.getbrandList();
         this.getxbList();
@@ -2344,9 +2370,15 @@ export default {
         },
         cflag() {
             let arr =[]
-            arr.push(this.par[3]);
-            arr.push(this.par[4]);
-            arr.push(this.par[5]);
+            if(this.par[3] != null){
+                arr.push(this.par[3]);
+            }
+            if(this.par[4] != null){
+                arr.push(this.par[4]);
+            }
+            if(this.par[5] != null){
+                arr.push(this.par[5]);
+            }
             // 获取通用属性
             client.postData(  GET_ATRR_LIST  , {"parentIds" :arr ,"pcaAtrrType":1} ).then(data => {
                 if (data.code == 200) {
@@ -2391,9 +2423,22 @@ export default {
             });
         },
         par(){
-            //this.showMsg("watch"+this.par);
-            this.request.spuCatId = this.par[5];
-            this.spuCatId = this.par[3]+","+this.par[4]+","+this.par[5];
+            //this.request.spuCatId = this.par[5];
+            if(this.par[5] != null){
+                this.request.spuCatId = this.par[5];
+            }else if(this.par[4] != null){
+                this.request.spuCatId = this.par[4];
+            }else if(this.par[3] != null){
+                this.request.spuCatId = this.par[3];
+            }
+            //this.spuCatId = this.par[3]+","+this.par[4]+","+this.par[5];
+            if(this.par[5] != null){
+                this.spuCatId = this.par[3]+","+this.par[4]+","+this.par[5];
+            }else if(this.par[4] != null){
+                this.spuCatId = this.par[3]+","+this.par[4];
+            }else if(this.par[3] != null){
+                this.spuCatId = this.par[3];
+            }
         },
         show() {
             this.showPage = this.show;

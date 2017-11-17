@@ -255,8 +255,10 @@ export default {
         },
         addItem() {
             let msg = "";
-            if( this.sele[1] == null || this.sele[2] == null){
-                this.showMsg( "请先选择三级的类目");
+            console.log(this.sele)
+            if(this.sele[0] == undefined || this.sele[1] == undefined){
+                //this.showMsg( "请先选择三级的类目");
+                this.showMsg( "请选择最后一级类目");
                 return;
             }
             //this.showMsg(msg);
@@ -266,6 +268,7 @@ export default {
             this.flag = !this.flag;
         },
         thirdSelect(val,event){
+            this.sele = [];
             let el = event.currentTarget;
             $(el).parent().addClass("selected");
             $(el).parent().siblings("li").removeClass("selected");
@@ -277,6 +280,7 @@ export default {
             });
         },
         thirdbuild(val,event) {
+            this.sele = [];
             var el = event.currentTarget;
             $(el).parent().addClass("selected");
             $(el).parent().siblings("li").removeClass("selected");
@@ -284,8 +288,16 @@ export default {
             this.sele[2] = null;
             this.selectArray[1]= val.text;
             this.selectArray[4]= val.id;
+            if(this.thirdList.length === 0){
+                this.selectArray[2]= null;
+                this.selectArray[5]= null;
+                this.selectArray.forEach((item,index)=>{
+                    this.sele.$set(index,item);
+                });
+            }
         },
         secondbuild(val,event) {
+            this.sele = [];
             var el = event.currentTarget;
             $(el).parent().addClass("selected");
             $(el).parent().siblings("li").removeClass("selected");
@@ -294,6 +306,15 @@ export default {
             this.sele[2] = null;
             this.selectArray[0] = val.text;
             this.selectArray[3] = val.id;
+            if(this.secondList.length === 0){
+                this.selectArray[1]= null;
+                this.selectArray[2]= null;
+                this.selectArray[4]= null;
+                this.selectArray[5]= null;
+                this.selectArray.forEach((item,index)=>{
+                    this.sele.$set(index,item);
+                });
+            }
         },
         // 获取类目列表
         getLEIMUList() {
