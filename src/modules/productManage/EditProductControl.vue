@@ -108,6 +108,15 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="form-group" style="padding-top:10px;">
+                            <label class="col-sm-3 control-label"><span class="required"> </span>旅游标签：</label>
+                            <div class="controls col-md-9" style="padding-top:8px;">
+                                <item-list :list="lvyouList" :remove="removeLvyouItem"></item-list>
+                                <a class="btn-select-label" @click="showLvYouDialog">
+                                    <i class="fa fa-plus" style="position:relative;"></i> 添加标签
+                                </a>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">上榜理由：</label>
                             <div class="col-md-4" style="background-color:white;width:600px;" >
@@ -405,6 +414,7 @@
         <tag-tree v-if="showTagTreeSelect" :list="tagsList"    :onselect="selectTagFunc" :oncancel="showTagDialog" :type="0"></tag-tree>
         <tag-tree v-if="showperTreeSelect" :list="personList"  :onselect="selectPerFunc" :oncancel="showperDialog" :type="3"></tag-tree>
         <tag-tree v-if="showneiTreeSelect" :list="neirongList" :onselect="selectNeiFunc" :oncancel="showneiDialog" :type="1"></tag-tree>
+        <tag-tree v-if="showLvYouTreeSelect" :list="lvyouList" :onselect="selectLvYouFunc" :oncancel="showLvYouDialog" :type="4"></tag-tree>
     </div>
 </template>
 
@@ -522,10 +532,12 @@ export default {
             title: '编辑基本信息',
             neirongList:[],
             personList:[],
+            lvyouList: [],
             tagsList: [],             //选择的标签
             showTagTreeSelect: false, //显示标签选择弹窗
             showperTreeSelect: false,//
             showneiTreeSelect: false,
+            showLvYouTreeSelect: false,
             editpdflag:false,
             brandTypeList: [],// 品牌类型list
         }
@@ -1083,6 +1095,9 @@ export default {
             this.neirongList.forEach((per,index)=>{
                 this.request.tagList.push( { "prpTagType": 201 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum, "prpSpuId":this.spuid ,"prpSort":index} )
             });
+            this.lvyouList.forEach((per,index)=>{
+                this.request.tagList.push( { "prpTagType": 1000 ,"prpTagId": per.id ,"prpTagName": per.text ,"prpSort": per.sortNum, "prpSpuId":this.spuid ,"prpSort":index} )
+            });
             // 先清空tagList中的品牌类型
             for(let i=0; i<this.request.tagList.length; i++){
                 if(this.request.tagList[i].prpTagType == 500){
@@ -1354,6 +1369,9 @@ export default {
         showneiDialog() {
             this.showneiTreeSelect = !this.showneiTreeSelect;
         },
+        showLvYouDialog(){
+            this.showLvYouTreeSelect = !this.showLvYouTreeSelect;
+        },
         // 移除某个标签
         removeTagItem(item) {
             let index = this.tagsList.findIndex(subitem => subitem.id == item.id);
@@ -1366,6 +1384,10 @@ export default {
         removeneiItem(item) {
             let index = this.neirongList.findIndex(subitem => subitem.id == item.id);
             this.neirongList.splice(index, 1);
+        },
+        removeLvyouItem(item) {
+            let index = this.lvyouList.findIndex(subitem => subitem.id == item.id);
+            this.lvyouList.splice(index, 1);
         },
         //内容标签回调
         selectNeiFunc(list) {
@@ -1380,6 +1402,21 @@ export default {
             }else{
                 this.neirongList = list;
                 this.showneiTreeSelect = !this.showneiTreeSelect;
+            }
+        },
+        //旅游标签回调
+        selectLvYouFunc(list){
+            let flag = false;
+            this.lvyouList = [];
+            this.data.labelIds = [];
+            if(flag){
+                this.showMsg("请选择到最后一级标签。");
+                this.data.labelIds = [];
+                this.lvyouList = list;
+                return;
+            }else{
+                this.lvyouList = list;
+                this.showLvYouTreeSelect = !this.showLvYouTreeSelect;
             }
         },
         //适合人群标签回调
@@ -1728,6 +1765,8 @@ export default {
                             this.personList.push(item);
                         }else if( item.prpTagType == 201 ){
                             this.neirongList.push(item);
+                        }else if( item.prpTagType == 1000 ){
+                            this.lvyouList.push(item);
                         }
                         item.id = item.prpTagId;
                         item.text = item.prpTagName;
