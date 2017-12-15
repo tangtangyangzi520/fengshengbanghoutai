@@ -45,6 +45,14 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">
+                                <span class="required"></span> 小程序地址：
+                            </label>
+                            <div class="controls col-md-6">
+                                <input type="text" class="form-control input-sm" v-model="request.spuWeixinUrl" placeholder="小程序地址" maxLength="200">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">商品简介：</label>
                             <div class="controls col-md-7">
                                 <textarea  v-model="request.spuPcSummary" placeholder="选填，微信分享给好友时会显示这里的文案" maxLength="10000" rows="3" cols="50">
@@ -465,6 +473,7 @@ export default {
                 "spuCarriageId":-1,//运费模板id
                 "spuType": 1,
                 "spuShareUrl":'',
+                "spuWeixinUrl": '',
                 "spuPic": '',
                 "spuId":0,
                 "spuAppSummary": "",
@@ -1745,6 +1754,7 @@ export default {
                         this.shangb.push(data.data.reasonsList[i].pcrReason); 
                     }
                     this.request.spuShareUrl = data.data.spuShareUrl
+                    this.request.spuWeixinUrl = data.data.spuWeixinUrl
                     this.request.spuAppSummary = data.data.spuAppSummary 
                     this.request.spuPcSummary = data.data.spuPcSummary 
                     this.request.spuName = data.data.spuName 
