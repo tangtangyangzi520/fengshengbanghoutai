@@ -43,7 +43,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn blue" @click="submitInfo">确定</button>
-                        <button type="button" class="btn default" @click="hideDialog">取消</button>
+                        <button type="button" class="btn default" @click="cancleFunc">取消</button>
                     </div>
                 </div>
             </div>
@@ -142,6 +142,13 @@ export default {
         this.onhide("cancel");
       }, 300);
     },
+    cancleFunc() {
+      this.showDialog = false;
+      setTimeout(() => {
+        this.showPage = false;
+        this.onhide("cancel");
+      }, 300);
+    },
     showMsg(msg, title) {
       if (title) {
         this.showAlertTitle = title;
@@ -152,11 +159,6 @@ export default {
       this.showAlert = true;
     },
     hideMsg() {
-      if (this.id == "") {
-        this.onhide("update");
-      } else {
-        this.onhide("create");
-      }
       this.showAlert = false;
     },
     clearInfo() {
