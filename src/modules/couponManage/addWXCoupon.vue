@@ -43,7 +43,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn blue" @click="submitInfo">确定</button>
-                        <button type="button" class="btn default" @click="cancel">取消</button>
+                        <button type="button" class="btn default" @click="hideDialog">取消</button>
                     </div>
                 </div>
             </div>

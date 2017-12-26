@@ -126,318 +126,358 @@
 </template>
 
 <script>
-import client from '../../common/utils/client';
-import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect } from '../../components';
-import search from './search';
-import control from './control';
-import loading from '../common/loading';
-import addCoupon from './addCoupon';
-import addWxCoupon from './addWxCoupon';
+import client from "../../common/utils/client";
+import {
+  pageTitleBar,
+  paging,
+  itemControl,
+  mMultiSelect,
+  mAlert,
+  mSelect
+} from "../../components";
+import search from "./search";
+import control from "./control";
+import loading from "../common/loading";
+import addCoupon from "./addCoupon";
+import addWxCoupon from "./addWxCoupon";
 
 let vueThis = null;
 
 export default {
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, addCoupon, addWxCoupon },
-    data() {
-        return {
-            mktid: 0,
-            couflag: false,
-            ordertitle: '',
-            oospuid: 0,
-            ooflag: false,
-            limgflag: false,
-            lspuid: 0,
-            lflag: false,
-            spuname: '',
-            skuCode: '',
-            spuCatId: '',
-            skuCode: '',
-            spuName: '',
-            pflag: true,
-            kflag: true,
-            flag: true,
-            spu: 0,
-            img: "http://img1.fshtop.com/1502701860183.jpg",
-            par: -100,
-            isLoading: false,
-            countDesc: '',  //数据统计
-            dataList: [],
-            page: {},   // 分页请求数据
-            showAlert: false,
-            showAddDialog: false,   //新增商品
-            showAlertTitle: '温馨提示',
-            showAlertMsg: '',
-            limitResource: null, //发布状态
-            clickItems: [],   //点击操作的数据项
-            controlType: '',  //当前操作的权限类型
-            showControl: false, //显示操作弹窗
-            destroyControlDialog: false, //注销良言操作弹框
-            expertEditId: '',
-            showEditDialog: false,  //编辑商品
-            showEditspuDialog: false,  //编辑商品
-            showCouponDialog: false, //编辑微信卡券
-            showpreDialog: false,
-            showorderDialog: false,
-            editWxCouponId: '', //编辑的优惠券id
-        }
+  components: {
+    pageTitleBar,
+    paging,
+    itemControl,
+    mAlert,
+    mMultiSelect,
+    mSelect,
+    search,
+    control,
+    loading,
+    addCoupon,
+    addWxCoupon
+  },
+  data() {
+    return {
+      mktid: 0,
+      couflag: false,
+      ordertitle: "",
+      oospuid: 0,
+      ooflag: false,
+      limgflag: false,
+      lspuid: 0,
+      lflag: false,
+      spuname: "",
+      skuCode: "",
+      spuCatId: "",
+      skuCode: "",
+      spuName: "",
+      pflag: true,
+      kflag: true,
+      flag: true,
+      spu: 0,
+      img: "http://img1.fshtop.com/1502701860183.jpg",
+      par: -100,
+      isLoading: false,
+      countDesc: "", //数据统计
+      dataList: [],
+      page: {}, // 分页请求数据
+      showAlert: false,
+      showAddDialog: false, //新增商品
+      showAlertTitle: "温馨提示",
+      showAlertMsg: "",
+      limitResource: null, //发布状态
+      clickItems: [], //点击操作的数据项
+      controlType: "", //当前操作的权限类型
+      showControl: false, //显示操作弹窗
+      destroyControlDialog: false, //注销良言操作弹框
+      expertEditId: "",
+      showEditDialog: false, //编辑商品
+      showEditspuDialog: false, //编辑商品
+      showCouponDialog: false, //编辑微信卡券
+      showpreDialog: false,
+      showorderDialog: false,
+      editWxCouponId: "" //编辑的优惠券id
+    };
+  },
+  computed: {
+    selectItems() {
+      let list = [];
+      this.dataList.forEach(item => {
+        item.checked && list.push(item);
+      });
+      return list;
+    }
+  },
+  filters: {
+    filterStatus(id) {
+      // return client.global.componentStatus.find(item => item.id == id).name;
     },
-    computed: {
-        selectItems() {
-            let list = [];
-            this.dataList.forEach(item => {
-                item.checked && list.push(item);
-            });
-            return list;
-        }
+    filterTime(time) {
+      return client.formateTime(time);
+    }
+  },
+  methods: {
+    //导出优惠券列表
+    exportList() {
+      $("#exportListForm").attr("action", MKT_EXPORT_LIST);
+      $("input[name='listRequest']").val(this.par);
+      $("#exportListForm").submit();
     },
-    filters: {
-        filterStatus(id) {
-            // return client.global.componentStatus.find(item => item.id == id).name;
-        },
-        filterTime(time) {
-            return client.formateTime(time);
+    //导出使用明细
+    exportDetails() {
+      let detailRequest,
+        list = [];
+      this.dataList.forEach(item => {
+        if (item.checked == true) {
+          list.push(item.mkcCampaignId);
         }
+      });
+      if (list.length == 0) {
+        this.showMsg("请选择需要导出使用明细的优惠券");
+        return;
+      }
+      detailRequest = list.join(",");
+      $("#exportDetailForm").attr("action", MKT_EXPORT_DETAIL);
+      $("input[name='detailRequest']").val(detailRequest);
+      $("#exportDetailForm").submit();
     },
-    methods: {
-        //导出优惠券列表
-        exportList() {
-            $("#exportListForm").attr("action", MKT_EXPORT_LIST);
-            $("input[name='listRequest']").val(this.par);
-            $("#exportListForm").submit();
-        },
-        //导出使用明细
-        exportDetails() {
-            let detailRequest, list=[];
-            this.dataList.forEach(item => {
-                if (item.checked == true) {
-                    list.push(item.mkcCampaignId);
-                }
+    //打开编辑页面
+    add() {
+      this.mktid = -100;
+      setTimeout(() => {
+        this.showEditDialog = true;
+      }, 100);
+    },
+    showEdit(id) {
+      this.mktid = id;
+      this.couflag = !this.couflag;
+      this.showEditDialog = true;
+    },
+    //添加或查看卡券
+    showCouponCtr(editWxCouponId) {
+      this.editWxCouponId = editWxCouponId;
+      this.showCouponDialog = true;
+    },
+    hideCouponDialog(type) {
+      this.showCouponDialog = false;
+      if (type != "cancel") {
+        this.getList();
+      }
+    },
+    //根据售价升降序
+    orderBy(val) {
+      let options;
+      if (true) {
+        // 拿最后一次请求的参数
+        options = this.lastSearchOptions;
+      } else {
+        options = Object.assign({}, this.searchOptions);
+      }
+      this.isLoading = true;
+      this.dataList = [];
+      this.lastSearchOptions = options;
+      if (!val) {
+        $("#asc").show();
+        $("#desc").hide();
+        options.orderBy = 0;
+      } else {
+        $("#desc").show();
+        $("#asc").hide();
+        options.orderBy = 1;
+      }
+      //
+      client.postData(SPU_GET_LIST, options).then(
+        data => {
+          //192.168.4.249
+          this.isLoading = false;
+          if (data.code == 200) {
+            data.data.forEach(item => {
+              item.checked = false;
             });
-            if(list.length==0){
-                this.showMsg("请选择需要导出使用明细的优惠券");
-                return;
-            }
-            detailRequest = list.join(",");
-            $("#exportDetailForm").attr("action", MKT_EXPORT_DETAIL);
-            $("input[name='detailRequest']").val(detailRequest);
-            $("#exportDetailForm").submit();
+            this.dataList = data.data;
+            this.page = data.page;
+          } else {
+            this.showMsg(data.msg);
+          }
         },
-        //打开编辑页面
-        add() {
-            this.mktid = -100;
-            setTimeout(()=>{
-                 this.showEditDialog = true;
-            },100);
-        },
-        showEdit(id) {
-            this.mktid = id;
-            this.couflag = !this.couflag;
-            this.showEditDialog = true;
-        },
-        //添加或查看卡券
-        showCouponCtr(editWxCouponId){
-            this.editWxCouponId = editWxCouponId;
-            this.showCouponDialog = true;
-        },
-        hideCouponDialog(type){
-            this.showCouponDialog = false;
-            console.log(type);
-        },
-        //根据售价升降序
-        orderBy(val) {
-            let options;
-            if (true) {
-                // 拿最后一次请求的参数
-                options = this.lastSearchOptions;
-            } else {
-                options = Object.assign({}, this.searchOptions);
-            }
-            this.isLoading = true;
-            this.dataList = [];
-            this.lastSearchOptions = options;
-            if( !val ){
-                $("#asc").show();
-                $("#desc").hide();
-                options.orderBy = 0;
-            }else{
-                $("#desc").show();
-                $("#asc").hide();
-                options.orderBy = 1;
-            }
-            //
-            client.postData( SPU_GET_LIST , options).then(data => {  //192.168.4.249
-                this.isLoading = false;
-                if (data.code == 200) {
-                    data.data.forEach(item => {
-                        item.checked = false;
-                    });
-                    this.dataList = data.data;
-                    this.page = data.page;
-                } else {
-                    this.showMsg(data.msg);
-                }
-            }, data => {
-                this.isLoading = false;
+        data => {
+          this.isLoading = false;
+        }
+      );
+    },
+    search() {
+      this.flag = !this.flag;
+    },
+    hideEditspuDialog(control) {
+      this.expertEditId = "";
+      this.showEditspuDialog = false;
+      if (control && control == "create") {
+        this.showMsg("保存成功");
+      }
+      if (control && control == "update") {
+        this.showMsg("更新成功");
+      }
+      if (control) {
+        setTimeout(() => {
+          //移除组件
+          this.destroyControlDialog = true;
+        }, 100);
+        setTimeout(() => {
+          //重新加入
+          this.destroyControlDialog = false;
+        }, 200);
+        this.getList(false, true);
+      }
+    },
+    //编辑商品
+    hideEditDialog(control) {
+      this.expertEditId = "";
+      this.showEditDialog = false;
+      if (control && control == "create") {
+        this.showMsg("保存成功");
+      }
+      if (control && control == "update") {
+        this.showMsg("更新成功");
+      }
+      if (control) {
+        setTimeout(() => {
+          //移除组件
+          this.destroyControlDialog = true;
+        }, 100);
+        setTimeout(() => {
+          //重新加入
+          this.destroyControlDialog = false;
+        }, 200);
+        this.getList(false, true);
+      }
+    },
+    //点击改变样式
+    changeClass(obj) {
+      $("#desc").show();
+      $("#asc").hide();
+      $("#" + obj)
+        .removeClass("select2")
+        .addClass("cha2");
+      if (obj == "-1") {
+        $("#0,#2,#1")
+          .removeClass("cha2")
+          .addClass("select2");
+        this.par = -1;
+      } else if (obj == "0") {
+        $("#-1,#2,#1")
+          .removeClass("cha2")
+          .addClass("select2");
+        this.par = 0;
+      } else if (obj == "2") {
+        $("#-1,#0,#1")
+          .removeClass("cha2")
+          .addClass("select2");
+        this.par = 2;
+      } else {
+        $("#0,#2,#-1")
+          .removeClass("cha2")
+          .addClass("select2");
+        this.par = 1;
+      }
+      //this.getList(false,true);
+    },
+    show() {
+      this.showEditDialog = true;
+    },
+    addItem() {
+      //document.location = '/dist/#!/categoryControl';
+      this.expertEditId = "";
+      this.showAddDialog = true;
+    },
+    hideAddDialog(control) {
+      this.expertEditId = "";
+      this.showAddDialog = false;
+      if (control && control == "create") {
+        this.showMsg("保存成功");
+      }
+      if (control && control == "update") {
+        this.showMsg("更新成功");
+      }
+      if (control) {
+        setTimeout(() => {
+          //移除组件
+          this.destroyControlDialog = true;
+        }, 100);
+        setTimeout(() => {
+          //重新加入
+          this.destroyControlDialog = false;
+        }, 200);
+        //this.getList();
+      }
+    },
+    // 搜索条件变化
+    changeSearchOptions(options) {
+      this.searchOptions = options;
+    },
+    showControlFunc(item, type) {
+      this.clickItems = [];
+      this.controlType = type;
+      //this.showEditDialog = true;
+      //console.log(item);
+      if (!item) {
+        if (this.selectItems.length != 0) {
+          this.clickItems = this.selectItems;
+          this.showControl = true;
+        }
+      } else {
+        this.clickItems.push(item);
+        if (type == "edit") {
+          //this.expertEditId = item.componentId;
+          this.showAddDialog = true;
+        } else {
+          this.showControl = true;
+        }
+      }
+    },
+    hideControlFunc(type) {
+      if (type == "success") {
+        //this.getList();
+      }
+      this.showControl = false;
+    },
+    //查询列表数据
+    getList(page, firstSearch) {
+      let options;
+      if (!firstSearch) {
+        // 拿最后一次请求的参数
+        options = this.lastSearchOptions;
+      } else {
+        options = Object.assign({}, this.searchOptions);
+      }
+      if (page) {
+        options.page = page;
+      }
+      this.isLoading = true;
+      this.dataList = [];
+      this.lastSearchOptions = options;
+      //
+      client.postData(MKT_LIST, options).then(
+        data => {
+          //192.168.4.249
+          this.isLoading = false;
+          if (data.code == 200) {
+            data.data.forEach(item => {
+              item.checked = false;
             });
+            this.dataList = data.data;
+            this.page = data.page;
+          } else {
+            this.showMsg(data.msg);
+          }
         },
-        search(){
-            this.flag = ! this.flag;
-        },
-        hideEditspuDialog(control) {
-            this.expertEditId = '';
-            this.showEditspuDialog = false;
-            if (control && control == 'create') {
-                this.showMsg('保存成功');
-            }
-            if (control && control == 'update') {
-                this.showMsg('更新成功');
-            }
-            if (control) {
-                setTimeout(() => {
-                    //移除组件
-                    this.destroyControlDialog = true;
-                }, 100);
-                setTimeout(() => {
-                    //重新加入
-                    this.destroyControlDialog = false;
-                }, 200);
-                this.getList(false,true);
-            }
-        } ,
-        //编辑商品
-        hideEditDialog(control) {
-            this.expertEditId = '';
-            this.showEditDialog = false;
-            if (control && control == 'create') {
-                this.showMsg('保存成功');
-            }
-            if (control && control == 'update') {
-                this.showMsg('更新成功');
-            }
-            if (control) {
-                setTimeout(() => {
-                    //移除组件
-                    this.destroyControlDialog = true;
-                }, 100)
-                setTimeout(() => {
-                    //重新加入
-                    this.destroyControlDialog = false;
-                }, 200);
-                this.getList(false,true);
-            }
-         } ,
-        //点击改变样式
-        changeClass(obj) {
-            $("#desc").show();
-            $("#asc").hide();
-            $("#"+obj).removeClass("select2").addClass("cha2");
-            if(obj == "-1"){
-                $("#0,#2,#1").removeClass("cha2").addClass("select2");
-                this.par = -1;
-            }else if(obj == "0"){
-                $("#-1,#2,#1").removeClass("cha2").addClass("select2");
-                this.par = 0;
-            }else if(obj == "2"){
-                $("#-1,#0,#1").removeClass("cha2").addClass("select2");
-                this.par = 2;
-            }else{
-                $("#0,#2,#-1").removeClass("cha2").addClass("select2");
-                this.par = 1;
-            }
-             //this.getList(false,true);
-        },
-        show(){
-             this.showEditDialog = true;
-        },
-        addItem() {
-            //document.location = '/dist/#!/categoryControl';
-            this.expertEditId = '';
-            this.showAddDialog = true;
-        },
-        hideAddDialog(control) {
-            this.expertEditId = '';
-            this.showAddDialog = false;
-            if (control && control == 'create') {
-                this.showMsg('保存成功');
-            }
-            if (control && control == 'update') {
-                this.showMsg('更新成功');
-            }
-            if (control) {
-                setTimeout(() => {
-                    //移除组件
-                    this.destroyControlDialog = true;
-                }, 100);
-                setTimeout(() => {
-                    //重新加入
-                    this.destroyControlDialog = false;
-                }, 200);
-                //this.getList();
-            }
-        },
-        // 搜索条件变化
-        changeSearchOptions(options) {
-            this.searchOptions = options;
-        },
-        showControlFunc(item, type) {
-            this.clickItems = [];
-            this.controlType = type;
-            //this.showEditDialog = true;
-            //console.log(item);
-            if (!item) {
-                if (this.selectItems.length != 0) {
-                    this.clickItems = this.selectItems;
-                    this.showControl = true;
-                }
-            } else {
-                this.clickItems.push(item);
-                if (type == 'edit') {
-                    //this.expertEditId = item.componentId;
-                    this.showAddDialog = true;
-                } else {
-                    this.showControl = true;
-                }
-            }
-        },
-        hideControlFunc(type) {
-            if (type == 'success') {
-                //this.getList();
-            }
-            this.showControl = false;
-        },
-        //查询列表数据
-        getList(page, firstSearch) {
-            let options;
-            if (!firstSearch) {
-                // 拿最后一次请求的参数
-                options = this.lastSearchOptions;
-            } else {
-                options = Object.assign({}, this.searchOptions);
-            }
-            if (page) {
-                options.page = page;
-            }
-            this.isLoading = true;
-            this.dataList = [];
-            this.lastSearchOptions = options;
-            //
-            client.postData( MKT_LIST , options).then(data => {  //192.168.4.249
-                this.isLoading = false;
-                if (data.code == 200) {
-                    data.data.forEach(item => {
-                        item.checked = false;
-                    });
-                    this.dataList = data.data;
-                    this.page = data.page;
-                } else {
-                    this.showMsg(data.msg);
-                }
-            }, data => {
-                this.isLoading = false;
-            });
-        },
-        //查询行头统计数据
-        /*getCount(options) {
+        data => {
+          this.isLoading = false;
+        }
+      );
+    },
+    //查询行头统计数据
+    /*getCount(options) {
             options.componentType = [12];
             client.postData(COMPONENT_ARTICLE_COUNTER, options).then(data => {
                 if (data.code == 200) {
@@ -449,50 +489,49 @@ export default {
             });
         },
         */
-        selectAll() {
-            this.dataList.forEach(item => {
-                item.checked = true;
-            });
-        },
-        reverseList() {
-            this.dataList.forEach(item => {
-                item.checked = !item.checked;
-            });
-        },
-        selectItem(item) {
-            item.checked = !item.checked;
-        },
-        showMsg(msg, title) {
-            if (title) {
-                this.showAlertTitle = title;
-            } else {
-                this.showAlertTitle = '温馨提示';
-            }
-            this.showAlertMsg = msg;
-            this.showAlert = true;
-        },
-        hideMsg() {
-            this.showAlert = false;
-            this.showEditDialog = false;
-            this.showAddDialog = false;
-            this.showEditspuDialog = false;
-        }
+    selectAll() {
+      this.dataList.forEach(item => {
+        item.checked = true;
+      });
     },
-    created() {
-        vueThis = this;
-        this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
-        //console.log(this.limitResource);
+    reverseList() {
+      this.dataList.forEach(item => {
+        item.checked = !item.checked;
+      });
     },
-    watch: {
+    selectItem(item) {
+      item.checked = !item.checked;
     },
-    route: {
-        canReuse: () => {
-            vueThis.getList(false, true);
-        }
+    showMsg(msg, title) {
+      if (title) {
+        this.showAlertTitle = title;
+      } else {
+        this.showAlertTitle = "温馨提示";
+      }
+      this.showAlertMsg = msg;
+      this.showAlert = true;
     },
-    ready() {
-        client.resetListHeight();
+    hideMsg() {
+      this.showAlert = false;
+      this.showEditDialog = false;
+      this.showAddDialog = false;
+      this.showEditspuDialog = false;
     }
+  },
+  created() {
+    vueThis = this;
+    this.limitResource = JSON.parse(localStorage.getItem("limitResource"));
+    //console.log(this.limitResource);
+  },
+  watch: {},
+  route: {
+    canReuse: () => {
+      vueThis.getList(false, true);
+    }
+  },
+  ready() {
+    client.resetListHeight();
+  }
 };
 </script>
 
@@ -500,49 +539,47 @@ export default {
 @import "../../common/css/common.less";
 @import "../../common/css/list.less";
 .select2 {
-    margin-left: 3px;
-    border: 10px solid gray;
-    border-bottom: 0px solid white;
-    border-width: 1px;
-    height: 30px;
-    width: 100px;
-    display: inline-block;
-    text-align: center;
-    line-height: 30px;
-    font-weight: bold;
+  margin-left: 3px;
+  border: 10px solid gray;
+  border-bottom: 0px solid white;
+  border-width: 1px;
+  height: 30px;
+  width: 100px;
+  display: inline-block;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
 }
 
-;
 .cha2 {
-    margin-left: 6px;
-    color: white;
-    border-width: 1px;
-    height: 30px;
-    width: 100px;
-    display: inline-block;
-    text-align: center;
-    line-height: 30px;
-    background-color: #66CC33
+  margin-left: 6px;
+  color: white;
+  border-width: 1px;
+  height: 30px;
+  width: 100px;
+  display: inline-block;
+  text-align: center;
+  line-height: 30px;
+  background-color: #66cc33;
 }
 
-;
 td {
-    text-align: center;
-    vertical-align: middle
-};
+  text-align: center;
+  vertical-align: middle;
+}
 .tt:hover {
-    color:#6699CC
-};
-.orderBy:hover{
-    color:red;
-    text-decoration:none
+  color: #6699cc;
 }
-#discount td{
-    border-right:none; 
-    border-left:none;
+.orderBy:hover {
+  color: red;
+  text-decoration: none;
 }
-#discount th{
-    border-right:none; 
-    border-left:none;
+#discount td {
+  border-right: none;
+  border-left: none;
+}
+#discount th {
+  border-right: none;
+  border-left: none;
 }
 </style>
