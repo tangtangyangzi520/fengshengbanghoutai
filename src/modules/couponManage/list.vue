@@ -82,6 +82,8 @@
                                 <!-- v-if="limitResource.expert_info_edit" 编辑的权限控制-->
                                 <span v-if="item.mkcIsInvalid == 1" >已失效</span>
                                 <span v-if="item.mkcIsInvalid == 0" >
+                                    <button type="button"  class="btn btn-xs green" @click.stop="showCouponCtr(item.mkcCampaignId)" v-if="item.bindStatus==0">添加卡券</button>
+                                    <button type="button"  class="btn btn-xs green" @click.stop="showCouponCtr(item.mkcCampaignId)" v-if="item.bindStatus==1">查看卡券</button>
                                     <button type="button"  class="btn btn-xs blue" @click.stop="showEdit(item.mkcCampaignId)" v-if="limitResource.coupon_edit">编辑</button>
                                     <button type="button"  @click.stop="showControlFunc(item.mkcCampaignId,'delete')" class="btn btn-xs yellow-crusta" v-if="limitResource.coupon_invalidate">使失效</button> 
                                 </span>
@@ -107,7 +109,11 @@
         <span v-if="dataList.length==0"><br><br></span>
         <!-- 优惠券-新建/编辑弹框 -->
         <add-coupon v-if="!destroyControlDialog" :id="expertEditId" :show="showEditDialog" :spuid="spu" :onhide="hideEditDialog" :coflag="couflag" :mkttid="mktid"></add-coupon> 
-        
+        <!-- 微信卡券-新建/编辑弹框 -->
+        <add-wx-coupon :id="editWxCouponId" :show="showCouponDialog" :onhide="hideCouponDialog"></add-wx-coupon> 
+        <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
+            <div slot="content">确定提交吗？</div>
+        </m-alert>
         <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
             <div slot="content">确定提交吗？</div>
         </m-alert>
@@ -126,11 +132,12 @@ import search from './search';
 import control from './control';
 import loading from '../common/loading';
 import addCoupon from './addCoupon';
+import addWxCoupon from './addWxCoupon';
 
 let vueThis = null;
 
 export default {
-    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, addCoupon },
+    components: { pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control, loading, addCoupon, addWxCoupon },
     data() {
         return {
             mktid: 0,
@@ -168,8 +175,10 @@ export default {
             expertEditId: '',
             showEditDialog: false,  //编辑商品
             showEditspuDialog: false,  //编辑商品
+            showCouponDialog: false, //编辑微信卡券
             showpreDialog: false,
             showorderDialog: false,
+            editWxCouponId: '', //编辑的优惠券id
         }
     },
     computed: {
@@ -224,6 +233,15 @@ export default {
             this.mktid = id;
             this.couflag = !this.couflag;
             this.showEditDialog = true;
+        },
+        //添加或查看卡券
+        showCouponCtr(editWxCouponId){
+            this.editWxCouponId = editWxCouponId;
+            this.showCouponDialog = true;
+        },
+        hideCouponDialog(type){
+            this.showCouponDialog = false;
+            console.log(type);
         },
         //根据售价升降序
         orderBy(val) {

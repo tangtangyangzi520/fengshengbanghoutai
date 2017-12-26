@@ -1069,7 +1069,7 @@ export default {
                 this.isLoading = false;
                 return;
             }
-            if( this. request.spuPackingList.length >= 200 ){
+            if( this.request.spuPackingList.length >= 200 ){
                 this.showMsg("包装清单不能超过200字");
                 this.isLoading = false;
                 return;

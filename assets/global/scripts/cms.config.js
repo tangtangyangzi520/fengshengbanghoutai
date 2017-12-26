@@ -280,109 +280,110 @@ var HEADLINE_LIST = CMS_API_BASE + "/headline/getList";
 
 //商品模块url
 //sku
-var  SKU_EDIT_LIST      =  OMS_TEST + "/sku/editProductSku";         //编辑sku列表
-var  SKU_GET_BY_ID      =  OMS_TEST + "/sku/getProductSkuBySpuId";   //根据spuID获取sku列表
+var SKU_EDIT_LIST = OMS_TEST + "/sku/editProductSku"; //编辑sku列表
+var SKU_GET_BY_ID = OMS_TEST + "/sku/getProductSkuBySpuId"; //根据spuID获取sku列表
 
 //评论管理
-var  OIC_GET_LIST       =  OMS_TEST + "/oic/listOic";                //获取评论列表
-var  OIC_IMPORT_LIST    =  OMS_TEST + "/oic/exportOics";             //导入评论
-var  OIC_DELETE         =  OMS_TEST + "/oic/deleteOic";              //删除评论
-var  OIC_EDIT           =  OMS_TEST + "/oic/editOrderItemComment";   //编辑评论
-var  OIC_EXPORT_TEMPLATE=  OMS_TEST + "/oic/exportOicTemplate";      //导出评论模板
+var OIC_GET_LIST = OMS_TEST + "/oic/listOic"; //获取评论列表
+var OIC_IMPORT_LIST = OMS_TEST + "/oic/exportOics"; //导入评论
+var OIC_DELETE = OMS_TEST + "/oic/deleteOic"; //删除评论
+var OIC_EDIT = OMS_TEST + "/oic/editOrderItemComment"; //编辑评论
+var OIC_EXPORT_TEMPLATE = OMS_TEST + "/oic/exportOicTemplate"; //导出评论模板
 
 //spu,图片资源
-var  SPU_EXPORT         =  OMS_TEST + "/spu/exportSpu";              //根据spuid导出sku列表
-var  SPU_CREATE         =  OMS_TEST + "/spu/createProductSpu";       //新增spu
-var  SPU_GET_LIST       =  OMS_TEST + "/spu/listSpu";                //获取spu列表
-var  SPU_GET_LIST_SKU   =  OMS_TEST + "/spu/listSpuAndSku";          //获取spu列表(包含sku列表)
-var  SPU_EDIT           =  OMS_TEST + "/spu/editProductSpu";         //编辑spu
-var  SPU_GET_BY_ID      =  OMS_TEST + "/spu/getProductSpuById";      //根据ID获取单个spu
-var  PSR_CREATE         =  OMS_TEST + "/psr/createPsr";              //新增详情页
-var  PSR_GETBANNER_BY_ID    =  OMS_TEST + "/psr/getPsrBannerById";   //banner图片资源
-var  PSR_GETDETAILS_BY_ID   =  OMS_TEST + "/psr/getPsrDetailsById";  //详情图片资源
-var  SPU_EDIT_UP_DOWN   =  OMS_TEST + "/spu/shelvesSpu";             //sku上架或下架
-var  SPU_DELETE  =  OMS_TEST + "/spu/deleteSpus";                    //sku上架或下架
+var SPU_EXPORT = OMS_TEST + "/spu/exportSpu"; //根据spuid导出sku列表
+var SPU_CREATE = OMS_TEST + "/spu/createProductSpu"; //新增spu
+var SPU_GET_LIST = OMS_TEST + "/spu/listSpu"; //获取spu列表
+var SPU_GET_LIST_SKU = OMS_TEST + "/spu/listSpuAndSku"; //获取spu列表(包含sku列表)
+var SPU_EDIT = OMS_TEST + "/spu/editProductSpu"; //编辑spu
+var SPU_GET_BY_ID = OMS_TEST + "/spu/getProductSpuById"; //根据ID获取单个spu
+var PSR_CREATE = OMS_TEST + "/psr/createPsr"; //新增详情页
+var PSR_GETBANNER_BY_ID = OMS_TEST + "/psr/getPsrBannerById"; //banner图片资源
+var PSR_GETDETAILS_BY_ID = OMS_TEST + "/psr/getPsrDetailsById"; //详情图片资源
+var SPU_EDIT_UP_DOWN = OMS_TEST + "/spu/shelvesSpu"; //sku上架或下架
+var SPU_DELETE = OMS_TEST + "/spu/deleteSpus"; //sku上架或下架
 
 //品牌
-var  PBD_GET_LIST   =  OMS_TEST + "/pbd/list";                       //获取品牌列表
-var  PBD_GET_LISTUSED   =  OMS_TEST + "/pbd/listUsed";               //获取正在使用的品牌列表
-var  PBD_CREATE     =  OMS_TEST + "/pbd/createProductBrand";         //新增品牌
-var  PBD_EDIT       =  OMS_TEST + "/pbd/editProductBrand";           //编辑品牌
-var  PBD_DISPLAY    =  OMS_TEST + "/pbd/displayProductBrand";        //启用停用品牌
-var  PBD_GET_ONE    =  OMS_TEST + "/pbd/getProductBrandById";        //根据品牌ID获取品牌
-var  PBD_GET_MAXSORT    =  OMS_TEST + "/pbd/getMaxPbdSort";          //获取最大排序
+var PBD_GET_LIST = OMS_TEST + "/pbd/list"; //获取品牌列表
+var PBD_GET_LISTUSED = OMS_TEST + "/pbd/listUsed"; //获取正在使用的品牌列表
+var PBD_CREATE = OMS_TEST + "/pbd/createProductBrand"; //新增品牌
+var PBD_EDIT = OMS_TEST + "/pbd/editProductBrand"; //编辑品牌
+var PBD_DISPLAY = OMS_TEST + "/pbd/displayProductBrand"; //启用停用品牌
+var PBD_GET_ONE = OMS_TEST + "/pbd/getProductBrandById"; //根据品牌ID获取品牌
+var PBD_GET_MAXSORT = OMS_TEST + "/pbd/getMaxPbdSort"; //获取最大排序
 
 //数据字典
-var  SYSTEM_REASON       =  OMS_TEST + "/reason/getProductChartReasons";  //获取上榜理由
-var  TAG_LIST_GET        =  CMS_API_BASE + "/tag/getTagTree";             //根据typeId 获取类目列表
-var  SYSTEM_DICTIONARY   =  OMS_TEST + "/system/listDictionary";          //根据"parentCode"获取数据字典
-var  PCA_GET_BY_CATID    =  OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据类目ID获取属性值
+var SYSTEM_REASON = OMS_TEST + "/reason/getProductChartReasons"; //获取上榜理由
+var TAG_LIST_GET = CMS_API_BASE + "/tag/getTagTree"; //根据typeId 获取类目列表
+var SYSTEM_DICTIONARY = OMS_TEST + "/system/listDictionary"; //根据"parentCode"获取数据字典
+var PCA_GET_BY_CATID = OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据类目ID获取属性值
 
 //订单模块url
-var ORDER_GET_LIST     =    OMS_TEST + "/order/list";                    //订单条件查询列表
-var ORDER_GET_LIST     =  OMS_TEST + "/order/list";                      //订单条件查询列表
-var ORDER_EDIT_DEMO    =  OMS_TEST + "/order/editOrderSetDemo";          //编辑商家备注
-var ORDER_EDIT_STATUS  =  OMS_TEST + "/order/changeOrdStatus";           //修改订单状态
-var ORDER_CANCEL_REASON   =  OMS_TEST + "/order/getOrderCancelReasons";  //获取订单取消原因
-var ORDER_EDIT_REASON  =  OMS_TEST + "/order/cancelOrderSub";            //取消订单
-var ORDER_EDIT_ACT_AMOUNT =  OMS_TEST + "/order/editActAmount";          //修改订单价格
-var ORDER_EXPORT       =  OMS_TEST + "/order/exportOrder";               //订单导出
-var ORDER_ADD_STAR     =  OMS_TEST + "/order/addStar";                   //订单加星提交
-var ORDER_DELIVER      =  OMS_TEST + "/order/deliverOrderSub";           //订单手动发货
-var ORDER_GET_LOGI_COMPANY =  OMS_TEST + "/order/getLogiCompanyList";    //获取物流公司列表
+var ORDER_GET_LIST = OMS_TEST + "/order/list"; //订单条件查询列表
+var ORDER_GET_LIST = OMS_TEST + "/order/list"; //订单条件查询列表
+var ORDER_EDIT_DEMO = OMS_TEST + "/order/editOrderSetDemo"; //编辑商家备注
+var ORDER_EDIT_STATUS = OMS_TEST + "/order/changeOrdStatus"; //修改订单状态
+var ORDER_CANCEL_REASON = OMS_TEST + "/order/getOrderCancelReasons"; //获取订单取消原因
+var ORDER_EDIT_REASON = OMS_TEST + "/order/cancelOrderSub"; //取消订单
+var ORDER_EDIT_ACT_AMOUNT = OMS_TEST + "/order/editActAmount"; //修改订单价格
+var ORDER_EXPORT = OMS_TEST + "/order/exportOrder"; //订单导出
+var ORDER_ADD_STAR = OMS_TEST + "/order/addStar"; //订单加星提交
+var ORDER_DELIVER = OMS_TEST + "/order/deliverOrderSub"; //订单手动发货
+var ORDER_GET_LOGI_COMPANY = OMS_TEST + "/order/getLogiCompanyList"; //获取物流公司列表
 
 //物流模块
-var ODD_GET_ORDERSUBID       =  OMS_TEST + "/odd/getByOrderSubId";       //根据子单获取物流信息?ordOrderId=1
+var ODD_GET_ORDERSUBID = OMS_TEST + "/odd/getByOrderSubId"; //根据子单获取物流信息?ordOrderId=1
 
 //app商品测试
-var APP_SPU_GET_ONE =  APP_TEST + "/spu/getAppProductSpuById";           //根据spuID获取信息
+var APP_SPU_GET_ONE = APP_TEST + "/spu/getAppProductSpuById"; //根据spuID获取信息
 
 //类目属性模块
 //=========================================新增加(chensenrong)====================================================//
-var PCA_INSERT      = OMS_TEST + "/pca/insertProductCategoryAtrr";         //添加通用属性及属性选项
-var PCA_QUERY_BYID  = OMS_TEST + "/pca/queryProductCategoryAtrrByPcaId";   //根据属性ID获取分类属性及属性选项
-var PCA_UPDATE      = OMS_TEST + "/pca/updateProductCategoryAtrr";         //修改通用属性及属性选项
-var PCA_REMOVE      = OMS_TEST + "/pca/removeProductCategoryAtrr";         //删除通用属性及属性选项
-var SALE_CREATE     = OMS_TEST + "/pca/createSaleSpuCategoryAtrr";         //添加销售属性及属性选项
-var SALE_UPDATE     = OMS_TEST + "/pca/editSaleSpuCategoryAtrr";           //修改销售属性及属性选项
-var SALE_DELETE     = OMS_TEST + "/pca/removeSaleSpuCategoryAtrr";         //删除销售属性及属性选项
-var GET_ATRR_LIST   = OMS_TEST + "/pca/getAtrrListByPcraCatId";            //根据分类ID获取属性数据(无分页)
+var PCA_INSERT = OMS_TEST + "/pca/insertProductCategoryAtrr"; //添加通用属性及属性选项
+var PCA_QUERY_BYID = OMS_TEST + "/pca/queryProductCategoryAtrrByPcaId"; //根据属性ID获取分类属性及属性选项
+var PCA_UPDATE = OMS_TEST + "/pca/updateProductCategoryAtrr"; //修改通用属性及属性选项
+var PCA_REMOVE = OMS_TEST + "/pca/removeProductCategoryAtrr"; //删除通用属性及属性选项
+var SALE_CREATE = OMS_TEST + "/pca/createSaleSpuCategoryAtrr"; //添加销售属性及属性选项
+var SALE_UPDATE = OMS_TEST + "/pca/editSaleSpuCategoryAtrr"; //修改销售属性及属性选项
+var SALE_DELETE = OMS_TEST + "/pca/removeSaleSpuCategoryAtrr"; //删除销售属性及属性选项
+var GET_ATRR_LIST = OMS_TEST + "/pca/getAtrrListByPcraCatId"; //根据分类ID获取属性数据(无分页)
 //===============================================================================================================//
-var PCA_CREATE      = OMS_TEST +"/pca/createProductCategoryAtrr";          //分类属性添加
-var PCA_GET_ID      = OMS_TEST +"/pca/getProductCategoryAtrrByPcaId";      //根据属性ID获取分类属性
-var PCA_EDIT        = OMS_TEST +"/pca/editProductCategoryAtrr";            //分类属性修改
-var PCA_GET_PCRACATIDS      = OMS_TEST +"/pca/getPcraCatIds";              //根据分类ID获取SPU分类属性
-var PCA_GET_BY_PCRACATIDS   = OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据分类ID获取SPU分类属性分页查询
-var PCA_DELETE      = OMS_TEST + "/pca/deleteProductCategoryAtrr";         //删除SPU分类属性
-var PCA_INPUTTYPES  = OMS_TEST +"/pca/getpcaInputTypes";                   //根据"parentCode"获取数据字典
-var SALEPCA_CREATE  =  OMS_TEST +"/pca/createSaleProductCategoryAtrr";     //销售属性添加
+var PCA_CREATE = OMS_TEST + "/pca/createProductCategoryAtrr"; //分类属性添加
+var PCA_GET_ID = OMS_TEST + "/pca/getProductCategoryAtrrByPcaId"; //根据属性ID获取分类属性
+var PCA_EDIT = OMS_TEST + "/pca/editProductCategoryAtrr"; //分类属性修改
+var PCA_GET_PCRACATIDS = OMS_TEST + "/pca/getPcraCatIds"; //根据分类ID获取SPU分类属性
+var PCA_GET_BY_PCRACATIDS = OMS_TEST + "/pca/getProductCategoryAtrrPcraCatIds"; //根据分类ID获取SPU分类属性分页查询
+var PCA_DELETE = OMS_TEST + "/pca/deleteProductCategoryAtrr"; //删除SPU分类属性
+var PCA_INPUTTYPES = OMS_TEST + "/pca/getpcaInputTypes"; //根据"parentCode"获取数据字典
+var SALEPCA_CREATE = OMS_TEST + "/pca/createSaleProductCategoryAtrr"; //销售属性添加
 
-var PCAO_DELETE     = OMS_TEST +  "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
-var PCAO_CREATE     = OMS_TEST +  "/pcao/createPacoandpcaoName";           //添加属性选项
-var PCAO_GET_ID     = OMS_TEST +   "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId"; //根据分类属性ID获取属性选项值
+var PCAO_DELETE = OMS_TEST + "/pcao/deleteProductCategoryAtrrOption"; //删除属性选项
+var PCAO_CREATE = OMS_TEST + "/pcao/createPacoandpcaoName"; //添加属性选项
+var PCAO_GET_ID = OMS_TEST + "/pcao/getProductCategoryAtrrOptionAtrrByPcaoAtrrId"; //根据分类属性ID获取属性选项值
 
 //营销模块
-var MKT_LIST   =  OMS_TEST+ "/mkt/list";                              //优惠券/活动条件查询
-var MKT_CREATE =  OMS_TEST+ "/mkt/createMktCampaign";                 //新建优惠券/活动
-var MKT_EDIT   =  OMS_TEST+ "/mkt/editMktCampaign";                   //编辑优惠券/活动
-var MKT_GET_ID   =  OMS_TEST+ "/mkt/getMktCampaignRespById";          //根据id获取优惠券/活动
-var MKT_INVALIDATE   =  OMS_TEST+ "/mkt/invalidateMktCampaign";       //优惠券/活动失效
-var MKT_DELETE  =  OMS_TEST+ "/mkt/deleteMktCampaign";                //优惠券/活动删除
-var MKT_EXPORT_LIST  =  OMS_TEST+ "/mkt/exportCoupon";                //优惠券列表导出
-var MKT_EXPORT_DETAIL  =  OMS_TEST+ "/order/exportByCampaignIds";     //优惠券明细导出
+var MKT_LIST = OMS_TEST + "/mkt/list"; //优惠券/活动条件查询
+var MKT_CREATE = OMS_TEST + "/mkt/createMktCampaign"; //新建优惠券/活动
+var MKT_EDIT = OMS_TEST + "/mkt/editMktCampaign"; //编辑优惠券/活动
+var MKT_GET_ID = OMS_TEST + "/mkt/getMktCampaignRespById"; //根据id获取优惠券/活动
+var MKT_INVALIDATE = OMS_TEST + "/mkt/invalidateMktCampaign"; //优惠券/活动失效
+var MKT_DELETE = OMS_TEST + "/mkt/deleteMktCampaign"; //优惠券/活动删除
+var MKT_EXPORT_LIST = OMS_TEST + "/mkt/exportCoupon"; //优惠券列表导出
+var MKT_EXPORT_DETAIL = OMS_TEST + "/order/exportByCampaignIds"; //优惠券明细导出
+var MKT_CREATE_WX_COUPON = OMS_TEST + "/mkt/createWechatCoupon"; //优惠券明细导出
 
 //运费模板模块  
-var PCT_EDIT   =  OMS_TEST+ "/pc/editProductCarriage";                //新增运费模板
-var PCT_CREATE =  OMS_TEST+ "/pc/createProductCarriage";              //新增运费模板
-var PCT_LIST   =  OMS_TEST+ "/pc/list";                               //运费模板列表(包含pct)
-var PCT_PCLIST =  OMS_TEST+ "/pc/pcList";                             //运费模板列表(只有pc)
+var PCT_EDIT = OMS_TEST + "/pc/editProductCarriage"; //新增运费模板
+var PCT_CREATE = OMS_TEST + "/pc/createProductCarriage"; //新增运费模板
+var PCT_LIST = OMS_TEST + "/pc/list"; //运费模板列表(包含pct)
+var PCT_PCLIST = OMS_TEST + "/pc/pcList"; //运费模板列表(只有pc)
 
 //地区模块
-var AREA_GET_LIST = OMS_TEST + "/area/list";                          //获取所有的省份
+var AREA_GET_LIST = OMS_TEST + "/area/list"; //获取所有的省份
 
 //系统配置管理
-var SYSTEM_SETTING_LIST = OMS_TEST + "/systemSetting/list";           //获取所有系统配置参数
-var SYSTEM_SETTING_EDIT = OMS_TEST + "/systemSetting/edit";           //编辑所有系统配置参数
+var SYSTEM_SETTING_LIST = OMS_TEST + "/systemSetting/list"; //获取所有系统配置参数
+var SYSTEM_SETTING_EDIT = OMS_TEST + "/systemSetting/edit"; //编辑所有系统配置参数
 
 //CMS系统
-var CMS_SERVER = "http://cms.fshtop.com/index.html";                  //CMS系统首页
+var CMS_SERVER = "http://cms.fshtop.com/index.html"; //CMS系统首页
