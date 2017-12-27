@@ -103,7 +103,7 @@ export default {
       showAlertMsg: "",
       data: {
         cardId: "",
-        appId: "",
+        appId: "wxbe1441b1d8cdf0df",
         jumpPath: ""
       }
     };
@@ -187,6 +187,7 @@ export default {
         return;
       }
       data.mkcCampaignId = this.id;
+      data.targetAppId = 'wx546860b227876058';
       this.isLoading = true;
       client.postData(MKT_CREATE_WX_COUPON, data).then(
         response => {
@@ -220,7 +221,7 @@ export default {
     id() {
       this.data = {
         cardId: "",
-        appId: "",
+        appId: "wxbe1441b1d8cdf0df",
         jumpPath: ""
       };
       if (this.id == "") {
@@ -237,7 +238,7 @@ export default {
           if (response.code == 200) {
             let data = response.data;
             this.data = {
-              appId: data.appId ? data.appId : "",
+              appId: data.appId ? data.appId : "wxbe1441b1d8cdf0df",
               jumpPath: data.jumpPath ? data.jumpPath : "",
               cardId: data.cardId ? data.cardId : ""
             };
