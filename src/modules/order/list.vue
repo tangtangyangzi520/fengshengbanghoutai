@@ -5,13 +5,9 @@
                 <span slot="title">订单列表</span>
             </page-title-bar>
             <search :onchange="changeSearchOptions" :oncreate="getList" v-ref:search></search>
-            <div class="col-md-12 left">
-                <div class="col-md-4"></div>
-                <div class="col-md-6" style="padding-bottom:5px;">
-                    <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button class="btn blue" type="button" @click="exportOrder" v-if="limitResource.Order_export">批量导出</button>
-                    <!-- <button class="btn blue" type="button" @click="showControlFunc(null,'rejectAll')">查看已生成报表</button> -->
-                </div>
+            <div class="col-md-4 fr" style="margin-top:-44px;">
+                <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn blue" type="button" @click="exportOrder" v-if="limitResource.Order_export">批量导出</button>
             </div>
             <form id="exportForm" method="POST">
                 <input type="hidden" v-model="exportString" name="request">
@@ -185,385 +181,430 @@
     </div>
 </template>
 <script>
-import client from '../../common/utils/client';
-import { pageTitleBar, paging, itemControl, mMultiSelect, mAlert, mSelect } from '../../components';
-import search from './search';
-import control from '../common/control';
-import loading from '../common/loading';
-import selectSpu from '../common/selectSpu';
-import orderControl from './orderControl';
-import demoControl from './demoControl';
-import deliverControl from './deliverControl';
-import changeStatusControl from './changeStatusControl';
-import cancelOrderControl from './cancelOrderControl';
-import changePaymentControl from './changePaymentControl';
-import preview from '../productManage/preview';
-import star from './star';
+import client from "../../common/utils/client";
+import {
+  pageTitleBar,
+  paging,
+  itemControl,
+  mMultiSelect,
+  mAlert,
+  mSelect
+} from "../../components";
+import search from "./search";
+import control from "../common/control";
+import loading from "../common/loading";
+import selectSpu from "../common/selectSpu";
+import orderControl from "./orderControl";
+import demoControl from "./demoControl";
+import deliverControl from "./deliverControl";
+import changeStatusControl from "./changeStatusControl";
+import cancelOrderControl from "./cancelOrderControl";
+import changePaymentControl from "./changePaymentControl";
+import preview from "../productManage/preview";
+import star from "./star";
 let vueThis = null;
 export default {
-    components: {
-        pageTitleBar, paging, itemControl, mAlert, mMultiSelect, mSelect, search, control,
-        loading, orderControl, demoControl, changeStatusControl, cancelOrderControl, changePaymentControl, selectSpu, preview, star, deliverControl
+  components: {
+    pageTitleBar,
+    paging,
+    itemControl,
+    mAlert,
+    mMultiSelect,
+    mSelect,
+    search,
+    control,
+    loading,
+    orderControl,
+    demoControl,
+    changeStatusControl,
+    cancelOrderControl,
+    changePaymentControl,
+    selectSpu,
+    preview,
+    star,
+    deliverControl
+  },
+  props: {
+    title: "",
+    ospuid: 0,
+    oflag: false,
+    ooflag: false,
+    show: {
+      type: Boolean,
+      value: false
     },
-    props: {
-        title: '',
-        ospuid: 0,
-        oflag: false,
-        ooflag: false,
-        show: {
-            type: Boolean,
-            value: false
-        },
-        onhide: {
-            type: Function,
-            value: () => { }
-        },
-    },
-    data() {
-        return {
-            showflag: true,
-            limgflag: false,
-            lspuid: 0,
-            lflag: false,
-            exportString: '',
-            reason: false,
-            isLoading: false,
-            countDesc: '',  //数据统计
-            dataList: [],
-            page: {},   // 分页请求数据
-            showAlert: false,
-            showAddDialog: false,
-            showDemoDialog: false,
-            showStarDialog: false,
-            showStatusDialog: false,
-            showReasonDialog: false,
-            showPaymentDialog: false,
-            showDeliverDialog: false,
-            showpreDialog: false,
-            showSpuDialog: false,
-            showAlertTitle: '温馨提示',
-            showAlertMsg: '',
-            limitResource: null, //发布状态
-            clickItems: [],   //点击操作的数据项
-            controlType: '',  //当前操作的权限类型
-            showControl: false, //显示操作弹窗
-            destroyControlDialog: false, //注销良言操作弹框
-            destroyPaymentDialog: false,
-            orderEditId: '',
-            orderSetData: null,
-            orderSubData: null,
-            orsId: 0,
-            ordOrderId: 0,
-            ordStar: 0,
-            ordDemo: "",
-            testSelectedSpu: [],
-            checkedList: [true, false, false, false, false, false, false],//用来使被选中标签高亮
-
-        }
-    },
-    computed: {
-        selectItems() {
-            let list = [];
-            this.dataList.forEach(item => {
-                item.checked && list.push(item);
-            })
-            return list;
-        },
-    },
-    filters: {
-        filterStatus(id) {
-            return client.global.componentStatus.find(item => item.id == id).name;
-        },
-        filterTime(time) {
-            return client.formateTime(time);
-        }
-    },
-    methods: {
-        //弹出手动发货窗口
-        deliver(itemSub) {
-            this.showDeliverDialog = true;
-            this.orderSubData = itemSub;
-        },
-        clearSearchOptions() {
-            this.$refs.search.clearOptions()
-            //console.log(this.$refs.search)
-        },
-        //得到选择的商品
-        getSelected(data) {
-            this.testSelectedSpu = data;
-        },
-        //选择商品
-        selectSpu() {
-            this.showSpuDialog = true;
-        },
-        //导出订单
-        exportOrder() {
-            this.searchOptions.ordSpuId = this.ospuid;
-            $("#exportForm").attr("action", ORDER_EXPORT);
-            $("input[name='request']").val(JSON.stringify(this.searchOptions));
-            $("#exportForm").submit();
-        },
-        //修改订单状态弹窗
-        editStatus(itemSub) {
-            this.ordOrderId = itemSub.ordOrderId;
-            this.showStatusDialog = true;
-        },
-        //取消订单
-        cancelOrder(itemSub) {
-            this.ordOrderId = itemSub.ordOrderId;
-            this.reason = !this.reason;
-            this.showReasonDialog = true;
-        },
-        //修改价格
-        editPayAmount(itemSub) {
-            this.orderSubData = itemSub;
-            this.showPaymentDialog = true;
-        },
-        //备注
-        setDemo(data) {
-            this.ordOrderId = data.ordOrderId;
-            this.ordDemo = data.ordDemo;
-            this.showDemoDialog = true;
-        },
-        //加星
-        setStar(data) {
-            //console.log(data);
-            this.ordOrderId = data.ordOrderId;
-            this.ordStar = data.ordStar
-            this.showStarDialog = true;
-        },
-        //支付渠道显示
-        ordPayChannel(payChannel) {
-            switch (payChannel) {
-                case 10:
-                case 11:
-                case 12: return '微信支付';
-                case 20:
-                case 21:
-                case 22: return '支付宝支付';
-                default: ;
-            }
-        },
-        //通过点击订单状态查询订单列表
-        getListByState(num) {
-            for (let index = 0; index < this.checkedList.length; index++) {//被选中标签高亮
-                if (index == num + 1) {
-                    this.checkedList.splice(index, 1, true);
-                } else {
-                    this.checkedList.splice(index, 1, false);
-                }
-            }
-            this.checkedbtn = num;
-            this.searchOptions.ordStatus = num;
-            this.getList(false, true);
-        },
-        //点击查看详情
-        showDetail(itemSet, itemSub) {
-            this.orderSetData = itemSet;
-            this.orderSubData = itemSub;
-            this.showAddDialog = true;
-        },
-        //商品那边的方法
-        hideDialog() {
-            this.showDialog = false;
-            setTimeout(() => {
-                this.showPage = false;
-                this.onhide();
-            }, 300)
-        },
-        //预览商品
-        previewpro(val) {
-            this.lspuid = val
-            this.limgflag = !this.limgflag
-            this.lflag = !this.lflag
-            this.showpreDialog = true;
-        },
-        hideAddDialog(control) {
-            this.expertEditId = '';
-            this.showAddDialog = false;
-            if (control && control == 'create') {
-                this.showMsg('保存成功');
-            }
-            if (control && control == 'update') {
-                this.showMsg('更新成功');
-            }
-            if (control) {
-                setTimeout(() => {
-                    //移除组件
-                    this.destroyControlDialog = true;
-                }, 100)
-                setTimeout(() => {
-                    //重新加入
-                    this.destroyControlDialog = false;
-                }, 200)
-                this.getList();
-            }
-        },
-        hidePreDialog() {
-            this.showpreDialog = false
-            setTimeout(() => {
-                this.onhide('cancel');
-            }, 300)
-        },
-        hideDemoDialog() {
-            this.showDemoDialog = false
-            setTimeout(() => {
-                this.onhide('cancel');
-            }, 300)
-        },
-        hideDeliverDialog() {
-            this.showDeliverDialog = false
-            setTimeout(() => {
-                this.onhide('cancel');
-            }, 300)
-        },
-        hideStatusDialog() {
-            this.showStatusDialog = false
-            setTimeout(() => {
-                this.onhide('cancel');
-            }, 300)
-        },
-        hideReasonDialog() {
-            this.showReasonDialog = false
-            setTimeout(() => {
-                this.onhide('cancel');
-            }, 300)
-        },
-        hidePaymentDialog() {
-            this.showPaymentDialog = false
-            this.getList();
-        },
-        hideStarDialog() {
-            this.showStarDialog = false
-            setTimeout(() => {
-                this.onhide('cancel');
-            }, 300)
-        },
-        // 搜索条件变化
-        changeSearchOptions(options) {
-            this.searchOptions = options;
-        },
-        hideControlFunc(type) {
-            if (type == 'success') {
-                this.getList();
-            }
-            this.showControl = false;
-        },
-        //数据校验
-        checkOptions() {
-            if (this.searchOptions.lowOrsOpenPay) {
-                if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(this.searchOptions.lowOrsOpenPay) || this.searchOptions.lowOrsOpenPay < 0) {
-                    alert("实付金额请输入不小于0的整数");
-                    return false;
-                }
-            }
-            if (this.searchOptions.highOrsOpenPay) {
-                if (!/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(this.searchOptions.highOrsOpenPay) || this.searchOptions.highOrsOpenPay < 0) {
-                    alert("实付金额请输入不小于0的整数");
-                    return false;
-                }
-            }
-            return true;
-        },
-        getList(page, firstSearch) {
-            let options, url = ORDER_GET_LIST;
-            //数据校验
-            if (!this.checkOptions()) return;
-            if (!firstSearch) {
-                // 拿最后一次请求的参数
-                options = this.lastSearchOptions;
-            } else {
-                options = Object.assign({}, this.searchOptions);
-            }
-            if (page) {
-                options.page = page;
-            }
-            options.ordSpuId = this.ospuid
-            this.exportString = JSON.stringify(options);
-            this.isLoading = true;
-            this.dataList = [];
-            this.lastSearchOptions = options;
-            // 统计数据
-            this.getCount(options);
-            options.componentType = [12];
-            client.postData(url, options).then(data => {
-                this.isLoading = false;
-                if (data.code == 200) {
-                    data.data.forEach(item => {
-                        item.checked = false;
-                    })
-                    this.dataList = data.data;
-                    this.page = data.page;
-                } else {
-                    this.showMsg(data.msg);
-                }
-            }, data => {
-                this.isLoading = false;
-            })
-        },
-        getCount(options) {
-            options.componentType = [12];
-            client.postData(COMPONENT_ARTICLE_COUNTER, options).then(data => {
-                if (data.code == 200) {
-                    this.countDesc = data.data;
-                } else {
-                    this.showMsg(data.msg);
-                }
-            }, data => {
-            })
-        },
-        selectAll() {
-            this.dataList.forEach(item => {
-                item.checked = true;
-            })
-        },
-        reverseList() {
-            this.dataList.forEach(item => {
-                item.checked = !item.checked;
-            })
-        },
-        selectItem(item) {
-            //item.checked = !item.checked;
-        },
-        showMsg(msg, title) {
-            if (title) {
-                this.showAlertTitle = title;
-            } else {
-                this.showAlertTitle = '温馨提示';
-            }
-            this.showAlertMsg = msg;
-            this.showAlert = true;
-        },
-        hideMsg() {
-            this.showAlert = false;
-            this.showAddDialog = false
-        }
-    },
-    created() {
-        vueThis = this;
-        this.limitResource = JSON.parse(localStorage.getItem('limitResource'));
-    },
-    watch: {
-        ooflag() {
-            this.showflag = true
-        },
-        oflag() {
-            this.showflag = false
-            this.getList(false, true)
-        },
-        show() {
-            this.showPage = this.show
-            this.showDialog = this.show
-        },
-    },
-    route: {
-        canReuse: () => {
-            vueThis.getList(false, true);
-        }
-    },
-    ready() {
-        client.resetListHeight();
+    onhide: {
+      type: Function,
+      value: () => {}
     }
+  },
+  data() {
+    return {
+      showflag: true,
+      limgflag: false,
+      lspuid: 0,
+      lflag: false,
+      exportString: "",
+      reason: false,
+      isLoading: false,
+      countDesc: "", //数据统计
+      dataList: [],
+      page: {}, // 分页请求数据
+      showAlert: false,
+      showAddDialog: false,
+      showDemoDialog: false,
+      showStarDialog: false,
+      showStatusDialog: false,
+      showReasonDialog: false,
+      showPaymentDialog: false,
+      showDeliverDialog: false,
+      showpreDialog: false,
+      showSpuDialog: false,
+      showAlertTitle: "温馨提示",
+      showAlertMsg: "",
+      limitResource: null, //发布状态
+      clickItems: [], //点击操作的数据项
+      controlType: "", //当前操作的权限类型
+      showControl: false, //显示操作弹窗
+      destroyControlDialog: false, //注销良言操作弹框
+      destroyPaymentDialog: false,
+      orderEditId: "",
+      orderSetData: null,
+      orderSubData: null,
+      orsId: 0,
+      ordOrderId: 0,
+      ordStar: 0,
+      ordDemo: "",
+      testSelectedSpu: [],
+      checkedList: [true, false, false, false, false, false, false] //用来使被选中标签高亮
+    };
+  },
+  computed: {
+    selectItems() {
+      let list = [];
+      this.dataList.forEach(item => {
+        item.checked && list.push(item);
+      });
+      return list;
+    }
+  },
+  filters: {
+    filterStatus(id) {
+      return client.global.componentStatus.find(item => item.id == id).name;
+    },
+    filterTime(time) {
+      return client.formateTime(time);
+    }
+  },
+  methods: {
+    //弹出手动发货窗口
+    deliver(itemSub) {
+      this.showDeliverDialog = true;
+      this.orderSubData = itemSub;
+    },
+    clearSearchOptions() {
+      this.$refs.search.clearOptions();
+      //console.log(this.$refs.search)
+    },
+    //得到选择的商品
+    getSelected(data) {
+      this.testSelectedSpu = data;
+    },
+    //选择商品
+    selectSpu() {
+      this.showSpuDialog = true;
+    },
+    //导出订单
+    exportOrder() {
+      this.searchOptions.ordSpuId = this.ospuid;
+      $("#exportForm").attr("action", ORDER_EXPORT);
+      $("input[name='request']").val(JSON.stringify(this.searchOptions));
+      $("#exportForm").submit();
+    },
+    //修改订单状态弹窗
+    editStatus(itemSub) {
+      this.ordOrderId = itemSub.ordOrderId;
+      this.showStatusDialog = true;
+    },
+    //取消订单
+    cancelOrder(itemSub) {
+      this.ordOrderId = itemSub.ordOrderId;
+      this.reason = !this.reason;
+      this.showReasonDialog = true;
+    },
+    //修改价格
+    editPayAmount(itemSub) {
+      this.orderSubData = itemSub;
+      this.showPaymentDialog = true;
+    },
+    //备注
+    setDemo(data) {
+      this.ordOrderId = data.ordOrderId;
+      this.ordDemo = data.ordDemo;
+      this.showDemoDialog = true;
+    },
+    //加星
+    setStar(data) {
+      //console.log(data);
+      this.ordOrderId = data.ordOrderId;
+      this.ordStar = data.ordStar;
+      this.showStarDialog = true;
+    },
+    //支付渠道显示
+    ordPayChannel(payChannel) {
+      switch (payChannel) {
+        case 10:
+        case 11:
+        case 12:
+          return "微信支付";
+        case 20:
+        case 21:
+        case 22:
+          return "支付宝支付";
+        default:
+      }
+    },
+    //通过点击订单状态查询订单列表
+    getListByState(num) {
+      for (let index = 0; index < this.checkedList.length; index++) {
+        //被选中标签高亮
+        if (index == num + 1) {
+          this.checkedList.splice(index, 1, true);
+        } else {
+          this.checkedList.splice(index, 1, false);
+        }
+      }
+      this.checkedbtn = num;
+      this.searchOptions.ordStatus = num;
+      this.getList(false, true);
+    },
+    //点击查看详情
+    showDetail(itemSet, itemSub) {
+      this.orderSetData = itemSet;
+      this.orderSubData = itemSub;
+      this.showAddDialog = true;
+    },
+    //商品那边的方法
+    hideDialog() {
+      this.showDialog = false;
+      setTimeout(() => {
+        this.showPage = false;
+        this.onhide();
+      }, 300);
+    },
+    //预览商品
+    previewpro(val) {
+      this.lspuid = val;
+      this.limgflag = !this.limgflag;
+      this.lflag = !this.lflag;
+      this.showpreDialog = true;
+    },
+    hideAddDialog(control) {
+      this.expertEditId = "";
+      this.showAddDialog = false;
+      if (control && control == "create") {
+        this.showMsg("保存成功");
+      }
+      if (control && control == "update") {
+        this.showMsg("更新成功");
+      }
+      if (control) {
+        setTimeout(() => {
+          //移除组件
+          this.destroyControlDialog = true;
+        }, 100);
+        setTimeout(() => {
+          //重新加入
+          this.destroyControlDialog = false;
+        }, 200);
+        this.getList();
+      }
+    },
+    hidePreDialog() {
+      this.showpreDialog = false;
+      setTimeout(() => {
+        this.onhide("cancel");
+      }, 300);
+    },
+    hideDemoDialog() {
+      this.showDemoDialog = false;
+      setTimeout(() => {
+        this.onhide("cancel");
+      }, 300);
+    },
+    hideDeliverDialog() {
+      this.showDeliverDialog = false;
+      setTimeout(() => {
+        this.onhide("cancel");
+      }, 300);
+    },
+    hideStatusDialog() {
+      this.showStatusDialog = false;
+      setTimeout(() => {
+        this.onhide("cancel");
+      }, 300);
+    },
+    hideReasonDialog() {
+      this.showReasonDialog = false;
+      setTimeout(() => {
+        this.onhide("cancel");
+      }, 300);
+    },
+    hidePaymentDialog() {
+      this.showPaymentDialog = false;
+      this.getList();
+    },
+    hideStarDialog() {
+      this.showStarDialog = false;
+      setTimeout(() => {
+        this.onhide("cancel");
+      }, 300);
+    },
+    // 搜索条件变化
+    changeSearchOptions(options) {
+      console.log(options);
+      this.searchOptions = options;
+    },
+    hideControlFunc(type) {
+      if (type == "success") {
+        this.getList();
+      }
+      this.showControl = false;
+    },
+    //数据校验
+    checkOptions() {
+      if (this.searchOptions.lowOrsOpenPay) {
+        if (
+          !/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(
+            this.searchOptions.lowOrsOpenPay
+          ) ||
+          this.searchOptions.lowOrsOpenPay < 0
+        ) {
+          alert("实付金额请输入不小于0的整数");
+          return false;
+        }
+      }
+      if (this.searchOptions.highOrsOpenPay) {
+        if (
+          !/^[0-9]{1,8}([.]{1}[0-9]{1,2})?$/.test(
+            this.searchOptions.highOrsOpenPay
+          ) ||
+          this.searchOptions.highOrsOpenPay < 0
+        ) {
+          alert("实付金额请输入不小于0的整数");
+          return false;
+        }
+      }
+      return true;
+    },
+    getList(page, firstSearch) {
+      let options,
+        url = ORDER_GET_LIST;
+      //数据校验
+      if (!this.checkOptions()) return;
+      if (!firstSearch) {
+        // 拿最后一次请求的参数
+        options = this.lastSearchOptions;
+      } else {
+        options = Object.assign({}, this.searchOptions);
+      }
+      if (page) {
+        options.page = page;
+      }
+      options.ordSpuId = this.ospuid;
+      this.exportString = JSON.stringify(options);
+      this.isLoading = true;
+      this.dataList = [];
+      this.lastSearchOptions = options;
+      // 统计数据
+      this.getCount(options);
+      options.componentType = [12];
+      if (options.orsClientType == -1) {
+        delete options.orsClientType;
+      }
+      client.postData(url, options).then(
+        data => {
+          this.isLoading = false;
+          if (data.code == 200) {
+            data.data.forEach(item => {
+              item.checked = false;
+            });
+            this.dataList = data.data;
+            this.page = data.page;
+          } else {
+            this.showMsg(data.msg);
+          }
+        },
+        data => {
+          this.isLoading = false;
+        }
+      );
+    },
+    getCount(options) {
+      options.componentType = [12];
+      client.postData(COMPONENT_ARTICLE_COUNTER, options).then(
+        data => {
+          if (data.code == 200) {
+            this.countDesc = data.data;
+          } else {
+            this.showMsg(data.msg);
+          }
+        },
+        data => {}
+      );
+    },
+    selectAll() {
+      this.dataList.forEach(item => {
+        item.checked = true;
+      });
+    },
+    reverseList() {
+      this.dataList.forEach(item => {
+        item.checked = !item.checked;
+      });
+    },
+    selectItem(item) {
+      //item.checked = !item.checked;
+    },
+    showMsg(msg, title) {
+      if (title) {
+        this.showAlertTitle = title;
+      } else {
+        this.showAlertTitle = "温馨提示";
+      }
+      this.showAlertMsg = msg;
+      this.showAlert = true;
+    },
+    hideMsg() {
+      this.showAlert = false;
+      this.showAddDialog = false;
+    }
+  },
+  created() {
+    vueThis = this;
+    this.limitResource = JSON.parse(localStorage.getItem("limitResource"));
+  },
+  watch: {
+    ooflag() {
+      this.showflag = true;
+    },
+    oflag() {
+      this.showflag = false;
+      this.getList(false, true);
+    },
+    show() {
+      this.showPage = this.show;
+      this.showDialog = this.show;
+    }
+  },
+  route: {
+    canReuse: () => {
+      vueThis.getList(false, true);
+    }
+  },
+  ready() {
+    client.resetListHeight();
+  }
 };
 </script>
 
@@ -571,20 +612,20 @@ export default {
 @import "../../common/css/common.less";
 @import "../../common/css/list.less";
 .contentOrderBlock {
-    overflow: auto;
-    border: none;
-    margin-top: 0px;
+  overflow: auto;
+  border: none;
+  margin-top: 0px;
 }
 
 .contentOrderleft {
-    position: relative;
-    min-height: 1px;
-    padding-left: 6px;
-    padding-right: 15px;
+  position: relative;
+  min-height: 1px;
+  padding-left: 6px;
+  padding-right: 15px;
 }
 
 .orderTable {
-    width: 100%;
-    margin-bottom: 8px;
+  width: 100%;
+  margin-bottom: 8px;
 }
 </style>
