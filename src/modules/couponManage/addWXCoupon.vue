@@ -197,6 +197,7 @@ export default {
           } else {
             this.showDialog = false;
             this.showMsg("操作成功!");
+            this.onhide("update");
           }
         },
         response => {
