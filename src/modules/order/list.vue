@@ -30,6 +30,7 @@
                             <th style="width:26%;">商品信息</th>
                             <th style="width:7%;">单价/数量</th>
                             <th style="width:7%;">下单时间</th>
+                            <th style="width:7%;">订单来源</th>
                             <th style="width:7%;">订单状态</th>
                             <th style="width:7%;">买家</th>
                             <th style="width:15%;">实付款</th>
@@ -90,8 +91,10 @@
                                     <span class="">（{{itemDetail.ordSkuNum}}{{itemDetail.ordUnit}}）</span>
                                 </p>
                             </td>
+                            <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">{{itemSub.ordCreatedTime}}</td>
                             <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
-                                {{itemSub.ordCreatedTime}}
+                                <span v-if="itemSet.orsClientType==0||itemSet.orsClientType==1">APP</span>
+                                <span v-if="itemSet.orsClientType==2">小程序</span>
                             </td>
                             <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <!-- 订单状态 -->
