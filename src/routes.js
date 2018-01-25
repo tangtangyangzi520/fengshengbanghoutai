@@ -1,4 +1,3 @@
-
 // 系统通用管理
 import LabelManage from './modules/system/labelManage/list.vue';
 //首页
@@ -23,6 +22,8 @@ import ProductCarriageTemp from './modules/ProductCarriageTemp/list.vue';
 import area from './modules/area/selectArea.vue';
 //评论
 import productComment from './modules/productComment/list.vue';
+//礼品卡
+import card from './modules/card/list.vue';
 
 export default function(router) {
     router.map({
@@ -34,7 +35,7 @@ export default function(router) {
             name: 'productManage',
             component: productManage
         },
-		'/productBrand': {
+        '/productBrand': {
             name: 'productBrand',
             component: productBrand
         },
@@ -74,6 +75,11 @@ export default function(router) {
             name: 'productComment',
             component: productComment
         },
+        '/card': {
+            name: 'card',
+            component: card
+        },
+
         // '/channelLayout/:parentId': {
         //     name: 'channelLayout',
         //     component: channelLayout,

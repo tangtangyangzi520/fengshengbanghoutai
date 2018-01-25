@@ -7,6 +7,8 @@ import App from './App.vue'
 import $ from 'jquery'
 Vue.use(VueRouter)
 
+
+
 const router = new VueRouter({
     hashbang: true,
     history: false,
@@ -18,3 +20,17 @@ sync(store, router)
 
 router.start(Vue.extend(App), '#root')
 window.router = router;
+
+router.afterEach(function(to) {
+    console.log('zzzz')
+    setTimeout(resizeHeight, 100)
+
+})
+
+let resizeHeight = function resetListHeight() {
+    const windowHeight = $(window).height();
+    $('#contentList').height(windowHeight - $('.page-bar').height() - 120 - $('.pagination').height());
+}
+$(window).on("resize", () => {
+    resizeHeight();
+});
