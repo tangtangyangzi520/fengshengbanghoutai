@@ -20,7 +20,9 @@ sync(store, router)
 
 router.start(Vue.extend(App), '#root')
 window.router = router;
-
+window.onload = function() {
+    resizeHeight();
+}
 router.afterEach(function(to) {
     console.log('zzzz')
     setTimeout(resizeHeight, 100)
