@@ -102,6 +102,16 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
+                <label class="col-md-3 sea">订单来源：</label>
+                <div class="col-md-9">
+                     <select class="form-control" v-model="searchOptions.orsPayWay">
+                        <option v-for="item in orderPayTypeList" :value="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
                 <button class="btn blue" type="button" @click="clearOptions()">清空查询条件</button>
             </div>
         </div>
@@ -153,6 +163,13 @@ export default {
         { id: -1, name: "全部" },
         { id: 10, name: "APP" },
         { id: 2, name: "小程序" }
+      ],
+      orderPayTypeList: [
+        { id: -1, name: "全部" },
+        { id: 0, name: "未支付" },
+        { id: 1, name: "礼品卡" },
+        { id: 2, name: "微信" },
+        { id: 3, name: "支付宝" }
       ],
       lastSearchOptions: {},
       searchOptions: {
@@ -293,9 +310,9 @@ export default {
   },
   created() {},
   watch: {
-    'searchOptions.orsClientType'(){
-        console.log(this.searchOptions.orsClientType)
-        this.onchange(this.searchOptions);
+    "searchOptions.orsClientType"() {
+      console.log(this.searchOptions.orsClientType);
+      this.onchange(this.searchOptions);
     },
     ordOrderNo(val) {
       this.searchOptions.ordOrderNo = val;

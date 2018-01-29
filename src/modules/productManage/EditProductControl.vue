@@ -388,7 +388,7 @@
                         </div>
                         <br><br><br>
                         <div id="img" style="text-align:center; margin-left:30%;" v-for=" (index,a) in imgList ">
-                            <item-move :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right="false">
+                            <item-move :change-top="detailMoveTop.bind(this,index)" :change-up="detailMoveUp.bind(this,index)" :change-down="detailMoveDown.bind(this,index)" :remove-item="detailRemove.bind(this,index)" style="width:400px;" :hidden-left-right="false">
                                 <img class="images" :src="a.url" style="height:300px; width:400px;">
                             </item-move><br>
                         </div>
@@ -428,7 +428,7 @@
 
 <script>
 import client from '../../common/utils/client';
-import itemMove from '../../components/page/itemMove';
+import itemMove from './itemMove';
 import tagTree from '../common/tagTree';
 import loading from '../common/loading';
 import templateControl from './templateControl';
@@ -589,6 +589,12 @@ export default {
                     }
                 }
             }
+        },
+        //详情图片置顶
+        detailMoveTop(index){
+            let moveItem = this.imgList[index];
+            this.imgList.splice(index,1);
+            this.imgList.unshift(moveItem);
         },
         // 详情图片上移
         detailMoveUp(index){
