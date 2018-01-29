@@ -162,7 +162,7 @@ export default {
       orderSourceList: [
         { id: -1, name: "全部" },
         { id: 10, name: "APP" },
-        { id: 2, name: "小程序" }
+        { id: 3, name: "小程序" }
       ],
       orderPayTypeList: [
         { id: -1, name: "全部" },

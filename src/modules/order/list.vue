@@ -94,7 +94,7 @@
                             <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">{{itemSub.ordCreatedTime}}</td>
                             <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <span v-if="itemSet.orsClientType==0||itemSet.orsClientType==1">APP</span>
-                                <span v-if="itemSet.orsClientType==2">小程序</span>
+                                <span v-if="itemSet.orsClientType==3">小程序</span>
                             </td>
                             <td align="center" style="width:7%;vertical-align:middle;" :rowspan="itemSub.orderDetailList.length" v-if="index===0">
                                 <!-- 订单状态 -->
