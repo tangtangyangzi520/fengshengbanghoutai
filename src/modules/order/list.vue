@@ -5,7 +5,7 @@
                 <span slot="title">订单列表</span>
             </page-title-bar>
             <search :onchange="changeSearchOptions" :oncreate="getList" v-ref:search></search>
-            <div class="col-md-4 fr" style="margin-top:-44px;">
+            <div class="col-md-2 fr" style="margin-top:-40px;">
                 <button class="btn blue" type="button" @click="getListByState(searchOptions.ordStatus)">筛选</button>&nbsp;&nbsp;&nbsp;&nbsp;
                 <button class="btn blue" type="button" @click="exportOrder" v-if="limitResource.Order_export">批量导出</button>
             </div>

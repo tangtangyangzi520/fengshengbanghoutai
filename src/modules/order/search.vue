@@ -110,7 +110,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <div class="form-group">
                 <button class="btn blue" type="button" @click="clearOptions()">清空查询条件</button>
             </div>
