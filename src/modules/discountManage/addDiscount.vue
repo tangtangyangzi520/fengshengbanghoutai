@@ -657,7 +657,7 @@ export default {
           　handler(val,oldVal){
                 if( val ) {
                     let reg = /^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s((([0-1][0-9])|(2?[0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?$/
-                    if(!reg.test(val)){
+                    if(new Date(val)=='Invalid Date'){
                         this.showMsg('日期格式不合法');
                         this.request.mktStart = "" ;
                         return;
@@ -871,6 +871,7 @@ export default {
             showAnim:'highlight',
             isClear:true, //是否显示清空 
             isRTL: false,
+            autoclose: true,
             onSelect: function(selectedDate){
                 var option = this.id == "createStartTime3" ? "minDate" : "maxDate";
                 dates.not(this).datepicker("option", option, selectedDate );
@@ -879,7 +880,7 @@ export default {
                 dates.removeAttr("disabled");
             },
             beforeShow: function(){
-                dates.attr("disabled","disabled");
+                // dates.attr("disabled","disabled");
                 /*if( $("#createStartTime3").datepicker( 'getDate' ) != null ){
                 return
                 }*/
@@ -887,7 +888,7 @@ export default {
             },
         });
         dates.on("click",function(){
-            $(this).attr("disabled","disabled");
+            // $(this).attr("disabled","disabled");
         })
         $("#submitform1").on("submit",this.addItem2);  
     },
