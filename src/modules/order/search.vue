@@ -147,7 +147,7 @@ export default {
         { id: 2, name: "已发货" },
         { id: 3, name: "已完成" },
         { id: 4, name: "已关闭" },
-        { id: 5, name: "售后线下处理" }
+        { id: 5, name: "售后" }
       ],
       logiTypeList: [
         { id: -1, name: "全部" },

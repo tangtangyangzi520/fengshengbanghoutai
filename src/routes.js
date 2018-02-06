@@ -24,7 +24,8 @@ import area from './modules/area/selectArea.vue';
 import productComment from './modules/productComment/list.vue';
 //礼品卡
 import card from './modules/card/list.vue';
-
+//售后
+import serviceList from './modules/service/list.vue';
 export default function(router) {
     router.map({
         '/': {
@@ -78,6 +79,10 @@ export default function(router) {
         '/card': {
             name: 'card',
             component: card
+        },
+        '/serviceList': {
+            name: 'serviceList',
+            component: serviceList
         },
 
         // '/channelLayout/:parentId': {
