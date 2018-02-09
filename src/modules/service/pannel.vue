@@ -163,12 +163,13 @@
     },
     watch: {
       show() {
+           console.log(this.show)
         this.showPage = this.show;
         this.showDialog = this.show;
       },
     },
-    create() {
-      console.log(this.show)
+    created() {
+   
     },
     beforeDestroy() {}
   };
