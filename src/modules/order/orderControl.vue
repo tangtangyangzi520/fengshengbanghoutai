@@ -107,7 +107,8 @@
                                 </tr>
                                 <tr>
                                     <td width="30%" style="text-align:right;">付款方式: </td>
-                                    <td width="70%" style="text-align:left;">{{ordPayChannel(setData.orsPayChannel)}}</td>
+                                    <!-- <td width="70%" style="text-align:left;">{{ordPayChannel(setData.orsPayChannel)}}</td> -->
+                                    <td width="70%" style="text-align:left;">{{ordPayWay(setData.orsPayWay)}}</td>
                                 </tr>
                                 <tr>
                                     <td width="30%" style="text-align:right;">买家昵称: </td>
@@ -282,6 +283,14 @@
                                     </tr>
                                     <tr>
                                         <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
+                                            礼品卡
+                                        </td>
+                                        <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
+                                            {{countGiftMoney(subData.orderDetailList)}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:65%;text-align:center;vertical-align:middle;font-family: 'Arial Normal', 'Arial';font-weight: 100;font-style: normal;border-right:none;border-left:none;">
                                             卖家改价
                                         </td>
                                         <td style="width:35%;text-align:center;vertical-align:middle;border-left:2px solid #D7D7D7;">
@@ -317,340 +326,426 @@
     </div>
 </template>
 <script>
-import client from '../../common/utils/client';
-import { selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList } from '../../components';
-import loading from '../common/loading';
-import { showSelectPic, getSelectPicList } from '../../vuex/actions/actions.resource';
-import campaignControl from './campaignControl';
-import oddLogDetail from './oddLogDetail';
+import client from "../../common/utils/client";
+import {
+  selectPic,
+  mAlert,
+  mSelect,
+  mMultiSelect,
+  selectComponentAll,
+  itemList
+} from "../../components";
+import loading from "../common/loading";
+import {
+  showSelectPic,
+  getSelectPicList
+} from "../../vuex/actions/actions.resource";
+import campaignControl from "./campaignControl";
+import oddLogDetail from "./oddLogDetail";
 
 export default {
-    components: {
-        selectPic, mAlert, mSelect, mMultiSelect, selectComponentAll, itemList, loading, campaignControl, oddLogDetail
+  components: {
+    selectPic,
+    mAlert,
+    mSelect,
+    mMultiSelect,
+    selectComponentAll,
+    itemList,
+    loading,
+    campaignControl,
+    oddLogDetail
+  },
+  props: {
+    show: {
+      type: Boolean,
+      value: false
     },
-    props: {
-        show: {
-            type: Boolean,
-            value: false
-        },
-        onhide: {
-            type: Function,
-            value: () => { }
-        },
-        id: {
-            type: String,
-            value: 0
-        },
-        setData: {
-            type: Object,
-            value: {}
-        },
-        subData: {
-            type: Object,
-            value: {}
-        },
-        progressObject: {
-            width: '',
-        }
+    onhide: {
+      type: Function,
+      value: () => {}
     },
-    data() {
-        return {
-            showOddDialog: false,
-            destroyControlDialog: false,
-            orderlog: [],
-            isLoading: false,
-            showDialog: false,
-            showPage: false,
-            showPainListSelect: true,
-            painIdsSelect: [],
-            painList: [],
-            componentShowOption: {},
-            data: {
-                "authorName": "",
-                "authorTitle": "",
-                "authorType": 2,
-                "bgUrl": "",
-                "description": "",
-                "halfFigure": "",
-                "iconId": null,
-                "iconUrl": "",
-                "painIds": [],
-                "painOptions": []
-            },
-            showAlert: false,
-            showAlertTitle: '温馨提示',
-            showAlertMsg: '',
-            removeAddDialog: false,
-            title: '订单详情',
-            showCampaignStatus: false,
-        }
+    id: {
+      type: String,
+      value: 0
     },
-    vuex: {
-        getters: {
-            picShowOption: ({ resourceControl }) => resourceControl.picShowOption,
-            selectPicList: ({ resourceControl }) => resourceControl.selectPicList,
-        },
-        actions: { showSelectPic, getSelectPicList }
+    setData: {
+      type: Object,
+      value: {}
     },
-    methods: {
-        hideOddDialog(control) {
-            this.showOddDialog = false;
-            if (control) {
-                setTimeout(() => {
-                    //移除组件
-                    this.destroyControlDialog = true;
-                }, 100)
-                setTimeout(() => {
-                    //重新加入
-                    this.destroyControlDialog = false;
-                }, 200)
-                //this.getList();
-            }
-        },
-        //卖家改价
-        changeTotal() {
-            let total = 0;
-            this.subData.orderDetailList.forEach(item => {
-                total = total + item.ordChangePrice;
-            });
-            return total.toFixed(2);
-        },
-        //弹出物流详情窗口
-        showOdd() {
-            this.showOddDialog = true
-        },
-        //隐藏优惠券信息
-        hidePreferentialContent(event) {
-            $("#PreferentialContent").hide()
-        },
-        //鼠标移至图标,显示优惠内容
-        showPreferentialContent(event) {
-            $("#PreferentialContent").show()
-        },
-        // //优惠券信息
-        // showCompaign() {
-        //     this.showCampaignStatus = !this.showCampaignStatus;
-        // },
-        //取消订单
-        cancelOrder(itemSub) {
-            this.$parent.cancelOrder(itemSub);
-        },
-        //修改价格
-        editPayAmount(itemSub) {
-            this.$parent.editPayAmount(itemSub);
-        },
-        //备注
-        setDemo(orsId) {
-            this.$parent.setDemo(orsId);
-        },
-        //加星
-        setStar(data) {
-            this.$parent.setStar(data);
-        },
-        //查看商品预览
-        previewpro(data) {
-            this.$parent.previewpro(data);
-        },
-        //进度条
-        progressWidth() {
-            let progress = this.subData.ordStatus;
-            //console.log(progress)
-            switch (progress) {
-                case 0: this.progressObject.width = "25%"; return;
-                case 1: this.progressObject.width = "50%"; return;
-                case 2: this.progressObject.width = "75%"; return;
-                case 3: this.progressObject.width = "100%"; return;
-                default: ;
-            }
-        },
-        //商品总件数
-        totalNum() {
-            let totalNum = 0;
-            this.subData.orderDetailList.forEach(item => {
-                totalNum += item.ordSkuNum;
-            });
-            return totalNum;
-        },
-        //商品限时折扣优惠
-        detailCampaignAmount(itemDetail) {
-            return (itemDetail.ordDiscount / itemDetail.ordSkuNum).toFixed(2);
-        },
-        //商品小计
-        detailActAmount(itemDetail) {
-            return (itemDetail.ordOriginal * itemDetail.ordSkuNum - itemDetail.ordDiscount).toFixed(2);
-        },
-        //显示支付状态
-        payStatus(payStatus) {
-            switch (payStatus) {
-                case 0: return '未支付';
-                case 1: return '支付成功';
-                case 2: return '取消支付';
-                case 3: return '无效订单';
-                default: ;
-            }
-        },
-        //显示收货信息
-        ordAddress(orderSub) {
-            return orderSub.ordReceiveProvince + " " + orderSub.ordReceiveCitity + " " + orderSub.ordReceiveArea + " " + orderSub.ordReceiveDetail +
-                "," + orderSub.ordReceiveName + "," + orderSub.ordReceiveMobile
-        },
-        //显示配送方式
-        ordLogiType(ordLogiType) {
-            switch (ordLogiType) {
-                case 1: return '快递发货';
-                case 2: return '上门自提';
-                default: ;
-            }
-        },
-        //支付渠道显示
-        ordPayChannel(payChannel) {
-            switch (payChannel) {
-                case 10:
-                case 11:
-                case 12: return '微信支付';
-                case 20:
-                case 21:
-                case 22: return '支付宝支付';
-                default: ;
-            }
-        },
-        // 显示订单类型
-        orderTypeDisplay(orderType) {
-            switch (orderType) {
-                case 0: return '跨境订单';
-                case 1: return '普通订单';
-                default: ;
-            }
-        },
-        // 选择组件回调
-        selectComponentFunc(list) {
-            if (list[0].componentType == 27 || list[0].componentType == 15 || list[0].componentType == 13) {
-                this.contentSelect = list[0].subtitle;
-            } else {
-                this.contentSelect = list[0].title;
-            }
-            this.data.subComponentId = list[0].componentId;
-            this.showComponent = false;
-        },
-        // 隐藏选择组件弹窗
-        cancelSelectComponent() {
-            this.showComponent = false;
-        },
-        hideAddDialog() {
-            this.showDialog = false;
-        },
-        hideDialog() {
-            this.showDemoDialog = false;
-            this.showStatusDialog = false;
-            this.showReasonDialog = false;
-            setTimeout(() => {
-                this.showPage = false;
-                this.onhide();
-            }, 300)
-            // this.$parent.getList(false, true);
-        },
-        hideCampaignDialog() {
-            this.showCampaignStatus = false;
-            setTimeout(() => {
-                this.showCampaignStatus = true;
-            }, 300)
-        },
-        showMsg(msg, title) {
-            if (title) {
-                this.showAlertTitle = title;
-            } else {
-                this.showAlertTitle = '温馨提示';
-            }
-            this.showAlertMsg = msg;
-            this.showAlert = true;
-        },
-        hideMsg() {
-            this.showAlert = false;
-        },
-        clearInfo() {
-            this.data = {
-                "authorName": "",
-                "authorTitle": "",
-                "authorType": 2,
-                "bgUrl": "",
-                "description": "",
-                "halfFigure": "",
-                "iconId": null,
-                "iconUrl": "",
-                "painIds": [],
-                "painOptions": []
-            }
-            this.painIdsSelect = [];
-        },
+    subData: {
+      type: Object,
+      value: {}
     },
-    computed() {
-
+    progressObject: {
+      width: ""
+    }
+  },
+  data() {
+    return {
+      showOddDialog: false,
+      destroyControlDialog: false,
+      orderlog: [],
+      isLoading: false,
+      showDialog: false,
+      showPage: false,
+      showPainListSelect: true,
+      painIdsSelect: [],
+      painList: [],
+      componentShowOption: {},
+      data: {
+        authorName: "",
+        authorTitle: "",
+        authorType: 2,
+        bgUrl: "",
+        description: "",
+        halfFigure: "",
+        iconId: null,
+        iconUrl: "",
+        painIds: [],
+        painOptions: []
+      },
+      showAlert: false,
+      showAlertTitle: "温馨提示",
+      showAlertMsg: "",
+      removeAddDialog: false,
+      title: "订单详情",
+      showCampaignStatus: false
+    };
+  },
+  vuex: {
+    getters: {
+      picShowOption: ({ resourceControl }) => resourceControl.picShowOption,
+      selectPicList: ({ resourceControl }) => resourceControl.selectPicList
     },
-    created() {
+    actions: { showSelectPic, getSelectPicList }
+  },
+  methods: {
+    //计算礼品卡支付的金额
+    countGiftMoney(orderList) {
+      let money = 0;
+      orderList.forEach(item => {
+        money += item.ordGiftPay;
+      });
+      return money.toFixed(2);
     },
-    watch: {
-        subData(val) {
-            client.postData(ODD_GET_ORDERSUBID + "?ordOrderId=" + val.ordOrderId, {}).then(data => {
-                //console.log(val.ordOrderId)
-                if (data.code == 200) {
-                    if (data.data == null) {
-                        this.orderlog = []
-                    } else {
-                        data.data.forEach((log, index) => {
-                            this.orderlog.$set(index, log)
-                        })
-                    }
-                }
-            }, data => {
-                this.showMsg("获取物流详情失败!" + data.message);
-            })
-        },
-        show() {
-            this.showPage = this.show;
-            this.showDialog = this.show;
-        },
-        id() {
-            this.data = {
-                "authorName": "",
-                "authorTitle": "",
-                "authorType": 2,
-                "bgUrl": "",
-                "description": "",
-                "halfFigure": "",
-                "iconId": null,
-                "iconUrl": "",
-                "painIds": [],
-                "painOptions": []
+    hideOddDialog(control) {
+      this.showOddDialog = false;
+      if (control) {
+        setTimeout(() => {
+          //移除组件
+          this.destroyControlDialog = true;
+        }, 100);
+        setTimeout(() => {
+          //重新加入
+          this.destroyControlDialog = false;
+        }, 200);
+        //this.getList();
+      }
+    },
+    //卖家改价
+    changeTotal() {
+      let total = 0;
+      this.subData.orderDetailList.forEach(item => {
+        total = total + item.ordChangePrice;
+      });
+      return total.toFixed(2);
+    },
+    //弹出物流详情窗口
+    showOdd() {
+      this.showOddDialog = true;
+    },
+    //隐藏优惠券信息
+    hidePreferentialContent(event) {
+      $("#PreferentialContent").hide();
+    },
+    //鼠标移至图标,显示优惠内容
+    showPreferentialContent(event) {
+      $("#PreferentialContent").show();
+    },
+    // //优惠券信息
+    // showCompaign() {
+    //     this.showCampaignStatus = !this.showCampaignStatus;
+    // },
+    //取消订单
+    cancelOrder(itemSub) {
+      this.$parent.cancelOrder(itemSub);
+    },
+    //修改价格
+    editPayAmount(itemSub) {
+      this.$parent.editPayAmount(itemSub);
+    },
+    //备注
+    setDemo(orsId) {
+      this.$parent.setDemo(orsId);
+    },
+    //加星
+    setStar(data) {
+      this.$parent.setStar(data);
+    },
+    //查看商品预览
+    previewpro(data) {
+      this.$parent.previewpro(data);
+    },
+    //进度条
+    progressWidth() {
+      let progress = this.subData.ordStatus;
+      //console.log(progress)
+      switch (progress) {
+        case 0:
+          this.progressObject.width = "25%";
+          return;
+        case 1:
+          this.progressObject.width = "50%";
+          return;
+        case 2:
+          this.progressObject.width = "75%";
+          return;
+        case 3:
+          this.progressObject.width = "100%";
+          return;
+        default:
+      }
+    },
+    //商品总件数
+    totalNum() {
+      let totalNum = 0;
+      this.subData.orderDetailList.forEach(item => {
+        totalNum += item.ordSkuNum;
+      });
+      return totalNum;
+    },
+    //商品限时折扣优惠
+    detailCampaignAmount(itemDetail) {
+      return (itemDetail.ordDiscount / itemDetail.ordSkuNum).toFixed(2);
+    },
+    //商品小计
+    detailActAmount(itemDetail) {
+      return (
+        itemDetail.ordOriginal * itemDetail.ordSkuNum -
+        itemDetail.ordDiscount
+      ).toFixed(2);
+    },
+    //显示支付状态
+    payStatus(payStatus) {
+      switch (payStatus) {
+        case 0:
+          return "未支付";
+        case 1:
+          return "支付成功";
+        case 2:
+          return "取消支付";
+        case 3:
+          return "无效订单";
+        default:
+      }
+    },
+    //显示收货信息
+    ordAddress(orderSub) {
+      return (
+        orderSub.ordReceiveProvince +
+        " " +
+        orderSub.ordReceiveCitity +
+        " " +
+        orderSub.ordReceiveArea +
+        " " +
+        orderSub.ordReceiveDetail +
+        "," +
+        orderSub.ordReceiveName +
+        "," +
+        orderSub.ordReceiveMobile
+      );
+    },
+    //显示配送方式
+    ordLogiType(ordLogiType) {
+      switch (ordLogiType) {
+        case 1:
+          return "快递发货";
+        case 2:
+          return "上门自提";
+        default:
+      }
+    },
+    //支付渠道显示
+    ordPayChannel(payChannel) {
+      switch (payChannel) {
+        case 10:
+        case 11:
+        case 12:
+          return "微信支付";
+        case 20:
+        case 21:
+        case 22:
+          return "支付宝支付";
+        default:
+      }
+    },
+    //支付方式显示
+    ordPayWay(payChannel) {
+      //    0-未支付 1-礼品卡 2-微信 3-支付宝 6-礼品卡混合支付(4-微信+礼品卡 5-支付宝+礼品卡) ,
+      switch (payChannel) {
+        case 0:
+          return "未支付";
+        case 1:
+          return "礼品卡";
+        case 2:
+          return "微信";
+        case 3:
+          return "支付宝";
+        case 4:
+          return "微信+礼品卡";
+        case 5:
+          return "支付宝+礼品卡";
+        case 6:
+          return "混合支付";
+        default:
+      }
+    },
+    // 显示订单类型
+    orderTypeDisplay(orderType) {
+      switch (orderType) {
+        case 0:
+          return "跨境订单";
+        case 1:
+          return "普通订单";
+        default:
+      }
+    },
+    // 选择组件回调
+    selectComponentFunc(list) {
+      if (
+        list[0].componentType == 27 ||
+        list[0].componentType == 15 ||
+        list[0].componentType == 13
+      ) {
+        this.contentSelect = list[0].subtitle;
+      } else {
+        this.contentSelect = list[0].title;
+      }
+      this.data.subComponentId = list[0].componentId;
+      this.showComponent = false;
+    },
+    // 隐藏选择组件弹窗
+    cancelSelectComponent() {
+      this.showComponent = false;
+    },
+    hideAddDialog() {
+      this.showDialog = false;
+    },
+    hideDialog() {
+      this.showDemoDialog = false;
+      this.showStatusDialog = false;
+      this.showReasonDialog = false;
+      setTimeout(() => {
+        this.showPage = false;
+        this.onhide();
+      }, 300);
+      // this.$parent.getList(false, true);
+    },
+    hideCampaignDialog() {
+      this.showCampaignStatus = false;
+      setTimeout(() => {
+        this.showCampaignStatus = true;
+      }, 300);
+    },
+    showMsg(msg, title) {
+      if (title) {
+        this.showAlertTitle = title;
+      } else {
+        this.showAlertTitle = "温馨提示";
+      }
+      this.showAlertMsg = msg;
+      this.showAlert = true;
+    },
+    hideMsg() {
+      this.showAlert = false;
+    },
+    clearInfo() {
+      this.data = {
+        authorName: "",
+        authorTitle: "",
+        authorType: 2,
+        bgUrl: "",
+        description: "",
+        halfFigure: "",
+        iconId: null,
+        iconUrl: "",
+        painIds: [],
+        painOptions: []
+      };
+      this.painIdsSelect = [];
+    }
+  },
+  computed() {},
+  created() {},
+  watch: {
+    subData(val) {
+      client
+        .postData(ODD_GET_ORDERSUBID + "?ordOrderId=" + val.ordOrderId, {})
+        .then(
+          data => {
+            //console.log(val.ordOrderId)
+            if (data.code == 200) {
+              if (data.data == null) {
+                this.orderlog = [];
+              } else {
+                data.data.forEach((log, index) => {
+                  this.orderlog.$set(index, log);
+                });
+              }
             }
-            this.painList = [];
-            this.painIdsSelect = [];
-            if (this.id == '') {
-                this.title = '添加专家';
-                setTimeout(() => {
-                    this.typesList = client.global.componentTypes;
-                }, 30)
-                return;
+          },
+          data => {
+            this.showMsg("获取物流详情失败!" + data.message);
+          }
+        );
+    },
+    show() {
+      this.showPage = this.show;
+      this.showDialog = this.show;
+    },
+    id() {
+      this.data = {
+        authorName: "",
+        authorTitle: "",
+        authorType: 2,
+        bgUrl: "",
+        description: "",
+        halfFigure: "",
+        iconId: null,
+        iconUrl: "",
+        painIds: [],
+        painOptions: []
+      };
+      this.painList = [];
+      this.painIdsSelect = [];
+      if (this.id == "") {
+        this.title = "添加专家";
+        setTimeout(() => {
+          this.typesList = client.global.componentTypes;
+        }, 30);
+        return;
+      }
+      this.title = "编辑专家";
+      this.isLoading = true;
+      this.painList = [];
+      client.postData(AUTHOR_GET + "?componentId=" + this.id, {}).then(
+        response => {
+          this.isLoading = false;
+          if (response.code == 200) {
+            let data = response.data;
+            if (data.painIds) {
+              data.painIds.forEach(item => {
+                this.painIdsSelect.push({ id: item, name: "" });
+              });
+              this.data.painIds = data.painIds;
             }
-            this.title = '编辑专家';
-            this.isLoading = true;
-            this.painList = [];
-            client.postData(AUTHOR_GET + '?componentId=' + this.id, {}).then(response => {
-                this.isLoading = false;
-                if (response.code == 200) {
-                    let data = response.data;
-                    if (data.painIds) {
-                        data.painIds.forEach(item => {
-                            this.painIdsSelect.push({ id: item, name: '' })
-                        })
-                        this.data.painIds = data.painIds;
-                    }
-                    if (data.painOptions) {
-                        /*data.painOptions.forEach(item => {
+            if (data.painOptions) {
+              /*data.painOptions.forEach(item => {
                             this.painIdsSelect.push({ id: item, name: '' })
                         })*/
-                        this.data.painOptions = data.painOptions;
-                    }
-                    /*"authorName": "",
+              this.data.painOptions = data.painOptions;
+            }
+            /*"authorName": "",
                                     "authorTitle":"",
                                     "authorType":2,
                                     "bgUrl":"",
@@ -661,66 +756,67 @@ export default {
                                     "painIds":[],
                                     "painOptions":[]*/
 
-                    this.data.authorId = data.authorId;
-                    this.data.authorName = data.authorName;
-                    this.data.authorTitle = data.authorTitle;
-                    this.data.description = data.description;
-                    this.data.iconUrl = data.iconUrl;
-                    this.data.halfFigure = data.halfFigure;
-                    this.data.bgUrl = data.bgUrl;
-                    data.tags.forEach(item => {
-                        item.id = item.tagId;
-                        item.text = item.tagName;
-                    })
-                } else {
-                    this.showMsg(response.msg);
-                }
-            }, data => {
-                this.isLoading = false;
-                this.showMsg(data.message);
-            })
+            this.data.authorId = data.authorId;
+            this.data.authorName = data.authorName;
+            this.data.authorTitle = data.authorTitle;
+            this.data.description = data.description;
+            this.data.iconUrl = data.iconUrl;
+            this.data.halfFigure = data.halfFigure;
+            this.data.bgUrl = data.bgUrl;
+            data.tags.forEach(item => {
+              item.id = item.tagId;
+              item.text = item.tagName;
+            });
+          } else {
+            this.showMsg(response.msg);
+          }
+        },
+        data => {
+          this.isLoading = false;
+          this.showMsg(data.message);
         }
-    },
-    ready() {
-        this.typesList = client.global.componentTypes;
-        this.showPainListSelect = true;
-
-    },
-    beforeDestroy() {
-        this.showPainListSelect = false;
+      );
     }
+  },
+  ready() {
+    this.typesList = client.global.componentTypes;
+    this.showPainListSelect = true;
+  },
+  beforeDestroy() {
+    this.showPainListSelect = false;
+  }
 };
 </script>
 <style>
 .myBorder {
-    border-color: #000000;
-    border: 1px solid;
-    padding: 0px;
+  border-color: #000000;
+  border: 1px solid;
+  padding: 0px;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity .5s
+  transition: opacity 0.5s;
 }
 
 #PreferentialContent {
-    border: 2px solid #CCCCCC;
-    width: 300px;
-    position: absolute;
-    bottom: -10%;
-    left: 70%;
-    background-color: white;
-    display: none;
+  border: 2px solid #cccccc;
+  width: 300px;
+  position: absolute;
+  bottom: -10%;
+  left: 70%;
+  background-color: white;
+  display: none;
 }
 
 #PreferentialContent td {
-    background-color: white;
-    border-right: 2px solid #D7D7D7;
-    border-left: 2px solid #D7D7D7;
+  background-color: white;
+  border-right: 2px solid #d7d7d7;
+  border-left: 2px solid #d7d7d7;
 }
 
 .stap div {
-    float: left;
-    text-align: center;
+  float: left;
+  text-align: center;
 }
 </style>

@@ -127,7 +127,8 @@
                                         <span style="font-size:12px;color:#FF2D2D;position:relative;bottom:5px;">×{{itemSub.ordStar}}</span>
                                     </a>
                                 </p>
-                                <p>¥ {{itemSub.ordActAmount.toFixed(2)}}</p>
+                                <!-- <p>¥ {{itemSub.ordActAmount.toFixed(2)}}</p> -->
+                                <p>￥{{itemSet.orsOpenPay.toFixed(2)}}</p>
                                 <p>{{ordPayChannel(itemSet.orsPayChannel)}}</p>
                                 <p>
                                     <button type="button" v-show="(itemSub.ordStatus==0)&&showflag" @click.stop="editPayAmount(itemSub)" class="btn btn-xs blue" v-if="limitResource.editActAmount">修改价格</button>
