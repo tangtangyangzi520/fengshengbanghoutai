@@ -16,14 +16,14 @@
           <div class="content-top ">
             <div class="all">
               <div class="part-word">买家申请售后</div>
-              <div class="part-word" v-if="dataDetail.orrRefundStatus===1||dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8">商家处理售后申请</div>
+              <div class="part-word" v-if="dataDetail.orrRefundStatus===1||dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8||dataDetail.orrRefundStatus==7">商家处理售后申请</div>
               <div class="part-word grey-word" v-else>商家处理售后申请</div>
               <div class="part-word" v-if="dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8">退款完成</div>
               <div class="part-word grey-word" v-else>退款完成</div>
             </div>
             <div class="all">
               <div class="part-cir">1</div>
-              <template v-if="dataDetail.orrRefundStatus===1||dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8">
+              <template v-if="dataDetail.orrRefundStatus===1||dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8||dataDetail.orrRefundStatus==7">
                 <div class="progress"></div>
                 <div class="part-cir">2</div>
               </template>
@@ -48,37 +48,44 @@
             <div class="middle ">
               <h4>售后信息</h4>
               <div class="soldInfo">
-                <div class="all">
-                  <image class="left-img" src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1002203061,3808629810&fm=27&gp=0.jpg"></image>
+                <div>
+                  <img class="left-img fl" style="margin-right:10px;" :src="dataDetail.spu.spuPic"/>
                   <div style="margin-left:10px;">
-                    <div>商品标题商品标题商品标题商品标题商品标题标</div>
-                    <div style="text-align:left;">规格</div>
+                    <div>{{dataDetail.spu.spuName}}</div>
+                    <div style="text-align:left;color:#999;">{{dataDetail.sku.skuName}}</div>
                   </div>
                 </div>
-                <div style="margin-top:20px;">退款说明：与描述不符</div>
-                <div>退款金额：880.00 元（含运费0.00元）</div>
-                <div>退款编号：与描述不符</div>
+                <div style="margin-top:20px;">退款说明：{{dataDetail.orrClientRemark }}</div>
+                <div>退款金额：{{dataDetail.orrActAmount}} 元</div>
+                <div>退款编号：{{dataDetail.orrId}}</div>
               </div>
               <div class="soldInfo middle-bor">
-                <p>订单编号：12655897889985</p>
-                <p>退款类型：普通订单</p>
-                <p>付款方式：支付宝支付</p>
-                <p>买家昵称：吉萨</p>
-                <p>配送方式：快递</p>
-                <p>收货信息：广东省 广州市 海珠区 工业大道缘觉路公园内工业大道缘觉路公园内, 张丽, 15920311373</p>
-                <p>买家留言：省电发热管太</p>
+                <p>订单编号：{{dataDetail.orrOrstNo}}</p>
+                <p>订单类型：{{dataDetail.set.orsType===0?'普通订单':'海外购'}}</p>
+                <p>付款方式：{{dataDetail.set.orsPayChannelDisplay}}</p>
+                <p>买家昵称：{{dataDetail.set.orsMemberNickname}}</p>
+                <p>配送方式：{{dataDetail.set.orderSubList[0].ordLogiTypeDisplay}}</p>
+                <p>收货信息：{{dataDetail.set.orderSubList[0].ordReceiveProvince}} 
+                  {{dataDetail.set.orderSubList[0].ordReceiveCitity}} 
+                  {{dataDetail.set.orderSubList[0].ordReceiveArea}} 
+                  {{dataDetail.set.orderSubList[0].ordReceiveDetail}} , {{dataDetail.set.orderSubList[0].ordReceiveName}}, {{dataDetail.set.orderSubList[0].ordReceiveMobile}}</p>
+                <p>买家留言：{{dataDetail.set.buyerMessage}} </p>
               </div>
             </div>
             <div class="middle">
-              <h4 sty>售后状态：退款中</h4>
+              <h4 sty>售后状态：{{dataDetail.orrRefundResult}}</h4>
               <div class="soldInfo ">
-                <p>退款金额：880.00 元 </p>
-                <p>退款方式：退至银行卡</p>
+                <p>退款金额：{{dataDetail.orrClientRemark}} 元 </p>
+                <p>退款方式：退至{{dataDetail.set.orsPayChannelDisplay}}</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="row" style="background-color:#F0F0F0;">
+        <div class="row" v-if="dataDetail.orrRefundStatus==1||dataDetail.orrRefundStatus===0">
+          <h4>审核意见：</h4>
+          <textarea class="form-control" v-model="orrServiceRemark" placeholder="请输入审核意见"></textarea>
+        </div>
+        <div class="row" v-show="false" style="background-color:#F0F0F0;">
           <div class="content-top ">
             <h4>协商记录</h4>
             <div class="middle">
@@ -94,12 +101,24 @@
           </div>
         </div>
       </div>
-      <span slot="btnList">
-          <button type="button" class="btn blue" @click="addItem()">保存</button>
-          <button type="button" class="btn default" @click="hideDialog()" >取消</button>
+      <span slot="btnList" v-if="dataDetail.orrRefundStatus==1||dataDetail.orrRefundStatus===0">
+      <!-- <span slot="btnList"> -->
+          <button type="button" class="btn blue" @click="submitInfo(1)">同意卖家退款</button>
+          <button type="button" class="btn default" @click="submitInfo(2)">拒绝退款申请</button>
       </span>
+      <!-- <loading :show="isLoading"></loading> -->
+      
     </m-alert>
-        <loading :show="isLoading"></loading>
+    <m-alert :title="showAlertTitle" :show="showAlert" :onhide="hideMsg">
+        <div slot="content">{{showAlertMsg}}</div>
+    </m-alert>
+    <div class="loading" v-if="isLoading">
+        <div class="page-spinner-bar">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -160,7 +179,11 @@ export default {
       showDialog: false,
       showPage: false,
       title: "",
-      isLoading: false
+      isLoading: false,
+      orrServiceRemark: "",
+      showAlert: false,
+      showAlertTitle: "温馨提示",
+      showAlertMsg: ""
     };
   },
   vuex: {},
@@ -172,24 +195,51 @@ export default {
         this.onhide("cancel");
       }, 300);
     },
-    submitInfo() {},
+    showMsg(msg, title) {
+      if (title) {
+        this.showAlertTitle = title;
+      } else {
+        this.showAlertTitle = "温馨提示";
+      }
+      this.showAlertMsg = msg;
+      this.showAlert = true;
+    },
+    hideMsg() {
+      this.showAlert = false;
+    },
+    submitInfo(status) {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      client
+        .postData(ORDER_AUDIT_REFUND, {
+          orrId: this.id,
+          orrServiceRemark: this.orrServiceRemark,
+          status: status
+        })
+        .then(
+          data => {
+            this.isLoading = false;
+            this.getInfo();
+            if (data.code == 200) {
+              this.showMsg(data.msg);
+            } else {
+              this.showMsg(data.msg);
+            }
+          },
+          data => {
+            this.isLoading = false;
+            this.showMsg("获取信息错误!" + data.message);
+          }
+        );
+    },
     addItem() {
       this.showDialog = false;
       setTimeout(() => {
         this.showPage = false;
         this.onhide("cancel");
       }, 300);
-    }
-  },
-  ready() {},
-  watch: {
-    show() {
-      this.showPage = this.show;
-      this.showDialog = this.show;
     },
-    id() {
-      if (this.id == 0) return;
-      console.log(this.id);
+    getInfo(){
       this.isLoading = true;
       client.postData(ORDER_GET_REFOUND_DETAIL, { orrId: this.id }).then(
         data => {
@@ -205,6 +255,18 @@ export default {
           this.showMsg("获取信息错误!" + data.message);
         }
       );
+    }
+  },
+  ready() {},
+  watch: {
+    show() {
+      this.showPage = this.show;
+      this.showDialog = this.show;
+    },
+    id() {
+      this.orrServiceRemark = '';
+      if (this.id == 0) return;
+      this.getInfo();
     }
   },
   created() {},

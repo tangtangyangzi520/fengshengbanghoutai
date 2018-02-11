@@ -143,6 +143,7 @@ export default {
     },
     hideAddDialog() {
       this.showAddDialog = false;
+      this.getList();
     },
     getListByState(status) {
       if (typeof status == "number") {

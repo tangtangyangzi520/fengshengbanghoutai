@@ -332,6 +332,7 @@ var ORDER_DELIVER = OMS_TEST + "/order/deliverOrderSub"; //订单手动发货
 var ORDER_GET_LOGI_COMPANY = OMS_TEST + "/order/getLogiCompanyList"; //获取物流公司列表
 var ORDER_GET_REFOUND = OMS_TEST + "/order/getRefundOrders"; //获取退款订单
 var ORDER_GET_REFOUND_DETAIL = OMS_TEST + "/order/getRefundOrderDetail"; //获取退款订单详情
+var ORDER_AUDIT_REFUND = OMS_TEST + "/order/auditRefundOrder"; //退款审核
 
 //物流模块
 var ODD_GET_ORDERSUBID = OMS_TEST + "/odd/getByOrderSubId"; //根据子单获取物流信息?ordOrderId=1
