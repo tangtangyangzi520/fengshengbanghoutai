@@ -1,4 +1,13 @@
 <template>
+<!-- // public static final int REFUND_STATUS_NOT = 0;// 申请退款
+// public static final int REFUND_STATUS_WAIT_SELLER_AGREE = 1;// 等待商家审核
+// public static final int REFUND_STATUS_WAIT_BUYER_RETURN_GOODS = 2;// 退款中
+// public static final int REFUND_STATUS_WAIT_SELLER_CONFIRM_GOODS = 3;// 退款中
+// public static final int REFUND_STATUS_SELLER_REFUSE_BUYER = 4;// 申请被拒绝
+// public static final int REFUND_STATUS_SUCCESS = 5;// 退款成功
+// public static final int REFUND_STATUS_CLOSED = 6;// 退款关闭
+// public static final int REFUND_STATUS_REFUNDING = 7;// 退款中
+// public static final int REFUND_STATUS_FAIL = 8;// 退款失败 -->
   <!-- 商品列表-编辑SKU信息 -->
   <div style="position: absolute;top:0;left:0;width:100%;height:100%;" v-show="showPage">
     <m-alert :title="title" :hide-btn="true" :show="showDialog" :onhide="hideDialog" :onsure="submitInfo" :effect="'fade'" :width="'1100px'" :backdrop="true">
@@ -7,15 +16,30 @@
           <div class="content-top ">
             <div class="all">
               <div class="part-word">买家申请售后</div>
-              <div class="part-word">商家处理售后申请</div>
-              <div class="part-word grey-word">退款完成</div>
+              <div class="part-word" v-if="dataDetail.orrRefundStatus===1||dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8">商家处理售后申请</div>
+              <div class="part-word grey-word" v-else>商家处理售后申请</div>
+              <div class="part-word" v-if="dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8">退款完成</div>
+              <div class="part-word grey-word" v-else>退款完成</div>
             </div>
             <div class="all">
               <div class="part-cir">1</div>
-              <div class="progress"></div>
-              <div class="part-cir">2</div>
-              <div class="progress grey-progress"></div>
-              <div class="part-cir grey-cir">3</div>
+              <template v-if="dataDetail.orrRefundStatus===1||dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8">
+                <div class="progress"></div>
+                <div class="part-cir">2</div>
+              </template>
+              <template v-else>
+                <div class="progress grey-progress"></div>
+                <div class="part-cir grey-cir">2</div>
+              </template>
+              <template v-if="dataDetail.orrRefundStatus==5||dataDetail.orrRefundStatus==4||dataDetail.orrRefundStatus==6||dataDetail.orrRefundStatus==8">
+                <div class="progress"></div>
+                <div class="part-cir">3</div>
+              </template>
+              <template v-else>
+                <div class="progress grey-progress"></div>
+                <div class="part-cir grey-cir">3</div>
+              </template>
+              
             </div>
           </div>
         </div>
@@ -71,10 +95,11 @@
         </div>
       </div>
       <span slot="btnList">
-                            <button type="button" class="btn blue" @click="addItem()">保存</button>
-                            <button type="button" class="btn default" @click="hideDialog()" >取消</button>
-                        </span>
+          <button type="button" class="btn blue" @click="addItem()">保存</button>
+          <button type="button" class="btn default" @click="hideDialog()" >取消</button>
+      </span>
     </m-alert>
+        <loading :show="isLoading"></loading>
   </div>
 </template>
 
@@ -87,6 +112,8 @@ import {
 } from "../../vuex/actions/actions.component";
 import { getPainTree } from "../../vuex/actions/actions.pain";
 import { mMultiSelect, mAlert, mSelect, itemList } from "../../components";
+import loading from "../common/loading";
+
 export default {
   props: {
     show: {
@@ -101,6 +128,9 @@ export default {
       type: Function,
       default: () => {}
     },
+    id: {
+      type: String
+    },
     oncreate: {
       type: Function,
       default: () => {}
@@ -111,7 +141,8 @@ export default {
     mSelect,
     mAlert,
     tagTree,
-    itemList
+    itemList,
+    loading
   },
   vuex: {
     getters: {
@@ -125,9 +156,11 @@ export default {
   },
   data() {
     return {
+      dataDetail: null,
       showDialog: false,
       showPage: false,
-      title: ""
+      title: "",
+      isLoading: false
     };
   },
   vuex: {},
@@ -151,23 +184,32 @@ export default {
   ready() {},
   watch: {
     show() {
-      console.log(this.show);
       this.showPage = this.show;
       this.showDialog = this.show;
+    },
+    id() {
+      if (this.id == 0) return;
+      console.log(this.id);
+      this.isLoading = true;
+      client.postData(ORDER_GET_REFOUND_DETAIL, { orrId: this.id }).then(
+        data => {
+          this.isLoading = false;
+          if (data.code == 200) {
+            this.dataDetail = data.data;
+          } else {
+            this.showMsg("获取信息错误!" + data.message);
+          }
+        },
+        data => {
+          this.isLoading = false;
+          this.showMsg("获取信息错误!" + data.message);
+        }
+      );
     }
   },
   created() {},
   beforeDestroy() {}
 };
-// public static final int REFUND_STATUS_NOT = 0;// 申请退款
-// public static final int REFUND_STATUS_WAIT_SELLER_AGREE = 1;// 等待商家审核
-// public static final int REFUND_STATUS_WAIT_BUYER_RETURN_GOODS = 2;// 退款中
-// public static final int REFUND_STATUS_WAIT_SELLER_CONFIRM_GOODS = 3;// 退款中
-// public static final int REFUND_STATUS_SELLER_REFUSE_BUYER = 4;// 申请被拒绝
-// public static final int REFUND_STATUS_SUCCESS = 5;// 退款成功
-// public static final int REFUND_STATUS_CLOSED = 6;// 退款关闭
-// public static final int REFUND_STATUS_REFUNDING = 7;// 退款中
-// public static final int REFUND_STATUS_FAIL = 8;// 退款失败
 </script>
 
 <style lang="less" scoped>

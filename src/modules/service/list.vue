@@ -51,7 +51,7 @@
               <td>{{item.orrCreatedTime |filterTime}}</td>
               <td>{{item.orrRefundResult}}</td>
               <td>
-                <button type="button" class="btn btn-xs blue" @click="checkMore()">处理退款</button>
+                <button type="button" class="btn btn-xs blue" @click="checkMore(item)">处理退款</button>
               </td>
             </tr>
             <tr v-if="dataList.length==0">
@@ -61,7 +61,7 @@
         </table>
       </div>
     </div>
-    <pannel :show="showAddDialog" :onhide="hideAddDialog"></pannel>
+    <pannel :show="showAddDialog" :id="detailId" :onhide="hideAddDialog"></pannel>
     <paging :current-page="page.currentPage" :page-size="page.pageSize" :start-index="page.startIndex" :total-page="page.totalPage" :total-size="page.totalSize" :change="getList"></paging>
     <m-alert :title="'提交'" :show-cancel-btn="true" :show="showSubmitDialog" :onsure="ajaxControl" :onhide="hideMsg">
       <div slot="content">确定提交吗？</div>
@@ -126,7 +126,8 @@ export default {
       limitResource: null, //发布状态
       showAddDialog: false,
       lastSearchOptions: {},
-      changeNum: 0
+      changeNum: 0,
+      detailId: 0,
     };
   },
   filters: {
@@ -135,7 +136,9 @@ export default {
     }
   },
   methods: {
-    checkMore() {
+    checkMore(item) {
+      console.log(item)
+      this.detailId = item.orrId;
       this.showAddDialog = true;
     },
     hideAddDialog() {
@@ -173,40 +176,41 @@ export default {
       this.dataList = [];
       this.lastSearchOptions = options;
       if (this.changeNum == 1) {
-        options.ordStatus = 2;
+        options.orrRefundStatus = [0, 1, 2, 3, 7];
       }
       if (this.changeNum == 2) {
-        options.ordStatus = 5;
+        options.orrRefundStatus = [5];
       }
       if (this.changeNum == 3) {
-        options.ordStatus = 6;
+        options.orrRefundStatus = [4, 6, 8];
       }
+      this.dataList = [];
       client.postData(ORDER_GET_REFOUND, options).then(
         data => {
           this.isLoading = false;
           if (data.code == 200) {
             this.dataList = [];
             data.data.find(item => {
-              if (this.changeNum == 0) {
-                this.dataList.push(item);
-              }
-              if (
-                (this.changeNum == 1 && item.orrRefundStatus == 2) ||
-                item.orrRefundStatus == 2 ||
-                item.orrRefundStatus == 3 ||
-                item.orrRefundStatus == 7
-              ) {
-                this.dataList.push(item);
-              }
-              if (this.changeNum == 2 && item.orrRefundStatus == 5) {
-                this.dataList.push(item);
-              }
-              if (this.changeNum == 3 && item.orrRefundStatus == 6) {
-                this.dataList.push(item);
-              }
+              // if (this.changeNum == 0) {
+              //   this.dataList.push(item);
+              // }
+              // if (
+              //   (this.changeNum == 1 && item.orrRefundStatus == 2) ||
+              //   item.orrRefundStatus == 2 ||
+              //   item.orrRefundStatus == 3 ||
+              //   item.orrRefundStatus == 7
+              // ) {
+              //   this.dataList.push(item);
+              // }
+              // if (this.changeNum == 2 && item.orrRefundStatus == 5) {
+              //   this.dataList.push(item);
+              // }
+              // if (this.changeNum == 3 && item.orrRefundStatus == 6) {
+              //   this.dataList.push(item);
+              // }
+              this.dataList.push(item);
             });
             this.page = data.page;
-            console.log(this.page)
           } else {
             this.showMsg(data.msg);
           }
