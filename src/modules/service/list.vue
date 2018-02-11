@@ -6,17 +6,17 @@
       </page-title-bar>
       <search :onchange="changeSearchOptions" :oncreate="getList"></search>
       <div class="col-md-2 fr" style="margin-top:-40px;">
-        <button class="btn blue" type="button" @click="getListByState(0)">筛选</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button class="btn blue" type="button" @click="getListByState">筛选</button>&nbsp;&nbsp;&nbsp;&nbsp;
         <!--   <button class="btn blue" type="button" @click="exportOrder" v-if="limitResource.Order_export">批量导出</button> -->
       </div>
       <form id="exportForm" method="POST">
         <input type="hidden" v-model="exportString" name="request">
       </form>
       <div class="col-md-12 contentOrderleft">
-        <button class="btn default" :class="{'blue':checkedList[0]}" type="button" @click="getListByState(0)">全部</button>
-        <button class="btn default" :class="{'blue':checkedList[1]}" type="button" @click="getListByState(1)">退款中</button>
-        <button class="btn default" :class="{'blue':checkedList[2]}" type="button" @click="getListByState(2)">退款成功</button>
-        <button class="btn default" :class="{'blue':checkedList[3]}" type="button" @click="getListByState(3)">退款关闭</button>
+        <button class="btn default" :class="{'blue':changeNum==0}" type="button" @click="getListByState(0)">全部</button>
+        <button class="btn default" :class="{'blue':changeNum==1}" type="button" @click="getListByState(1)">退款中</button>
+        <button class="btn default" :class="{'blue':changeNum==2}" type="button" @click="getListByState(2)">退款成功</button>
+        <button class="btn default" :class="{'blue':changeNum==3}" type="button" @click="getListByState(3)">退款关闭</button>
       </div>
     </div>
     <div class="contentOrderBlock" id="contentList">
@@ -43,8 +43,8 @@
                   </a>
                 </p>
                 <h4>订单编号&nbsp;{{item.orrOrstNo }}</h4>
-                <p>{{item.sku.skuName}}</p>
-                <h4>颜色分类：黑色尺码XL</h4>
+                <p>{{item.spu.spuName}}</p>
+                <h4>{{item.sku.skuName}}</h4>
               </td>
               <td>{{item.orsTotalPay }}</td>
               <td>{{item.orrActAmount }}</td>
@@ -73,196 +73,199 @@
   </div>
 </template>
 <script>
-  import client from "../../common/utils/client";
-  import pannel from "./pannel";
-  import {
+import client from "../../common/utils/client";
+import pannel from "./pannel";
+import {
+  pageTitleBar,
+  paging,
+  itemControl,
+  mMultiSelect,
+  mAlert,
+  mSelect
+} from "../../components";
+import search from "./search";
+import control from "../common/control";
+import loading from "../common/loading";
+let vueThis = null;
+export default {
+  components: {
     pageTitleBar,
     paging,
     itemControl,
-    mMultiSelect,
     mAlert,
-    mSelect
-  } from "../../components";
-  import search from "./search";
-  import control from "../common/control";
-  import loading from "../common/loading";
-  let vueThis = null;
-  export default {
-    components: {
-      pageTitleBar,
-      paging,
-      itemControl,
-      mAlert,
-      mMultiSelect,
-      mSelect,
-      search,
-      control,
-      loading,
-      pannel
+    mMultiSelect,
+    mSelect,
+    search,
+    control,
+    loading,
+    pannel
+  },
+  props: {
+    title: "",
+    ospuid: 0,
+    oflag: false,
+    ooflag: false,
+    show: {
+      type: Boolean,
+      value: false
     },
-    props: {
-      title: "",
-      ospuid: 0,
-      oflag: false,
-      ooflag: false,
-      show: {
-        type: Boolean,
-        value: false
-      },
-      onhide: {
-        type: Function,
-        value: () => {}
+    onhide: {
+      type: Function,
+      value: () => {}
+    }
+  },
+  data() {
+    return {
+      showflag: true,
+      isLoading: false,
+      dataList: [],
+      page: {}, // 分页请求数据
+      showAlert: false,
+      showAlertTitle: "温馨提示",
+      showAlertMsg: "",
+      limitResource: null, //发布状态
+      showAddDialog: false,
+      lastSearchOptions: {},
+      changeNum: 0
+    };
+  },
+  filters: {
+    filterTime(time) {
+      return client.formateTime(time);
+    }
+  },
+  methods: {
+    checkMore() {
+      this.showAddDialog = true;
+    },
+    hideAddDialog() {
+      this.showAddDialog = false;
+    },
+    getListByState(status) {
+      if (typeof status == "number") {
+        this.changeNum = status;
       }
+      this.getList(null, true);
     },
-    data() {
-      return {
-        showflag: true,
-        isLoading: false,
-        dataList: [],
-        page: {}, // 分页请求数据
-        showAlert: false,
-        showAlertTitle: "温馨提示",
-        showAlertMsg: "",
-        limitResource: null, //发布状态
-        checkedList: [true, false, false, false], //用来使被选中标签高亮
-        showAddDialog: false,
-        lastSearchOptions: {
-        
-        },
-        changeNum: 0
-      };
-    },
-    filters: {
-      filterTime(time) {
-        return client.formateTime(time);
-      }
-    },
-    methods: {
-      checkMore() {
-        this.showAddDialog = true;
-      },
-      hideAddDialog() {
-        this.showAddDialog = false;
-      },
-      getListByState(status) {
-        this.checkedList.find((item, index) => {
-          if (index == status) {
-            this.checkedList.splice(index, 1, true);
-            this.changeNum = index;
-          } else {
-            this.checkedList.splice(index, 1, false);
-          }
-        })
-        this.getList();
-      },
-      //导出订单
-      /*     exportOrder() {
+    //导出订单
+    /*     exportOrder() {
             this.searchOptions.ordSpuId = this.ospuid;
             $("#exportForm").attr("action", ORDER_EXPORT);
             $("input[name='request']").val(JSON.stringify(this.searchOptions));
             $("#exportForm").submit();
           }, */
-      // 搜索条件变化
-      changeSearchOptions(options) {
-        console.log('7777',options)
-        this.searchOptions = options;
-        this.changeNum = 0;
-      },
-      getList(page, firstSearch) {
-        console.log('666',this.searchOptions)
-        this.checkedList[0] = true;
-        let options = "";
-        if (!firstSearch) {
-          // 拿最后一次请求的参数
-          options = this.lastSearchOptions;
-        } else {
-          options = Object.assign({}, this.searchOptions);
-        }
-        if (page) {
-          options.page = page;
-        }
-        this.isLoading = true;
-        this.dataList = [];
-        this.lastSearchOptions = options;
-        client.postData(ORDER_GET_REFOUND, options).then(
-          data => {
-            this.isLoading = false;
-            if (data.code == 200) {
-              this.dataList = [];
-              data.data.find(item => {
-                if (this.changeNum == 0) {
-                  this.dataList.push(item);
-                }
-                if (this.changeNum == 1 && item.orrRefundStatus == 2 || item.orrRefundStatus == 2 || item.orrRefundStatus == 3 || item.orrRefundStatus == 7) {
-                  this.dataList.push(item);
-                }
-                if (this.changeNum == 2 && item.orrRefundStatus == 5) {
-                  this.dataList.push(item);
-                }
-                if (this.changeNum == 3 && item.orrRefundStatus == 6) {
-                  this.dataList.push(item);
-                }
-              });
-              this.page = data.page;
-            } else {
-              this.showMsg(data.msg);
-            }
-          },
-          data => {
-            this.isLoading = false;
+    // 搜索条件变化
+    changeSearchOptions(options) {
+      this.searchOptions = options;
+    },
+    getList(page, firstSearch) {
+      let options = "";
+      if (!firstSearch) {
+        // 拿最后一次请求的参数
+        options = this.lastSearchOptions;
+      } else {
+        options = Object.assign({}, this.searchOptions);
+      }
+      if (page) {
+        options.page = page;
+      }
+      this.isLoading = true;
+      this.dataList = [];
+      this.lastSearchOptions = options;
+      if (this.changeNum == 1) {
+        options.ordStatus = 2;
+      }
+      if (this.changeNum == 2) {
+        options.ordStatus = 5;
+      }
+      if (this.changeNum == 3) {
+        options.ordStatus = 6;
+      }
+      client.postData(ORDER_GET_REFOUND, options).then(
+        data => {
+          this.isLoading = false;
+          if (data.code == 200) {
+            this.dataList = [];
+            data.data.find(item => {
+              if (this.changeNum == 0) {
+                this.dataList.push(item);
+              }
+              if (
+                (this.changeNum == 1 && item.orrRefundStatus == 2) ||
+                item.orrRefundStatus == 2 ||
+                item.orrRefundStatus == 3 ||
+                item.orrRefundStatus == 7
+              ) {
+                this.dataList.push(item);
+              }
+              if (this.changeNum == 2 && item.orrRefundStatus == 5) {
+                this.dataList.push(item);
+              }
+              if (this.changeNum == 3 && item.orrRefundStatus == 6) {
+                this.dataList.push(item);
+              }
+            });
+            this.page = data.page;
+            console.log(this.page)
+          } else {
+            this.showMsg(data.msg);
           }
-        );
-      },
-      showMsg(msg, title) {
-        if (title) {
-          this.showAlertTitle = title;
-        } else {
-          this.showAlertTitle = "温馨提示";
+        },
+        data => {
+          this.isLoading = false;
         }
-        this.showAlertMsg = msg;
-        this.showAlert = true;
-      },
-      hideMsg() {
-        this.showAlert = false;
-        this.showAddDialog = false;
+      );
+    },
+    showMsg(msg, title) {
+      if (title) {
+        this.showAlertTitle = title;
+      } else {
+        this.showAlertTitle = "温馨提示";
       }
+      this.showAlertMsg = msg;
+      this.showAlert = true;
     },
-    filters: {
-      filterTime(time) {
-        return client.formateTime(time);
-      }
-    },
-    created() {
-      console.log('sss',this.searchOptions)
-      /*       vueThis = this;
-            this.limitResource = JSON.parse(localStorage.getItem("limitResource")); */
-    },
-    watch: {},
-    route: {
-      canReuse: () => {
-        vueThis.getList(false, true);
-      }
-    },
-    ready() {
-      client.resetListHeight();
+    hideMsg() {
+      this.showAlert = false;
+      this.showAddDialog = false;
     }
-  };
+  },
+  filters: {
+    filterTime(time) {
+      return client.formateTime(time);
+    }
+  },
+  created() {
+    console.log("sss", this.searchOptions);
+    /*       vueThis = this;
+            this.limitResource = JSON.parse(localStorage.getItem("limitResource")); */
+  },
+  watch: {},
+  route: {
+    canReuse: () => {
+      vueThis.getList(false, true);
+    }
+  },
+  ready() {
+    client.resetListHeight();
+  }
+};
 </script>
 
 <style lang="less">
-  @import "../../common/css/common.less";
-  @import "../../common/css/list.less";
-  .tdTitle {
-    text-align: left;
-    vertical-align: middle;
-    line-height: 100%;
-  }
-  .table>tbody>tr>td,
-  .table>tbody>tr>th,
-  .table>tfoot>tr>td,
-  .table>tfoot>tr>th,
-  .table>thead>tr>td,
-  .table>thead>tr>th {
-    vertical-align: middle;
-  }
+@import "../../common/css/common.less";
+@import "../../common/css/list.less";
+.tdTitle {
+  text-align: left;
+  vertical-align: middle;
+  line-height: 100%;
+}
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > tfoot > tr > td,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+  vertical-align: middle;
+}
 </style>

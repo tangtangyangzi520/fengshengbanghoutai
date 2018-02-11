@@ -79,201 +79,197 @@
 </template>
 
 <script>
-  import client from "../../common/utils/client";
-  import tagTree from "../common/tagTree";
-  import {
-    getComponentList,
-    getComponentChannelList
-  } from "../../vuex/actions/actions.component";
-  import {
-    getPainTree
-  } from "../../vuex/actions/actions.pain";
-  import {
+import client from "../../common/utils/client";
+import tagTree from "../common/tagTree";
+import {
+  getComponentList,
+  getComponentChannelList
+} from "../../vuex/actions/actions.component";
+import { getPainTree } from "../../vuex/actions/actions.pain";
+import { mMultiSelect, mAlert, mSelect, itemList } from "../../components";
+export default {
+  props: {
+    show: {
+      type: Boolean,
+      value: false
+    },
+    onhide: {
+      type: Function,
+      value: () => {}
+    },
+    onchange: {
+      type: Function,
+      default: () => {}
+    },
+    oncreate: {
+      type: Function,
+      default: () => {}
+    }
+  },
+  components: {
     mMultiSelect,
-    mAlert,
     mSelect,
+    mAlert,
+    tagTree,
     itemList
-  } from "../../components";
-  export default {
-    props: {
-      show: {
-        type: Boolean,
-        value: false
-      },
-      onhide: {
-        type: Function,
-        value: () => {}
-      },
-      onchange: {
-        type: Function,
-        default: () => {}
-      },
-      oncreate: {
-        type: Function,
-        default: () => {}
-      }
+  },
+  vuex: {
+    getters: {
+      componentChannelList: ({ component }) => component.componentChannelList,
+      painTree: ({ pain }) => pain.painTree
     },
-    components: {
-      mMultiSelect,
-      mSelect,
-      mAlert,
-      tagTree,
-      itemList
+    actions: {
+      getComponentChannelList,
+      getPainTree
+    }
+  },
+  data() {
+    return {
+      showDialog: false,
+      showPage: false,
+      title: ""
+    };
+  },
+  vuex: {},
+  methods: {
+    hideDialog() {
+      this.showDialog = false;
+      setTimeout(() => {
+        this.showPage = false;
+        this.onhide("cancel");
+      }, 300);
     },
-    vuex: {
-      getters: {
-        componentChannelList: ({
-          component
-        }) => component.componentChannelList,
-        painTree: ({
-          pain
-        }) => pain.painTree
-      },
-      actions: {
-        getComponentChannelList,
-        getPainTree
-      }
-    },
-    data() {
-      return {
-        showDialog: false,
-        showPage: false,
-        title: "",
-      };
-    },
-    vuex: {},
-    methods: {
-      hideDialog() {
-        this.showDialog = false;
-        setTimeout(() => {
-          this.showPage = false;
-          this.onhide("cancel");
-        }, 300);
-      },
-      submitInfo() {},
-      addItem() {
-        this.showDialog = false;
-        setTimeout(() => {
-          this.showPage = false;
-          this.onhide("cancel");
-        }, 300);
-      },
-    },
-    ready() {
-    },
-    watch: {
-      show() {
-           console.log(this.show)
-        this.showPage = this.show;
-        this.showDialog = this.show;
-      },
-    },
-    created() {
-   
-    },
-    beforeDestroy() {}
-  };
+    submitInfo() {},
+    addItem() {
+      this.showDialog = false;
+      setTimeout(() => {
+        this.showPage = false;
+        this.onhide("cancel");
+      }, 300);
+    }
+  },
+  ready() {},
+  watch: {
+    show() {
+      console.log(this.show);
+      this.showPage = this.show;
+      this.showDialog = this.show;
+    }
+  },
+  created() {},
+  beforeDestroy() {}
+};
+// public static final int REFUND_STATUS_NOT = 0;// 申请退款
+// public static final int REFUND_STATUS_WAIT_SELLER_AGREE = 1;// 等待商家审核
+// public static final int REFUND_STATUS_WAIT_BUYER_RETURN_GOODS = 2;// 退款中
+// public static final int REFUND_STATUS_WAIT_SELLER_CONFIRM_GOODS = 3;// 退款中
+// public static final int REFUND_STATUS_SELLER_REFUSE_BUYER = 4;// 申请被拒绝
+// public static final int REFUND_STATUS_SUCCESS = 5;// 退款成功
+// public static final int REFUND_STATUS_CLOSED = 6;// 退款关闭
+// public static final int REFUND_STATUS_REFUNDING = 7;// 退款中
+// public static final int REFUND_STATUS_FAIL = 8;// 退款失败
 </script>
 
 <style lang="less" scoped>
-  .input {
-    margin-left: 2%;
-    margin-top: 1%;
-  }
-  .tab {
-    text-align: center;
-    border-collapse: collapse;
-  }
-  table,
-  table tr th,
-  table tr td {
-    text-align: center;
-    border: 1px solid #a5a552;
-  }
-  .last-word {
-    margin-top: 8px;
-  }
-  .all {
-    display: -webkit-box;
-  }
-  .btn {
-    text-align: right;
-  }
-  .content-top {
-    width: 100%;
-    padding: 20px;
-  }
-  /* .sprice{
+.input {
+  margin-left: 2%;
+  margin-top: 1%;
+}
+.tab {
+  text-align: center;
+  border-collapse: collapse;
+}
+table,
+table tr th,
+table tr td {
+  text-align: center;
+  border: 1px solid #a5a552;
+}
+.last-word {
+  margin-top: 8px;
+}
+.all {
+  display: -webkit-box;
+}
+.btn {
+  text-align: right;
+}
+.content-top {
+  width: 100%;
+  padding: 20px;
+}
+/* .sprice{
                         margin-top:
                     } */
-  .part-word {
-    color: rgb(119, 161, 240);
-    font-size: 18px;
-  }
-  .grey-word {
-    color: rgb(199, 197, 197);
-  }
-  .part-word:nth-child(1) {
-    margin-left: 120px;
-  }
-  .part-word:not(:first-child) {
-    margin-left: 220px;
-  }
-  .part-cir {
-    width: 30px;
-    height: 30px;
-    border-radius: 100%!important;
-    background: rgb(119, 161, 240);
-    color: #ffffff;
-    line-height: 30px;
-    margin-top: 10px;
-    text-align: center;
-  }
-  .grey-cir {
-    background: rgb(199, 197, 197);
-  }
-  .part-cir:nth-child(1) {
-    margin-left: 160px;
-  }
-  .progress {
-    width: 270px;
-    margin: 20px 20px 0 20px;
-    border-radius: 10px !important;
-    height: 10px;
-    background: rgb(119, 161, 240);
-  }
-  .grey-progress {
-    background: rgb(199, 197, 197);
-  }
-  .row:not(:first-child) {
-    margin-top: 10px;
-  }
-  .middle {
-    width: 50%;
-  }
-  .middle:nth-child(1) {
-    border-right: 1px solid rgb(223, 220, 220);
-  }
-  .middle:nth-child(2) {
-    padding: 0 20px;
-  }
-  .soldInfo {
-    margin-left: 20px;
-  }
-  .middle-bor {
-    margin: 10px 10px 0 20px;
-    padding-top: 10px;
-    border-top: 1px solid rgb(223, 220, 220);
-  }
-  .left-img {
-    width: 50px;
-    height: 50px;
-  }
-  .soldInfo p {
-    margin-top: 10px;
-  }
-  .time {
-    margin-left: 20px;
-    font-size: 14px;
-  }
+.part-word {
+  color: rgb(119, 161, 240);
+  font-size: 18px;
+}
+.grey-word {
+  color: rgb(199, 197, 197);
+}
+.part-word:nth-child(1) {
+  margin-left: 120px;
+}
+.part-word:not(:first-child) {
+  margin-left: 220px;
+}
+.part-cir {
+  width: 30px;
+  height: 30px;
+  border-radius: 100% !important;
+  background: rgb(119, 161, 240);
+  color: #ffffff;
+  line-height: 30px;
+  margin-top: 10px;
+  text-align: center;
+}
+.grey-cir {
+  background: rgb(199, 197, 197);
+}
+.part-cir:nth-child(1) {
+  margin-left: 160px;
+}
+.progress {
+  width: 270px;
+  margin: 20px 20px 0 20px;
+  border-radius: 10px !important;
+  height: 10px;
+  background: rgb(119, 161, 240);
+}
+.grey-progress {
+  background: rgb(199, 197, 197);
+}
+.row:not(:first-child) {
+  margin-top: 10px;
+}
+.middle {
+  width: 50%;
+}
+.middle:nth-child(1) {
+  border-right: 1px solid rgb(223, 220, 220);
+}
+.middle:nth-child(2) {
+  padding: 0 20px;
+}
+.soldInfo {
+  margin-left: 20px;
+}
+.middle-bor {
+  margin: 10px 10px 0 20px;
+  padding-top: 10px;
+  border-top: 1px solid rgb(223, 220, 220);
+}
+.left-img {
+  width: 50px;
+  height: 50px;
+}
+.soldInfo p {
+  margin-top: 10px;
+}
+.time {
+  margin-left: 20px;
+  font-size: 14px;
+}
 </style>
+
