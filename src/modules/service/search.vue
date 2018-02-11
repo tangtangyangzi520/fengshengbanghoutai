@@ -4,7 +4,7 @@
       <div class="form-group">
         <label class="col-md-3 sea">订单编号：</label>
         <div class="col-md-9">
-          <input type="text" class="form-control" v-model="orrId">
+          <input type="text" class="form-control" v-model="orrOrstNo">
         </div>
       </div>
     </div>
@@ -12,7 +12,7 @@
       <div class="form-group">
         <label class="col-md-3 sea">退款编号：</label>
         <div class="col-md-9">
-          <input type="text" class="form-control" v-model="orrOrstNo">
+          <input type="text" class="form-control" v-model="orrId">
         </div>
       </div>
     </div>
