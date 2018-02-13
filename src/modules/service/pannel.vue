@@ -75,7 +75,7 @@
             <div class="middle">
               <h4 sty>售后状态：{{dataDetail.orrRefundResult}}</h4>
               <div class="soldInfo ">
-                <p>退款金额：{{dataDetail.orrClientRemark}} 元 </p>
+                <p>退款金额：{{dataDetail.orrActAmount}} 元 </p>
                 <p>退款方式：退至{{dataDetail.set.orsPayChannelDisplay}}</p>
               </div>
             </div>
